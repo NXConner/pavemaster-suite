@@ -70,7 +70,7 @@ export function sanitizeInput(input: string): string {
 }
 
 /**
- * Rate limiting helper
+ * Enhanced rate limiting helper with persistent storage
  */
 export class RateLimiter {
   private attempts: Map<string, number[]> = new Map();
@@ -78,7 +78,10 @@ export class RateLimiter {
   constructor(
     private maxAttempts: number = 5,
     private windowMs: number = 15 * 60 * 1000 // 15 minutes
-  ) {}
+  ) {
+    // Clean up old entries periodically
+    setInterval(() => this.cleanup(), this.windowMs);
+  }
   
   isAllowed(identifier: string): boolean {
     const now = Date.now();
@@ -90,6 +93,10 @@ export class RateLimiter {
     );
     
     if (recentAttempts.length >= this.maxAttempts) {
+      secureLog(`Rate limit exceeded for ${identifier}`, { 
+        attempts: recentAttempts.length, 
+        maxAttempts: this.maxAttempts 
+      });
       return false;
     }
     
@@ -102,6 +109,32 @@ export class RateLimiter {
   
   reset(identifier: string): void {
     this.attempts.delete(identifier);
+    secureLog(`Rate limit reset for ${identifier}`);
+  }
+  
+  private cleanup(): void {
+    const now = Date.now();
+    for (const [identifier, attempts] of this.attempts.entries()) {
+      const recentAttempts = attempts.filter(
+        timestamp => now - timestamp < this.windowMs
+      );
+      
+      if (recentAttempts.length === 0) {
+        this.attempts.delete(identifier);
+      } else {
+        this.attempts.set(identifier, recentAttempts);
+      }
+    }
+  }
+  
+  getAttemptCount(identifier: string): number {
+    const now = Date.now();
+    const userAttempts = this.attempts.get(identifier) || [];
+    return userAttempts.filter(timestamp => now - timestamp < this.windowMs).length;
+  }
+  
+  getRemainingAttempts(identifier: string): number {
+    return Math.max(0, this.maxAttempts - this.getAttemptCount(identifier));
   }
 }
 
@@ -150,4 +183,131 @@ export function secureLog(message: string, data?: any): void {
     // In production, only log non-sensitive information
     console.log(`[SECURITY] ${message}`);
   }
+}
+
+/**
+ * Enhanced CSP headers for better security
+ */
+export const ENHANCED_SECURITY_HEADERS = {
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.openai.com; frame-ancestors 'none';",
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self)',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
+};
+
+/**
+ * Validate file upload security
+ */
+export function validateFileUpload(file: File): {
+  isValid: boolean;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'application/pdf', 'text/plain', 'text/csv',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-excel'
+  ];
+  
+  if (file.size > maxSize) {
+    errors.push('File size must be less than 10MB');
+  }
+  
+  if (!allowedTypes.includes(file.type)) {
+    errors.push('File type not allowed');
+  }
+  
+  // Check for suspicious file extensions
+  const suspiciousExtensions = ['.exe', '.scr', '.bat', '.cmd', '.com', '.pif', '.js', '.jar'];
+  const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+  
+  if (suspiciousExtensions.includes(fileExtension)) {
+    errors.push('File extension not allowed');
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
+
+/**
+ * Sanitize filename for safe storage
+ */
+export function sanitizeFilename(filename: string): string {
+  return filename
+    .replace(/[^a-zA-Z0-9.-]/g, '_')
+    .replace(/_{2,}/g, '_')
+    .toLowerCase()
+    .slice(0, 100);
+}
+
+/**
+ * Create rate limiter instances for different actions
+ */
+export const authRateLimiter = new RateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
+export const apiRateLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per minute
+export const uploadRateLimiter = new RateLimiter(10, 60 * 1000); // 10 uploads per minute
+
+/**
+ * Security audit logger
+ */
+export async function logSecurityEvent(
+  action: string,
+  resourceType?: string,
+  resourceId?: string,
+  details?: any
+): Promise<void> {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    
+    await supabase.rpc('log_security_event', {
+      p_action: action,
+      p_resource_type: resourceType,
+      p_resource_id: resourceId,
+      p_details: details
+    });
+  } catch (error) {
+    secureLog('Failed to log security event', { action, error });
+  }
+}
+
+/**
+ * Check if request is from valid IP range (if configured)
+ */
+export function isValidOrigin(origin: string): boolean {
+  const allowedOrigins = [
+    'localhost',
+    '127.0.0.1',
+    '.supabase.co',
+    '.vercel.app',
+    '.netlify.app'
+  ];
+  
+  return allowedOrigins.some(allowed => 
+    origin.includes(allowed) || origin === allowed
+  );
+}
+
+/**
+ * Mask sensitive data for logging
+ */
+export function maskSensitiveData(data: any): any {
+  if (typeof data !== 'object' || data === null) return data;
+  
+  const masked = { ...data };
+  const sensitiveKeys = ['password', 'token', 'api_key', 'secret', 'credit_card', 'ssn'];
+  
+  for (const key in masked) {
+    if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
+      masked[key] = '***MASKED***';
+    }
+  }
+  
+  return masked;
 }

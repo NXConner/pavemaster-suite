@@ -1,10 +1,72 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Rate limiting storage
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+
+function checkRateLimit(identifier: string, maxRequests: number = 15, windowMinutes: number = 15): boolean {
+  const now = Date.now()
+  const windowMs = windowMinutes * 60 * 1000
+  const existing = rateLimitMap.get(identifier)
+  
+  // Clean up expired entries
+  if (existing && now > existing.resetTime) {
+    rateLimitMap.delete(identifier)
+  }
+  
+  const current = rateLimitMap.get(identifier) || { count: 0, resetTime: now + windowMs }
+  
+  if (current.count >= maxRequests) {
+    return false
+  }
+  
+  current.count++
+  rateLimitMap.set(identifier, current)
+  return true
+}
+
+function sanitizeInput(input: string): string {
+  return input
+    .trim()
+    .slice(0, 2000) // Limit message length
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .replace(/['"]/g, '') // Remove quotes to prevent injection
+}
+
+function validateRequest(body: any): { isValid: boolean; errors: string[] } {
+  const errors: string[] = []
+  
+  if (!body.message || typeof body.message !== 'string') {
+    errors.push('Message is required and must be a string')
+  }
+  
+  if (body.message && body.message.length > 2000) {
+    errors.push('Message too long (max 2000 characters)')
+  }
+  
+  if (body.context && typeof body.context !== 'string') {
+    errors.push('Context must be a string')
+  }
+  
+  if (body.conversation && !Array.isArray(body.conversation)) {
+    errors.push('Conversation must be an array')
+  }
+  
+  if (body.conversation && body.conversation.length > 20) {
+    errors.push('Conversation history too long')
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  }
+}
 
 const systemPrompts = {
   general: `You are an AI assistant for the Pavement Performance Suite application. You help with general queries about the application, navigation, and basic functionality.`,
@@ -67,9 +129,41 @@ serve(async (req) => {
   }
 
   try {
-    const { message, context = 'general', conversation = [] } = await req.json();
+    // Get request body with size limit
+    const body = await req.json().catch(() => null);
+    
+    if (!body) {
+      throw new Error('Invalid request body');
+    }
+    
+    // Validate request
+    const validation = validateRequest(body);
+    if (!validation.isValid) {
+      return new Response(JSON.stringify({ error: validation.errors.join(', ') }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    
+    // Check rate limit
+    if (!checkRateLimit(clientIP)) {
+      console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait before making another request.' }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const { message, context = 'general', conversation = [] } = body;
 
-    if (!message) {
+    // Sanitize inputs
+    const sanitizedMessage = sanitizeInput(message);
+    const sanitizedContext = context ? sanitizeInput(context) : 'general';
+    
+    if (!sanitizedMessage) {
       throw new Error('Message is required');
     }
 
@@ -78,29 +172,29 @@ serve(async (req) => {
       throw new Error('OpenAI API key not configured');
     }
 
-    console.log(`Processing ${context} query:`, message.substring(0, 100) + '...');
+    console.log(`Processing ${sanitizedContext} query:`, sanitizedMessage.substring(0, 100) + '...');
 
     // Build conversation context
     const messages = [
       {
         role: 'system',
-        content: systemPrompts[context as keyof typeof systemPrompts] || systemPrompts.general
+        content: systemPrompts[sanitizedContext as keyof typeof systemPrompts] || systemPrompts.general
       }
     ];
 
-    // Add conversation history (last 10 messages)
+    // Add conversation history (last 5 messages for security)
     if (conversation.length > 0) {
-      const recentMessages = conversation.slice(-10).map((msg: any) => ({
-        role: msg.role,
-        content: msg.content
-      }));
+      const recentMessages = conversation.slice(-5).map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'assistant', // Sanitize role
+        content: sanitizeInput(msg.content || '')
+      })).filter(msg => msg.content.length > 0);
       messages.push(...recentMessages);
     }
 
     // Add current message
     messages.push({
       role: 'user',
-      content: message
+      content: sanitizedMessage
     });
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {

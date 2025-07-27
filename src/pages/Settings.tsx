@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { Header } from '@/components/Header';
 import { RealtimeDashboard } from '@/components/RealtimeDashboard';
+import { SecurityMonitor } from '@/components/enhanced/SecurityMonitor';
 import { Settings, Palette, User, Shield, Bell, Activity } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -67,20 +68,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Security Settings
-                </CardTitle>
-                <CardDescription>
-                  Manage your security preferences and authentication
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Security settings coming soon...</p>
-              </CardContent>
-            </Card>
+            <SecurityMonitor />
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">
