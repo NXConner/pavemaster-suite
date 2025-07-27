@@ -15,6 +15,7 @@ import AIHub from "./pages/AIHub";
 import Analytics from "./pages/Analytics";
 import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
+import ApiDocumentation from "@/components/ApiDocumentation";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
                               <Route path="/ai" element={<AIHub />} />
                               <Route path="/analytics" element={<Analytics />} />
                               <Route path="/mobile" element={<Mobile />} />
+                              <Route path="/api-docs" element={<ApiDocumentation />} />
                               {/* Placeholder routes for sidebar items */}
                               <Route path="/tracking" element={<div className="p-6"><h1>GPS Tracking (Coming Soon)</h1></div>} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />

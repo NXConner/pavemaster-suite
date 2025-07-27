@@ -25,13 +25,15 @@ import {
   Shield,
   MapPin,
   Camera,
-  Activity
+  Activity,
+  BookOpen
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Hub", url: "/ai", icon: Brain },
+  { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]
 
