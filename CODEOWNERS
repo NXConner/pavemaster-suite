@@ -1,98 +1,115 @@
-# PaveMaster Suite - Code Ownership Configuration
-# This file defines who is responsible for reviewing changes to specific parts of the codebase
+# CODEOWNERS - Pavement Performance Suite
+# This file defines code ownership for the repository
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# Global Owners - These users are requested for review on every PR
-* @admin @maintainer
-
-# Core Application
-/src/ @frontend-team @admin
-/src/components/ @ui-team @frontend-team
-/src/pages/ @frontend-team @business-logic-team
-/src/hooks/ @frontend-team @state-management-team
-
-# Database & Backend
-/supabase/ @backend-team @database-team @admin
-/supabase/migrations/ @database-team @admin
-/src/integrations/supabase/ @backend-team @frontend-team
-
-# Security & Authentication
-/src/lib/security.ts @security-team @admin
-/src/hooks/useAuth.tsx @security-team @backend-team
-/src/components/ProtectedRoute.tsx @security-team @frontend-team
-
-# Configuration & Infrastructure
-/.env.example @devops-team @admin
-/scripts/ @devops-team @admin
-/package.json @admin @devops-team
-/package-lock.json @admin @devops-team
-/tsconfig*.json @admin @frontend-team
-/tailwind.config.ts @ui-team @frontend-team
-/vite.config.ts @frontend-team @devops-team
+# Global owners - require approval for all changes
+* @n8ter8
 
 # Documentation
-/docs/ @documentation-team @admin
-/README.md @documentation-team @admin
-/CONTRIBUTING.md @documentation-team @admin
-/CHANGELOG.md @documentation-team @admin
+*.md @n8ter8
+docs/ @n8ter8
+README.md @n8ter8
+CONTRIBUTING.md @n8ter8
 
-# GitHub Configuration
-/.github/ @admin @devops-team
-/.github/workflows/ @devops-team @admin
-/.github/ISSUE_TEMPLATE/ @admin
-/.github/pull_request_template.md @admin
+# Configuration and Infrastructure
+.github/ @n8ter8
+.env.example @n8ter8
+docker*.* @n8ter8
+capacitor.config.json @n8ter8
+nginx.conf @n8ter8
+scripts/ @n8ter8
 
-# Code Quality
-/.eslintrc* @frontend-team @admin
-/.prettierrc* @frontend-team @admin
-/.gitignore @devops-team @admin
+# Core Application Code
+src/ @n8ter8
 
-# Business Logic Components
-/src/components/Dashboard* @business-logic-team @frontend-team
-/src/components/Project* @business-logic-team @frontend-team
-/src/components/Equipment* @business-logic-team @frontend-team
-/src/components/CRM* @business-logic-team @frontend-team
-/src/components/Financial* @business-logic-team @frontend-team
+# Frontend Components
+src/components/ @n8ter8
+src/pages/ @n8ter8
+src/hooks/ @n8ter8
 
-# UI Components
-/src/components/ui/ @ui-team @design-team
-/src/index.css @ui-team @design-team
-/src/assets/ @ui-team @design-team
+# UI Components Library
+src/components/ui/ @n8ter8
 
-# API & Services
-/src/services/ @backend-team @api-team
-/src/lib/ @backend-team @frontend-team
+# Business Logic and Services
+src/lib/ @n8ter8
+src/services/ @n8ter8
+src/integrations/ @n8ter8
+
+# Database and Supabase
+supabase/ @n8ter8
+src/integrations/supabase/ @n8ter8
+
+# Security-Critical Files
+src/lib/security.ts @n8ter8
+supabase/functions/ @n8ter8
+
+# Mobile and Offline Functionality
+src/components/MobileFieldInterface.tsx @n8ter8
+src/components/OfflineManager.tsx @n8ter8
+src/pages/Mobile.tsx @n8ter8
+
+# AI and Machine Learning
+src/components/AIAssistant.tsx @n8ter8
+src/components/PredictiveAnalytics.tsx @n8ter8
+src/components/VoiceInterface.tsx @n8ter8
+supabase/functions/ai-assistant/ @n8ter8
+supabase/functions/voice-to-text/ @n8ter8
+supabase/functions/text-to-speech/ @n8ter8
+
+# Analytics and Performance
+src/components/PerformanceDashboard.tsx @n8ter8
+src/components/RealtimeDashboard.tsx @n8ter8
+src/pages/Analytics.tsx @n8ter8
+
+# API Documentation
+src/components/ApiDocumentation.tsx @n8ter8
+src/lib/apiDocumentation.ts @n8ter8
+scripts/generate-api-docs.js @n8ter8
+
+# Build and Deployment
+package.json @n8ter8
+package-lock.json @n8ter8
+vite.config.ts @n8ter8
+tailwind.config.ts @n8ter8
+tsconfig*.json @n8ter8
+
+# Styling and Design System
+src/index.css @n8ter8
+src/components/ui/ @n8ter8
 
 # Testing
-/src/**/*.test.* @qa-team @frontend-team
-/src/**/*.spec.* @qa-team @frontend-team
-/tests/ @qa-team @admin
-/cypress/ @qa-team @frontend-team
+**/*.test.ts @n8ter8
+**/*.test.tsx @n8ter8
+**/*.spec.ts @n8ter8
+**/*.spec.tsx @n8ter8
 
-# Mobile Components
-/src/components/mobile/ @mobile-team @frontend-team
-/src/hooks/use-mobile.tsx @mobile-team @frontend-team
+# Legal and Licensing
+LICENSE @n8ter8
+.gitignore @n8ter8
 
-# Specific Business Features
-/src/components/*estimat* @estimation-team @business-logic-team
-/src/components/*church* @church-specialist @business-logic-team
-/src/components/*weather* @integrations-team @backend-team
-/src/components/*gps* @integrations-team @backend-team
-/src/components/*tracking* @integrations-team @backend-team
+# Phase Documentation
+docs/PHASE_*.md @n8ter8
 
-# Performance Critical Files
-/src/components/ui/sidebar.tsx @performance-team @ui-team
-/src/hooks/useAuth.tsx @performance-team @security-team
-/src/lib/utils.ts @performance-team @frontend-team
+# Feature-Specific Areas
+# (Add team members here as the project grows)
 
-# External Integrations
-/src/integrations/ @integrations-team @backend-team
-/src/services/api/ @api-team @backend-team
+# Mobile Development (Future team members)
+# capacitor.config.json @mobile-team
+# src/pages/Mobile.tsx @mobile-team
 
-# Build & Deployment
-/Dockerfile @devops-team @admin
-/docker-compose.yml @devops-team @admin
-/.dockerignore @devops-team @admin
+# AI Development (Future team members)  
+# src/components/AI*.tsx @ai-team
+# supabase/functions/ai-assistant/ @ai-team
 
-# Sensitive Configuration (Requires Admin Approval)
-/supabase/config.toml @admin
-/.env.example @admin @security-team
+# UI/UX Design (Future team members)
+# src/components/ui/ @design-team
+# src/index.css @design-team
+
+# DevOps and Infrastructure (Future team members)
+# .github/workflows/ @devops-team
+# docker*.* @devops-team
+# scripts/ @devops-team
+
+# Quality Assurance (Future team members)
+# **/*.test.* @qa-team
+# **/*.spec.* @qa-team

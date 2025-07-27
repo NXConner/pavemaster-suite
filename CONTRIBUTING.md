@@ -1,50 +1,35 @@
-# Contributing to PaveMaster Suite
+# Contributing to Pavement Performance Suite
 
-Thank you for your interest in contributing to PaveMaster Suite! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to the Pavement Performance Suite! This document provides guidelines and information for contributors.
 
-## Table of Contents
+## 🤝 Code of Conduct
 
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Project Structure](#project-structure)
-- [Coding Standards](#coding-standards)
-- [Git Workflow](#git-workflow)
-- [Testing](#testing)
-- [Documentation](#documentation)
-- [Pull Request Process](#pull-request-process)
-- [Issue Reporting](#issue-reporting)
+We are committed to providing a welcoming and inspiring community for all. Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Node.js 18+ 
+- Node.js 18+
 - Git
-- A Supabase account
-- Familiarity with React, TypeScript, and Tailwind CSS
+- Familiarity with React, TypeScript, and Supabase
+- Understanding of asphalt paving industry (helpful but not required)
 
 ### Development Setup
-
-1. **Clone the repository**
+1. **Fork the repository**
    ```bash
-   git clone <repository-url>
-   cd pavemaster-suite
+   git clone https://github.com/your-username/pavement-performance-suite.git
+   cd pavement-performance-suite
    ```
 
-2. **Run the installation script**
+2. **Install dependencies**
    ```bash
-   # On macOS/Linux
-   chmod +x scripts/install_dependencies.sh
-   ./scripts/install_dependencies.sh
-   
-   # On Windows
-   scripts/install_dependencies.bat
+   npm install
    ```
 
-3. **Configure environment**
+3. **Set up environment**
    ```bash
    cp .env.example .env
-   # Edit .env with your configuration
+   # Configure your environment variables
    ```
 
 4. **Start development server**
@@ -52,273 +37,332 @@ Thank you for your interest in contributing to PaveMaster Suite! This document p
    npm run dev
    ```
 
-## Project Structure
+5. **Run tests**
+   ```bash
+   npm test
+   ```
 
-```
-src/
-├── components/          # Reusable UI components
-│   ├── ui/             # Base UI components (shadcn/ui)
-│   ├── forms/          # Form components
-│   ├── charts/         # Chart components
-│   └── modals/         # Modal components
-├── pages/              # Page components
-├── hooks/              # Custom React hooks
-├── services/           # API and external service integrations
-├── lib/                # Utility functions and configurations
-├── contexts/           # React contexts
-├── types/              # TypeScript type definitions
-└── assets/             # Static assets
-```
+## 📋 How to Contribute
 
-## Coding Standards
+### 🐛 Reporting Bugs
+1. **Search existing issues** to avoid duplicates
+2. **Use the bug report template** when creating new issues
+3. **Include detailed information**:
+   - Browser/device information
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Screenshots or error messages
 
-### TypeScript
+### 💡 Suggesting Features
+1. **Check the roadmap** to see if it's already planned
+2. **Use the feature request template**
+3. **Provide clear use cases** and business justification
+4. **Consider the scope** - start with small, focused features
 
-- Use TypeScript for all new code
-- Define proper interfaces and types
-- Avoid `any` type - use specific types or `unknown`
-- Use strict mode settings
+### 🔧 Code Contributions
 
-### React
+#### Branching Strategy
+- `main` - Production-ready code
+- `develop` - Integration branch for features
+- `feature/[description]` - New features
+- `bugfix/[description]` - Bug fixes
+- `hotfix/[description]` - Critical production fixes
 
-- Use functional components with hooks
-- Follow React best practices for performance
-- Use proper dependency arrays in useEffect
-- Implement proper error boundaries
+#### Pull Request Process
+1. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-### Styling
+2. **Make your changes**
+   - Follow coding standards
+   - Add tests for new functionality
+   - Update documentation as needed
 
-- Use Tailwind CSS for styling
-- Follow the design system defined in `src/index.css`
-- Use semantic color tokens, not direct colors
-- Ensure responsive design for all components
-- Maintain accessibility standards (WCAG 2.1 AA)
+3. **Test your changes**
+   ```bash
+   npm test
+   npm run lint
+   npm run type-check
+   ```
 
-### Code Organization
+4. **Commit your changes**
+   ```bash
+   git commit -m "feat: add new material calculator feature"
+   ```
+
+5. **Push and create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. **Fill out PR template** with detailed description
+
+## 📝 Coding Standards
+
+### TypeScript Guidelines
+- **Use TypeScript** for all new code
+- **Define interfaces** for all data structures
+- **Use strict mode** and resolve all type errors
+- **Prefer type inference** when possible
 
 ```typescript
-// ✅ Good - Proper imports order
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
-import type { Project } from '@/types/project';
-
-// ✅ Good - Clear component structure
-interface ProjectCardProps {
-  project: Project;
-  onEdit?: (id: string) => void;
+// ✅ Good
+interface Project {
+  id: string;
+  name: string;
+  status: 'planning' | 'in-progress' | 'completed';
+  createdAt: Date;
 }
 
-export function ProjectCard({ project, onEdit }: ProjectCardProps) {
-  // Component logic here
+// ❌ Avoid
+const project: any = { ... };
+```
+
+### React Guidelines
+- **Use functional components** with hooks
+- **Custom hooks** for reusable logic
+- **Props interfaces** for all components
+- **Meaningful component names**
+
+```typescript
+// ✅ Good
+interface MaterialCalculatorProps {
+  area: number;
+  thickness: number;
+  onCalculate: (result: CalculationResult) => void;
+}
+
+export function MaterialCalculator({ area, thickness, onCalculate }: MaterialCalculatorProps) {
+  // Component implementation
 }
 ```
 
-### Database
+### CSS/Styling Guidelines
+- **Use Tailwind CSS** utility classes
+- **Semantic design tokens** from index.css
+- **Responsive design** by default
+- **Dark mode support**
 
-- Use proper RLS policies for all tables
-- Follow naming conventions (snake_case for database, camelCase for TypeScript)
-- Include proper indexes for performance
-- Write idempotent migrations
+```tsx
+// ✅ Good
+<button className="bg-primary text-primary-foreground hover:bg-primary/90">
+  Calculate
+</button>
 
-## Git Workflow
-
-### Branch Naming
-
-- `feature/description` - New features
-- `fix/description` - Bug fixes  
-- `docs/description` - Documentation changes
-- `refactor/description` - Code refactoring
-- `test/description` - Test additions/changes
-
-### Commit Messages
-
-Follow conventional commits:
-
-```
-type(scope): description
-
-Examples:
-feat(auth): add password reset functionality
-fix(dashboard): resolve metric calculation error
-docs(api): update endpoint documentation
-refactor(components): extract common button logic
-test(utils): add unit tests for date helpers
+// ❌ Avoid
+<button className="bg-blue-500 text-white hover:bg-blue-600">
+  Calculate
+</button>
 ```
 
-### Pull Request Process
-
-1. Create a feature branch from `main`
-2. Make your changes following coding standards
-3. Add/update tests as needed
-4. Update documentation if required
-5. Ensure all checks pass
-6. Create a detailed pull request
-
-## Testing
-
-### Types of Tests
-
-1. **Unit Tests** - Test individual functions/components
-2. **Integration Tests** - Test component interactions
-3. **E2E Tests** - Test complete user workflows
-
-### Testing Guidelines
-
-- Write tests for all new functionality
-- Maintain at least 85% code coverage
-- Use descriptive test names
-- Test both happy path and error cases
-- Mock external dependencies properly
-
-### Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run E2E tests
-npm run test:e2e
+### File Organization
+```
+src/
+├── components/
+│   ├── ui/              # Reusable UI components
+│   ├── forms/           # Form components
+│   └── layout/          # Layout components
+├── pages/               # Route components
+├── hooks/               # Custom hooks
+├── lib/                 # Utilities and helpers
+├── types/               # TypeScript type definitions
+└── assets/              # Static assets
 ```
 
-## Documentation
+## 🧪 Testing Guidelines
+
+### Unit Tests
+- **Test all business logic**
+- **Use Jest and React Testing Library**
+- **Mock external dependencies**
+- **Aim for 80%+ coverage**
+
+```typescript
+// Example test
+import { render, screen } from '@testing-library/react';
+import { MaterialCalculator } from './MaterialCalculator';
+
+describe('MaterialCalculator', () => {
+  it('calculates material quantity correctly', () => {
+    render(<MaterialCalculator area={1000} thickness={2} onCalculate={jest.fn()} />);
+    // Test implementation
+  });
+});
+```
+
+### Integration Tests
+- **Test user workflows**
+- **Use Cypress for E2E testing**
+- **Test critical business paths**
+
+### Performance Testing
+- **Monitor bundle size**
+- **Test mobile performance**
+- **Measure Core Web Vitals**
+
+## 📚 Documentation Guidelines
 
 ### Code Documentation
+- **JSDoc comments** for functions and classes
+- **README files** for complex modules
+- **Inline comments** for complex logic
 
-- Use JSDoc for functions and complex logic
-- Include type information in comments
-- Document business logic and algorithms
-- Explain "why" not just "what"
+```typescript
+/**
+ * Calculates the amount of asphalt needed for a given area
+ * @param area - Area in square feet
+ * @param thickness - Thickness in inches
+ * @param density - Asphalt density in lbs/ft³ (default: 150)
+ * @returns Material quantity in tons
+ */
+export function calculateAsphaltQuantity(
+  area: number, 
+  thickness: number, 
+  density = 150
+): number {
+  // Implementation
+}
+```
 
 ### API Documentation
+- **OpenAPI/Swagger specs** for all endpoints
+- **Request/response examples**
+- **Error handling documentation**
 
-- Document all API endpoints
-- Include request/response examples
-- Specify error codes and messages
-- Update OpenAPI/Swagger specifications
+## 🏗️ Industry Knowledge
 
-### User Documentation
+### Asphalt Paving Basics
+Understanding these concepts will help with contributions:
+- **Mix temperatures** and application windows
+- **Compaction** requirements and equipment
+- **Weather dependencies** for operations
+- **Quality control** standards and testing
 
-- Keep README.md up to date
-- Include setup instructions
-- Document new features and changes
-- Provide troubleshooting guides
+### Business Context
+- **Small contractor challenges** (2-10 employees)
+- **Project lifecycle** from estimate to completion
+- **Equipment management** and maintenance
+- **Safety compliance** requirements
 
-## Security Guidelines
+## 🚀 Feature Development Process
 
-### Input Validation
+### 1. Planning Phase
+- **Create GitHub issue** with detailed requirements
+- **Discuss approach** in issue comments
+- **Get approval** from maintainers before starting
 
-- Validate all user inputs
-- Use proper sanitization
-- Implement rate limiting
-- Follow OWASP best practices
+### 2. Development Phase
+- **Create feature branch** from develop
+- **Implement incrementally** with regular commits
+- **Add comprehensive tests**
+- **Update documentation**
 
-### Authentication & Authorization
+### 3. Review Phase
+- **Self-review** your changes
+- **Run full test suite**
+- **Create detailed PR** with screenshots/videos
+- **Address review feedback** promptly
 
-- Use proper RLS policies
-- Implement role-based access control
-- Secure API endpoints
-- Handle sessions properly
+### 4. Release Phase
+- **Merge to develop** for integration testing
+- **Deploy to staging** for validation
+- **Merge to main** for production release
 
-### Data Protection
+## 🔄 Release Process
 
-- Encrypt sensitive data
-- Use HTTPS everywhere
-- Implement proper logging (no sensitive data)
-- Follow data retention policies
+### Version Numbering
+We follow [Semantic Versioning](https://semver.org/):
+- **Major** (1.0.0) - Breaking changes
+- **Minor** (1.1.0) - New features, backwards compatible
+- **Patch** (1.1.1) - Bug fixes
 
-## Performance Guidelines
+### Changelog
+Update `CHANGELOG.md` with:
+- **Added** - New features
+- **Changed** - Changes in existing functionality
+- **Deprecated** - Soon-to-be removed features
+- **Removed** - Removed features
+- **Fixed** - Bug fixes
+- **Security** - Security improvements
 
-### Frontend Performance
+## 🎯 Contribution Areas
 
-- Implement code splitting
-- Use lazy loading for routes
-- Optimize images and assets
-- Minimize bundle size
-- Implement proper caching
+### High Priority
+- **Mobile optimization** and native app features
+- **AI/ML improvements** for predictive analytics
+- **IoT integrations** for equipment monitoring
+- **Performance optimizations**
 
-### Database Performance
+### Medium Priority
+- **Third-party integrations** (QuickBooks, etc.)
+- **Advanced reporting** features
+- **Workflow automation**
+- **User experience improvements**
 
-- Use proper indexes
-- Optimize queries
-- Implement pagination
-- Monitor query performance
-- Use database functions when appropriate
+### Good First Issues
+- **UI component improvements**
+- **Documentation updates**
+- **Test coverage improvements**
+- **Accessibility enhancements**
 
-## Accessibility Guidelines
+## 🛡️ Security Guidelines
 
-- Use semantic HTML
-- Implement proper ARIA labels
-- Ensure keyboard navigation
-- Maintain color contrast ratios
-- Test with screen readers
-- Provide alternative text for images
+### Reporting Security Issues
+- **Do not** create public issues for security vulnerabilities
+- **Email** security@pavementperformance.com with details
+- **Include** steps to reproduce and potential impact
 
-## Business Context
+### Security Best Practices
+- **Never commit** secrets or API keys
+- **Use environment variables** for configuration
+- **Validate all inputs** on client and server
+- **Follow OWASP guidelines**
 
-### Church Parking Lot Focus
+## 📞 Getting Help
 
-When contributing features, consider:
+### Communication Channels
+- **GitHub Discussions** - General questions and ideas
+- **GitHub Issues** - Bug reports and feature requests
+- **Discord** - Real-time chat and collaboration
+- **Email** - development@pavementperformance.com
 
-- Service time coordination (avoid disruptions)
-- Congregation access and safety
-- Weather dependencies for outdoor work
-- Seasonal considerations
-- Visual presentation for approval processes
+### Mentorship
+New contributors can request mentorship:
+- **Pair programming** sessions
+- **Code review** guidance
+- **Architecture** discussions
+- **Industry knowledge** sharing
 
-### Small Business Considerations
+## 🏆 Recognition
 
-- Keep interfaces simple and intuitive
-- Minimize training requirements
-- Automate repetitive tasks
-- Optimize for efficiency
-- Consider limited technical expertise
+### Contributors
+- **Listed** in README.md
+- **Featured** in release notes
+- **Invited** to contributor events
+- **Referral bonuses** for successful hires
 
-## Code Review Guidelines
+### Significant Contributions
+- **Co-maintainer** status
+- **Speaking opportunities** at conferences
+- **Case study** features
+- **Professional references**
 
-### For Reviewers
+## 📋 Checklist
 
-- Check code quality and standards
-- Verify business logic correctness
-- Test functionality locally
-- Review security implications
-- Suggest improvements constructively
+Before submitting a PR, ensure:
+- [ ] Code follows style guidelines
+- [ ] Tests pass and coverage is maintained
+- [ ] Documentation is updated
+- [ ] Commit messages follow convention
+- [ ] PR template is filled out
+- [ ] No secrets or sensitive data included
+- [ ] Breaking changes are clearly documented
 
-### For Contributors
+## 🙏 Thank You
 
-- Respond to feedback promptly
-- Ask questions if unclear
-- Make requested changes
-- Update tests and documentation
-- Verify all checks pass
-
-## Release Process
-
-1. **Feature Development** - Development in feature branches
-2. **Code Review** - Thorough peer review process
-3. **Testing** - Comprehensive testing in staging
-4. **Documentation** - Update all relevant documentation
-5. **Deployment** - Automated deployment to production
-6. **Monitoring** - Post-deployment monitoring and verification
-
-## Getting Help
-
-- Create an issue for bugs or feature requests
-- Use discussions for questions and ideas
-- Check existing documentation and code
-- Reach out to maintainers for guidance
-
-## License
-
-By contributing to PaveMaster Suite, you agree that your contributions will be licensed under the same license as the project.
+Your contributions help make the asphalt paving industry more efficient and profitable. Every bug fix, feature addition, and documentation improvement makes a difference for contractors worldwide.
 
 ---
 
-Thank you for contributing to PaveMaster Suite! Your efforts help improve asphalt operations management for businesses everywhere.
+**Questions?** Reach out to our team at development@pavementperformance.com or join our Discord community!
