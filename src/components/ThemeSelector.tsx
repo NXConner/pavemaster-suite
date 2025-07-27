@@ -12,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import { Palette, Monitor, Sun, Moon, Upload, Plus, Check } from 'lucide-react';
+import { ThemeCard } from '@/components/ThemeCard';
 
 export function ThemeSelector() {
   const {
@@ -208,40 +209,60 @@ export function ThemeSelector() {
             </div>
 
             <ScrollArea className="h-64">
-              <div className="grid gap-3">
-                {themes.map((theme) => (
-                  <div
-                    key={theme.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50 ${
-                      currentTheme?.id === theme.id ? 'border-primary bg-primary/5' : 'border-border'
-                    }`}
-                    onClick={() => setTheme(theme.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-medium">{theme.name}</h4>
-                          {theme.is_system && <Badge variant="secondary" className="text-xs">System</Badge>}
-                          {currentTheme?.id === theme.id && <Check className="h-4 w-4 text-primary" />}
-                        </div>
-                        {theme.description && (
-                          <p className="text-sm text-muted-foreground mt-1">{theme.description}</p>
-                        )}
-                      </div>
-                      <div className="flex gap-1">
-                        {/* Color preview */}
-                        <div
-                          className="w-4 h-4 rounded-full border"
-                          style={{ backgroundColor: `hsl(${theme.colors.light.primary})` }}
-                        />
-                        <div
-                          className="w-4 h-4 rounded-full border"
-                          style={{ backgroundColor: `hsl(${theme.colors.light.secondary || theme.colors.light.primary})` }}
-                        />
-                      </div>
+              <div className="space-y-4">
+                {/* Core System Themes */}
+                <div>
+                  <Label className="text-xs font-medium text-muted-foreground mb-2 block">CORE THEMES</Label>
+                  <div className="grid gap-2">
+                    {themes.filter(theme => 
+                      theme.is_system && ['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms'].includes(theme.name)
+                    ).map((theme) => (
+                      <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Industry-Specific Themes */}
+                <div>
+                  <Label className="text-xs font-medium text-muted-foreground mb-2 block">INDUSTRY OPERATIONS</Label>
+                  <div className="grid gap-2">
+                    {themes.filter(theme => 
+                      theme.is_system && ['Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                    ).map((theme) => (
+                      <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Custom Themes */}
+                {themes.filter(theme => !theme.is_system).length > 0 && (
+                  <div>
+                    <Label className="text-xs font-medium text-muted-foreground mb-2 block">CUSTOM THEMES</Label>
+                    <div className="grid gap-2">
+                      {themes.filter(theme => !theme.is_system).map((theme) => (
+                        <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
+                      ))}
                     </div>
                   </div>
-                ))}
+                )}
+
+                {/* Fallback - show any other themes */}
+                {themes.filter(theme => 
+                  theme.is_system && 
+                  !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                ).length > 0 && (
+                  <div>
+                    <Label className="text-xs font-medium text-muted-foreground mb-2 block">OTHER THEMES</Label>
+                    <div className="grid gap-2">
+                      {themes.filter(theme => 
+                        theme.is_system && 
+                        !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                      ).map((theme) => (
+                        <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </TabsContent>
