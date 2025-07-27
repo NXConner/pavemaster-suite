@@ -1,0 +1,98 @@
+# PaveMaster Suite - Code Ownership Configuration
+# This file defines who is responsible for reviewing changes to specific parts of the codebase
+
+# Global Owners - These users are requested for review on every PR
+* @admin @maintainer
+
+# Core Application
+/src/ @frontend-team @admin
+/src/components/ @ui-team @frontend-team
+/src/pages/ @frontend-team @business-logic-team
+/src/hooks/ @frontend-team @state-management-team
+
+# Database & Backend
+/supabase/ @backend-team @database-team @admin
+/supabase/migrations/ @database-team @admin
+/src/integrations/supabase/ @backend-team @frontend-team
+
+# Security & Authentication
+/src/lib/security.ts @security-team @admin
+/src/hooks/useAuth.tsx @security-team @backend-team
+/src/components/ProtectedRoute.tsx @security-team @frontend-team
+
+# Configuration & Infrastructure
+/.env.example @devops-team @admin
+/scripts/ @devops-team @admin
+/package.json @admin @devops-team
+/package-lock.json @admin @devops-team
+/tsconfig*.json @admin @frontend-team
+/tailwind.config.ts @ui-team @frontend-team
+/vite.config.ts @frontend-team @devops-team
+
+# Documentation
+/docs/ @documentation-team @admin
+/README.md @documentation-team @admin
+/CONTRIBUTING.md @documentation-team @admin
+/CHANGELOG.md @documentation-team @admin
+
+# GitHub Configuration
+/.github/ @admin @devops-team
+/.github/workflows/ @devops-team @admin
+/.github/ISSUE_TEMPLATE/ @admin
+/.github/pull_request_template.md @admin
+
+# Code Quality
+/.eslintrc* @frontend-team @admin
+/.prettierrc* @frontend-team @admin
+/.gitignore @devops-team @admin
+
+# Business Logic Components
+/src/components/Dashboard* @business-logic-team @frontend-team
+/src/components/Project* @business-logic-team @frontend-team
+/src/components/Equipment* @business-logic-team @frontend-team
+/src/components/CRM* @business-logic-team @frontend-team
+/src/components/Financial* @business-logic-team @frontend-team
+
+# UI Components
+/src/components/ui/ @ui-team @design-team
+/src/index.css @ui-team @design-team
+/src/assets/ @ui-team @design-team
+
+# API & Services
+/src/services/ @backend-team @api-team
+/src/lib/ @backend-team @frontend-team
+
+# Testing
+/src/**/*.test.* @qa-team @frontend-team
+/src/**/*.spec.* @qa-team @frontend-team
+/tests/ @qa-team @admin
+/cypress/ @qa-team @frontend-team
+
+# Mobile Components
+/src/components/mobile/ @mobile-team @frontend-team
+/src/hooks/use-mobile.tsx @mobile-team @frontend-team
+
+# Specific Business Features
+/src/components/*estimat* @estimation-team @business-logic-team
+/src/components/*church* @church-specialist @business-logic-team
+/src/components/*weather* @integrations-team @backend-team
+/src/components/*gps* @integrations-team @backend-team
+/src/components/*tracking* @integrations-team @backend-team
+
+# Performance Critical Files
+/src/components/ui/sidebar.tsx @performance-team @ui-team
+/src/hooks/useAuth.tsx @performance-team @security-team
+/src/lib/utils.ts @performance-team @frontend-team
+
+# External Integrations
+/src/integrations/ @integrations-team @backend-team
+/src/services/api/ @api-team @backend-team
+
+# Build & Deployment
+/Dockerfile @devops-team @admin
+/docker-compose.yml @devops-team @admin
+/.dockerignore @devops-team @admin
+
+# Sensitive Configuration (Requires Admin Approval)
+/supabase/config.toml @admin
+/.env.example @admin @security-team

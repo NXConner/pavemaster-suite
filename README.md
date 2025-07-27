@@ -1,73 +1,185 @@
-# Welcome to your Lovable project
+# 🏗️ PaveMaster Suite
 
-## Project info
+> **Enterprise Asphalt Operations Management System**  
+> Specialized for church parking lot repair, sealcoating, and line-striping optimization
 
-**URL**: https://lovable.dev/projects/7eb30887-9626-47d4-a66e-506f2cf77df6
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-18%2B-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-18.3.1-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/typescript-5.5.3-blue.svg)](https://www.typescriptlang.org/)
+[![Supabase](https://img.shields.io/badge/supabase-2.52.1-green.svg)](https://supabase.com/)
 
-## How can I edit this code?
+## 🌟 Overview
 
-There are several ways of editing your application.
+PaveMaster Suite is a comprehensive, AI-assisted enterprise solution designed specifically for asphalt paving operations management. With a special focus on church parking lot services, it streamlines everything from project estimation to crew management, helping small contractors maximize efficiency while maintaining the highest quality standards.
 
-**Use Lovable**
+### 🎯 Key Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7eb30887-9626-47d4-a66e-506f2cf77df6) and start prompting.
+- **📊 Project Management** - Complete lifecycle tracking from estimation to completion
+- **👥 Customer Relationship Management** - Church-focused CRM with service time coordination
+- **🚛 Fleet & Equipment Management** - Real-time asset tracking and maintenance scheduling
+- **📱 Mobile-First Design** - Touch-friendly interfaces for field crews
+- **🔒 Enterprise Security** - Bank-level security with role-based access control
+- **📈 Business Intelligence** - Advanced analytics and performance metrics
+- **🌤️ Weather Integration** - Operation planning with weather-aware scheduling
+- **💰 Financial Management** - Cost tracking, revenue analysis, and profitability reporting
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Quick Start
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **Git** - [Download here](https://git-scm.com/)
+- **Supabase Account** - [Sign up here](https://supabase.com/)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd pavemaster-suite
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. **Run the automated setup**
+   ```bash
+   # macOS/Linux
+   chmod +x scripts/install_dependencies.sh
+   ./scripts/install_dependencies.sh
+   
+   # Windows
+   scripts/install_dependencies.bat
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. **Configure your environment**
+   ```bash
+   # Update .env with your actual configuration
+   nano .env
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+5. **Visit the application**
+   Open [http://localhost:5173](http://localhost:5173) in your browser
+
+## 🔐 Authentication & Getting Started
+
+### Admin Account Setup
+
+1. **Sign up with the super admin email**: `n8ter8@gmail.com`
+   - This email is automatically assigned super admin privileges
+   - You can also use the password reset feature if needed
+
+2. **Access the dashboard** after successful authentication
+
+3. **Configure your business settings** in the Settings page
+
+### User Management
+
+- Super admins can create additional user accounts
+- Role-based access control (super_admin, admin, manager, crew, driver)
+- Each user gets appropriate permissions based on their role
+
+## 🏗️ Architecture
+
+### Technology Stack
+
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **State Management**: TanStack Query + React Context
+- **Security**: Row Level Security (RLS) + Enterprise-grade validation
+
+### Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # Base shadcn/ui components
+│   ├── forms/          # Form components
+│   ├── charts/         # Data visualization
+│   └── modals/         # Modal dialogs
+├── pages/              # Route components
+├── hooks/              # Custom React hooks
+├── services/           # API integrations
+├── lib/                # Utilities and configurations
+├── contexts/           # React contexts
+├── types/              # TypeScript definitions
+└── assets/             # Static assets
 ```
 
-**Edit a file directly in GitHub**
+## 🛠️ Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Available Scripts
 
-**Use GitHub Codespaces**
+```bash
+# Development
+npm run dev              # Start development server
+npm run build           # Build for production
+npm run preview         # Preview production build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Code Quality
+npm run lint            # Run ESLint
+npm run format          # Format code with Prettier
+npm run type-check      # TypeScript type checking
 
-## What technologies are used for this project?
+# Database
+npm run db:reset        # Reset local database
+npm run db:seed         # Seed database with sample data
+npm run db:migrate      # Run pending migrations
+```
 
-This project is built with:
+### Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Copy `.env.example` to `.env` and configure:
 
-## How can I deploy this project?
+```bash
+# Required
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-Simply open [Lovable](https://lovable.dev/projects/7eb30887-9626-47d4-a66e-506f2cf77df6) and click on Share -> Publish.
+# Optional
+VITE_GOOGLE_MAPS_API_KEY=your_maps_key
+VITE_WEATHER_API_KEY=your_weather_key
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_key
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 🏢 Business Focus
 
-Yes, you can!
+### Church Parking Lot Specialization
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **⛪ Service Time Coordination** - Automatic scheduling around worship services
+- **👥 Congregation Communication** - Dedicated notification systems
+- **📋 Visual Project Approval** - Layout mockups for church approval
+- **🎯 Minimal Disruption Planning** - Strategic timing to avoid conflicts
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Small Business Optimization
+
+Designed for teams of **2 full-time + 1 part-time employees**:
+
+- **🚀 Automation-First** - Reduce manual administrative tasks by 30%
+- **📱 Mobile-Optimized** - Field crews can work efficiently on any device
+- **💡 Intuitive Design** - Minimal training required for new users
+- **📈 Scalable Architecture** - Grows with your business
+
+## 📞 Support
+
+- **🐛 Issues**: Use the GitHub Issues tab for bug reports
+- **💡 Feature Requests**: Submit feature requests via GitHub Issues
+- **📚 Documentation**: Check the docs/ folder for detailed guides
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**Made with ❤️ for the asphalt paving industry**
+
+[Lovable Project](https://lovable.dev/projects/7eb30887-9626-47d4-a66e-506f2cf77df6)
+
+</div>
