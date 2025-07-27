@@ -3081,6 +3081,42 @@ export type Database = {
           },
         ]
       }
+      themes: {
+        Row: {
+          colors: Json
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          is_system: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          colors: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          colors?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       time_records: {
         Row: {
           break_duration: number | null
@@ -3205,6 +3241,54 @@ export type Database = {
             columns: ["vehicle_id"]
             isOneToOne: false
             referencedRelation: "fleet_vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_preferences: {
+        Row: {
+          created_at: string | null
+          custom_settings: Json | null
+          id: string
+          theme_id: string | null
+          theme_mode: string | null
+          updated_at: string | null
+          user_id: string
+          wallpaper_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_settings?: Json | null
+          id?: string
+          theme_id?: string | null
+          theme_mode?: string | null
+          updated_at?: string | null
+          user_id: string
+          wallpaper_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_settings?: Json | null
+          id?: string
+          theme_id?: string | null
+          theme_mode?: string | null
+          updated_at?: string | null
+          user_id?: string
+          wallpaper_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_preferences_wallpaper_id_fkey"
+            columns: ["wallpaper_id"]
+            isOneToOne: false
+            referencedRelation: "wallpapers"
             referencedColumns: ["id"]
           },
         ]
@@ -3400,6 +3484,51 @@ export type Database = {
           created_at?: string | null
           id?: string
           name?: string
+        }
+        Relationships: []
+      }
+      wallpapers: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          image_url: string
+          is_public: boolean | null
+          is_system: boolean | null
+          name: string
+          tags: string[] | null
+          thumbnail_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_url: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          name: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          name?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }

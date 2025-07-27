@@ -127,5 +127,32 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  /* Wallpaper overlay to ensure readability */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: hsl(var(--background) / 0.85);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Ensure cards and content have proper backgrounds with wallpapers */
+  .card, .bg-card {
+    background: hsl(var(--card) / 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  .bg-background {
+    background: hsl(var(--background) / 0.95);
+    backdrop-filter: blur(8px);
   }
 }
