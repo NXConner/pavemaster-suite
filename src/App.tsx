@@ -1,3 +1,5 @@
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/AppSidebar"
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +13,7 @@ import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
 import AIHub from "./pages/AIHub";
 import Analytics from "./pages/Analytics";
+import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,31 +26,46 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <Index />
-                </ProtectedRoute>
-              } />
-              <Route path="/settings" element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } />
-              <Route path="/ai" element={
-                <ProtectedRoute>
-                  <AIHub />
-                </ProtectedRoute>
-              } />
-              <Route path="/analytics" element={
-                <ProtectedRoute>
-                  <Analytics />
-                </ProtectedRoute>
-              } />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <SidebarProvider>
+              <div className="min-h-screen flex w-full">
+                <Routes>
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/*" element={
+                    <ProtectedRoute>
+                      <>
+                        <header className="h-12 flex items-center border-b bg-background px-4 w-full">
+                          <SidebarTrigger className="mr-2" />
+                          <h2 className="font-semibold">PaveMaster Suite</h2>
+                        </header>
+                        <div className="flex flex-1 w-full">
+                          <AppSidebar />
+                          <main className="flex-1 overflow-auto">
+                            <Routes>
+                              <Route path="/" element={<Index />} />
+                              <Route path="/settings" element={<Settings />} />
+                              <Route path="/ai" element={<AIHub />} />
+                              <Route path="/analytics" element={<Analytics />} />
+                              <Route path="/mobile" element={<Mobile />} />
+                              {/* Placeholder routes for sidebar items */}
+                              <Route path="/tracking" element={<div className="p-6"><h1>GPS Tracking (Coming Soon)</h1></div>} />
+                              <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
+                              <Route path="/measurements" element={<div className="p-6"><h1>Measurements (Coming Soon)</h1></div>} />
+                              <Route path="/projects" element={<div className="p-6"><h1>Projects (Coming Soon)</h1></div>} />
+                              <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
+                              <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
+                              <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />
+                              <Route path="/finance" element={<div className="p-6"><h1>Finance (Coming Soon)</h1></div>} />
+                              <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
+                              <Route path="*" element={<NotFound />} />
+                            </Routes>
+                          </main>
+                        </div>
+                      </>
+                    </ProtectedRoute>
+                  } />
+                </Routes>
+              </div>
+            </SidebarProvider>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

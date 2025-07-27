@@ -1,0 +1,30 @@
+{
+  "appId": "app.lovable.7eb30887962647d4a66e506f2cf77df6",
+  "appName": "pavemaster-suite",
+  "webDir": "dist",
+  "server": {
+    "url": "https://7eb30887-9626-47d4-a66e-506f2cf77df6.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#ffffffff",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "androidSpinnerStyle": "large",
+      "iosSpinnerStyle": "small",
+      "spinnerColor": "#999999",
+      "splashFullScreen": true,
+      "splashImmersive": true,
+      "layoutName": "launch_screen",
+      "useDialog": true
+    },
+    "StatusBar": {
+      "style": "default",
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
