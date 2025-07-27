@@ -2404,37 +2404,58 @@ export type Database = {
       }
       projects: {
         Row: {
+          actual_cost: number | null
+          client_email: string | null
+          client_name: string | null
+          client_phone: string | null
           created_at: string | null
           created_by: string | null
           customer_id: string | null
           description: string | null
           end_date: string | null
+          estimated_cost: number | null
           id: string
           name: string
+          project_type: Database["public"]["Enums"]["project_type"] | null
+          site_address: string | null
           start_date: string | null
           status: Database["public"]["Enums"]["project_status"] | null
           updated_at: string | null
         }
         Insert: {
+          actual_cost?: number | null
+          client_email?: string | null
+          client_name?: string | null
+          client_phone?: string | null
           created_at?: string | null
           created_by?: string | null
           customer_id?: string | null
           description?: string | null
           end_date?: string | null
+          estimated_cost?: number | null
           id?: string
           name: string
+          project_type?: Database["public"]["Enums"]["project_type"] | null
+          site_address?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"] | null
           updated_at?: string | null
         }
         Update: {
+          actual_cost?: number | null
+          client_email?: string | null
+          client_name?: string | null
+          client_phone?: string | null
           created_at?: string | null
           created_by?: string | null
           customer_id?: string | null
           description?: string | null
           end_date?: string | null
+          estimated_cost?: number | null
           id?: string
           name?: string
+          project_type?: Database["public"]["Enums"]["project_type"] | null
+          site_address?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"] | null
           updated_at?: string | null
@@ -5613,7 +5634,30 @@ export type Database = {
         | "Field Crew Lead"
         | "Field Technician"
         | "Client"
+      equipment_status:
+        | "available"
+        | "in_use"
+        | "maintenance"
+        | "out_of_service"
+      equipment_type:
+        | "paver"
+        | "roller"
+        | "truck"
+        | "trailer"
+        | "compactor"
+        | "seal_coating_tank"
+        | "line_striper"
+        | "crack_sealer"
+        | "tools"
       project_status: "pending" | "in_progress" | "completed" | "cancelled"
+      project_type:
+        | "asphalt_paving"
+        | "sealcoating"
+        | "line_striping"
+        | "crack_sealing"
+        | "pothole_repair"
+        | "overlay"
+        | "maintenance"
       user_role: "admin" | "manager" | "user" | "super_admin"
       weather_condition: "sunny" | "cloudy" | "rainy" | "snowy" | "windy"
     }
@@ -5759,7 +5803,33 @@ export const Constants = {
         "Field Technician",
         "Client",
       ],
+      equipment_status: [
+        "available",
+        "in_use",
+        "maintenance",
+        "out_of_service",
+      ],
+      equipment_type: [
+        "paver",
+        "roller",
+        "truck",
+        "trailer",
+        "compactor",
+        "seal_coating_tank",
+        "line_striper",
+        "crack_sealer",
+        "tools",
+      ],
       project_status: ["pending", "in_progress", "completed", "cancelled"],
+      project_type: [
+        "asphalt_paving",
+        "sealcoating",
+        "line_striping",
+        "crack_sealing",
+        "pothole_repair",
+        "overlay",
+        "maintenance",
+      ],
       user_role: ["admin", "manager", "user", "super_admin"],
       weather_condition: ["sunny", "cloudy", "rainy", "snowy", "windy"],
     },
