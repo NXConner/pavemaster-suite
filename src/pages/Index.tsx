@@ -7,6 +7,9 @@ import { RecentActivity } from "@/components/RecentActivity";
 import { SecurityDashboard } from "@/components/SecurityDashboard";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { Button } from "@/components/ui/button";
+import { DashboardCustomizer } from "@/components/DashboardCustomizer";
+import { NotificationCenter } from "@/components/NotificationCenter";
+import { EnhancedProjectManagement } from "@/components/EnhancedProjectManagement";
 import { useState } from "react";
 import dashboardHero from "@/assets/dashboard-hero.jpg";
 
@@ -87,18 +90,22 @@ const Index = () => {
 
       {/* Dashboard Content */}
       <div className="container py-8 space-y-8">
-        {/* Security Dashboard Toggle */}
+        {/* Dashboard Controls */}
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Dashboard Overview</h2>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSecurityDashboard(!showSecurityDashboard)}
-            className="flex items-center space-x-2"
-          >
-            <Shield className="h-4 w-4" />
-            <span>{showSecurityDashboard ? 'Hide' : 'Show'} Security Status</span>
-          </Button>
+          <div className="flex items-center space-x-2">
+            <NotificationCenter />
+            <DashboardCustomizer />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSecurityDashboard(!showSecurityDashboard)}
+              className="flex items-center space-x-2"
+            >
+              <Shield className="h-4 w-4" />
+              <span>{showSecurityDashboard ? 'Hide' : 'Show'} Security Status</span>
+            </Button>
+          </div>
         </div>
 
         {/* Security Dashboard */}
@@ -135,12 +142,15 @@ const Index = () => {
           />
         </div>
 
+        {/* Enhanced Project Management */}
+        <EnhancedProjectManagement />
+
         {/* Main Content Grid */}
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Projects Overview */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">Active Projects</h2>
+              <h2 className="text-2xl font-bold text-foreground">Quick Project Overview</h2>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <CheckCircle className="h-4 w-4 text-success" />
                 <span>23 Active</span>
