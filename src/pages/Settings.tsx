@@ -3,7 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { Header } from '@/components/Header';
-import { Settings, Palette, User, Shield, Bell } from 'lucide-react';
+import { RealtimeDashboard } from '@/components/RealtimeDashboard';
+import { Settings, Palette, User, Shield, Bell, Activity } from 'lucide-react';
 
 export default function SettingsPage() {
   return (
@@ -21,7 +22,7 @@ export default function SettingsPage() {
         <Separator />
 
         <Tabs defaultValue="appearance" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="appearance" className="flex items-center gap-2">
               <Palette className="h-4 w-4" />
               Appearance
@@ -37,6 +38,10 @@ export default function SettingsPage() {
             <TabsTrigger value="notifications" className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
               Notifications
+            </TabsTrigger>
+            <TabsTrigger value="realtime" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Real-time
             </TabsTrigger>
           </TabsList>
 
@@ -91,6 +96,20 @@ export default function SettingsPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">Notification settings coming soon...</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="realtime" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Real-time Operations</CardTitle>
+                <CardDescription>
+                  Monitor live database updates, user presence, and system activity
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RealtimeDashboard />
               </CardContent>
             </Card>
           </TabsContent>
