@@ -3,8 +3,6 @@
  * Defines OpenAPI/Swagger specification for all API endpoints
  */
 
-import swaggerJSDoc from 'swagger-jsdoc';
-
 // OpenAPI specification configuration
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -312,17 +310,11 @@ const apiDocumentation = {
   },
 };
 
-// Swagger options
-const options = {
-  definition: {
-    ...swaggerDefinition,
-    paths: apiDocumentation,
-  },
-  apis: ['./src/integrations/supabase/functions/*.ts'], // Path to API files
+// Static swagger specification (no Node.js dependencies)
+export const swaggerSpec = {
+  ...swaggerDefinition,
+  paths: apiDocumentation,
 };
-
-// Generate swagger specification
-export const swaggerSpec = swaggerJSDoc(options);
 
 // API examples for testing
 export const apiExamples = {
