@@ -6,6 +6,8 @@ import { Header } from '@/components/Header';
 import { RealtimeDashboard } from '@/components/RealtimeDashboard';
 import { SecurityMonitor } from '@/components/enhanced/SecurityMonitor';
 import { Settings, Palette, User, Shield, Bell, Activity } from 'lucide-react';
+import { AccountSettings } from '@/components/enhanced/AccountSettings';
+import { NotificationSettings } from '@/components/enhanced/NotificationSettings';
 
 export default function SettingsPage() {
   return (
@@ -51,20 +53,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="account" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Account Settings
-                </CardTitle>
-                <CardDescription>
-                  Manage your account information and preferences
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Account settings coming soon...</p>
-              </CardContent>
-            </Card>
+            <AccountSettings />
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">
@@ -72,20 +61,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-5 w-5" />
-                  Notification Settings
-                </CardTitle>
-                <CardDescription>
-                  Configure how and when you receive notifications
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Notification settings coming soon...</p>
-              </CardContent>
-            </Card>
+            <NotificationSettings />
           </TabsContent>
 
           <TabsContent value="realtime" className="space-y-6">
