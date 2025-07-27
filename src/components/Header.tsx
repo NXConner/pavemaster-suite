@@ -1,4 +1,4 @@
-import { Building2, Bell, Settings, User, LogOut, Shield } from "lucide-react";
+import { Building2, Settings, User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationCenter } from "@/components/enhanced/NotificationCenter";
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -29,10 +30,8 @@ export function Header() {
 
         {/* User Actions */}
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon">
-            <Bell className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
+          <NotificationCenter />
+          <Button variant="ghost" size="icon" asChild className="hover-scale">
             <Link to="/settings">
               <Settings className="h-5 w-5" />
             </Link>

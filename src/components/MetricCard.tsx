@@ -15,11 +15,11 @@ interface MetricCardProps {
 
 export function MetricCard({ title, value, change, icon, className }: MetricCardProps) {
   return (
-    <Card className={cn("transition-all duration-300 hover:shadow-md", className)}>
+    <Card className={cn("group transition-all duration-300 hover:shadow-lg hover:scale-105 hover-glow animate-fade-in", className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-primary">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               {icon}
             </div>
             <div>
