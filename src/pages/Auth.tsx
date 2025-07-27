@@ -12,9 +12,10 @@ import { validateEmail, validatePassword, sanitizeInput } from '@/lib/security';
 import { Loader2, Shield, Truck } from 'lucide-react';
 
 export default function Auth() {
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn, signUp, resetPassword } = useAuth();
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [resetMode, setResetMode] = useState(false);
 
   // Redirect if already authenticated
   if (user) {
@@ -88,6 +89,33 @@ export default function Auth() {
     setLoading(false);
   };
 
+  const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setValidationErrors([]);
+    
+    const formData = new FormData(e.currentTarget);
+    const email = sanitizeInput(formData.get('email') as string);
+    
+    // Validate input
+    const errors: string[] = [];
+    if (!validateEmail(email)) {
+      errors.push('Please enter a valid email address');
+    }
+    
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      setLoading(false);
+      return;
+    }
+    
+    const { error } = await resetPassword(email);
+    if (!error) {
+      setResetMode(false);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
@@ -122,11 +150,49 @@ export default function Auth() {
 
         {/* Auth Tabs */}
         <Card>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
+          {resetMode ? (
+            <form onSubmit={handleResetPassword}>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-xl">Reset Password</CardTitle>
+                <CardDescription>
+                  Enter your email to receive a password reset link
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="reset-email">Email</Label>
+                  <Input
+                    id="reset-email"
+                    name="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    required
+                    disabled={loading}
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-2">
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Send Reset Link
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  className="w-full" 
+                  onClick={() => setResetMode(false)}
+                  disabled={loading}
+                >
+                  Back to Sign In
+                </Button>
+              </CardFooter>
+            </form>
+          ) : (
+            <Tabs defaultValue="signin" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="signin">Sign In</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              </TabsList>
 
             <TabsContent value="signin">
               <form onSubmit={handleSignIn}>
@@ -159,10 +225,19 @@ export default function Auth() {
                     />
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex flex-col space-y-2">
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Sign In
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    className="w-full text-sm" 
+                    onClick={() => setResetMode(true)}
+                    disabled={loading}
+                  >
+                    Forgot your password?
                   </Button>
                 </CardFooter>
               </form>
@@ -232,7 +307,8 @@ export default function Auth() {
                 </CardFooter>
               </form>
             </TabsContent>
-          </Tabs>
+            </Tabs>
+          )}
         </Card>
 
         <Separator />
