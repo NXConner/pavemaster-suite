@@ -16,6 +16,10 @@ import Analytics from "./pages/Analytics";
 import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
 import ApiDocumentation from "@/components/ApiDocumentation";
+import Tracking from "./pages/Tracking";
+import Measurements from "./pages/Measurements";
+import ParkingLotDesigner from "./pages/ParkingLotDesigner";
+import Projects from "./pages/Projects";
 
 const queryClient = new QueryClient();
 
@@ -48,11 +52,13 @@ const App = () => (
                               <Route path="/analytics" element={<Analytics />} />
                               <Route path="/mobile" element={<Mobile />} />
                               <Route path="/api-docs" element={<ApiDocumentation />} />
+                              {/* Feature pages */}
+                              <Route path="/tracking" element={<Tracking />} />
+                              <Route path="/measurements" element={<Measurements />} />
+                              <Route path="/parking-designer" element={<ParkingLotDesigner />} />
+                              <Route path="/projects" element={<Projects />} />
                               {/* Placeholder routes for sidebar items */}
-                              <Route path="/tracking" element={<div className="p-6"><h1>GPS Tracking (Coming Soon)</h1></div>} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
-                              <Route path="/measurements" element={<div className="p-6"><h1>Measurements (Coming Soon)</h1></div>} />
-                              <Route path="/projects" element={<div className="p-6"><h1>Projects (Coming Soon)</h1></div>} />
                               <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
                               <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
                               <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />

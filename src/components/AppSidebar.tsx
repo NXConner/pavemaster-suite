@@ -26,7 +26,8 @@ import {
   MapPin,
   Camera,
   Activity,
-  BookOpen
+  BookOpen,
+  Layout
 } from "lucide-react"
 
 const mainItems = [
@@ -42,6 +43,7 @@ const fieldItems = [
   { title: "GPS Tracking", url: "/tracking", icon: MapPin },
   { title: "Photo Reports", url: "/photos", icon: Camera },
   { title: "Measurements", url: "/measurements", icon: Activity },
+  { title: "Parking Designer", url: "/parking-designer", icon: Layout },
 ]
 
 const managementItems = [
