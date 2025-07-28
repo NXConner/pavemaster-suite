@@ -36,6 +36,7 @@ const PerformanceMonitor = lazy(() => import("./components/PerformanceMonitor"))
 const AdvancedDashboard = lazy(() => import("./components/AdvancedDashboard"));
 const PredictiveAnalytics = lazy(() => import("./components/PredictiveAnalytics"));
 const IoTDashboard = lazy(() => import("./components/IoTDashboard"));
+const GlobalExpansion = lazy(() => import("./components/GlobalExpansion"));
 const VeteranResources = lazy(() => import("./pages/VeteranResources"));
 const FleetManagement = lazy(() => import("./pages/FleetManagement"));
 const CompanyResources = lazy(() => import("./pages/CompanyResources"));
@@ -103,6 +104,7 @@ const App = () => (
                             <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
                             <Route path="/predictive-analytics" element={<PredictiveAnalytics />} />
                             <Route path="/iot-monitoring" element={<IoTDashboard />} />
+                            <Route path="/global-expansion" element={<GlobalExpansion />} />
                             {/* Company Features */}
                             <Route path="/veterans" element={<VeteranResources />} />
                             <Route path="/fleet" element={<FleetManagement />} />

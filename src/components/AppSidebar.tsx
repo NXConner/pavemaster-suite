@@ -32,13 +32,15 @@ import {
   Flag,
   Building2,
   Brain,
-  Monitor
+  Monitor,
+  Globe
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Insights", url: "/predictive-analytics", icon: Brain },
+  { title: "Global Expansion", url: "/global-expansion", icon: Globe },
   { title: "AI Hub", url: "/ai", icon: Zap },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },

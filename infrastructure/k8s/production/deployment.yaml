@@ -1,0 +1,364 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pavemaster-suite
+  namespace: pavemaster-production
+  labels:
+    app: pavemaster-suite
+    version: v1
+    environment: production
+    tier: frontend
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: pavemaster-suite
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: pavemaster-suite
+        version: v1
+        environment: production
+        tier: frontend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+      - name: pavemaster-suite
+        image: ghcr.io/pavemaster/pavemaster-suite:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: VITE_ENVIRONMENT
+          value: "production"
+        - name: VITE_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pavemaster-config
+              key: api-url
+        - name: VITE_SUPABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: pavemaster-secrets
+              key: supabase-url
+        - name: VITE_SUPABASE_ANON_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pavemaster-secrets
+              key: supabase-anon-key
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: ssl-certs
+          mountPath: /app/ssl
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: pavemaster-config
+      - name: ssl-certs
+        secret:
+          secretName: pavemaster-ssl-certs
+      imagePullSecrets:
+      - name: ghcr-secret
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - pavemaster-suite
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "pavemaster"
+        effect: "NoSchedule"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pavemaster-suite-service
+  namespace: pavemaster-production
+  labels:
+    app: pavemaster-suite
+    environment: production
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: pavemaster-suite
+    environment: production
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pavemaster-suite-hpa
+  namespace: pavemaster-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pavemaster-suite
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+      selectPolicy: Max
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pavemaster-config
+  namespace: pavemaster-production
+data:
+  api-url: "https://api.pavemaster.com"
+  cdn-url: "https://cdn.pavemaster.com"
+  environment: "production"
+  log-level: "info"
+  feature-flags: |
+    {
+      "predictive-analytics": true,
+      "blockchain-integration": true,
+      "iot-monitoring": true,
+      "ai-insights": true,
+      "veteran-support": true,
+      "fleet-management": true,
+      "advanced-security": true
+    }
+  nginx.conf: |
+    server {
+        listen 8080;
+        server_name _;
+        root /app/dist;
+        index index.html;
+        
+        # Security headers
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co;" always;
+        
+        # Compression
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 1024;
+        gzip_comp_level 6;
+        gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
+        
+        # Cache static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+        
+        # Health checks
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
+        
+        location /ready {
+            access_log off;
+            return 200 "ready\n";
+            add_header Content-Type text/plain;
+        }
+        
+        # SPA routing
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+    }
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pavemaster-suite-ingress
+  namespace: pavemaster-production
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  tls:
+  - hosts:
+    - app.pavemaster.com
+    - www.pavemaster.com
+    secretName: pavemaster-suite-tls
+  rules:
+  - host: app.pavemaster.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pavemaster-suite-service
+            port:
+              number: 80
+  - host: www.pavemaster.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pavemaster-suite-service
+            port:
+              number: 80
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pavemaster-suite-pdb
+  namespace: pavemaster-production
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: pavemaster-suite
+      environment: production
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pavemaster-suite-sa
+  namespace: pavemaster-production
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/PaveMasterSuiteRole
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pavemaster-suite-network-policy
+  namespace: pavemaster-production
+spec:
+  podSelector:
+    matchLabels:
+      app: pavemaster-suite
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: nginx-ingress
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+    - protocol: UDP
+      port: 53
