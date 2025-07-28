@@ -30,6 +30,8 @@ import EquipmentManagement from "./pages/EquipmentManagement";
 import SchedulingSystem from "./pages/SchedulingSystem";
 import FinancialManagement from "./pages/FinancialManagement";
 import SafetyManagement from "./pages/SafetyManagement";
+import PerformanceMonitor from "./components/PerformanceMonitor";
+import AdvancedDashboard from "./components/AdvancedDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +91,9 @@ const App = () => (
                                   <Route path="/schedule" element={<SchedulingSystem />} />
                                   <Route path="/finance" element={<FinancialManagement />} />
                                   <Route path="/safety" element={<SafetyManagement />} />
+                                  {/* Advanced Features */}
+                                  <Route path="/performance" element={<PerformanceMonitor />} />
+                                  <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
                                   <Route path="*" element={<NotFound />} />
                                 </Routes>
                               </Suspense>
