@@ -20,6 +20,12 @@ import Tracking from "./pages/Tracking";
 import Measurements from "./pages/Measurements";
 import ParkingLotDesigner from "./pages/ParkingLotDesigner";
 import Projects from "./pages/Projects";
+import PhotoReports from "./pages/PhotoReports";
+import TeamManagement from "./pages/TeamManagement";
+import EquipmentManagement from "./pages/EquipmentManagement";
+import SchedulingSystem from "./pages/SchedulingSystem";
+import FinancialManagement from "./pages/FinancialManagement";
+import SafetyManagement from "./pages/SafetyManagement";
 
 const queryClient = new QueryClient();
 
@@ -58,12 +64,12 @@ const App = () => (
                               <Route path="/parking-designer" element={<ParkingLotDesigner />} />
                               <Route path="/projects" element={<Projects />} />
                               {/* Placeholder routes for sidebar items */}
-                              <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
-                              <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
-                              <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
-                              <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />
-                              <Route path="/finance" element={<div className="p-6"><h1>Finance (Coming Soon)</h1></div>} />
-                              <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
+                                        <Route path="/photos" element={<PhotoReports />} />
+          <Route path="/team" element={<TeamManagement />} />
+          <Route path="/equipment" element={<EquipmentManagement />} />
+                     <Route path="/schedule" element={<SchedulingSystem />} />
+                     <Route path="/finance" element={<FinancialManagement />} />
+                     <Route path="/safety" element={<SafetyManagement />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </main>
