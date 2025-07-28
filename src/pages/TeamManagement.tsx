@@ -69,6 +69,25 @@ interface Employee {
     hoursThisMonth: number;
     overtimeHours: number;
   };
+  documents: EmployeeDocument[];
+  veteranStatus?: {
+    isVeteran: boolean;
+    branch?: string;
+    rank?: string;
+    serviceYears?: string;
+    disabilityRating?: number;
+  };
+}
+
+interface EmployeeDocument {
+  id: string;
+  type: 'contract' | 'license' | 'id' | 'certification' | 'medical' | 'background' | 'w4' | 'i9' | 'other';
+  name: string;
+  fileName: string;
+  uploadDate: string;
+  expirationDate?: string;
+  verified: boolean;
+  required: boolean;
 }
 
 interface TimeEntry {

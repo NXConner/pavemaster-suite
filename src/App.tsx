@@ -32,6 +32,9 @@ import FinancialManagement from "./pages/FinancialManagement";
 import SafetyManagement from "./pages/SafetyManagement";
 import PerformanceMonitor from "./components/PerformanceMonitor";
 import AdvancedDashboard from "./components/AdvancedDashboard";
+import VeteranResources from "./pages/VeteranResources";
+import FleetManagement from "./pages/FleetManagement";
+import CompanyResources from "./pages/CompanyResources";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,10 +94,14 @@ const App = () => (
                                   <Route path="/schedule" element={<SchedulingSystem />} />
                                   <Route path="/finance" element={<FinancialManagement />} />
                                   <Route path="/safety" element={<SafetyManagement />} />
-                                  {/* Advanced Features */}
-                                  <Route path="/performance" element={<PerformanceMonitor />} />
-                                  <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
-                                  <Route path="*" element={<NotFound />} />
+                                                              {/* Advanced Features */}
+                            <Route path="/performance" element={<PerformanceMonitor />} />
+                            <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
+                            {/* Company Features */}
+                            <Route path="/veterans" element={<VeteranResources />} />
+                            <Route path="/fleet" element={<FleetManagement />} />
+                            <Route path="/resources" element={<CompanyResources />} />
+                            <Route path="*" element={<NotFound />} />
                                 </Routes>
                               </Suspense>
                             </ErrorBoundary>
