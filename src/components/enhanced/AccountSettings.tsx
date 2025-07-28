@@ -99,7 +99,7 @@ export function AccountSettings() {
               <Input
                 id="firstName"
                 value={formData.firstName}
-                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                onChange={(e) => { handleInputChange('firstName', e.target.value); }}
                 placeholder="Enter your first name"
                 className="transition-all duration-200 focus:scale-[1.02]"
               />
@@ -109,7 +109,7 @@ export function AccountSettings() {
               <Input
                 id="lastName"
                 value={formData.lastName}
-                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                onChange={(e) => { handleInputChange('lastName', e.target.value); }}
                 placeholder="Enter your last name"
                 className="transition-all duration-200 focus:scale-[1.02]"
               />
@@ -122,7 +122,7 @@ export function AccountSettings() {
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={(e) => { handleInputChange('email', e.target.value); }}
               placeholder="Enter your email"
               className="transition-all duration-200 focus:scale-[1.02]"
             />
@@ -167,7 +167,7 @@ export function AccountSettings() {
               id="currentPassword"
               type="password"
               value={formData.currentPassword}
-              onChange={(e) => handleInputChange('currentPassword', e.target.value)}
+              onChange={(e) => { handleInputChange('currentPassword', e.target.value); }}
               placeholder="Enter current password"
               className="transition-all duration-200 focus:scale-[1.02]"
             />
@@ -180,7 +180,7 @@ export function AccountSettings() {
                 id="newPassword"
                 type="password"
                 value={formData.newPassword}
-                onChange={(e) => handleInputChange('newPassword', e.target.value)}
+                onChange={(e) => { handleInputChange('newPassword', e.target.value); }}
                 placeholder="Enter new password"
                 className="transition-all duration-200 focus:scale-[1.02]"
               />
@@ -191,7 +191,7 @@ export function AccountSettings() {
                 id="confirmPassword"
                 type="password"
                 value={formData.confirmPassword}
-                onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                onChange={(e) => { handleInputChange('confirmPassword', e.target.value); }}
                 placeholder="Confirm new password"
                 className="transition-all duration-200 focus:scale-[1.02]"
               />
@@ -210,7 +210,7 @@ export function AccountSettings() {
             <Switch
               id="twoFactor"
               checked={formData.twoFactorEnabled}
-              onCheckedChange={(checked) => handleInputChange('twoFactorEnabled', checked)}
+              onCheckedChange={(checked) => { handleInputChange('twoFactorEnabled', checked); }}
             />
           </div>
 

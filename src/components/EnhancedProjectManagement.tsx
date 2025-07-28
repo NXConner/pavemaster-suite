@@ -218,7 +218,7 @@ export function EnhancedProjectManagement() {
                     </span>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => setSelectedProject(project.id)}>
+                <Button variant="outline" size="sm" onClick={() => { setSelectedProject(project.id); }}>
                   View Details
                 </Button>
               </div>

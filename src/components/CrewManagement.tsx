@@ -180,7 +180,7 @@ export function CrewManagement() {
           <Input
             placeholder="Search crew members..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); }}
             className="pl-10"
           />
         </div>
@@ -254,7 +254,7 @@ export function CrewManagement() {
                         variant="outline" 
                         size="sm" 
                         className="flex-1 text-xs"
-                        onClick={() => handleContactMember(member)}
+                        onClick={() => { handleContactMember(member); }}
                       >
                         Contact
                       </Button>
@@ -262,7 +262,7 @@ export function CrewManagement() {
                         variant="outline" 
                         size="sm" 
                         className="flex-1 text-xs"
-                        onClick={() => handleAssignProject(member.id)}
+                        onClick={() => { handleAssignProject(member.id); }}
                       >
                         Assign
                       </Button>

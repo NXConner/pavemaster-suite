@@ -134,7 +134,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
             <Button
               variant={showVoiceInterface ? "default" : "outline"}
               size="sm"
-              onClick={() => setShowVoiceInterface(!showVoiceInterface)}
+              onClick={() => { setShowVoiceInterface(!showVoiceInterface); }}
             >
               {showVoiceInterface ? <Volume2 className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
             </Button>
@@ -227,7 +227,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => { setInput(e.target.value); }}
             placeholder="Ask me anything about pavement operations..."
             disabled={isLoading}
             className="flex-1"

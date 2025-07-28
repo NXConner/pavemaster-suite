@@ -136,7 +136,7 @@ export function FinancialDashboard() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">Financial Dashboard</h2>
         <div className="flex items-center space-x-2">
-          <Select value={timeframe} onValueChange={(value: 'month' | 'quarter' | 'year') => setTimeframe(value)}>
+          <Select value={timeframe} onValueChange={(value: 'month' | 'quarter' | 'year') => { setTimeframe(value); }}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>

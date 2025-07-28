@@ -85,7 +85,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
       mediaRecorderRef.current.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         await processAudio(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach(track => { track.stop(); });
       };
 
       mediaRecorderRef.current.start();

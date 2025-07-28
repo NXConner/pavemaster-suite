@@ -267,10 +267,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (themeMode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = () => applyTheme(currentTheme, themeMode);
+      const handleChange = () => { applyTheme(currentTheme, themeMode); };
       
       mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      return () => { mediaQuery.removeEventListener('change', handleChange); };
     }
   }, [themeMode, currentTheme]);
 

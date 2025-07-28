@@ -151,7 +151,7 @@ export function NotificationCenter() {
                     getNotificationColor(notification.type),
                     !notification.read && 'bg-accent/50'
                   )}
-                  onClick={() => markAsRead(notification.id)}
+                  onClick={() => { markAsRead(notification.id); }}
                 >
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0 mt-0.5">

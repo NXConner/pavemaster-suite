@@ -104,7 +104,7 @@ const Index = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowSecurityDashboard(!showSecurityDashboard)}
+              onClick={() => { setShowSecurityDashboard(!showSecurityDashboard); }}
               className="flex items-center space-x-2"
             >
               <Shield className="h-4 w-4" />

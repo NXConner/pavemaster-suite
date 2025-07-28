@@ -142,7 +142,7 @@ export function NotificationCenter() {
       }
     }, 30000); // Check every 30 seconds
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   return (
@@ -192,7 +192,7 @@ export function NotificationCenter() {
                             id="projects-toggle"
                             checked={settings.projects}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, projects: checked }))
+                              { setSettings(prev => ({ ...prev, projects: checked })); }
                             }
                           />
                         </div>
@@ -202,7 +202,7 @@ export function NotificationCenter() {
                             id="equipment-toggle"
                             checked={settings.equipment}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, equipment: checked }))
+                              { setSettings(prev => ({ ...prev, equipment: checked })); }
                             }
                           />
                         </div>
@@ -212,7 +212,7 @@ export function NotificationCenter() {
                             id="weather-toggle"
                             checked={settings.weather}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, weather: checked }))
+                              { setSettings(prev => ({ ...prev, weather: checked })); }
                             }
                           />
                         </div>
@@ -222,7 +222,7 @@ export function NotificationCenter() {
                             id="system-toggle"
                             checked={settings.system}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, system: checked }))
+                              { setSettings(prev => ({ ...prev, system: checked })); }
                             }
                           />
                         </div>
@@ -233,7 +233,7 @@ export function NotificationCenter() {
                             id="email-toggle"
                             checked={settings.emailNotifications}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, emailNotifications: checked }))
+                              { setSettings(prev => ({ ...prev, emailNotifications: checked })); }
                             }
                           />
                         </div>
@@ -243,7 +243,7 @@ export function NotificationCenter() {
                             id="push-toggle"
                             checked={settings.pushNotifications}
                             onCheckedChange={(checked) => 
-                              setSettings(prev => ({ ...prev, pushNotifications: checked }))
+                              { setSettings(prev => ({ ...prev, pushNotifications: checked })); }
                             }
                           />
                         </div>
@@ -273,7 +273,7 @@ export function NotificationCenter() {
                             ? `${getNotificationColor(notification.type)} border-l-4` 
                             : 'bg-muted/30 border-transparent'
                         }`}
-                        onClick={() => markAsRead(notification.id)}
+                        onClick={() => { markAsRead(notification.id); }}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start space-x-3 flex-1">

@@ -64,8 +64,8 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
     loadWeatherData();
     
     // Setup online/offline detection
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const handleOnline = () => { setIsOnline(true); };
+    const handleOffline = () => { setIsOnline(false); };
     
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -348,7 +348,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => recordMeasurement(task.id)}
+                      onClick={() => { recordMeasurement(task.id); }}
                       className="flex items-center gap-2 text-xs"
                     >
                       <Thermometer className="h-3 w-3" />
@@ -358,7 +358,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                   {task.status === 'pending' && (
                     <Button
                       size="sm"
-                      onClick={() => updateTaskStatus(task.id, 'in_progress')}
+                      onClick={() => { updateTaskStatus(task.id, 'in_progress'); }}
                       className="text-xs"
                     >
                       Start Task
@@ -368,7 +368,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => updateTaskStatus(task.id, 'completed')}
+                      onClick={() => { updateTaskStatus(task.id, 'completed'); }}
                       className="text-xs"
                     >
                       Complete

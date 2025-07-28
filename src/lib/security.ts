@@ -3,20 +3,33 @@
  * Enterprise-grade security functions for input validation and sanitization
  */
 
-import DOMPurify from 'dompurify';
+import CryptoJS from 'crypto-js';
+import { createClient } from '@supabase/supabase-js';
 
-/**
- * Sanitize HTML content to prevent XSS attacks
- */
-export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li'],
-    ALLOWED_ATTR: []
-  });
+// Type definitions for better type safety
+interface PasswordValidation {
+  isValid: boolean;
+  errors: string[];
+}
+
+interface SecurityAuditLog {
+  id?: string;
+  user_id: string;
+  action: string;
+  ip_address: string;
+  user_agent: string;
+  status: 'success' | 'failure' | 'warning';
+  metadata?: Record<string, unknown>;
+  timestamp: string;
+}
+
+interface CSRFToken {
+  token: string;
+  timestamp: number;
 }
 
 /**
- * Validate and sanitize email addresses
+ * Validate email addresses
  */
 export function validateEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,16 +37,17 @@ export function validateEmail(email: string): boolean {
 }
 
 /**
- * Validate password strength
+ * Enhanced password validation with comprehensive rules
  */
-export function validatePassword(password: string): {
-  isValid: boolean;
-  errors: string[];
-} {
+export function validatePassword(password: string): PasswordValidation {
   const errors: string[] = [];
   
-  if (password.length < 8) {
-    errors.push('Password must be at least 8 characters long');
+  if (password.length < 12) {
+    errors.push('Password must be at least 12 characters long');
+  }
+  
+  if (password.length > 128) {
+    errors.push('Password must not exceed 128 characters');
   }
   
   if (!/[A-Z]/.test(password)) {
@@ -47,8 +61,9 @@ export function validatePassword(password: string): {
   if (!/\d/.test(password)) {
     errors.push('Password must contain at least one number');
   }
-  
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+
+  // Fixed regex - removed unnecessary escapes
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
     errors.push('Password must contain at least one special character');
   }
   
@@ -80,179 +95,246 @@ export class RateLimiter {
     private windowMs: number = 15 * 60 * 1000 // 15 minutes
   ) {
     // Clean up old entries periodically
-    setInterval(() => this.cleanup(), this.windowMs);
+    setInterval(() => {
+      this.cleanup();
+    }, this.windowMs);
   }
   
   isAllowed(identifier: string): boolean {
     const now = Date.now();
-    const userAttempts = this.attempts.get(identifier) || [];
+    const userAttempts = this.attempts.get(identifier) ?? [];
     
     // Remove old attempts outside the window
-    const recentAttempts = userAttempts.filter(
+    const validAttempts = userAttempts.filter(
       timestamp => now - timestamp < this.windowMs
     );
     
-    if (recentAttempts.length >= this.maxAttempts) {
-      secureLog(`Rate limit exceeded for ${identifier}`, { 
-        attempts: recentAttempts.length, 
-        maxAttempts: this.maxAttempts 
-      });
+    if (validAttempts.length >= this.maxAttempts) {
       return false;
     }
     
-    // Add current attempt
-    recentAttempts.push(now);
-    this.attempts.set(identifier, recentAttempts);
+    // Record this attempt
+    validAttempts.push(now);
+    this.attempts.set(identifier, validAttempts);
     
     return true;
-  }
-  
-  reset(identifier: string): void {
-    this.attempts.delete(identifier);
-    secureLog(`Rate limit reset for ${identifier}`);
   }
   
   private cleanup(): void {
     const now = Date.now();
     for (const [identifier, attempts] of this.attempts.entries()) {
-      const recentAttempts = attempts.filter(
+      const validAttempts = attempts.filter(
         timestamp => now - timestamp < this.windowMs
       );
       
-      if (recentAttempts.length === 0) {
+      if (validAttempts.length === 0) {
         this.attempts.delete(identifier);
       } else {
-        this.attempts.set(identifier, recentAttempts);
+        this.attempts.set(identifier, validAttempts);
       }
     }
   }
   
-  getAttemptCount(identifier: string): number {
-    const now = Date.now();
-    const userAttempts = this.attempts.get(identifier) || [];
-    return userAttempts.filter(timestamp => now - timestamp < this.windowMs).length;
+  getRemainingAttempts(identifier: string): number {
+    const userAttempts = this.attempts.get(identifier) ?? [];
+    return Math.max(0, this.maxAttempts - userAttempts.length);
   }
   
-  getRemainingAttempts(identifier: string): number {
-    return Math.max(0, this.maxAttempts - this.getAttemptCount(identifier));
+  getTimeUntilReset(identifier: string): number {
+    const userAttempts = this.attempts.get(identifier) ?? [];
+    if (userAttempts.length === 0) return 0;
+    
+    const oldestAttempt = Math.min(...userAttempts);
+    const resetTime = oldestAttempt + this.windowMs;
+    return Math.max(0, resetTime - Date.now());
   }
 }
 
 /**
- * Security headers for requests
+ * CSRF Token management
  */
-export const SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin'
-};
-
-/**
- * Validate UUID format
- */
-export function isValidUuid(uuid: string): boolean {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(uuid);
-}
-
-/**
- * Generate a secure random token
- */
-export function generateSecureToken(length: number = 32): string {
-  const array = new Uint8Array(length);
-  crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-}
-
-/**
- * Check if running in development mode
- */
-export function isDevelopment(): boolean {
-  return import.meta.env.DEV || import.meta.env.VITE_ENVIRONMENT === 'development';
-}
-
-/**
- * Secure logging (excludes sensitive data in production)
- */
-export function secureLog(message: string, data?: any): void {
-  if (isDevelopment()) {
-    console.log(`[SECURITY] ${message}`, data);
-  } else {
-    // In production, only log non-sensitive information
-    console.log(`[SECURITY] ${message}`);
+export class CSRFProtection {
+  private static tokenKey = 'csrf_token';
+  
+  static generateToken(): string {
+    const token = CryptoJS.lib.WordArray.random(32).toString();
+    const csrf: CSRFToken = {
+      token,
+      timestamp: Date.now()
+    };
+    
+    sessionStorage.setItem(this.tokenKey, JSON.stringify(csrf));
+    return token;
+  }
+  
+  static validateToken(token: string): boolean {
+    const stored = sessionStorage.getItem(this.tokenKey);
+    if (!stored) return false;
+    
+    try {
+      const csrf: CSRFToken = JSON.parse(stored);
+      
+      // Check if token is expired (24 hours)
+      if (Date.now() - csrf.timestamp > 24 * 60 * 60 * 1000) {
+        this.clearToken();
+        return false;
+      }
+      
+      return csrf.token === token;
+    } catch {
+      return false;
+    }
+  }
+  
+  static clearToken(): void {
+    sessionStorage.removeItem(this.tokenKey);
   }
 }
 
 /**
- * Enhanced CSP headers for better security
+ * Enhanced audit logging
  */
-export const ENHANCED_SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.openai.com; frame-ancestors 'none';",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self)',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
-};
+export class SecurityAuditLogger {
+  private supabase: ReturnType<typeof createClient>;
+  
+  constructor() {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      console.warn('Supabase configuration missing for audit logging');
+      throw new Error('Supabase configuration required for audit logging');
+    }
+    
+    this.supabase = createClient(supabaseUrl, supabaseKey);
+  }
+  
+  async log(logEntry: Omit<SecurityAuditLog, 'id' | 'timestamp'>): Promise<void> {
+    try {
+      const entry: SecurityAuditLog = {
+        ...logEntry,
+        timestamp: new Date().toISOString()
+      };
+      
+      const { error } = await this.supabase
+        .from('security_audit_logs')
+        .insert(entry);
+      
+      if (error) {
+        console.error('Failed to log security event:', error);
+      }
+    } catch (error) {
+      console.error('Audit logging error:', error);
+    }
+  }
+}
 
 /**
- * Validate file upload security
+ * XSS Protection helper
  */
-export function validateFileUpload(file: File): {
-  isValid: boolean;
-  errors: string[];
-} {
-  const errors: string[] = [];
-  const maxSize = 10 * 1024 * 1024; // 10MB
-  const allowedTypes = [
-    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-    'application/pdf', 'text/plain', 'text/csv',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'application/vnd.ms-excel'
+export function sanitizeHTML(html: string): string {
+  const div = document.createElement('div');
+  div.textContent = html;
+  return div.innerHTML;
+}
+
+/**
+ * Validate allowed origins for CORS
+ */
+export function validateOrigin(origin: string): boolean {
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'https://your-production-domain.com'
   ];
   
-  if (file.size > maxSize) {
-    errors.push('File size must be less than 10MB');
-  }
-  
-  if (!allowedTypes.includes(file.type)) {
-    errors.push('File type not allowed');
-  }
-  
-  // Check for suspicious file extensions
-  const suspiciousExtensions = ['.exe', '.scr', '.bat', '.cmd', '.com', '.pif', '.js', '.jar'];
-  const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-  
-  if (suspiciousExtensions.includes(fileExtension)) {
-    errors.push('File extension not allowed');
-  }
-  
-  return {
-    isValid: errors.length === 0,
-    errors
-  };
+  return allowedOrigins.includes(origin);
 }
 
 /**
- * Sanitize filename for safe storage
+ * Generate secure session ID
  */
-export function sanitizeFilename(filename: string): string {
-  return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_')
-    .replace(/_{2,}/g, '_')
-    .toLowerCase()
-    .slice(0, 100);
+export function generateSecureSessionId(): string {
+  return CryptoJS.lib.WordArray.random(32).toString();
 }
 
 /**
- * Create rate limiter instances for different actions
+ * Enhanced encryption helper
  */
-export const authRateLimiter = new RateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
-export const apiRateLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per minute
-export const uploadRateLimiter = new RateLimiter(10, 60 * 1000); // 10 uploads per minute
+export class EncryptionHelper {
+  private static readonly algorithm = 'AES';
+  
+  static encrypt(data: string, key: string): string {
+    return CryptoJS.AES.encrypt(data, key).toString();
+  }
+  
+  static decrypt(encryptedData: string, key: string): string {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+  
+  static hash(data: string): string {
+    return CryptoJS.SHA256(data).toString();
+  }
+}
+
+/**
+ * Input validation helper
+ */
+export function validateInput(
+  value: unknown,
+  type: 'email' | 'phone' | 'url' | 'alphanumeric'
+): boolean {
+  if (typeof value !== 'string') {
+    return false;
+  }
+  
+  switch (type) {
+    case 'email':
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    case 'phone':
+      return /^\+?[\d\s-()]+$/.test(value);
+    case 'url':
+      try {
+        new URL(value);
+        return true;
+      } catch {
+        return false;
+      }
+    case 'alphanumeric':
+      return /^[a-zA-Z0-9]+$/.test(value);
+    default:
+      return false;
+  }
+}
+
+/**
+ * Content Security Policy helper
+ */
+export function generateCSPHeader(): string {
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "font-src 'self'",
+    "connect-src 'self' https://*.supabase.co",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+    "base-uri 'self'"
+  ].join('; ');
+}
+
+/**
+ * Permission validation helper
+ */
+export function hasPermission(
+  userPermissions: string[],
+  requiredPermission: string
+): boolean {
+  return userPermissions.includes(requiredPermission) || 
+         userPermissions.includes('admin');
+}
 
 /**
  * Security audit logger
@@ -261,53 +343,26 @@ export async function logSecurityEvent(
   action: string,
   resourceType?: string,
   resourceId?: string,
-  details?: any
+  details?: Record<string, unknown>
 ): Promise<void> {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
-    
-    await supabase.rpc('log_security_event', {
-      p_action: action,
-      p_resource_type: resourceType,
-      p_resource_id: resourceId,
-      p_details: details
+    await auditLogger.log({
+      user_id: '', // Will be filled by the auth system
+      action,
+      ip_address: '', // Will be filled by the request context
+      user_agent: navigator.userAgent,
+      status: 'success',
+      metadata: {
+        resourceType,
+        resourceId,
+        ...details
+      }
     });
   } catch (error) {
-    secureLog('Failed to log security event', { action, error });
+    console.error('Failed to log security event:', error);
   }
 }
 
-/**
- * Check if request is from valid IP range (if configured)
- */
-export function isValidOrigin(origin: string): boolean {
-  const allowedOrigins = [
-    'localhost',
-    '127.0.0.1',
-    '.supabase.co',
-    '.vercel.app',
-    '.netlify.app'
-  ];
-  
-  return allowedOrigins.some(allowed => 
-    origin.includes(allowed) || origin === allowed
-  );
-}
-
-/**
- * Mask sensitive data for logging
- */
-export function maskSensitiveData(data: any): any {
-  if (typeof data !== 'object' || data === null) return data;
-  
-  const masked = { ...data };
-  const sensitiveKeys = ['password', 'token', 'api_key', 'secret', 'credit_card', 'ssn'];
-  
-  for (const key in masked) {
-    if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
-      masked[key] = '***MASKED***';
-    }
-  }
-  
-  return masked;
-}
+// Export instances for immediate use
+export const rateLimiter = new RateLimiter();
+export const auditLogger = new SecurityAuditLogger();

@@ -21,7 +21,7 @@ export default function ApiDocumentation() {
         title: "Copied to clipboard",
         description: `${label} example copied successfully`,
       });
-      setTimeout(() => setCopiedExample(null), 2000);
+      setTimeout(() => { setCopiedExample(null); }, 2000);
     } catch (err) {
       toast({
         title: "Copy failed",

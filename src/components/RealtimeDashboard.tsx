@@ -141,7 +141,7 @@ export function RealtimeDashboard() {
               <Badge 
                 variant={selectedTable === 'all' ? 'default' : 'secondary'}
                 className="cursor-pointer hover-scale"
-                onClick={() => setSelectedTable('all')}
+                onClick={() => { setSelectedTable('all'); }}
               >
                 All ({updates.length})
               </Badge>
@@ -150,7 +150,7 @@ export function RealtimeDashboard() {
                   key={table}
                   variant={selectedTable === table ? 'default' : 'secondary'}
                   className="cursor-pointer hover-scale"
-                  onClick={() => setSelectedTable(table)}
+                  onClick={() => { setSelectedTable(table); }}
                 >
                   {table} ({count})
                 </Badge>

@@ -203,7 +203,7 @@ export function SecureAuthForm() {
                     type="email"
                     placeholder="name@company.com"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={(e) => { handleInputChange('email', e.target.value); }}
                     disabled={isSubmitting}
                     required
                   />
@@ -216,7 +216,7 @@ export function SecureAuthForm() {
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
+                      onChange={(e) => { handleInputChange('password', e.target.value); }}
                       disabled={isSubmitting}
                       required
                     />
@@ -225,7 +225,7 @@ export function SecureAuthForm() {
                       variant="ghost"
                       size="sm"
                       className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => { setShowPassword(!showPassword); }}
                       disabled={isSubmitting}
                     >
                       {showPassword ? (
@@ -264,7 +264,7 @@ export function SecureAuthForm() {
                       id="firstName"
                       placeholder="John"
                       value={formData.firstName}
-                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      onChange={(e) => { handleInputChange('firstName', e.target.value); }}
                       disabled={isSubmitting}
                       required
                     />
@@ -275,7 +275,7 @@ export function SecureAuthForm() {
                       id="lastName"
                       placeholder="Doe"
                       value={formData.lastName}
-                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      onChange={(e) => { handleInputChange('lastName', e.target.value); }}
                       disabled={isSubmitting}
                       required
                     />
@@ -289,7 +289,7 @@ export function SecureAuthForm() {
                     type="email"
                     placeholder="name@company.com"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={(e) => { handleInputChange('email', e.target.value); }}
                     disabled={isSubmitting}
                     required
                   />
@@ -302,7 +302,7 @@ export function SecureAuthForm() {
                       id="signupPassword"
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
+                      onChange={(e) => { handleInputChange('password', e.target.value); }}
                       disabled={isSubmitting}
                       required
                     />
@@ -311,7 +311,7 @@ export function SecureAuthForm() {
                       variant="ghost"
                       size="sm"
                       className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => { setShowPassword(!showPassword); }}
                       disabled={isSubmitting}
                     >
                       {showPassword ? (

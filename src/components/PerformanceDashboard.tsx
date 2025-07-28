@@ -276,7 +276,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
               key={period}
               variant={selectedPeriod === period ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelectedPeriod(period)}
+              onClick={() => { setSelectedPeriod(period); }}
               className="capitalize"
             >
               {period}

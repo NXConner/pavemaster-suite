@@ -3893,11 +3893,11 @@ export type Database = {
         Returns: unknown
       }
       box: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: unknown
       }
       box2d: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: unknown
       }
       box2d_in: {
@@ -3917,7 +3917,7 @@ export type Database = {
         Returns: unknown
       }
       box3d: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: unknown
       }
       box3d_in: {
@@ -3933,7 +3933,7 @@ export type Database = {
         Returns: unknown
       }
       bytea: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: string
       }
       check_rate_limit: {
@@ -4023,13 +4023,13 @@ export type Database = {
       geometry: {
         Args:
           | { "": string }
-          | { "": string }
+           
           | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
+           
+           
+           
+           
+           
         Returns: unknown
       }
       geometry_above: {
@@ -4197,7 +4197,7 @@ export type Database = {
         Returns: boolean
       }
       geometrytype: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: string
       }
       geomfromewkb: {
@@ -4288,11 +4288,11 @@ export type Database = {
         Returns: Json
       }
       l2_norm: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: number
       }
       l2_normalize: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { "": string } | { "": unknown }  
         Returns: unknown
       }
       log_security_event: {
@@ -4576,7 +4576,7 @@ export type Database = {
         Returns: number
       }
       st_asbinary: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: string
       }
       st_asencodedpolyline: {
@@ -4588,7 +4588,7 @@ export type Database = {
         Returns: string
       }
       st_asewkt: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { "": string } | { "": unknown }  
         Returns: string
       }
       st_asgeojson: {
@@ -4670,7 +4670,7 @@ export type Database = {
         Returns: string
       }
       st_astext: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { "": string } | { "": unknown }  
         Returns: string
       }
       st_astwkb: {
@@ -4984,7 +4984,7 @@ export type Database = {
         Returns: unknown
       }
       st_geomfromgeojson: {
-        Args: { "": Json } | { "": Json } | { "": string }
+        Args: { "": Json }   | { "": string }
         Returns: unknown
       }
       st_geomfromgml: {
@@ -5468,7 +5468,7 @@ export type Database = {
         Returns: unknown[]
       }
       st_summary: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { "": unknown }  
         Returns: string
       }
       st_swapordinates: {

@@ -182,7 +182,7 @@ export function ThemeSelector() {
                       <Input
                         id="theme-name"
                         value={newTheme.name}
-                        onChange={(e) => setNewTheme(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => { setNewTheme(prev => ({ ...prev, name: e.target.value })); }}
                         placeholder="My Custom Theme"
                       />
                     </div>
@@ -191,7 +191,7 @@ export function ThemeSelector() {
                       <Textarea
                         id="theme-description"
                         value={newTheme.description}
-                        onChange={(e) => setNewTheme(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={(e) => { setNewTheme(prev => ({ ...prev, description: e.target.value })); }}
                         placeholder="A beautiful custom theme..."
                       />
                     </div>
@@ -199,7 +199,7 @@ export function ThemeSelector() {
                       <Button onClick={handleCreateTheme} className="flex-1">
                         Create Theme
                       </Button>
-                      <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+                      <Button variant="outline" onClick={() => { setCreateDialogOpen(false); }}>
                         Cancel
                       </Button>
                     </div>
@@ -304,7 +304,7 @@ export function ThemeSelector() {
                       <Input
                         id="wallpaper-name"
                         value={wallpaperUpload.name}
-                        onChange={(e) => setWallpaperUpload(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => { setWallpaperUpload(prev => ({ ...prev, name: e.target.value })); }}
                         placeholder="My Custom Wallpaper"
                       />
                     </div>
@@ -313,7 +313,7 @@ export function ThemeSelector() {
                       <Textarea
                         id="wallpaper-description"
                         value={wallpaperUpload.description}
-                        onChange={(e) => setWallpaperUpload(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={(e) => { setWallpaperUpload(prev => ({ ...prev, description: e.target.value })); }}
                         placeholder="A beautiful custom wallpaper..."
                       />
                     </div>
@@ -321,7 +321,7 @@ export function ThemeSelector() {
                       <Button onClick={handleUploadWallpaper} className="flex-1">
                         Upload Wallpaper
                       </Button>
-                      <Button variant="outline" onClick={() => setUploadDialogOpen(false)}>
+                      <Button variant="outline" onClick={() => { setUploadDialogOpen(false); }}>
                         Cancel
                       </Button>
                     </div>

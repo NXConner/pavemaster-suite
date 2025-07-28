@@ -107,7 +107,7 @@ export function AdvancedScheduling() {
             <span>Advanced Scheduling System</span>
           </CardTitle>
           <div className="flex items-center space-x-2">
-            <Select value={viewMode} onValueChange={(value: 'day' | 'week' | 'month') => setViewMode(value)}>
+            <Select value={viewMode} onValueChange={(value: 'day' | 'week' | 'month') => { setViewMode(value); }}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -124,7 +124,7 @@ export function AdvancedScheduling() {
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={viewMode} onValueChange={(value: string) => setViewMode(value as 'day' | 'week' | 'month')}>
+        <Tabs value={viewMode} onValueChange={(value: string) => { setViewMode(value as 'day' | 'week' | 'month'); }}>
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="day">Today</TabsTrigger>
             <TabsTrigger value="week">This Week</TabsTrigger>
@@ -174,7 +174,7 @@ export function AdvancedScheduling() {
                     </div>
                     
                     <div className="flex space-x-2">
-                      <Button variant="outline" size="sm" onClick={() => handleReschedule(item.id)}>
+                      <Button variant="outline" size="sm" onClick={() => { handleReschedule(item.id); }}>
                         Reschedule
                       </Button>
                       <Button variant="outline" size="sm">

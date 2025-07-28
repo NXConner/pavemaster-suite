@@ -48,11 +48,11 @@ export function DashboardCustomizer() {
     return colors[category as keyof typeof colors] || 'bg-muted';
   };
 
-  const groupedWidgets = widgets.reduce((acc, widget) => {
+  const groupedWidgets = widgets.reduce<Record<string, DashboardWidget[]>>((acc, widget) => {
     if (!acc[widget.category]) acc[widget.category] = [];
     acc[widget.category].push(widget);
     return acc;
-  }, {} as Record<string, DashboardWidget[]>);
+  }, {});
 
   return (
     <Dialog>
@@ -112,7 +112,7 @@ export function DashboardCustomizer() {
                         <Switch
                           id={widget.id}
                           checked={widget.enabled}
-                          onCheckedChange={() => toggleWidget(widget.id)}
+                          onCheckedChange={() => { toggleWidget(widget.id); }}
                         />
                       </div>
                     </div>

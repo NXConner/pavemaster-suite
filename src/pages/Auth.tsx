@@ -180,7 +180,7 @@ export default function Auth() {
                   type="button" 
                   variant="ghost" 
                   className="w-full" 
-                  onClick={() => setResetMode(false)}
+                  onClick={() => { setResetMode(false); }}
                   disabled={loading}
                 >
                   Back to Sign In
@@ -234,7 +234,7 @@ export default function Auth() {
                     type="button" 
                     variant="ghost" 
                     className="w-full text-sm" 
-                    onClick={() => setResetMode(true)}
+                    onClick={() => { setResetMode(true); }}
                     disabled={loading}
                   >
                     Forgot your password?

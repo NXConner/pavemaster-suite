@@ -94,7 +94,7 @@ export function useRealtimeUpdates() {
     };
   }, [user]);
 
-  const clearUpdates = () => setUpdates([]);
+  const clearUpdates = () => { setUpdates([]); };
 
   return {
     updates,
