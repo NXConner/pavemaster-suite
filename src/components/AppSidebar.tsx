@@ -30,13 +30,16 @@ import {
   Layout,
   Truck,
   Flag,
-  Building2
+  Building2,
+  Brain,
+  Monitor
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "AI Hub", url: "/ai", icon: Brain },
+  { title: "AI Insights", url: "/predictive-analytics", icon: Brain },
+  { title: "AI Hub", url: "/ai", icon: Zap },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]
@@ -47,6 +50,7 @@ const fieldItems = [
   { title: "Photo Reports", url: "/photos", icon: Camera },
   { title: "Measurements", url: "/measurements", icon: Activity },
   { title: "Parking Designer", url: "/parking-designer", icon: Layout },
+  { title: "IoT Monitoring", url: "/iot-monitoring", icon: Monitor },
 ]
 
 const managementItems = [

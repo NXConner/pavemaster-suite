@@ -11,30 +11,34 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageLoading } from "@/components/Loading";
 import NotificationCenter from "@/components/NotificationCenter";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Settings from "./pages/Settings";
-import AIHub from "./pages/AIHub";
-import Analytics from "./pages/Analytics";
-import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
-import ApiDocumentation from "@/components/ApiDocumentation";
-import Tracking from "./pages/Tracking";
-import Measurements from "./pages/Measurements";
-import ParkingLotDesigner from "./pages/ParkingLotDesigner";
-import Projects from "./pages/Projects";
-import PhotoReports from "./pages/PhotoReports";
-import TeamManagement from "./pages/TeamManagement";
-import EquipmentManagement from "./pages/EquipmentManagement";
-import SchedulingSystem from "./pages/SchedulingSystem";
-import FinancialManagement from "./pages/FinancialManagement";
-import SafetyManagement from "./pages/SafetyManagement";
-import PerformanceMonitor from "./components/PerformanceMonitor";
-import AdvancedDashboard from "./components/AdvancedDashboard";
-import VeteranResources from "./pages/VeteranResources";
-import FleetManagement from "./pages/FleetManagement";
-import CompanyResources from "./pages/CompanyResources";
+
+// Lazy load non-critical pages for better performance
+const Settings = lazy(() => import("./pages/Settings"));
+const AIHub = lazy(() => import("./pages/AIHub"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const Mobile = lazy(() => import("./pages/Mobile"));
+const ApiDocumentation = lazy(() => import("@/components/ApiDocumentation"));
+const Tracking = lazy(() => import("./pages/Tracking"));
+const Measurements = lazy(() => import("./pages/Measurements"));
+const ParkingLotDesigner = lazy(() => import("./pages/ParkingLotDesigner"));
+const Projects = lazy(() => import("./pages/Projects"));
+const PhotoReports = lazy(() => import("./pages/PhotoReports"));
+const TeamManagement = lazy(() => import("./pages/TeamManagement"));
+const EquipmentManagement = lazy(() => import("./pages/EquipmentManagement"));
+const SchedulingSystem = lazy(() => import("./pages/SchedulingSystem"));
+const FinancialManagement = lazy(() => import("./pages/FinancialManagement"));
+const SafetyManagement = lazy(() => import("./pages/SafetyManagement"));
+const PerformanceMonitor = lazy(() => import("./components/PerformanceMonitor"));
+const AdvancedDashboard = lazy(() => import("./components/AdvancedDashboard"));
+const PredictiveAnalytics = lazy(() => import("./components/PredictiveAnalytics"));
+const IoTDashboard = lazy(() => import("./components/IoTDashboard"));
+const VeteranResources = lazy(() => import("./pages/VeteranResources"));
+const FleetManagement = lazy(() => import("./pages/FleetManagement"));
+const CompanyResources = lazy(() => import("./pages/CompanyResources"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,6 +101,8 @@ const App = () => (
                                                               {/* Advanced Features */}
                             <Route path="/performance" element={<PerformanceMonitor />} />
                             <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
+                            <Route path="/predictive-analytics" element={<PredictiveAnalytics />} />
+                            <Route path="/iot-monitoring" element={<IoTDashboard />} />
                             {/* Company Features */}
                             <Route path="/veterans" element={<VeteranResources />} />
                             <Route path="/fleet" element={<FleetManagement />} />
