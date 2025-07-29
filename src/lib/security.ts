@@ -5,13 +5,20 @@
 
 import { supabase } from '../integrations/supabase/client';
 
-// Enhanced input validation and sanitization with DOMPurify support
+// Enhanced input validation and sanitization with comprehensive protection
 export const sanitizeInput = (input: string): string => {
-  // Basic sanitization as fallback
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+  
+  // Enhanced sanitization with additional XSS protection
   return input
     .trim()
-    .replace(/[<>\"']/g, '') // Remove potential XSS characters
-    .substring(0, 1000); // Limit length
+    .replace(/[<>\"'&]/g, '') // Remove HTML/XSS characters
+    .replace(/javascript:/gi, '') // Remove javascript: URLs
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .replace(/\0/g, '') // Remove null bytes
+    .substring(0, 1000); // Limit length to prevent DoS
 };
 
 // Advanced HTML sanitization (requires DOMPurify when available)
