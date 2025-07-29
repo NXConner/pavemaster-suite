@@ -2552,27 +2552,27 @@ export type Database = {
       rate_limits: {
         Row: {
           action: string
-          count: number | null
-          created_at: string | null
+          count: number
+          created_at: string
           id: string
           identifier: string
-          window_start: string | null
+          window_start: string
         }
         Insert: {
           action: string
-          count?: number | null
-          created_at?: string | null
+          count?: number
+          created_at?: string
           id?: string
           identifier: string
-          window_start?: string | null
+          window_start?: string
         }
         Update: {
           action?: string
-          count?: number | null
-          created_at?: string | null
+          count?: number
+          created_at?: string
           id?: string
           identifier?: string
-          window_start?: string | null
+          window_start?: string
         }
         Relationships: []
       }
