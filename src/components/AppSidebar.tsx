@@ -26,13 +26,22 @@ import {
   MapPin,
   Camera,
   Activity,
-  BookOpen
+  BookOpen,
+  Layout,
+  Truck,
+  Flag,
+  Building2,
+  Brain,
+  Monitor,
+  Globe
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "AI Hub", url: "/ai", icon: Brain },
+  { title: "AI Insights", url: "/predictive-analytics", icon: Brain },
+  { title: "Global Expansion", url: "/global-expansion", icon: Globe },
+  { title: "AI Hub", url: "/ai", icon: Zap },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]
@@ -42,15 +51,23 @@ const fieldItems = [
   { title: "GPS Tracking", url: "/tracking", icon: MapPin },
   { title: "Photo Reports", url: "/photos", icon: Camera },
   { title: "Measurements", url: "/measurements", icon: Activity },
+  { title: "Parking Designer", url: "/parking-designer", icon: Layout },
+  { title: "IoT Monitoring", url: "/iot-monitoring", icon: Monitor },
 ]
 
 const managementItems = [
   { title: "Projects", url: "/projects", icon: FileText },
   { title: "Team", url: "/team", icon: Users },
   { title: "Equipment", url: "/equipment", icon: Wrench },
+  { title: "Fleet", url: "/fleet", icon: Truck },
   { title: "Schedule", url: "/schedule", icon: Calendar },
   { title: "Finance", url: "/finance", icon: DollarSign },
   { title: "Safety", url: "/safety", icon: Shield },
+]
+
+const companyItems = [
+  { title: "Veterans", url: "/veterans", icon: Flag },
+  { title: "Resources", url: "/resources", icon: Building2 },
 ]
 
 export function AppSidebar() {
@@ -66,6 +83,7 @@ export function AppSidebar() {
   const isMainExpanded = mainItems.some((item) => isActive(item.url))
   const isFieldExpanded = fieldItems.some((item) => isActive(item.url))
   const isManagementExpanded = managementItems.some((item) => isActive(item.url))
+  const isCompanyExpanded = companyItems.some((item) => isActive(item.url))
 
   return (
     <Sidebar
@@ -119,6 +137,25 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {managementItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={item.url} className={getNavCls}>
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {open && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Company */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Company</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {companyItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavCls}>
