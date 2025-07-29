@@ -30,18 +30,20 @@ import {
   Command,
   Target,
   Satellite,
-  Plug
+  Plug,
+  Zap
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Ultimate Mission Control", url: "/ultimate-mission-control", icon: Target },
+  { title: "Quantum Operations", url: "/quantum", icon: Zap },
   { title: "Mission Control", url: "/mission-control", icon: Satellite },
   { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
   { title: "AI Operations", url: "/ai-operations", icon: Brain },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "Integrations", url: "/integrations", icon: Plug },
   { title: "Mobile", url: "/mobile", icon: Smartphone },
-  { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]
 

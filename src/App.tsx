@@ -25,6 +25,8 @@ import AdvancedAnalytics from "@/components/AdvancedAnalytics";
 import MissionControlCenter from "@/components/MissionControlCenter";
 import EnterpriseIntegrations from "@/components/EnterpriseIntegrations";
 import MobileCompanion from "@/components/MobileCompanion";
+import QuantumOperationsCenter from "@/components/QuantumOperationsCenter";
+import UltimateEnhancedMissionControl from "@/components/UltimateEnhancedMissionControl";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +68,8 @@ const App = () => (
                               <Route path="/mission-control" element={<MissionControlCenter />} />
                               <Route path="/integrations" element={<EnterpriseIntegrations />} />
                               <Route path="/mobile" element={<MobileCompanion />} />
+                              <Route path="/quantum" element={<QuantumOperationsCenter />} />
+                              <Route path="/ultimate-mission-control" element={<UltimateEnhancedMissionControl />} />
                               {/* Placeholder routes for sidebar items */}
                               <Route path="/tracking" element={<EmployeeTracker />} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
