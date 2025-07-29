@@ -1,10 +1,9 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { LazyLoadWrapper } from '@/components/LazyLoadWrapper';
-import { useAuth } from '@/hooks/useAuth';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { performanceMonitor } from '@/lib/performance';
-import { configUtils } from '@/config/environment';
+import { getEnvironmentInfo } from '@/config/environment';
 
 // Advanced lazy component with performance tracking and preloading
 const createAdvancedLazyComponent = (
@@ -105,7 +104,7 @@ const SchedulingPage = createAdvancedLazyComponent(
 );
 
 // Analytics page - only load if feature is enabled
-const AnalyticsPage = configUtils.isFeatureEnabled('enableAnalytics')
+const AnalyticsPage = getEnvironmentInfo().isFeatureEnabled('enableAnalytics')
   ? createAdvancedLazyComponent(
     () => import('@/pages/Analytics'),
     'analytics',
@@ -145,7 +144,7 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children, requiredFeature, requiredRole, fallback }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
+  const { user, loading } = getEnvironmentInfo().useAuth();
 
   // Performance tracking for auth checks
   React.useEffect(() => {
@@ -176,7 +175,7 @@ function ProtectedRoute({ children, requiredFeature, requiredRole, fallback }: P
   }
 
   // Feature flag check
-  if (requiredFeature && !configUtils.isFeatureEnabled(requiredFeature as any)) {
+  if (requiredFeature && !getEnvironmentInfo().isFeatureEnabled(requiredFeature as any)) {
     return fallback || <Navigate to="/dashboard" replace />;
   }
 
@@ -194,7 +193,7 @@ interface PublicRouteProps {
 }
 
 function PublicRoute({ children }: PublicRouteProps) {
-  const { user, loading } = useAuth();
+  const { user, loading } = getEnvironmentInfo().useAuth();
 
   if (loading) {
     return (
@@ -226,7 +225,7 @@ export function useIntelligentPreloading() {
       '/dashboard': () => {
         // From dashboard, users often go to projects or analytics
         ProjectsPage.preload();
-        if (configUtils.isFeatureEnabled('enableAnalytics') && AnalyticsPage) {
+        if (getEnvironmentInfo().isFeatureEnabled('enableAnalytics') && AnalyticsPage) {
           AnalyticsPage.preload();
         }
       },
@@ -261,7 +260,7 @@ export function useIntelligentPreloading() {
         // Preload remaining critical pages during idle time
         Dashboard.preload();
         ProjectsPage.preload();
-        if (configUtils.isFeatureEnabled('enableAnalytics') && AnalyticsPage) {
+        if (getEnvironmentInfo().isFeatureEnabled('enableAnalytics') && AnalyticsPage) {
           AnalyticsPage.preload();
         }
       };
@@ -378,7 +377,7 @@ export function OptimizedAppRouter() {
           />
 
           {/* Feature-gated routes */}
-          {configUtils.isFeatureEnabled('enableAnalytics') && AnalyticsPage && (
+          {getEnvironmentInfo().isFeatureEnabled('enableAnalytics') && AnalyticsPage && (
             <Route
               path="/analytics/*"
               element={

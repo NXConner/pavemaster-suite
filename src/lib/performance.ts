@@ -1,5 +1,5 @@
 import React from 'react';
-import { configUtils } from '@/config/environment';
+import { getEnvironmentInfo } from '@/config/environment';
 
 /**
  * Advanced Performance Monitoring System
@@ -55,7 +55,7 @@ export class PerformanceMonitor {
     this.metrics.set(name, categoryMetrics);
 
     // Log in development
-    if (configUtils.getEnvironment() === 'development') {
+    if (getEnvironmentInfo().isDevelopment) {
       console.log(`📊 Performance: ${name} = ${value.toFixed(2)}${unit}`, metadata);
     }
   }

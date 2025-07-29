@@ -1,6 +1,6 @@
 import { performanceMonitor } from './performance';
 import { intelligentBundleLoader } from './bundleOptimization';
-import { configUtils } from '@/config/environment';
+import { getEnvironmentInfo } from '@/config/environment';
 
 /**
  * AI-Powered Performance Optimization System
@@ -750,7 +750,7 @@ export function initializeAIOptimization(): void {
   console.log('🤖 AI Performance Optimizer initialized');
 
   // Log optimization insights in development
-  if (configUtils.getEnvironment() === 'development') {
+  if (getEnvironmentInfo().isDevelopment) {
     setInterval(() => {
       const insights = aiPerformanceOptimizer.getOptimizationInsights();
       console.group('🤖 AI Optimization Insights');

@@ -1,5 +1,5 @@
 import { performanceMonitor } from './performance';
-import { configUtils } from '@/config/environment';
+import { getEnvironmentInfo } from '@/config/environment';
 
 /**
  * Advanced Bundle Optimization System
@@ -162,7 +162,7 @@ class IntelligentBundleLoader {
     }
 
     // Feature flag check
-    if (conditions.feature && !configUtils.isFeatureEnabled(conditions.feature as any)) {
+    if (conditions.feature && !getEnvironmentInfo().isFeatureEnabled(conditions.feature as any)) {
       return false;
     }
 
