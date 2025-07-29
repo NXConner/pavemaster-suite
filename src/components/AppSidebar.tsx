@@ -28,12 +28,15 @@ import {
   Activity,
   BookOpen,
   Command,
-  Target
+  Target,
+  Satellite
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Mission Control", url: "/mission-control", icon: Satellite },
   { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
+  { title: "AI Operations", url: "/ai-operations", icon: Brain },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Hub", url: "/ai", icon: Brain },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },

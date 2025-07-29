@@ -20,6 +20,9 @@ import CostCounter from "@/components/CostCounter";
 import EmployeeTracker from "@/components/EmployeeTracker";
 import OverWatchTOSS from "@/components/OverWatchTOSS";
 import TaskPriorityManager from "@/components/TaskPriorityManager";
+import AIOperationsCenter from "@/components/AIOperationsCenter";
+import AdvancedAnalytics from "@/components/AdvancedAnalytics";
+import MissionControlCenter from "@/components/MissionControlCenter";
 
 const queryClient = new QueryClient();
 
@@ -49,13 +52,16 @@ const App = () => (
                               <Route path="/" element={<Index />} />
                               <Route path="/settings" element={<Settings />} />
                               <Route path="/ai" element={<AIHub />} />
-                              <Route path="/analytics" element={<Analytics />} />
+                              <Route path="/analytics" element={<AdvancedAnalytics />} />
                               <Route path="/mobile" element={<Mobile />} />
                               <Route path="/api-docs" element={<ApiDocumentation />} />
                               <Route path="/cost-counter" element={<CostCounter />} />
                               <Route path="/employee-tracker" element={<EmployeeTracker />} />
                               <Route path="/overwatch" element={<OverWatchTOSS />} />
                               <Route path="/task-priorities" element={<TaskPriorityManager />} />
+                              <Route path="/ai-operations" element={<AIOperationsCenter />} />
+                              <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
+                              <Route path="/mission-control" element={<MissionControlCenter />} />
                               {/* Placeholder routes for sidebar items */}
                               <Route path="/tracking" element={<EmployeeTracker />} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
