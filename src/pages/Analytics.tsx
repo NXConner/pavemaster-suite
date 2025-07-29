@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
-import { PredictiveAnalytics } from '@/components/PredictiveAnalytics';
+import PredictiveAnalytics from '@/components/PredictiveAnalytics';
 import { PerformanceDashboard } from '@/components/PerformanceDashboard';
 import { 
   BarChart3, 
