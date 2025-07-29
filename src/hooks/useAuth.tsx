@@ -58,24 +58,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     try {
-      // TODO: Re-enable rate limiting once RPC functions are deployed
-      // const clientIP = await getClientIP();
-      // const { data: canProceed } = await supabase.rpc('check_rate_limit', {
-      //   p_identifier: clientIP,
-      //   p_action: 'signup_attempt',
-      //   p_limit: 3,
-      //   p_window_minutes: 15
-      // });
+      const clientIP = await getClientIP();
+      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+        p_identifier: clientIP,
+        p_action: 'signup_attempt',
+        p_limit: 3,
+        p_window_minutes: 15
+      });
 
-      // if (!canProceed) {
-      //   const error = { message: 'Too many signup attempts. Please try again later.' };
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Rate limit exceeded',
-      //     description: error.message,
-      //   });
-      //   return { error };
-      // }
+      if (!canProceed) {
+        const error = { message: 'Too many signup attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
 
       const redirectUrl = `${window.location.origin}/`;
       
@@ -91,14 +90,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
       });
 
-      // TODO: Re-enable security logging once RPC functions are deployed
-      // if (!error) {
-      //   await supabase.rpc('log_security_event', {
-      //     p_action: 'user_signup',
-      //     p_resource_type: 'auth',
-      //     p_details: { email, timestamp: new Date().toISOString() }
-      //   });
-      // }
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signup',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      }
 
       if (error) {
         toast({
@@ -125,58 +123,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // TODO: Re-enable IP detection function once RPC functions are deployed
-  // const getClientIP = async (): Promise<string> => {
-  //   try {
-  //     const response = await fetch('https://api.ipify.org?format=json');
-  //     const data = await response.json();
-  //     return data.ip;
-  //   } catch {
-  //     return 'unknown';
-  //   }
-  // };
+  const getClientIP = async (): Promise<string> => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch {
+      return 'unknown';
+    }
+  };
 
   const signIn = async (email: string, password: string) => {
     try {
-      // TODO: Re-enable rate limiting once RPC functions are deployed
-      // const clientIP = await getClientIP();
-      // const { data: canProceed } = await supabase.rpc('check_rate_limit', {
-      //   p_identifier: `${clientIP}-${email}`,
-      //   p_action: 'login_attempt',
-      //   p_limit: 5,
-      //   p_window_minutes: 15
-      // });
+      const clientIP = await getClientIP();
+      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+        p_identifier: `${clientIP}-${email}`,
+        p_action: 'login_attempt',
+        p_limit: 5,
+        p_window_minutes: 15
+      });
 
-      // if (!canProceed) {
-      //   const error = { message: 'Too many login attempts. Please try again later.' };
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Rate limit exceeded',
-      //     description: error.message,
-      //   });
-      //   return { error };
-      // }
+      if (!canProceed) {
+        const error = { message: 'Too many login attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
       
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      // TODO: Re-enable security logging once RPC functions are deployed
-      // if (!error) {
-      //   await supabase.rpc('log_security_event', {
-      //     p_action: 'user_signin',
-      //     p_resource_type: 'auth',
-      //     p_details: { email, timestamp: new Date().toISOString() }
-      //   });
-      // } else {
-      //   // Log failed login attempt
-      //   await supabase.rpc('log_security_event', {
-      //     p_action: 'failed_signin',
-      //     p_resource_type: 'auth',
-      //     p_details: { email, error: error.message, timestamp: new Date().toISOString() }
-      //   });
-      // }
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signin',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      } else {
+        // Log failed login attempt
+        await supabase.rpc('log_security_event', {
+          p_action: 'failed_signin',
+          p_resource_type: 'auth',
+          p_details: { email, error: error.message, timestamp: new Date().toISOString() }
+        });
+      }
 
       if (error) {
         toast({
