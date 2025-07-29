@@ -16,6 +16,15 @@ import Analytics from "./pages/Analytics";
 import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
 import ApiDocumentation from "@/components/ApiDocumentation";
+import Tracking from "./pages/Tracking";
+import Photos from "./pages/Photos";
+import Measurements from "./pages/Measurements";
+import Projects from "./pages/Projects";
+import Team from "./pages/Team";
+import Equipment from "./pages/Equipment";
+import Schedule from "./pages/Schedule";
+import Finance from "./pages/Finance";
+import Safety from "./pages/Safety";
 
 const queryClient = new QueryClient();
 
@@ -48,16 +57,16 @@ const App = () => (
                               <Route path="/analytics" element={<Analytics />} />
                               <Route path="/mobile" element={<Mobile />} />
                               <Route path="/api-docs" element={<ApiDocumentation />} />
-                              {/* Placeholder routes for sidebar items */}
-                              <Route path="/tracking" element={<div className="p-6"><h1>GPS Tracking (Coming Soon)</h1></div>} />
-                              <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
-                              <Route path="/measurements" element={<div className="p-6"><h1>Measurements (Coming Soon)</h1></div>} />
-                              <Route path="/projects" element={<div className="p-6"><h1>Projects (Coming Soon)</h1></div>} />
-                              <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
-                              <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
-                              <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />
-                              <Route path="/finance" element={<div className="p-6"><h1>Finance (Coming Soon)</h1></div>} />
-                              <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
+                              {/* Main application routes */}
+                              <Route path="/tracking" element={<Tracking />} />
+                              <Route path="/photos" element={<Photos />} />
+                              <Route path="/measurements" element={<Measurements />} />
+                              <Route path="/projects" element={<Projects />} />
+                              <Route path="/team" element={<Team />} />
+                              <Route path="/equipment" element={<Equipment />} />
+                              <Route path="/schedule" element={<Schedule />} />
+                              <Route path="/finance" element={<Finance />} />
+                              <Route path="/safety" element={<Safety />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </main>
