@@ -1,0 +1,11 @@
+{
+    "welcome_message": "Bienvenue, {name}!",
+    "dashboard_title": "Tableau de Bord de Performance des Chaussées",
+    "project_overview": "Aperçu du Projet",
+    "analytics_section": "Analyse de Performance",
+    "map_view": "Cartographie Géospatiale",
+    "financial_summary": "Résumé Financier",
+    "settings": "Paramètres Utilisateur",
+    "help": "Aide et Support",
+    "logout": "Déconnexion"
+}

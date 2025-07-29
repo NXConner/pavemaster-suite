@@ -1,0 +1,11 @@
+{
+    "welcome_message": "Welcome, {name}!",
+    "dashboard_title": "Pavement Performance Dashboard",
+    "project_overview": "Project Overview",
+    "analytics_section": "Performance Analytics",
+    "map_view": "Geospatial Mapping",
+    "financial_summary": "Financial Summary",
+    "settings": "User Settings",
+    "help": "Help & Support",
+    "logout": "Logout"
+}

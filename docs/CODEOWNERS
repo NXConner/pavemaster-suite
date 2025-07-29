@@ -1,0 +1,115 @@
+# CODEOWNERS - Pavement Performance Suite
+# This file defines code ownership for the repository
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners - require approval for all changes
+* @n8ter8
+
+# Documentation
+*.md @n8ter8
+docs/ @n8ter8
+README.md @n8ter8
+CONTRIBUTING.md @n8ter8
+
+# Configuration and Infrastructure
+.github/ @n8ter8
+.env.example @n8ter8
+docker*.* @n8ter8
+capacitor.config.json @n8ter8
+nginx.conf @n8ter8
+scripts/ @n8ter8
+
+# Core Application Code
+src/ @n8ter8
+
+# Frontend Components
+src/components/ @n8ter8
+src/pages/ @n8ter8
+src/hooks/ @n8ter8
+
+# UI Components Library
+src/components/ui/ @n8ter8
+
+# Business Logic and Services
+src/lib/ @n8ter8
+src/services/ @n8ter8
+src/integrations/ @n8ter8
+
+# Database and Supabase
+supabase/ @n8ter8
+src/integrations/supabase/ @n8ter8
+
+# Security-Critical Files
+src/lib/security.ts @n8ter8
+supabase/functions/ @n8ter8
+
+# Mobile and Offline Functionality
+src/components/MobileFieldInterface.tsx @n8ter8
+src/components/OfflineManager.tsx @n8ter8
+src/pages/Mobile.tsx @n8ter8
+
+# AI and Machine Learning
+src/components/AIAssistant.tsx @n8ter8
+src/components/PredictiveAnalytics.tsx @n8ter8
+src/components/VoiceInterface.tsx @n8ter8
+supabase/functions/ai-assistant/ @n8ter8
+supabase/functions/voice-to-text/ @n8ter8
+supabase/functions/text-to-speech/ @n8ter8
+
+# Analytics and Performance
+src/components/PerformanceDashboard.tsx @n8ter8
+src/components/RealtimeDashboard.tsx @n8ter8
+src/pages/Analytics.tsx @n8ter8
+
+# API Documentation
+src/components/ApiDocumentation.tsx @n8ter8
+src/lib/apiDocumentation.ts @n8ter8
+scripts/generate-api-docs.js @n8ter8
+
+# Build and Deployment
+package.json @n8ter8
+package-lock.json @n8ter8
+vite.config.ts @n8ter8
+tailwind.config.ts @n8ter8
+tsconfig*.json @n8ter8
+
+# Styling and Design System
+src/index.css @n8ter8
+src/components/ui/ @n8ter8
+
+# Testing
+**/*.test.ts @n8ter8
+**/*.test.tsx @n8ter8
+**/*.spec.ts @n8ter8
+**/*.spec.tsx @n8ter8
+
+# Legal and Licensing
+LICENSE @n8ter8
+.gitignore @n8ter8
+
+# Phase Documentation
+docs/PHASE_*.md @n8ter8
+
+# Feature-Specific Areas
+# (Add team members here as the project grows)
+
+# Mobile Development (Future team members)
+# capacitor.config.json @mobile-team
+# src/pages/Mobile.tsx @mobile-team
+
+# AI Development (Future team members)  
+# src/components/AI*.tsx @ai-team
+# supabase/functions/ai-assistant/ @ai-team
+
+# UI/UX Design (Future team members)
+# src/components/ui/ @design-team
+# src/index.css @design-team
+
+# DevOps and Infrastructure (Future team members)
+# .github/workflows/ @devops-team
+# docker*.* @devops-team
+# scripts/ @devops-team
+
+# Quality Assurance (Future team members)
+# **/*.test.* @qa-team
+# **/*.spec.* @qa-team

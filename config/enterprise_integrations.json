@@ -1,0 +1,92 @@
+{
+  "platforms": {
+    "quickbooks": {
+      "name": "QuickBooks Enterprise",
+      "type": "accounting",
+      "requiredScopes": [
+        "accounting",
+        "reporting",
+        "payroll"
+      ],
+      "syncFrequency": {
+        "default": "daily",
+        "options": ["hourly", "daily", "weekly"]
+      },
+      "dataTypes": [
+        "invoices",
+        "expenses",
+        "payroll",
+        "customers",
+        "vendors"
+      ]
+    },
+    "adp": {
+      "name": "ADP Workforce Now",
+      "type": "hr_payroll",
+      "requiredScopes": [
+        "employee_data",
+        "payroll",
+        "time_tracking"
+      ],
+      "syncFrequency": {
+        "default": "weekly",
+        "options": ["daily", "weekly", "monthly"]
+      },
+      "dataTypes": [
+        "employee_records",
+        "payroll_records",
+        "time_sheets",
+        "benefits"
+      ]
+    },
+    "sap": {
+      "name": "SAP Business One",
+      "type": "erp",
+      "requiredScopes": [
+        "financial_management",
+        "inventory",
+        "procurement"
+      ],
+      "syncFrequency": {
+        "default": "daily",
+        "options": ["hourly", "daily", "weekly"]
+      },
+      "dataTypes": [
+        "financial_transactions",
+        "inventory_levels",
+        "purchase_orders",
+        "sales_data"
+      ]
+    },
+    "stripe": {
+      "name": "Stripe Payments",
+      "type": "payment_processing",
+      "requiredScopes": [
+        "payments",
+        "refunds",
+        "transfers"
+      ],
+      "syncFrequency": {
+        "default": "hourly",
+        "options": ["realtime", "hourly", "daily"]
+      },
+      "dataTypes": [
+        "transactions",
+        "customers",
+        "payouts",
+        "disputes"
+      ]
+    }
+  },
+  "globalSettings": {
+    "maxConcurrentSyncs": 2,
+    "retryAttempts": 3,
+    "defaultTimeout": 30000,
+    "loggingLevel": "info"
+  },
+  "securitySettings": {
+    "tokenEncryptionMethod": "AES-256-GCM",
+    "tokenRotationFrequency": "monthly",
+    "auditLogging": true
+  }
+}
