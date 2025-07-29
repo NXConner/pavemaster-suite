@@ -3,7 +3,7 @@ import {
   Smartphone, Wifi, WifiOff, Battery, Signal, Camera, Mic, 
   MapPin, Clock, Bell, User, Home, BarChart3, Settings,
   Navigation, Phone, MessageCircle, AlertTriangle, CheckCircle,
-  Download, Upload, Sync, Globe, Bluetooth, Share2
+  Download, Upload, RefreshCw, Globe, Bluetooth, Share2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -464,7 +464,7 @@ const MobileCompanion: React.FC = () => {
     {
       id: 'sync',
       name: 'Sync Data',
-      icon: Sync,
+      icon: RefreshCw,
       action: syncOfflineActions,
       enabled: mobileStatus.isOnline && !syncInProgress,
       badge: offlineActions.filter(a => !a.synced).length
@@ -695,11 +695,11 @@ const MobileCompanion: React.FC = () => {
               onClick={syncOfflineActions}
               disabled={!mobileStatus.isOnline || syncInProgress}
             >
-              {syncInProgress ? (
-                <Sync className="h-4 w-4 animate-spin" />
-              ) : (
-                <Upload className="h-4 w-4" />
-              )}
+                           {syncInProgress ? (
+               <RefreshCw className="h-4 w-4 animate-spin" />
+             ) : (
+               <Upload className="h-4 w-4" />
+             )}
             </Button>
           </div>
 

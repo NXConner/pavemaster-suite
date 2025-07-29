@@ -64,7 +64,6 @@ const App = () => (
                               <Route path="/overwatch" element={<OverWatchTOSS />} />
                               <Route path="/task-priorities" element={<TaskPriorityManager />} />
                               <Route path="/ai-operations" element={<AIOperationsCenter />} />
-                              <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                               <Route path="/mission-control" element={<MissionControlCenter />} />
                               <Route path="/integrations" element={<EnterpriseIntegrations />} />
                               <Route path="/mobile" element={<MobileCompanion />} />

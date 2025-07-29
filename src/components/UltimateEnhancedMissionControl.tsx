@@ -772,31 +772,31 @@ const UltimateEnhancedMissionControl: React.FC = () => {
 
         {/* Consciousness Interface Tab */}
         <TabsContent value="consciousness" className="space-y-3">
-          {consciousnessInterfaces.map(interface => (
-            <Card key={interface.id} className="bg-black/40 border-green-500/50">
+          {consciousnessInterfaces.map(consciousnessInterface => (
+            <Card key={consciousnessInterface.id} className="bg-black/40 border-green-500/50">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-bold text-white">Consciousness Interface</h3>
                   <Badge className="bg-green-600">
-                    SYNC {interface.sync_level.toFixed(1)}%
+                    SYNC {consciousnessInterface.sync_level.toFixed(1)}%
                   </Badge>
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400">{interface.decision_enhancement.toFixed(0)}%</div>
+                    <div className="text-2xl font-bold text-blue-400">{consciousnessInterface.decision_enhancement.toFixed(0)}%</div>
                     <div className="text-xs text-gray-400">Decision Enhancement</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-400">{interface.empathic_resonance.toFixed(0)}%</div>
+                    <div className="text-2xl font-bold text-purple-400">{consciousnessInterface.empathic_resonance.toFixed(0)}%</div>
                     <div className="text-xs text-gray-400">Empathic Resonance</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-400">{interface.intuition_amplification.toFixed(0)}%</div>
+                    <div className="text-2xl font-bold text-yellow-400">{consciousnessInterface.intuition_amplification.toFixed(0)}%</div>
                     <div className="text-xs text-gray-400">Intuition Amplification</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-400">{interface.cognitive_load.toFixed(0)}%</div>
+                    <div className="text-2xl font-bold text-red-400">{consciousnessInterface.cognitive_load.toFixed(0)}%</div>
                     <div className="text-xs text-gray-400">Cognitive Load</div>
                   </div>
                 </div>
@@ -804,7 +804,7 @@ const UltimateEnhancedMissionControl: React.FC = () => {
                 <div className="mt-4">
                   <span className="text-gray-400 text-sm">Active Neural Patterns:</span>
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {interface.neural_patterns.map((pattern, index) => (
+                    {consciousnessInterface.neural_patterns.map((pattern, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {pattern}
                       </Badge>
@@ -815,9 +815,9 @@ const UltimateEnhancedMissionControl: React.FC = () => {
                 <div className="mt-4 pt-3 border-t border-gray-700">
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-400">Sync Quality:</span>
-                    <span className="text-green-400">{interface.last_sync_quality.toFixed(1)}%</span>
+                    <span className="text-green-400">{consciousnessInterface.last_sync_quality.toFixed(1)}%</span>
                   </div>
-                  <Progress value={interface.last_sync_quality} className="mt-2 h-1" />
+                  <Progress value={consciousnessInterface.last_sync_quality} className="mt-2 h-1" />
                 </div>
               </CardContent>
             </Card>
