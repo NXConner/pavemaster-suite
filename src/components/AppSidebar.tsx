@@ -31,17 +31,28 @@ import {
   Truck,
   Flag,
   Building2,
-  Brain,
   Monitor,
-  Globe
+  Globe,
+  Command,
+  Target,
+  Satellite,
+  Plug,
+  Zap
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Ultimate Mission Control", url: "/ultimate-mission-control", icon: Target },
+  { title: "Quantum Operations", url: "/quantum", icon: Zap },
+  { title: "Mission Control", url: "/mission-control", icon: Satellite },
+  { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
+  { title: "AI Operations", url: "/ai-operations", icon: Brain },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Insights", url: "/predictive-analytics", icon: Brain },
   { title: "Global Expansion", url: "/global-expansion", icon: Globe },
-  { title: "AI Hub", url: "/ai", icon: Zap },
+  { title: "AI Hub", url: "/ai", icon: Brain },
+  { title: "Integrations", url: "/integrations", icon: Plug },
+  { title: "Mobile", url: "/mobile", icon: Smartphone },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]
