@@ -1,14 +1,15 @@
 import { expect, afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 // Global test utilities and configurations
 afterEach(() => {
   cleanup()
 })
 
-// Extend Vitest's expect with custom matchers if needed
+// Extend Vitest's expect with jest-dom matchers
 expect.extend({
-  // Add custom matchers here if needed in the future
+  // jest-dom matchers are automatically added via the import above
 })
 
 // Mock environment variables
@@ -76,4 +77,11 @@ global.ResizeObserver = class ResizeObserver {
   unobserve(_target: Element) {
     // Mock implementation
   }
+}
+
+// Mock CSS.supports for better test compatibility
+if (typeof CSS === 'undefined') {
+  global.CSS = {
+    supports: () => false,
+  } as any
 }
