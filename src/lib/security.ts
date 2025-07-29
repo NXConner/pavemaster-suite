@@ -130,7 +130,7 @@ export const defaultPermissions: RolePermissions[] = [
 
 // Encryption utilities
 export class EncryptionService {
-  private static readonly SECRET_KEY = process.env.VITE_ENCRYPTION_KEY || 'fallback-key-for-dev';
+  private static readonly SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'fallback-key-for-dev';
 
   static encrypt(data: string): string {
     try {
@@ -239,7 +239,7 @@ export class AuditLogger {
       await supabase.from('audit_logs').insert(fullAuditLog);
 
       // Also log to console in development
-      if (process.env.NODE_ENV === 'development') {
+      if (import.meta.env.DEV) {
         console.log('🔍 Audit Log:', fullAuditLog);
       }
     } catch (error) {
