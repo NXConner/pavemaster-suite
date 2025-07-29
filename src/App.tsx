@@ -8,31 +8,48 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PageLoading } from "@/components/Loading";
+import NotificationCenter from "@/components/NotificationCenter";
+import { Suspense, lazy } from "react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Settings from "./pages/Settings";
-import AIHub from "./pages/AIHub";
-import Analytics from "./pages/Analytics";
-import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
-import ApiDocumentation from "@/components/ApiDocumentation";
-import CostCounter from "@/components/CostCounter";
-import EmployeeTracker from "@/components/EmployeeTracker";
-// More dynamic imports for performance
-const OverWatchTOSS = lazy(() => import("@/components/OverWatchTOSS"));
-const TaskPriorityManager = lazy(() => import("@/components/TaskPriorityManager"));
-const AIOperationsCenter = lazy(() => import("@/components/AIOperationsCenter"));
-const AdvancedAnalytics = lazy(() => import("@/components/AdvancedAnalytics"));
-const MissionControlCenter = lazy(() => import("@/components/MissionControlCenter"));
-const EnterpriseIntegrations = lazy(() => import("@/components/EnterpriseIntegrations"));
-const MobileCompanion = lazy(() => import("@/components/MobileCompanion"));
-// Dynamic imports for better performance
-import { lazy, Suspense } from 'react';
 
-const QuantumOperationsCenter = lazy(() => import("@/components/QuantumOperationsCenter"));
-const UltimateEnhancedMissionControl = lazy(() => import("@/components/UltimateEnhancedMissionControl"));
+// Lazy load non-critical pages for better performance
+const Settings = lazy(() => import("./pages/Settings"));
+const AIHub = lazy(() => import("./pages/AIHub"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const Mobile = lazy(() => import("./pages/Mobile"));
+const ApiDocumentation = lazy(() => import("@/components/ApiDocumentation"));
+const Tracking = lazy(() => import("./pages/Tracking"));
+const Measurements = lazy(() => import("./pages/Measurements"));
+const ParkingLotDesigner = lazy(() => import("./pages/ParkingLotDesigner"));
+const Projects = lazy(() => import("./pages/Projects"));
+const PhotoReports = lazy(() => import("./pages/PhotoReports"));
+const TeamManagement = lazy(() => import("./pages/TeamManagement"));
+const EquipmentManagement = lazy(() => import("./pages/EquipmentManagement"));
+const SchedulingSystem = lazy(() => import("./pages/SchedulingSystem"));
+const FinancialManagement = lazy(() => import("./pages/FinancialManagement"));
+const SafetyManagement = lazy(() => import("./pages/SafetyManagement"));
+const PerformanceMonitor = lazy(() => import("./components/PerformanceMonitor"));
+const AdvancedDashboard = lazy(() => import("./components/AdvancedDashboard"));
+const PredictiveAnalytics = lazy(() => import("./components/PredictiveAnalytics"));
+const IoTDashboard = lazy(() => import("./components/IoTDashboard"));
+const GlobalExpansion = lazy(() => import("./components/GlobalExpansion"));
+const VeteranResources = lazy(() => import("./pages/VeteranResources"));
+const FleetManagement = lazy(() => import("./pages/FleetManagement"));
+const CompanyResources = lazy(() => import("./pages/CompanyResources"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -49,61 +66,15 @@ const App = () => (
                   <Route path="/*" element={
                     <ProtectedRoute>
                       <>
-                        <header className="h-12 flex items-center border-b bg-background px-4 w-full">
-                          <SidebarTrigger className="mr-2" />
-                          <h2 className="font-semibold">PaveMaster Suite</h2>
+                        <header className="h-12 flex items-center justify-between border-b bg-background px-4 w-full">
+                          <div className="flex items-center">
+                            <SidebarTrigger className="mr-2" />
+                            <h2 className="font-semibold">PaveMaster Suite</h2>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <NotificationCenter />
+                          </div>
                         </header>
                         <div className="flex flex-1 w-full">
                           <AppSidebar />
                           <main className="flex-1 overflow-auto">
-                            <Suspense fallback={
-                              <div className="flex items-center justify-center h-screen">
-                                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-                              </div>
-                            }>
-                              <Routes>
-                              <Route path="/" element={<Index />} />
-                              <Route path="/settings" element={<Settings />} />
-                              <Route path="/ai" element={<AIHub />} />
-                              <Route path="/analytics" element={<AdvancedAnalytics />} />
-                              <Route path="/mobile" element={<MobileCompanion />} />
-                              <Route path="/api-docs" element={<ApiDocumentation />} />
-                              <Route path="/cost-counter" element={<CostCounter />} />
-                              <Route path="/employee-tracker" element={<EmployeeTracker />} />
-                              <Route path="/overwatch" element={<OverWatchTOSS />} />
-                              <Route path="/task-priorities" element={<TaskPriorityManager />} />
-                              <Route path="/ai-operations" element={<AIOperationsCenter />} />
-                              <Route path="/mission-control" element={<MissionControlCenter />} />
-                              <Route path="/integrations" element={<EnterpriseIntegrations />} />
-                              <Route path="/mobile" element={<MobileCompanion />} />
-                              <Route path="/quantum" element={<QuantumOperationsCenter />} />
-                              <Route path="/ultimate-mission-control" element={<UltimateEnhancedMissionControl />} />
-                              {/* Placeholder routes for sidebar items */}
-                              <Route path="/tracking" element={<EmployeeTracker />} />
-                              <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
-                              <Route path="/measurements" element={<div className="p-6"><h1>Measurements (Coming Soon)</h1></div>} />
-                              <Route path="/projects" element={<TaskPriorityManager />} />
-                              <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
-                              <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
-                              <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />
-                              <Route path="/finance" element={<CostCounter />} />
-                              <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
-                              <Route path="*" element={<NotFound />} />
-                              </Routes>
-                            </Suspense>
-                          </main>
-                        </div>
-                      </>
-                    </ProtectedRoute>
-                  } />
-                </Routes>
-              </div>
-            </SidebarProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
-
-export default App;
