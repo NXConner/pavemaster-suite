@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { performanceMonitor } from '@/lib/performance';
 import { configUtils } from '@/config/environment';
 
-// Advanced lazy loading with performance tracking and preloading
+// Advanced lazy component with performance tracking and preloading
 const createAdvancedLazyComponent = (
   importFunc: () => Promise<{ default: React.ComponentType<any> }>,
   componentName: string,
@@ -39,21 +39,23 @@ const createAdvancedLazyComponent = (
     importFunc().catch(() => {});
   };
 
-  // Auto-preload based on triggers
-  React.useEffect(() => {
-    const currentPath = window.location.pathname;
-    const shouldPreload = preloadTriggers.some(trigger => currentPath.includes(trigger));
+  const WrappedComponent = (props: any) => {
+    // Auto-preload based on triggers - moved inside component
+    React.useEffect(() => {
+      const currentPath = window.location.pathname;
+      const shouldPreload = preloadTriggers.some(trigger => currentPath.includes(trigger));
 
-    if (shouldPreload) {
-      preload();
-    }
-  }, []);
+      if (shouldPreload) {
+        preload();
+      }
+    }, [preloadTriggers]); // Added proper dependencies
 
-  const WrappedComponent = (props: any) => (
-    <LazyLoadWrapper skeleton="page">
-      <LazyComponent {...props} />
-    </LazyLoadWrapper>
-  );
+    return (
+      <LazyLoadWrapper skeleton="page">
+        <LazyComponent {...props} />
+      </LazyLoadWrapper>
+    );
+  };
 
   WrappedComponent.preload = preload;
   return WrappedComponent;

@@ -2,7 +2,7 @@
  * Dynamic import utilities for advanced code splitting and feature loading
  */
 
-import { ComponentType, lazy } from 'react';
+import React, { ComponentType, lazy } from 'react';
 import { performanceMonitor } from '@/lib/performance';
 
 // Feature flag system for dynamic loading
@@ -19,21 +19,21 @@ interface FeatureFlags {
 interface UserPermissions {
   canViewAnalytics: boolean;
   canExportData: boolean;
-  canManageUsers: boolean;
-  canViewReports: boolean;
-  isAdmin: boolean;
-  isSuperAdmin: boolean;
+  canManageProjects: boolean;
+  canAccessReports: boolean;
+  canModifySettings: boolean;
+  canInviteUsers: boolean;
 }
 
 // Dynamic import with performance tracking
 export function createDynamicImport<T = any>(
   importFn: () => Promise<{ default: ComponentType<T> }>,
   componentName: string,
-  dependencies?: string[]
+  dependencies?: string[],
 ) {
   return lazy(async () => {
     const startTime = performance.now();
-    
+
     try {
       // Pre-load dependencies if specified
       if (dependencies) {
@@ -41,18 +41,18 @@ export function createDynamicImport<T = any>(
       }
 
       const module = await importFn();
-      
+
       const loadTime = performance.now() - startTime;
       performanceMonitor.recordMetric(`dynamic_import_${componentName}`, loadTime, 'ms', {
         dependencies: dependencies?.length || 0,
-        cached: loadTime < 50 // Likely cached if very fast
+        cached: loadTime < 50, // Likely cached if very fast
       });
 
       return module;
     } catch (error) {
       performanceMonitor.recordMetric('dynamic_import_error', 1, 'count', {
         component: componentName,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
@@ -65,47 +65,47 @@ export const FeatureComponents = {
   AdvancedAnalytics: createDynamicImport(
     () => import('@/components/analytics/AdvancedAnalytics'),
     'AdvancedAnalytics',
-    ['recharts', 'date-fns']
+    ['recharts', 'date-fns'],
   ),
 
   // Reporting features (PDF generation, complex exports)
   ReportGenerator: createDynamicImport(
     () => import('@/components/reports/ReportGenerator'),
     'ReportGenerator',
-    ['jspdf', 'html2canvas']
+    ['jspdf', 'html2canvas'],
   ),
 
   // Data visualization (large charting libraries)
   DataVisualization: createDynamicImport(
     () => import('@/components/charts/DataVisualization'),
     'DataVisualization',
-    ['d3', 'recharts']
+    ['d3', 'recharts'],
   ),
 
   // Admin panel (user management, system settings)
   AdminPanel: createDynamicImport(
     () => import('@/components/admin/AdminPanel'),
-    'AdminPanel'
+    'AdminPanel',
   ),
 
   // Mobile-specific optimizations
   MobileOptimizedView: createDynamicImport(
     () => import('@/components/mobile/MobileOptimizedView'),
-    'MobileOptimizedView'
+    'MobileOptimizedView',
   ),
 
   // Real-time features (WebSocket, live updates)
   RealTimeUpdates: createDynamicImport(
     () => import('@/components/realtime/RealTimeUpdates'),
     'RealTimeUpdates',
-    ['socket.io-client']
+    ['socket.io-client'],
   ),
 
   // Data export functionality
   DataExportTools: createDynamicImport(
     () => import('@/components/export/DataExportTools'),
     'DataExportTools',
-    ['xlsx', 'csv-parser']
+    ['xlsx', 'csv-parser'],
   ),
 };
 
@@ -113,23 +113,23 @@ export const FeatureComponents = {
 export function createPermissionBasedLoader<T = any>(
   component: ComponentType<T>,
   requiredPermissions: (keyof UserPermissions)[],
-  fallbackComponent?: ComponentType<T>
+  fallbackComponent?: ComponentType<T>,
 ) {
   return function PermissionWrapper(props: T) {
     // This would integrate with your auth system
     const userPermissions = getUserPermissions(); // Implement this function
-    
+
     const hasPermission = requiredPermissions.every(
-      permission => userPermissions[permission]
+      permission => userPermissions[permission],
     );
 
     if (!hasPermission) {
       const FallbackComponent = fallbackComponent || (() => null);
-      return <FallbackComponent {...props} />;
+      return React.createElement(FallbackComponent, props);
     }
 
     const DynamicComponent = component;
-    return <DynamicComponent {...props} />;
+    return React.createElement(DynamicComponent, props);
   };
 }
 
@@ -137,22 +137,22 @@ export function createPermissionBasedLoader<T = any>(
 export function createFeatureFlagLoader<T = any>(
   component: ComponentType<T>,
   requiredFeatures: (keyof FeatureFlags)[],
-  fallbackComponent?: ComponentType<T>
+  fallbackComponent?: ComponentType<T>,
 ) {
   return function FeatureWrapper(props: T) {
     const featureFlags = getFeatureFlags(); // Implement this function
-    
+
     const featureEnabled = requiredFeatures.every(
-      feature => featureFlags[feature]
+      feature => featureFlags[feature],
     );
 
     if (!featureEnabled) {
       const FallbackComponent = fallbackComponent || (() => null);
-      return <FallbackComponent {...props} />;
+      return React.createElement(FallbackComponent, props);
     }
 
     const DynamicComponent = component;
-    return <DynamicComponent {...props} />;
+    return React.createElement(DynamicComponent, props);
   };
 }
 
@@ -178,7 +178,7 @@ export class ProgressiveLoader {
   }
 
   private static async processQueue() {
-    if (this.preloadQueue.length === 0) return;
+    if (this.preloadQueue.length === 0) { return; }
 
     // Process 2 at a time to avoid overwhelming the network
     const batch = this.preloadQueue.splice(0, 2);
@@ -197,7 +197,7 @@ export class ProgressiveLoader {
       this.preloadFeature('DataVisualization');
     }
 
-    if (userPermissions.canViewReports) {
+    if (userPermissions.canAccessReports) {
       this.preloadFeature('ReportGenerator');
     }
 
@@ -205,7 +205,7 @@ export class ProgressiveLoader {
       this.preloadFeature('DataExportTools');
     }
 
-    if (userPermissions.isAdmin) {
+    if (userPermissions.canModifySettings) {
       this.preloadFeature('AdminPanel');
     }
   }
@@ -213,7 +213,7 @@ export class ProgressiveLoader {
   static preloadBasedOnUserBehavior() {
     // Preload based on user navigation patterns
     const currentPath = window.location.pathname;
-    
+
     if (currentPath.includes('/dashboard')) {
       // User is on dashboard, likely to view analytics
       this.preloadFeature('AdvancedAnalytics');
@@ -233,10 +233,10 @@ function getUserPermissions(): UserPermissions {
   return {
     canViewAnalytics: true,
     canExportData: true,
-    canManageUsers: false,
-    canViewReports: true,
-    isAdmin: false,
-    isSuperAdmin: false,
+    canManageProjects: false,
+    canAccessReports: true,
+    canModifySettings: false,
+    canInviteUsers: false,
   };
 }
 
@@ -257,31 +257,31 @@ function getFeatureFlags(): FeatureFlags {
 export function createDeviceBasedLoader<T = any>(
   desktopComponent: ComponentType<T>,
   mobileComponent: ComponentType<T>,
-  threshold: number = 768
+  threshold: number = 768,
 ) {
   return function DeviceWrapper(props: T) {
     const isMobile = window.innerWidth < threshold;
     const Component = isMobile ? mobileComponent : desktopComponent;
-    return <Component {...props} />;
+    return React.createElement(Component, props);
   };
 }
 
 // Bandwidth-aware loading
 export function createBandwidthAwareLoader<T = any>(
   highBandwidthComponent: ComponentType<T>,
-  lowBandwidthComponent: ComponentType<T>
+  lowBandwidthComponent: ComponentType<T>,
 ) {
   return function BandwidthWrapper(props: T) {
     // Check connection speed (if available)
     const connection = (navigator as any).connection;
     const isSlowConnection = connection && (
-      connection.effectiveType === '2g' || 
-      connection.effectiveType === 'slow-2g' ||
-      connection.saveData
+      connection.effectiveType === '2g'
+      || connection.effectiveType === 'slow-2g'
+      || connection.saveData
     );
 
     const Component = isSlowConnection ? lowBandwidthComponent : highBandwidthComponent;
-    return <Component {...props} />;
+    return React.createElement(Component, props);
   };
 }
 
@@ -289,13 +289,13 @@ export function createBandwidthAwareLoader<T = any>(
 export function useAutoPreloader() {
   React.useEffect(() => {
     const userPermissions = getUserPermissions();
-    
+
     // Initial preload based on permissions
     ProgressiveLoader.preloadBasedOnUserRole(userPermissions);
-    
+
     // Preload based on current route
     ProgressiveLoader.preloadBasedOnUserBehavior();
-    
+
     // Preload on idle
     if ('requestIdleCallback' in window) {
       const idleCallback = () => {
@@ -304,7 +304,7 @@ export function useAutoPreloader() {
           ProgressiveLoader.preloadFeature(feature as keyof typeof FeatureComponents);
         });
       };
-      
+
       requestIdleCallback(idleCallback, { timeout: 5000 });
     }
   }, []);
