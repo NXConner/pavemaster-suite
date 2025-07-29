@@ -58,33 +58,7 @@ export default defineConfig(({ mode }) => ({
           'query': ['@tanstack/react-query'],
           
           // API and documentation
-          'api-vendor': ['swagger-ui-react'],
-          
-          // Feature-based chunks
-          'quantum-ops': [
-            './src/components/QuantumOperationsCenter',
-            './src/components/UltimateEnhancedMissionControl'
-          ],
-          'ai-systems': [
-            './src/components/AIOperationsCenter',
-            './src/components/AIAssistant'
-          ],
-          'analytics': [
-            './src/components/AdvancedAnalytics',
-            './src/components/PredictiveAnalytics',
-            './src/components/PerformanceDashboard'
-          ],
-          'overwatch': [
-            './src/components/OverWatchTOSS'
-          ],
-          'mobile': [
-            './src/components/MobileCompanion',
-            './src/components/MobileFieldInterface'
-          ],
-          'enterprise': [
-            './src/components/EnterpriseIntegrations',
-            './src/components/MissionControlCenter'
-          ]
+          'api-vendor': ['swagger-ui-react']
         },
         
         // Optimize chunk names
