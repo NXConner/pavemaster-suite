@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../hooks/useAuth';
 import {
@@ -13,7 +13,10 @@ import {
   X,
   Wifi,
   BarChart3,
-  Cloud
+  Cloud,
+  Brain,
+  Shield,
+  Link
 } from 'lucide-react';
 
 const navigation = [
@@ -24,6 +27,9 @@ const navigation = [
   { name: 'IoT Hub', href: '/iot', icon: Wifi },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Weather', href: '/weather', icon: Cloud },
+  { name: 'AI Engine', href: '/intelligence', icon: Brain },
+  { name: 'Security', href: '/security', icon: Shield },
+  { name: 'Blockchain', href: '/blockchain', icon: Link },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
@@ -77,7 +83,7 @@ export default function Layout() {
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
-                <Link
+                <RouterLink
                   key={item.name}
                   to={item.href}
                   className={`
@@ -91,7 +97,7 @@ export default function Layout() {
                 >
                   <item.icon className="mr-3 h-4 w-4" />
                   {item.name}
-                </Link>
+                </RouterLink>
               );
             })}
           </nav>

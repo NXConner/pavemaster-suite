@@ -11,6 +11,9 @@ import TeamManagement from "./components/TeamManagement";
 import IoTHub from "./components/IoTHub";
 import Analytics from "./components/Analytics";
 import WeatherMonitor from "./components/WeatherMonitor";
+import IntelligenceEngine from "./components/IntelligenceEngine";
+import SecurityMonitor from "./components/SecurityMonitor";
+import BlockchainHub from "./components/BlockchainHub";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -42,6 +45,9 @@ const App = () => {
               <Route path="iot" element={<IoTHub />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="weather" element={<WeatherMonitor />} />
+              <Route path="intelligence" element={<IntelligenceEngine />} />
+              <Route path="security" element={<SecurityMonitor />} />
+              <Route path="blockchain" element={<BlockchainHub />} />
               <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
             </Route>
           </Routes>
