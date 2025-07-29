@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Calendar, MapPin, DollarSign, Users, Clock, TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from 'react';
+import { Calendar, MapPin, DollarSign, Users, Clock, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ProjectMilestone {
   id: string;
@@ -45,87 +45,87 @@ export function EnhancedProjectManagement() {
 
   const projects: EnhancedProject[] = [
     {
-      id: "1",
-      name: "Highway 101 Resurfacing",
-      location: "San Francisco, CA",
-      status: "active",
+      id: '1',
+      name: 'Highway 101 Resurfacing',
+      location: 'San Francisco, CA',
+      status: 'active',
       progress: 65,
       budget: 450000,
       spent: 285000,
       crewSize: 12,
-      dueDate: "2024-12-15",
-      startDate: "2024-10-01",
-      type: "resurfacing",
-      weatherRisk: "medium",
+      dueDate: '2024-12-15',
+      startDate: '2024-10-01',
+      type: 'resurfacing',
+      weatherRisk: 'medium',
       profitMargin: 18.5,
       milestones: [
-        { id: "1", title: "Site Preparation", dueDate: "2024-10-15", completed: true, critical: false },
-        { id: "2", title: "Base Layer Application", dueDate: "2024-11-01", completed: true, critical: true },
-        { id: "3", title: "Surface Layer Application", dueDate: "2024-11-20", completed: false, critical: true },
-        { id: "4", title: "Line Marking", dueDate: "2024-12-10", completed: false, critical: false },
-        { id: "5", title: "Final Inspection", dueDate: "2024-12-15", completed: false, critical: true },
+        { id: '1', title: 'Site Preparation', dueDate: '2024-10-15', completed: true, critical: false },
+        { id: '2', title: 'Base Layer Application', dueDate: '2024-11-01', completed: true, critical: true },
+        { id: '3', title: 'Surface Layer Application', dueDate: '2024-11-20', completed: false, critical: true },
+        { id: '4', title: 'Line Marking', dueDate: '2024-12-10', completed: false, critical: false },
+        { id: '5', title: 'Final Inspection', dueDate: '2024-12-15', completed: false, critical: true },
       ],
       resources: [
-        { type: "crew", name: "Paving Crew", allocated: 12, used: 8, unit: "members" },
-        { type: "equipment", name: "Asphalt Paver", allocated: 2, used: 1, unit: "units" },
-        { type: "material", name: "Hot Mix Asphalt", allocated: 1200, used: 780, unit: "tons" },
-      ]
+        { type: 'crew', name: 'Paving Crew', allocated: 12, used: 8, unit: 'members' },
+        { type: 'equipment', name: 'Asphalt Paver', allocated: 2, used: 1, unit: 'units' },
+        { type: 'material', name: 'Hot Mix Asphalt', allocated: 1200, used: 780, unit: 'tons' },
+      ],
     },
     {
-      id: "2",
-      name: "Church Parking Lot Sealcoating",
-      location: "Richmond, VA",
-      status: "planned",
+      id: '2',
+      name: 'Church Parking Lot Sealcoating',
+      location: 'Richmond, VA',
+      status: 'planned',
       progress: 15,
       budget: 85000,
       spent: 12750,
       crewSize: 4,
-      dueDate: "2024-11-30",
-      startDate: "2024-11-15",
-      type: "sealcoating",
-      weatherRisk: "low",
+      dueDate: '2024-11-30',
+      startDate: '2024-11-15',
+      type: 'sealcoating',
+      weatherRisk: 'low',
       profitMargin: 22.3,
       milestones: [
-        { id: "1", title: "Surface Cleaning", dueDate: "2024-11-16", completed: false, critical: false },
-        { id: "2", title: "Crack Sealing", dueDate: "2024-11-18", completed: false, critical: true },
-        { id: "3", title: "Sealcoat Application", dueDate: "2024-11-25", completed: false, critical: true },
-        { id: "4", title: "Line Striping", dueDate: "2024-11-29", completed: false, critical: false },
+        { id: '1', title: 'Surface Cleaning', dueDate: '2024-11-16', completed: false, critical: false },
+        { id: '2', title: 'Crack Sealing', dueDate: '2024-11-18', completed: false, critical: true },
+        { id: '3', title: 'Sealcoat Application', dueDate: '2024-11-25', completed: false, critical: true },
+        { id: '4', title: 'Line Striping', dueDate: '2024-11-29', completed: false, critical: false },
       ],
       resources: [
-        { type: "crew", name: "Sealcoat Team", allocated: 4, used: 0, unit: "members" },
-        { type: "equipment", name: "Sealcoat Tank", allocated: 1, used: 0, unit: "units" },
-        { type: "material", name: "Sealcoat Material", allocated: 450, used: 0, unit: "gallons" },
-      ]
-    }
+        { type: 'crew', name: 'Sealcoat Team', allocated: 4, used: 0, unit: 'members' },
+        { type: 'equipment', name: 'Sealcoat Tank', allocated: 1, used: 0, unit: 'units' },
+        { type: 'material', name: 'Sealcoat Material', allocated: 450, used: 0, unit: 'gallons' },
+      ],
+    },
   ];
 
   const getStatusColor = (status: string) => {
     const colors = {
-      active: "bg-success/10 text-success border-success/20",
-      planned: "bg-info/10 text-info border-info/20",
-      completed: "bg-primary/10 text-primary border-primary/20",
-      "on-hold": "bg-warning/10 text-warning border-warning/20"
+      active: 'bg-success/10 text-success border-success/20',
+      planned: 'bg-info/10 text-info border-info/20',
+      completed: 'bg-primary/10 text-primary border-primary/20',
+      'on-hold': 'bg-warning/10 text-warning border-warning/20',
     };
-    return colors[status as keyof typeof colors] || "bg-muted";
+    return colors[status as keyof typeof colors] || 'bg-muted';
   };
 
   const getWeatherRiskColor = (risk: string) => {
     const colors = {
-      low: "text-success",
-      medium: "text-warning",
-      high: "text-destructive"
+      low: 'text-success',
+      medium: 'text-warning',
+      high: 'text-destructive',
     };
-    return colors[risk as keyof typeof colors] || "text-muted-foreground";
+    return colors[risk as keyof typeof colors] || 'text-muted-foreground';
   };
 
   const getTypeIcon = (type: string) => {
     const icons = {
-      resurfacing: "🛣️",
-      sealcoating: "🖤",
-      "line-striping": "🛣️",
-      repair: "🔧"
+      resurfacing: '🛣️',
+      sealcoating: '🖤',
+      'line-striping': '🛣️',
+      repair: '🔧',
     };
-    return icons[type as keyof typeof icons] || "📋";
+    return icons[type as keyof typeof icons] || '📋';
   };
 
   return (
@@ -218,7 +218,7 @@ export function EnhancedProjectManagement() {
                     </span>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => setSelectedProject(project.id)}>
+                <Button variant="outline" size="sm" onClick={() => { setSelectedProject(project.id); }}>
                   View Details
                 </Button>
               </div>
@@ -239,7 +239,7 @@ export function EnhancedProjectManagement() {
                 <TabsTrigger value="resources">Resources</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="milestones" className="space-y-4">
                 {projects.find(p => p.id === selectedProject)?.milestones.map((milestone) => (
                   <div key={milestone.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -260,14 +260,14 @@ export function EnhancedProjectManagement() {
                       {milestone.critical && (
                         <Badge variant="destructive" className="text-xs">Critical</Badge>
                       )}
-                      <Badge variant={milestone.completed ? "default" : "secondary"}>
-                        {milestone.completed ? "Completed" : "Pending"}
+                      <Badge variant={milestone.completed ? 'default' : 'secondary'}>
+                        {milestone.completed ? 'Completed' : 'Pending'}
                       </Badge>
                     </div>
                   </div>
                 ))}
               </TabsContent>
-              
+
               <TabsContent value="resources" className="space-y-4">
                 {projects.find(p => p.id === selectedProject)?.resources.map((resource, index) => (
                   <div key={index} className="space-y-2">
@@ -281,7 +281,7 @@ export function EnhancedProjectManagement() {
                   </div>
                 ))}
               </TabsContent>
-              
+
               <TabsContent value="timeline">
                 <p className="text-muted-foreground">Timeline view coming soon...</p>
               </TabsContent>

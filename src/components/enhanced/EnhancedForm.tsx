@@ -19,17 +19,17 @@ interface FormFieldProps {
   className?: string;
 }
 
-export function FormField({ 
-  label, 
-  required, 
-  error, 
-  success, 
-  hint, 
-  children, 
-  className 
+export function FormField({
+  label,
+  required,
+  error,
+  success,
+  hint,
+  children,
+  className,
 }: FormFieldProps) {
   return (
-    <div className={cn("space-y-2 animate-fade-in", className)}>
+    <div className={cn('space-y-2 animate-fade-in', className)}>
       <div className="flex items-center gap-2">
         <Label className="font-medium">
           {label}
@@ -44,10 +44,10 @@ export function FormField({
           </div>
         )}
       </div>
-      
+
       <div className="relative">
         {children}
-        
+
         {/* Status indicators */}
         {error && (
           <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
@@ -60,7 +60,7 @@ export function FormField({
           </div>
         )}
       </div>
-      
+
       {/* Messages */}
       {error && (
         <p className="text-sm text-destructive flex items-center gap-1 animate-slide-down">
@@ -100,12 +100,12 @@ export const EnhancedInput = forwardRef<HTMLInputElement, EnhancedInputProps>(
           <Input
             ref={ref}
             className={cn(
-              "transition-all duration-200 focus:scale-[1.02]",
-              leftIcon && "pl-10",
-              (rightIcon || error || success) && "pr-10",
-              error && "border-destructive focus:border-destructive focus:ring-destructive",
-              success && !error && "border-success focus:border-success focus:ring-success",
-              className
+              'transition-all duration-200 focus:scale-[1.02]',
+              leftIcon && 'pl-10',
+              (rightIcon || error || success) && 'pr-10',
+              error && 'border-destructive focus:border-destructive focus:ring-destructive',
+              success && !error && 'border-success focus:border-success focus:ring-success',
+              className,
             )}
             {...props}
           />
@@ -117,10 +117,10 @@ export const EnhancedInput = forwardRef<HTMLInputElement, EnhancedInputProps>(
         </div>
       </FormField>
     );
-  }
+  },
 );
 
-EnhancedInput.displayName = "EnhancedInput";
+EnhancedInput.displayName = 'EnhancedInput';
 
 interface EnhancedTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
@@ -136,19 +136,19 @@ export const EnhancedTextarea = forwardRef<HTMLTextAreaElement, EnhancedTextarea
         <Textarea
           ref={ref}
           className={cn(
-            "transition-all duration-200 focus:scale-[1.02] min-h-[100px]",
-            error && "border-destructive focus:border-destructive focus:ring-destructive",
-            success && !error && "border-success focus:border-success focus:ring-success",
-            className
+            'transition-all duration-200 focus:scale-[1.02] min-h-[100px]',
+            error && 'border-destructive focus:border-destructive focus:ring-destructive',
+            success && !error && 'border-success focus:border-success focus:ring-success',
+            className,
           )}
           {...props}
         />
       </FormField>
     );
-  }
+  },
 );
 
-EnhancedTextarea.displayName = "EnhancedTextarea";
+EnhancedTextarea.displayName = 'EnhancedTextarea';
 
 interface EnhancedSelectProps {
   label: string;
@@ -163,36 +163,36 @@ interface EnhancedSelectProps {
   className?: string;
 }
 
-export function EnhancedSelect({ 
-  label, 
-  error, 
-  success, 
-  hint, 
-  placeholder, 
-  options, 
-  value, 
-  onValueChange, 
-  required, 
-  className 
+export function EnhancedSelect({
+  label,
+  error,
+  success,
+  hint,
+  placeholder,
+  options,
+  value,
+  onValueChange,
+  required,
+  className,
 }: EnhancedSelectProps) {
   return (
     <FormField label={label} required={required} error={error} success={success} hint={hint}>
       <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger 
+        <SelectTrigger
           className={cn(
-            "transition-all duration-200 focus:scale-[1.02]",
-            error && "border-destructive focus:border-destructive focus:ring-destructive",
-            success && !error && "border-success focus:border-success focus:ring-success",
-            className
+            'transition-all duration-200 focus:scale-[1.02]',
+            error && 'border-destructive focus:border-destructive focus:ring-destructive',
+            success && !error && 'border-success focus:border-success focus:ring-success',
+            className,
           )}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
-            <SelectItem 
-              key={option.value} 
-              value={option.value} 
+            <SelectItem
+              key={option.value}
+              value={option.value}
               disabled={option.disabled}
             >
               {option.label}
@@ -213,19 +213,19 @@ interface EnhancedCheckboxProps {
   className?: string;
 }
 
-export function EnhancedCheckbox({ 
-  label, 
-  description, 
-  checked, 
-  onCheckedChange, 
-  required, 
-  className 
+export function EnhancedCheckbox({
+  label,
+  description,
+  checked,
+  onCheckedChange,
+  required,
+  className,
 }: EnhancedCheckboxProps) {
   return (
-    <div className={cn("flex items-top space-x-2 animate-fade-in", className)}>
-      <Checkbox 
+    <div className={cn('flex items-top space-x-2 animate-fade-in', className)}>
+      <Checkbox
         id={label}
-        checked={checked} 
+        checked={checked}
         onCheckedChange={onCheckedChange}
         className="transition-all duration-200 hover:scale-105"
       />
@@ -256,16 +256,16 @@ interface EnhancedSwitchProps {
   className?: string;
 }
 
-export function EnhancedSwitch({ 
-  label, 
-  description, 
-  checked, 
-  onCheckedChange, 
-  badge, 
-  className 
+export function EnhancedSwitch({
+  label,
+  description,
+  checked,
+  onCheckedChange,
+  badge,
+  className,
 }: EnhancedSwitchProps) {
   return (
-    <div className={cn("flex items-center justify-between space-x-2 animate-fade-in", className)}>
+    <div className={cn('flex items-center justify-between space-x-2 animate-fade-in', className)}>
       <div className="space-y-0.5">
         <div className="flex items-center gap-2">
           <Label className="text-base font-medium">{label}</Label>
@@ -281,8 +281,8 @@ export function EnhancedSwitch({
           </p>
         )}
       </div>
-      <Switch 
-        checked={checked} 
+      <Switch
+        checked={checked}
         onCheckedChange={onCheckedChange}
         className="transition-all duration-200 hover:scale-105"
       />

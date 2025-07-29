@@ -1,20 +1,20 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { AnimatedButton } from "./AnimatedButton";
-import { cn } from "@/lib/utils";
-import { 
-  MapPin, 
-  Users, 
-  Calendar, 
-  DollarSign, 
-  Eye, 
-  Edit, 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { AnimatedButton } from './AnimatedButton';
+import { cn } from '@/lib/utils';
+import {
+  MapPin,
+  Users,
+  Calendar,
+  DollarSign,
+  Eye,
+  Edit,
   MoreVertical,
   Clock,
-  AlertTriangle 
-} from "lucide-react";
+  AlertTriangle,
+} from 'lucide-react';
 
 interface ProjectCardProps {
   project: {
@@ -73,23 +73,23 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
   const isNearDeadline = new Date(project.dueDate) <= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   return (
-    <Card 
+    <Card
       className={cn(
-        "group relative transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 animate-fade-in overflow-hidden",
-        "before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100",
-        isOverBudget && "ring-2 ring-destructive/20",
-        isNearDeadline && "ring-2 ring-warning/20",
-        className
+        'group relative transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 animate-fade-in overflow-hidden',
+        'before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100',
+        isOverBudget && 'ring-2 ring-destructive/20',
+        isNearDeadline && 'ring-2 ring-warning/20',
+        className,
       )}
     >
       {/* Priority indicator */}
       {project.priority && project.priority !== 'low' && (
         <div className={cn(
-          "absolute top-0 right-0 w-0 h-0 border-l-[20px] border-b-[20px]",
-          "border-l-transparent transition-all duration-300",
-          project.priority === 'urgent' && "border-b-destructive",
-          project.priority === 'high' && "border-b-warning",
-          project.priority === 'medium' && "border-b-primary"
+          'absolute top-0 right-0 w-0 h-0 border-l-[20px] border-b-[20px]',
+          'border-l-transparent transition-all duration-300',
+          project.priority === 'urgent' && 'border-b-destructive',
+          project.priority === 'high' && 'border-b-warning',
+          project.priority === 'medium' && 'border-b-primary',
         )}>
           {project.priority === 'urgent' && (
             <AlertTriangle className="absolute -top-4 -right-4 h-3 w-3 text-destructive-foreground" />
@@ -115,13 +115,13 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Badge className={cn(getStatusColor(project.status), "transition-all duration-200")}>
+            <Badge className={cn(getStatusColor(project.status), 'transition-all duration-200')}>
               {project.status}
             </Badge>
             {project.priority && (
-              <Badge variant="outline" className={cn("text-xs", getPriorityColor(project.priority))}>
+              <Badge variant="outline" className={cn('text-xs', getPriorityColor(project.priority))}>
                 {project.priority}
               </Badge>
             )}
@@ -136,9 +136,9 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
             <span className="font-medium">Progress</span>
             <span className="text-muted-foreground">{project.progress}%</span>
           </div>
-          <Progress 
-            value={project.progress} 
-            className="h-2 transition-all duration-300 group-hover:h-3" 
+          <Progress
+            value={project.progress}
+            className="h-2 transition-all duration-300 group-hover:h-3"
           />
         </div>
 
@@ -151,14 +151,14 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
               <span className="ml-1 font-medium">{project.crewSize}</span>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2 text-sm">
             <Calendar className="h-4 w-4 text-primary transition-transform duration-300 group-hover:scale-110" />
             <div>
               <span className="text-muted-foreground">Due:</span>
               <span className={cn(
-                "ml-1 font-medium",
-                isNearDeadline && "text-warning"
+                'ml-1 font-medium',
+                isNearDeadline && 'text-warning',
               )}>
                 {new Date(project.dueDate).toLocaleDateString()}
               </span>
@@ -175,25 +175,25 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
             </div>
             <div className="text-right">
               <div className={cn(
-                "font-medium",
-                isOverBudget && "text-destructive"
+                'font-medium',
+                isOverBudget && 'text-destructive',
               )}>
                 ${project.spent.toLocaleString()} / ${project.budget.toLocaleString()}
               </div>
               <div className={cn(
-                "text-xs",
-                isOverBudget ? "text-destructive" : "text-muted-foreground"
+                'text-xs',
+                isOverBudget ? 'text-destructive' : 'text-muted-foreground',
               )}>
                 {budgetUsage.toFixed(1)}% used
               </div>
             </div>
           </div>
-          
+
           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div 
+            <div
               className={cn(
-                "h-full transition-all duration-500",
-                isOverBudget ? "bg-destructive" : budgetUsage > 80 ? "bg-warning" : "bg-primary"
+                'h-full transition-all duration-500',
+                isOverBudget ? 'bg-destructive' : budgetUsage > 80 ? 'bg-warning' : 'bg-primary',
               )}
               style={{ width: `${Math.min(budgetUsage, 100)}%` }}
             />
@@ -239,7 +239,7 @@ export function ProjectCard({ project, onView, onEdit, className }: ProjectCardP
               Edit
             </AnimatedButton>
           </div>
-          
+
           <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <MoreVertical className="h-4 w-4" />
           </Button>

@@ -32,7 +32,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     this.setState({ errorInfo });
-    
+
     // Call the optional onError callback
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
@@ -67,10 +67,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
     navigator.clipboard.writeText(JSON.stringify(errorDetails, null, 2));
     this.setState({ copied: true });
-    
+
     toast({
-      title: "Error Details Copied",
-      description: "Error information has been copied to your clipboard.",
+      title: 'Error Details Copied',
+      description: 'Error information has been copied to your clipboard.',
     });
 
     setTimeout(() => {
@@ -95,11 +95,11 @@ export class ErrorBoundary extends Component<Props, State> {
                   <AlertTriangle className="h-10 w-10 text-destructive" />
                 </div>
               </div>
-              
+
               <CardTitle className="text-2xl font-bold text-foreground">
                 Something went wrong
               </CardTitle>
-              
+
               <CardDescription className="text-muted-foreground">
                 We encountered an unexpected error. Don't worry, this has been logged and our team will look into it.
               </CardDescription>
@@ -115,7 +115,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     Runtime Error
                   </Badge>
                 </div>
-                
+
                 <div className="bg-muted/50 rounded-lg p-4 border border-destructive/20">
                   <code className="text-sm text-foreground break-all">
                     {this.state.error?.message || 'Unknown error occurred'}
@@ -127,25 +127,25 @@ export class ErrorBoundary extends Component<Props, State> {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button 
+                <Button
                   onClick={this.handleRetry}
                   className="flex-1 transition-all duration-200 hover:scale-105"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   onClick={this.handleGoHome}
                   className="flex-1 transition-all duration-200 hover:scale-105"
                 >
                   <Home className="h-4 w-4 mr-2" />
                   Go Home
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   onClick={this.handleCopyError}
                   className="flex-1 transition-all duration-200 hover:scale-105"
                 >
@@ -169,7 +169,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
                     Development Details (Click to expand)
                   </summary>
-                  
+
                   <div className="bg-muted/30 rounded-lg p-4 border text-xs font-mono space-y-2">
                     <div>
                       <strong>Error:</strong>
@@ -177,7 +177,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         {this.state.error.stack}
                       </pre>
                     </div>
-                    
+
                     {this.state.errorInfo?.componentStack && (
                       <div>
                         <strong>Component Stack:</strong>
@@ -208,11 +208,11 @@ export class ErrorBoundary extends Component<Props, State> {
 export function useErrorHandler() {
   const handleError = (error: Error, errorInfo?: ErrorInfo) => {
     console.error('Error caught by error handler:', error, errorInfo);
-    
+
     toast({
-      title: "An error occurred",
-      description: error.message || "Something went wrong. Please try again.",
-      variant: "destructive",
+      title: 'An error occurred',
+      description: error.message || 'Something went wrong. Please try again.',
+      variant: 'destructive',
     });
 
     // Log to monitoring service

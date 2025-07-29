@@ -91,14 +91,14 @@ export function NotificationSettings() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
-        title: "Preferences Saved",
-        description: "Your notification preferences have been updated successfully.",
+        title: 'Preferences Saved',
+        description: 'Your notification preferences have been updated successfully.',
       });
     } catch (error) {
       toast({
-        title: "Save Failed",
-        description: "Failed to save preferences. Please try again.",
-        variant: "destructive",
+        title: 'Save Failed',
+        description: 'Failed to save preferences. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -128,7 +128,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.email.projectUpdates}
-              onCheckedChange={(checked) => updatePreference('email', 'projectUpdates', checked)}
+              onCheckedChange={(checked) => { updatePreference('email', 'projectUpdates', checked); }}
             />
           </div>
 
@@ -146,7 +146,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.email.securityAlerts}
-              onCheckedChange={(checked) => updatePreference('email', 'securityAlerts', checked)}
+              onCheckedChange={(checked) => { updatePreference('email', 'securityAlerts', checked); }}
             />
           </div>
 
@@ -161,7 +161,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.email.weatherAlerts}
-              onCheckedChange={(checked) => updatePreference('email', 'weatherAlerts', checked)}
+              onCheckedChange={(checked) => { updatePreference('email', 'weatherAlerts', checked); }}
             />
           </div>
 
@@ -176,7 +176,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.email.equipmentAlerts}
-              onCheckedChange={(checked) => updatePreference('email', 'equipmentAlerts', checked)}
+              onCheckedChange={(checked) => { updatePreference('email', 'equipmentAlerts', checked); }}
             />
           </div>
 
@@ -186,7 +186,7 @@ export function NotificationSettings() {
             <Label>Email Frequency</Label>
             <Select
               value={preferences.email.frequency}
-              onValueChange={(value) => updatePreference('email', 'frequency', value)}
+              onValueChange={(value) => { updatePreference('email', 'frequency', value); }}
             >
               <SelectTrigger className="w-full transition-all duration-200 focus:scale-[1.02]">
                 <SelectValue placeholder="Select frequency" />
@@ -223,7 +223,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.push.enabled}
-              onCheckedChange={(checked) => updatePreference('push', 'enabled', checked)}
+              onCheckedChange={(checked) => { updatePreference('push', 'enabled', checked); }}
             />
           </div>
 
@@ -240,7 +240,7 @@ export function NotificationSettings() {
                 </div>
                 <Switch
                   checked={preferences.push.projectUpdates}
-                  onCheckedChange={(checked) => updatePreference('push', 'projectUpdates', checked)}
+                  onCheckedChange={(checked) => { updatePreference('push', 'projectUpdates', checked); }}
                 />
               </div>
 
@@ -258,7 +258,7 @@ export function NotificationSettings() {
                 </div>
                 <Switch
                   checked={preferences.push.emergencyAlerts}
-                  onCheckedChange={(checked) => updatePreference('push', 'emergencyAlerts', checked)}
+                  onCheckedChange={(checked) => { updatePreference('push', 'emergencyAlerts', checked); }}
                 />
               </div>
 
@@ -273,7 +273,7 @@ export function NotificationSettings() {
                 </div>
                 <Switch
                   checked={preferences.push.dailyDigest}
-                  onCheckedChange={(checked) => updatePreference('push', 'dailyDigest', checked)}
+                  onCheckedChange={(checked) => { updatePreference('push', 'dailyDigest', checked); }}
                 />
               </div>
             </>
@@ -302,7 +302,7 @@ export function NotificationSettings() {
             </div>
             <Switch
               checked={preferences.inApp.enabled}
-              onCheckedChange={(checked) => updatePreference('inApp', 'enabled', checked)}
+              onCheckedChange={(checked) => { updatePreference('inApp', 'enabled', checked); }}
             />
           </div>
 
@@ -319,7 +319,7 @@ export function NotificationSettings() {
                 </div>
                 <Switch
                   checked={preferences.inApp.soundEnabled}
-                  onCheckedChange={(checked) => updatePreference('inApp', 'soundEnabled', checked)}
+                  onCheckedChange={(checked) => { updatePreference('inApp', 'soundEnabled', checked); }}
                 />
               </div>
 
@@ -338,7 +338,7 @@ export function NotificationSettings() {
                   </div>
                   <Switch
                     checked={preferences.inApp.quietHours.enabled}
-                    onCheckedChange={(checked) => updateQuietHours('enabled', checked)}
+                    onCheckedChange={(checked) => { updateQuietHours('enabled', checked); }}
                   />
                 </div>
 
@@ -348,7 +348,7 @@ export function NotificationSettings() {
                       <Label htmlFor="quietStart">Start Time</Label>
                       <Select
                         value={preferences.inApp.quietHours.start}
-                        onValueChange={(value) => updateQuietHours('start', value)}
+                        onValueChange={(value) => { updateQuietHours('start', value); }}
                       >
                         <SelectTrigger id="quietStart">
                           <SelectValue />
@@ -369,7 +369,7 @@ export function NotificationSettings() {
                       <Label htmlFor="quietEnd">End Time</Label>
                       <Select
                         value={preferences.inApp.quietHours.end}
-                        onValueChange={(value) => updateQuietHours('end', value)}
+                        onValueChange={(value) => { updateQuietHours('end', value); }}
                       >
                         <SelectTrigger id="quietEnd">
                           <SelectValue />
@@ -396,7 +396,7 @@ export function NotificationSettings() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <AnimatedButton 
+        <AnimatedButton
           onClick={handleSavePreferences}
           disabled={isLoading}
           variant="default"

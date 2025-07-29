@@ -4,17 +4,17 @@ import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import PredictiveAnalytics from '@/components/PredictiveAnalytics';
 import { PerformanceDashboard } from '@/components/PerformanceDashboard';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Brain, 
-  Target, 
-  Activity, 
+import {
+  BarChart3,
+  TrendingUp,
+  Brain,
+  Target,
+  Activity,
   Zap,
   PieChart,
   LineChart,
   Users,
-  AlertTriangle
+  AlertTriangle,
 } from 'lucide-react';
 
 export default function AnalyticsPage() {

@@ -15,7 +15,7 @@ import {
   AlertCircle,
   RotateCcw,
   Smartphone,
-  HardDrive
+  HardDrive,
 } from 'lucide-react';
 
 interface OfflineData {
@@ -40,7 +40,7 @@ interface OfflineManagerProps {
   className?: string;
 }
 
-export function OfflineManager({ className = "" }: OfflineManagerProps) {
+export function OfflineManager({ className = '' }: OfflineManagerProps) {
   const { toast } = useToast();
   const [offlineData, setOfflineData] = useState<OfflineData>({
     projects: 0,
@@ -48,29 +48,29 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
     photos: 0,
     measurements: 0,
     reports: 0,
-    lastSync: null
+    lastSync: null,
   });
-  
+
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
     isOnline: navigator.onLine,
     isSyncing: false,
     pendingUploads: 0,
     pendingDownloads: 0,
     lastSync: null,
-    syncProgress: 0
+    syncProgress: 0,
   });
 
   const [storageUsage, setStorageUsage] = useState({
     used: 0,
     total: 0,
-    percentage: 0
+    percentage: 0,
   });
 
   useEffect(() => {
     loadOfflineData();
     checkStorageUsage();
     setupNetworkListeners();
-    
+
     // Setup auto-sync when coming online
     if (syncStatus.isOnline && syncStatus.pendingUploads > 0) {
       startSync();
@@ -81,17 +81,17 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
     const handleOnline = () => {
       setSyncStatus(prev => ({ ...prev, isOnline: true }));
       toast({
-        title: "Connection Restored",
-        description: "Back online - starting sync...",
+        title: 'Connection Restored',
+        description: 'Back online - starting sync...',
       });
     };
 
     const handleOffline = () => {
       setSyncStatus(prev => ({ ...prev, isOnline: false }));
       toast({
-        title: "Offline Mode",
-        description: "Working offline - data will sync when reconnected",
-        variant: "destructive",
+        title: 'Offline Mode',
+        description: 'Working offline - data will sync when reconnected',
+        variant: 'destructive',
       });
     };
 
@@ -112,13 +112,13 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
       photos: 45,
       measurements: 28,
       reports: 6,
-      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     };
-    
+
     const mockSyncStatus: Partial<SyncStatus> = {
       pendingUploads: 8,
       pendingDownloads: 2,
-      lastSync: mockData.lastSync
+      lastSync: mockData.lastSync,
     };
 
     setOfflineData(mockData);
@@ -132,11 +132,11 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
         const used = estimate.usage || 0;
         const total = estimate.quota || 0;
         const percentage = total > 0 ? (used / total) * 100 : 0;
-        
+
         setStorageUsage({
           used: Math.round(used / 1024 / 1024), // Convert to MB
           total: Math.round(total / 1024 / 1024), // Convert to MB
-          percentage: Math.round(percentage)
+          percentage: Math.round(percentage),
         });
       }
     } catch (error) {
@@ -147,9 +147,9 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
   const startSync = async () => {
     if (!syncStatus.isOnline) {
       toast({
-        title: "No Connection",
-        description: "Cannot sync while offline",
-        variant: "destructive",
+        title: 'No Connection',
+        description: 'Cannot sync while offline',
+        variant: 'destructive',
       });
       return;
     }
@@ -175,33 +175,32 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
         pendingUploads: 0,
         pendingDownloads: 0,
         lastSync: new Date(),
-        syncProgress: 100
+        syncProgress: 100,
       }));
 
       toast({
-        title: "Sync Complete",
-        description: "All data has been synchronized successfully",
+        title: 'Sync Complete',
+        description: 'All data has been synchronized successfully',
       });
 
       // Reset progress after a moment
       setTimeout(() => {
         setSyncStatus(prev => ({ ...prev, syncProgress: 0 }));
       }, 2000);
-
     } catch (error) {
       console.error('Sync error:', error);
       setSyncStatus(prev => ({ ...prev, isSyncing: false, syncProgress: 0 }));
       toast({
-        title: "Sync Failed",
-        description: "Failed to synchronize data. Please try again.",
-        variant: "destructive",
+        title: 'Sync Failed',
+        description: 'Failed to synchronize data. Please try again.',
+        variant: 'destructive',
       });
     }
   };
 
   const downloadForOffline = async () => {
     setSyncStatus(prev => ({ ...prev, isSyncing: true, syncProgress: 0 }));
-    
+
     try {
       // Simulate downloading essential data for offline use
       for (let i = 0; i <= 100; i += 10) {
@@ -210,15 +209,15 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
       }
 
       toast({
-        title: "Download Complete",
-        description: "Essential data downloaded for offline use",
+        title: 'Download Complete',
+        description: 'Essential data downloaded for offline use',
       });
     } catch (error) {
       console.error('Download error:', error);
       toast({
-        title: "Download Failed",
-        description: "Failed to download offline data",
-        variant: "destructive",
+        title: 'Download Failed',
+        description: 'Failed to download offline data',
+        variant: 'destructive',
       });
     } finally {
       setSyncStatus(prev => ({ ...prev, isSyncing: false, syncProgress: 0 }));
@@ -232,17 +231,17 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
       photos: 0,
       measurements: 0,
       reports: 0,
-      lastSync: null
+      lastSync: null,
     });
-    
+
     toast({
-      title: "Data Cleared",
-      description: "Offline data has been cleared",
+      title: 'Data Cleared',
+      description: 'Offline data has been cleared',
     });
   };
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 MB';
+    if (bytes === 0) { return '0 MB'; }
     return `${bytes} MB`;
   };
 
@@ -250,16 +249,15 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
     if (syncStatus.isOnline) {
       return {
         icon: <Wifi className="h-4 w-4 text-green-500" />,
-        label: "Online",
-        variant: "default" as const
-      };
-    } else {
-      return {
-        icon: <WifiOff className="h-4 w-4 text-red-500" />,
-        label: "Offline",
-        variant: "destructive" as const
+        label: 'Online',
+        variant: 'default' as const,
       };
     }
+    return {
+      icon: <WifiOff className="h-4 w-4 text-red-500" />,
+      label: 'Offline',
+      variant: 'destructive' as const,
+    };
   };
 
   const status = getConnectionStatus();
@@ -315,7 +313,7 @@ export function OfflineManager({ className = "" }: OfflineManagerProps) {
               <RotateCcw className="h-4 w-4" />
               Sync Now
             </Button>
-            
+
             <Button
               variant="outline"
               onClick={downloadForOffline}

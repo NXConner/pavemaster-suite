@@ -12,14 +12,14 @@ interface VoiceInterfaceProps {
   className?: string;
 }
 
-export function VoiceInterface({ onTranscription, onResponse, className = "" }: VoiceInterfaceProps) {
+export function VoiceInterface({ onTranscription, onResponse, className = '' }: VoiceInterfaceProps) {
   const { toast } = useToast();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [audioLevel, setAudioLevel] = useState(0);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -38,11 +38,11 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
   }, []);
 
   const updateAudioLevel = () => {
-    if (!analyserRef.current) return;
+    if (!analyserRef.current) { return; }
 
     const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
     analyserRef.current.getByteFrequencyData(dataArray);
-    
+
     const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
     setAudioLevel(average / 255);
 
@@ -53,14 +53,14 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: 44100,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
-        }
+          autoGainControl: true,
+        },
       });
 
       // Set up audio context for visualization
@@ -71,7 +71,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
       analyserRef.current.fftSize = 256;
 
       mediaRecorderRef.current = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
+        mimeType: 'audio/webm;codecs=opus',
       });
 
       audioChunksRef.current = [];
@@ -85,7 +85,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
       mediaRecorderRef.current.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         await processAudio(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach(track => { track.stop(); });
       };
 
       mediaRecorderRef.current.start();
@@ -93,15 +93,15 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
       updateAudioLevel();
 
       toast({
-        title: "Recording started",
-        description: "Speak now...",
+        title: 'Recording started',
+        description: 'Speak now...',
       });
     } catch (error) {
       console.error('Error starting recording:', error);
       toast({
-        title: "Recording failed",
-        description: "Could not access microphone",
-        variant: "destructive",
+        title: 'Recording failed',
+        description: 'Could not access microphone',
+        variant: 'destructive',
       });
     }
   };
@@ -111,7 +111,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       setAudioLevel(0);
-      
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -120,7 +120,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
 
   const processAudio = async (audioBlob: Blob) => {
     setIsProcessing(true);
-    
+
     try {
       // Convert blob to base64
       const arrayBuffer = await audioBlob.arrayBuffer();
@@ -128,10 +128,10 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
 
       // Send to speech-to-text
       const { data: transcriptionData, error: transcriptionError } = await supabase.functions.invoke('voice-to-text', {
-        body: { audio: base64Audio }
+        body: { audio: base64Audio },
       });
 
-      if (transcriptionError) throw transcriptionError;
+      if (transcriptionError) { throw transcriptionError; }
 
       const transcribedText = transcriptionData.text;
       setTranscript(transcribedText);
@@ -139,40 +139,40 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
 
       // Generate AI response
       const { data: responseData, error: responseError } = await supabase.functions.invoke('ai-assistant', {
-        body: { 
+        body: {
           message: transcribedText,
-          context: 'voice_interface'
-        }
+          context: 'voice_interface',
+        },
       });
 
-      if (responseError) throw responseError;
+      if (responseError) { throw responseError; }
 
       const aiResponse = responseData.response;
       onResponse?.(aiResponse);
 
       // Convert response to speech
       const { data: speechData, error: speechError } = await supabase.functions.invoke('text-to-speech', {
-        body: { 
+        body: {
           text: aiResponse,
-          voice: 'alloy'
-        }
+          voice: 'alloy',
+        },
       });
 
-      if (speechError) throw speechError;
+      if (speechError) { throw speechError; }
 
       // Play the audio response
       await playAudioResponse(speechData.audioContent);
 
       toast({
-        title: "Processing complete",
-        description: "AI response generated and played",
+        title: 'Processing complete',
+        description: 'AI response generated and played',
       });
     } catch (error) {
       console.error('Error processing audio:', error);
       toast({
-        title: "Processing failed",
-        description: "Could not process voice command",
-        variant: "destructive",
+        title: 'Processing failed',
+        description: 'Could not process voice command',
+        variant: 'destructive',
       });
     } finally {
       setIsProcessing(false);
@@ -181,12 +181,12 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
 
   const playAudioResponse = async (base64Audio: string) => {
     setIsSpeaking(true);
-    
+
     try {
       const audioData = atob(base64Audio);
       const arrayBuffer = new ArrayBuffer(audioData.length);
       const view = new Uint8Array(arrayBuffer);
-      
+
       for (let i = 0; i < audioData.length; i++) {
         view[i] = audioData.charCodeAt(i);
       }
@@ -232,7 +232,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
         {/* Audio Level Visualization */}
         {isRecording && (
           <div className="w-full bg-secondary rounded-full h-2 overflow-hidden">
-            <div 
+            <div
               className="h-full bg-primary transition-all duration-100 ease-out"
               style={{ width: `${Math.min(audioLevel * 100, 100)}%` }}
             />
@@ -273,7 +273,7 @@ export function VoiceInterface({ onTranscription, onResponse, className = "" }: 
         <Button
           onClick={toggleRecording}
           disabled={isProcessing || isSpeaking}
-          variant={isRecording ? "destructive" : "default"}
+          variant={isRecording ? 'destructive' : 'default'}
           className="w-full"
           size="lg"
         >

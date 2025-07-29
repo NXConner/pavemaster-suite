@@ -1,15 +1,15 @@
-import { Plus, FileText, Calendar, Users, Truck, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, FileText, Calendar, Users, Truck, Calculator } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function QuickActions() {
   const actions = [
-    { icon: Plus, label: "New Project", color: "bg-primary text-primary-foreground" },
-    { icon: FileText, label: "Create Quote", color: "bg-secondary text-secondary-foreground" },
-    { icon: Calendar, label: "Schedule", color: "bg-info text-info-foreground" },
-    { icon: Users, label: "Assign Crew", color: "bg-success text-success-foreground" },
-    { icon: Truck, label: "Track Equipment", color: "bg-warning text-warning-foreground" },
-    { icon: Calculator, label: "Cost Calculator", color: "bg-accent text-accent-foreground" },
+    { icon: Plus, label: 'New Project', color: 'bg-primary text-primary-foreground' },
+    { icon: FileText, label: 'Create Quote', color: 'bg-secondary text-secondary-foreground' },
+    { icon: Calendar, label: 'Schedule', color: 'bg-info text-info-foreground' },
+    { icon: Users, label: 'Assign Crew', color: 'bg-success text-success-foreground' },
+    { icon: Truck, label: 'Track Equipment', color: 'bg-warning text-warning-foreground' },
+    { icon: Calculator, label: 'Cost Calculator', color: 'bg-accent text-accent-foreground' },
   ];
 
   return (

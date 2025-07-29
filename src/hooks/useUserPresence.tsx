@@ -18,7 +18,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
   const [isTracking, setIsTracking] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) { return; }
 
     const channel = supabase.channel(roomId);
 
@@ -28,7 +28,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
         const newState = channel.presenceState<UserPresence>();
         console.log('Presence sync:', newState);
         setPresenceState(newState);
-        
+
         // Flatten presence state to get list of online users
         const users = Object.values(newState).flat();
         setOnlineUsers(users);
@@ -41,7 +41,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
       })
       .subscribe(async (status) => {
         console.log('Presence channel status:', status);
-        
+
         if (status === 'SUBSCRIBED') {
           // Start tracking user presence
           const userPresence: UserPresence = {
@@ -50,7 +50,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
             status: 'online',
             last_seen: new Date().toISOString(),
             current_page: window.location.pathname,
-            device_type: detectDeviceType()
+            device_type: detectDeviceType(),
           };
 
           const presenceTrackStatus = await channel.track(userPresence);
@@ -68,7 +68,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
           status: 'online',
           last_seen: new Date().toISOString(),
           current_page: window.location.pathname,
-          device_type: detectDeviceType()
+          device_type: detectDeviceType(),
         });
       }
     };
@@ -82,7 +82,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
           status: 'online',
           last_seen: new Date().toISOString(),
           current_page: window.location.pathname,
-          device_type: detectDeviceType()
+          device_type: detectDeviceType(),
         });
       }
     };
@@ -99,7 +99,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
   }, [user, roomId, isTracking]);
 
   const updateStatus = async (status: UserPresence['status']) => {
-    if (!user || !isTracking) return;
+    if (!user || !isTracking) { return; }
 
     const channel = supabase.channel(roomId);
     await channel.track({
@@ -108,7 +108,7 @@ export function useUserPresence(roomId: string = 'main-workspace') {
       status,
       last_seen: new Date().toISOString(),
       current_page: window.location.pathname,
-      device_type: detectDeviceType()
+      device_type: detectDeviceType(),
     });
   };
 
@@ -117,20 +117,20 @@ export function useUserPresence(roomId: string = 'main-workspace') {
     onlineUsers,
     isTracking,
     updateStatus,
-    totalOnlineUsers: onlineUsers.length
+    totalOnlineUsers: onlineUsers.length,
   };
 }
 
 function detectDeviceType(): 'desktop' | 'mobile' | 'tablet' {
   const userAgent = navigator.userAgent;
-  
+
   if (/tablet|ipad/i.test(userAgent)) {
     return 'tablet';
   }
-  
+
   if (/mobile|iphone|android/i.test(userAgent)) {
     return 'mobile';
   }
-  
+
   return 'desktop';
 }

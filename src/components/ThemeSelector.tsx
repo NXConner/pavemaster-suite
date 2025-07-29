@@ -26,7 +26,7 @@ export function ThemeSelector() {
     setWallpaper,
     setThemeMode,
     createCustomTheme,
-    uploadWallpaper
+    uploadWallpaper,
   } = useTheme();
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -39,26 +39,26 @@ export function ThemeSelector() {
         background: '220 13% 98%',
         foreground: '220 15% 15%',
         primary: '32 95% 55%',
-        'primary-foreground': '0 0% 100%'
+        'primary-foreground': '0 0% 100%',
       },
       dark: {
         background: '222.2 84% 4.9%',
         foreground: '210 40% 98%',
         primary: '32 95% 55%',
-        'primary-foreground': '0 0% 100%'
-      }
-    }
+        'primary-foreground': '0 0% 100%',
+      },
+    },
   });
 
   const [wallpaperUpload, setWallpaperUpload] = useState({
     name: '',
     description: '',
-    file: null as File | null
+    file: null as File | null,
   });
 
   const handleCreateTheme = async () => {
-    if (!newTheme.name) return;
-    
+    if (!newTheme.name) { return; }
+
     await createCustomTheme(newTheme);
     setCreateDialogOpen(false);
     setNewTheme({
@@ -69,21 +69,21 @@ export function ThemeSelector() {
           background: '220 13% 98%',
           foreground: '220 15% 15%',
           primary: '32 95% 55%',
-          'primary-foreground': '0 0% 100%'
+          'primary-foreground': '0 0% 100%',
         },
         dark: {
           background: '222.2 84% 4.9%',
           foreground: '210 40% 98%',
           primary: '32 95% 55%',
-          'primary-foreground': '0 0% 100%'
-        }
-      }
+          'primary-foreground': '0 0% 100%',
+        },
+      },
     });
   };
 
   const handleUploadWallpaper = async () => {
-    if (!wallpaperUpload.file || !wallpaperUpload.name) return;
-    
+    if (!wallpaperUpload.file || !wallpaperUpload.name) { return; }
+
     await uploadWallpaper(wallpaperUpload.file, wallpaperUpload.name, wallpaperUpload.description);
     setUploadDialogOpen(false);
     setWallpaperUpload({ name: '', description: '', file: null });
@@ -182,7 +182,7 @@ export function ThemeSelector() {
                       <Input
                         id="theme-name"
                         value={newTheme.name}
-                        onChange={(e) => setNewTheme(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => { setNewTheme(prev => ({ ...prev, name: e.target.value })); }}
                         placeholder="My Custom Theme"
                       />
                     </div>
@@ -191,7 +191,7 @@ export function ThemeSelector() {
                       <Textarea
                         id="theme-description"
                         value={newTheme.description}
-                        onChange={(e) => setNewTheme(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={(e) => { setNewTheme(prev => ({ ...prev, description: e.target.value })); }}
                         placeholder="A beautiful custom theme..."
                       />
                     </div>
@@ -199,7 +199,7 @@ export function ThemeSelector() {
                       <Button onClick={handleCreateTheme} className="flex-1">
                         Create Theme
                       </Button>
-                      <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+                      <Button variant="outline" onClick={() => { setCreateDialogOpen(false); }}>
                         Cancel
                       </Button>
                     </div>
@@ -214,8 +214,8 @@ export function ThemeSelector() {
                 <div>
                   <Label className="text-xs font-medium text-muted-foreground mb-2 block">CORE THEMES</Label>
                   <div className="grid gap-2">
-                    {themes.filter(theme => 
-                      theme.is_system && ['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms'].includes(theme.name)
+                    {themes.filter(theme =>
+                      theme.is_system && ['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms'].includes(theme.name),
                     ).map((theme) => (
                       <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
                     ))}
@@ -226,8 +226,8 @@ export function ThemeSelector() {
                 <div>
                   <Label className="text-xs font-medium text-muted-foreground mb-2 block">INDUSTRY OPERATIONS</Label>
                   <div className="grid gap-2">
-                    {themes.filter(theme => 
-                      theme.is_system && ['Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                    {themes.filter(theme =>
+                      theme.is_system && ['Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name),
                     ).map((theme) => (
                       <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
                     ))}
@@ -247,16 +247,16 @@ export function ThemeSelector() {
                 )}
 
                 {/* Fallback - show any other themes */}
-                {themes.filter(theme => 
-                  theme.is_system && 
-                  !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                {themes.filter(theme =>
+                  theme.is_system
+                  && !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name),
                 ).length > 0 && (
                   <div>
                     <Label className="text-xs font-medium text-muted-foreground mb-2 block">OTHER THEMES</Label>
                     <div className="grid gap-2">
-                      {themes.filter(theme => 
-                        theme.is_system && 
-                        !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name)
+                      {themes.filter(theme =>
+                        theme.is_system
+                        && !['Construction Pro', 'Division Reborn', 'Gemini', 'Echo Comms', 'Construction Command', 'Security Operations', 'Tactical Operations', 'Urban Infrastructure'].includes(theme.name),
                       ).map((theme) => (
                         <ThemeCard key={theme.id} theme={theme} currentTheme={currentTheme} setTheme={setTheme} />
                       ))}
@@ -304,7 +304,7 @@ export function ThemeSelector() {
                       <Input
                         id="wallpaper-name"
                         value={wallpaperUpload.name}
-                        onChange={(e) => setWallpaperUpload(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => { setWallpaperUpload(prev => ({ ...prev, name: e.target.value })); }}
                         placeholder="My Custom Wallpaper"
                       />
                     </div>
@@ -313,7 +313,7 @@ export function ThemeSelector() {
                       <Textarea
                         id="wallpaper-description"
                         value={wallpaperUpload.description}
-                        onChange={(e) => setWallpaperUpload(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={(e) => { setWallpaperUpload(prev => ({ ...prev, description: e.target.value })); }}
                         placeholder="A beautiful custom wallpaper..."
                       />
                     </div>
@@ -321,7 +321,7 @@ export function ThemeSelector() {
                       <Button onClick={handleUploadWallpaper} className="flex-1">
                         Upload Wallpaper
                       </Button>
-                      <Button variant="outline" onClick={() => setUploadDialogOpen(false)}>
+                      <Button variant="outline" onClick={() => { setUploadDialogOpen(false); }}>
                         Cancel
                       </Button>
                     </div>

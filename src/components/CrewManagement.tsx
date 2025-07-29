@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Users, Phone, Clock, MapPin, Award, Settings, Plus, Search } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { Users, Phone, Clock, MapPin, Award, Settings, Plus, Search } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 
 interface CrewMember {
   id: string;
@@ -37,89 +37,89 @@ interface CrewTeam {
 
 export function CrewManagement() {
   const { toast } = useToast();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const crewMembers: CrewMember[] = [
     {
-      id: "1",
-      name: "John Smith",
-      role: "Crew Leader",
-      phone: "(555) 123-4567",
-      email: "john.smith@company.com",
+      id: '1',
+      name: 'John Smith',
+      role: 'Crew Leader',
+      phone: '(555) 123-4567',
+      email: 'john.smith@company.com',
       status: 'busy',
-      location: "Highway 101 Site",
-      skills: ["Asphalt Paving", "Equipment Operation", "Team Leadership"],
+      location: 'Highway 101 Site',
+      skills: ['Asphalt Paving', 'Equipment Operation', 'Team Leadership'],
       rating: 4.8,
       hoursThisWeek: 42,
-      currentProject: "Highway 101 Resurfacing",
-      certifications: ["CDL", "Safety Training", "Equipment Operator"],
-      experience: 8
+      currentProject: 'Highway 101 Resurfacing',
+      certifications: ['CDL', 'Safety Training', 'Equipment Operator'],
+      experience: 8,
     },
     {
-      id: "2",
-      name: "Mike Johnson", 
-      role: "Equipment Operator",
-      phone: "(555) 234-5678",
-      email: "mike.johnson@company.com",
+      id: '2',
+      name: 'Mike Johnson',
+      role: 'Equipment Operator',
+      phone: '(555) 234-5678',
+      email: 'mike.johnson@company.com',
       status: 'available',
-      location: "Base Yard",
-      skills: ["Paver Operation", "Roller Operation", "Maintenance"],
+      location: 'Base Yard',
+      skills: ['Paver Operation', 'Roller Operation', 'Maintenance'],
       rating: 4.6,
       hoursThisWeek: 38,
-      certifications: ["CDL", "Equipment Operator", "Hydraulics"],
-      experience: 12
+      certifications: ['CDL', 'Equipment Operator', 'Hydraulics'],
+      experience: 12,
     },
     {
-      id: "3",
-      name: "Sarah Davis",
-      role: "Quality Inspector",
-      phone: "(555) 345-6789", 
-      email: "sarah.davis@company.com",
+      id: '3',
+      name: 'Sarah Davis',
+      role: 'Quality Inspector',
+      phone: '(555) 345-6789',
+      email: 'sarah.davis@company.com',
       status: 'busy',
-      location: "Shopping Center Site",
-      skills: ["Quality Control", "Testing", "Documentation"],
+      location: 'Shopping Center Site',
+      skills: ['Quality Control', 'Testing', 'Documentation'],
       rating: 4.9,
       hoursThisWeek: 40,
-      currentProject: "Shopping Center Parking",
-      certifications: ["Quality Inspector", "Materials Testing", "Safety"],
-      experience: 6
+      currentProject: 'Shopping Center Parking',
+      certifications: ['Quality Inspector', 'Materials Testing', 'Safety'],
+      experience: 6,
     },
     {
-      id: "4",
-      name: "Tom Wilson",
-      role: "Truck Driver",
-      phone: "(555) 456-7890",
-      email: "tom.wilson@company.com", 
+      id: '4',
+      name: 'Tom Wilson',
+      role: 'Truck Driver',
+      phone: '(555) 456-7890',
+      email: 'tom.wilson@company.com',
       status: 'available',
-      location: "En Route",
-      skills: ["Heavy Vehicle Operation", "Material Transport", "Route Planning"],
+      location: 'En Route',
+      skills: ['Heavy Vehicle Operation', 'Material Transport', 'Route Planning'],
       rating: 4.7,
       hoursThisWeek: 35,
-      certifications: ["CDL Class A", "Hazmat", "Safety Training"],
-      experience: 15
-    }
+      certifications: ['CDL Class A', 'Hazmat', 'Safety Training'],
+      experience: 15,
+    },
   ];
 
   const teams: CrewTeam[] = [
     {
-      id: "1",
-      name: "Alpha Team",
-      leader: "John Smith",
-      members: ["1", "2", "3"],
+      id: '1',
+      name: 'Alpha Team',
+      leader: 'John Smith',
+      members: ['1', '2', '3'],
       status: 'assigned',
-      currentProject: "Highway 101 Resurfacing",
-      specialization: "Highway Paving"
+      currentProject: 'Highway 101 Resurfacing',
+      specialization: 'Highway Paving',
     },
     {
-      id: "2", 
-      name: "Beta Team",
-      leader: "Sarah Davis",
-      members: ["4"],
+      id: '2',
+      name: 'Beta Team',
+      leader: 'Sarah Davis',
+      members: ['4'],
       status: 'active',
-      currentProject: "Shopping Center Parking",
-      specialization: "Commercial Paving"
-    }
+      currentProject: 'Shopping Center Parking',
+      specialization: 'Commercial Paving',
+    },
   ];
 
   const getStatusColor = (status: string) => {
@@ -127,33 +127,33 @@ export function CrewManagement() {
       available: 'bg-green-100 text-green-800 border-green-200',
       busy: 'bg-blue-100 text-blue-800 border-blue-200',
       'off-duty': 'bg-gray-100 text-gray-800 border-gray-200',
-      'on-leave': 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      'on-leave': 'bg-yellow-100 text-yellow-800 border-yellow-200',
     };
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
   const getRatingStars = (rating: number) => {
-    return "★".repeat(Math.floor(rating)) + "☆".repeat(5 - Math.floor(rating));
+    return '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
   };
 
   const filteredMembers = crewMembers.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.role.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase())
+                         || member.role.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const handleAssignProject = (memberId: string) => {
     toast({
-      title: "Assignment Updated",
-      description: "Crew member has been assigned to the selected project.",
+      title: 'Assignment Updated',
+      description: 'Crew member has been assigned to the selected project.',
     });
   };
 
   const handleContactMember = (member: CrewMember) => {
     toast({
-      title: "Contacting " + member.name,
-      description: "Opening communication channel...",
+      title: 'Contacting ' + member.name,
+      description: 'Opening communication channel...',
     });
   };
 
@@ -180,7 +180,7 @@ export function CrewManagement() {
           <Input
             placeholder="Search crew members..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); }}
             className="pl-10"
           />
         </div>
@@ -222,7 +222,7 @@ export function CrewManagement() {
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{member.role}</p>
-                    
+
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center space-x-2">
                         <Phone className="h-3 w-3" />
@@ -250,19 +250,19 @@ export function CrewManagement() {
                     )}
 
                     <div className="mt-3 flex space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="flex-1 text-xs"
-                        onClick={() => handleContactMember(member)}
+                        onClick={() => { handleContactMember(member); }}
                       >
                         Contact
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="flex-1 text-xs"
-                        onClick={() => handleAssignProject(member.id)}
+                        onClick={() => { handleAssignProject(member.id); }}
                       >
                         Assign
                       </Button>

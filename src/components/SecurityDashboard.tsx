@@ -25,42 +25,42 @@ export function SecurityDashboard() {
         title: 'Authentication',
         status: user ? 'secure' : 'critical',
         description: user ? 'User authenticated with secure session' : 'No authentication detected',
-        score: user ? 100 : 0
+        score: user ? 100 : 0,
       },
       {
         title: 'Database Security',
         status: 'warning',
         description: 'RLS policies active, 47 security issues remaining',
-        score: 75
+        score: 75,
       },
       {
         title: 'Input Validation',
         status: 'secure',
         description: 'XSS protection and input sanitization active',
-        score: 95
+        score: 95,
       },
       {
         title: 'Session Management',
         status: user ? 'secure' : 'warning',
         description: user ? 'Secure session with auto-refresh' : 'No active session',
-        score: user ? 90 : 50
+        score: user ? 90 : 50,
       },
       {
         title: 'Data Encryption',
         status: 'secure',
         description: 'HTTPS enabled, data encrypted in transit',
-        score: 100
+        score: 100,
       },
       {
         title: 'Access Control',
         status: 'secure',
         description: 'Role-based access control implemented',
-        score: 85
-      }
+        score: 85,
+      },
     ];
 
     setSecurityMetrics(metrics);
-    
+
     // Calculate overall score
     const totalScore = metrics.reduce((sum, metric) => sum + metric.score, 0);
     const avgScore = Math.round(totalScore / metrics.length);
@@ -90,8 +90,8 @@ export function SecurityDashboard() {
   };
 
   const getOverallStatus = () => {
-    if (overallScore >= 90) return 'secure';
-    if (overallScore >= 70) return 'warning';
+    if (overallScore >= 90) { return 'secure'; }
+    if (overallScore >= 70) { return 'warning'; }
     return 'critical';
   };
 
@@ -116,11 +116,11 @@ export function SecurityDashboard() {
             <SecurityBanner
               level={getOverallStatus()}
               message={
-                overallScore >= 90 
-                  ? "Excellent security posture" 
-                  : overallScore >= 70 
-                    ? "Good security with some improvements needed"
-                    : "Critical security issues require attention"
+                overallScore >= 90
+                  ? 'Excellent security posture'
+                  : overallScore >= 70
+                    ? 'Good security with some improvements needed'
+                    : 'Critical security issues require attention'
               }
             />
           </div>

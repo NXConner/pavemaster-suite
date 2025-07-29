@@ -56,7 +56,7 @@ const swaggerDefinition = {
           updated_at: { type: 'string', format: 'date-time' },
         },
       },
-      
+
       // Project schemas
       Project: {
         type: 'object',
@@ -175,10 +175,10 @@ const apiDocumentation = {
               type: 'object',
               properties: {
                 message: { type: 'string', description: 'User message to the AI assistant' },
-                context: { 
-                  type: 'string', 
+                context: {
+                  type: 'string',
                   enum: ['general', 'pavement', 'project', 'safety', 'finance'],
-                  description: 'Context for the AI assistant'
+                  description: 'Context for the AI assistant',
                 },
                 conversation: {
                   type: 'array',
@@ -189,7 +189,7 @@ const apiDocumentation = {
                       content: { type: 'string' },
                     },
                   },
-                  description: 'Previous conversation history'
+                  description: 'Previous conversation history',
                 },
               },
               required: ['message'],
@@ -230,10 +230,10 @@ const apiDocumentation = {
             schema: {
               type: 'object',
               properties: {
-                audio: { 
-                  type: 'string', 
+                audio: {
+                  type: 'string',
                   format: 'base64',
-                  description: 'Base64 encoded audio data'
+                  description: 'Base64 encoded audio data',
                 },
               },
               required: ['audio'],
@@ -274,10 +274,10 @@ const apiDocumentation = {
               type: 'object',
               properties: {
                 text: { type: 'string', description: 'Text to convert to speech' },
-                voice: { 
-                  type: 'string', 
+                voice: {
+                  type: 'string',
                   enum: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'],
-                  description: 'Voice type for speech synthesis'
+                  description: 'Voice type for speech synthesis',
                 },
               },
               required: ['text'],
@@ -293,10 +293,10 @@ const apiDocumentation = {
               schema: {
                 type: 'object',
                 properties: {
-                  audioContent: { 
-                    type: 'string', 
+                  audioContent: {
+                    type: 'string',
                     format: 'base64',
-                    description: 'Base64 encoded audio content'
+                    description: 'Base64 encoded audio content',
                   },
                 },
               },
@@ -320,37 +320,37 @@ export const swaggerSpec = {
 export const apiExamples = {
   aiAssistant: {
     request: {
-      message: "What's the optimal temperature for asphalt paving today?",
-      context: "pavement",
+      message: 'What\'s the optimal temperature for asphalt paving today?',
+      context: 'pavement',
       conversation: [
-        { role: "user", content: "Good morning" },
-        { role: "assistant", content: "Good morning! How can I help with your paving operations today?" }
-      ]
+        { role: 'user', content: 'Good morning' },
+        { role: 'assistant', content: 'Good morning! How can I help with your paving operations today?' },
+      ],
     },
     response: {
-      response: "Based on current weather conditions, the optimal temperature for asphalt paving is between 50-85°F ambient temperature. Current conditions show 72°F, which is ideal for paving operations.",
-      context: "pavement"
-    }
+      response: 'Based on current weather conditions, the optimal temperature for asphalt paving is between 50-85°F ambient temperature. Current conditions show 72°F, which is ideal for paving operations.',
+      context: 'pavement',
+    },
   },
 
   voiceToText: {
     request: {
-      audio: "UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N+QQAoUXrTp66hVFApGn+D0u2IdBTCQ1/DJeyw=" 
+      audio: 'UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N+QQAoUXrTp66hVFApGn+D0u2IdBTCQ1/DJeyw=',
     },
     response: {
-      text: "The asphalt temperature is 275 degrees Fahrenheit and ready for application."
-    }
+      text: 'The asphalt temperature is 275 degrees Fahrenheit and ready for application.',
+    },
   },
 
   textToSpeech: {
     request: {
-      text: "Asphalt temperature is optimal. Begin paving operations.",
-      voice: "alloy"
+      text: 'Asphalt temperature is optimal. Begin paving operations.',
+      voice: 'alloy',
     },
     response: {
-      audioContent: "SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU4LjEz"
-    }
-  }
+      audioContent: 'SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU4LjEz',
+    },
+  },
 };
 
 export default swaggerSpec;

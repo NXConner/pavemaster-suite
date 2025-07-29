@@ -18,15 +18,15 @@ export default function ApiDocumentation() {
       await navigator.clipboard.writeText(text);
       setCopiedExample(label);
       toast({
-        title: "Copied to clipboard",
+        title: 'Copied to clipboard',
         description: `${label} example copied successfully`,
       });
-      setTimeout(() => setCopiedExample(null), 2000);
+      setTimeout(() => { setCopiedExample(null); }, 2000);
     } catch (err) {
       toast({
-        title: "Copy failed",
-        description: "Failed to copy to clipboard",
-        variant: "destructive",
+        title: 'Copy failed',
+        description: 'Failed to copy to clipboard',
+        variant: 'destructive',
       });
     }
   };
@@ -45,14 +45,14 @@ export default function ApiDocumentation() {
     URL.revokeObjectURL(url);
 
     toast({
-      title: "Download started",
-      description: "API specification downloaded successfully",
+      title: 'Download started',
+      description: 'API specification downloaded successfully',
     });
   };
 
-  const ApiExample = ({ title, example, type }: { 
-    title: string; 
-    example: any; 
+  const ApiExample = ({ title, example, type }: {
+    title: string;
+    example: any;
     type: 'request' | 'response';
   }) => (
     <Card className="mb-4">
@@ -100,9 +100,9 @@ export default function ApiDocumentation() {
             Download Spec
           </Button>
           <Button asChild>
-            <a 
-              href="https://editor.swagger.io/" 
-              target="_blank" 
+            <a
+              href="https://editor.swagger.io/"
+              target="_blank"
               rel="noopener noreferrer"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
@@ -132,7 +132,7 @@ export default function ApiDocumentation() {
             </CardHeader>
             <CardContent className="p-0">
               <div className="border rounded-lg overflow-hidden">
-                <SwaggerUI 
+                <SwaggerUI
                   spec={swaggerSpec}
                   deepLinking={true}
                   displayRequestDuration={true}
@@ -152,7 +152,7 @@ export default function ApiDocumentation() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
+
               {/* AI Assistant Examples */}
               <div>
                 <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -160,13 +160,13 @@ export default function ApiDocumentation() {
                   AI Assistant
                 </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample 
-                    title="AI Assistant Request" 
+                  <ApiExample
+                    title="AI Assistant Request"
                     example={apiExamples.aiAssistant.request}
                     type="request"
                   />
-                  <ApiExample 
-                    title="AI Assistant Response" 
+                  <ApiExample
+                    title="AI Assistant Response"
                     example={apiExamples.aiAssistant.response}
                     type="response"
                   />
@@ -180,13 +180,13 @@ export default function ApiDocumentation() {
                   Voice to Text
                 </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample 
-                    title="Voice to Text Request" 
+                  <ApiExample
+                    title="Voice to Text Request"
                     example={apiExamples.voiceToText.request}
                     type="request"
                   />
-                  <ApiExample 
-                    title="Voice to Text Response" 
+                  <ApiExample
+                    title="Voice to Text Response"
                     example={apiExamples.voiceToText.response}
                     type="response"
                   />
@@ -200,13 +200,13 @@ export default function ApiDocumentation() {
                   Text to Speech
                 </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample 
-                    title="Text to Speech Request" 
+                  <ApiExample
+                    title="Text to Speech Request"
                     example={apiExamples.textToSpeech.request}
                     type="request"
                   />
-                  <ApiExample 
-                    title="Text to Speech Response" 
+                  <ApiExample
+                    title="Text to Speech Response"
                     example={apiExamples.textToSpeech.response}
                     type="response"
                   />

@@ -10,20 +10,20 @@ const spinnerVariants = cva(
         secondary: 'border-secondary border-t-transparent',
         destructive: 'border-destructive border-t-transparent',
         success: 'border-success border-t-transparent',
-        glow: 'border-primary border-t-transparent animate-pulse-glow'
+        glow: 'border-primary border-t-transparent animate-pulse-glow',
       },
       size: {
         sm: 'h-4 w-4',
         default: 'h-6 w-6',
         lg: 'h-8 w-8',
-        xl: 'h-12 w-12'
-      }
+        xl: 'h-12 w-12',
+      },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default'
-    }
-  }
+      size: 'default',
+    },
+  },
 );
 
 interface LoadingSpinnerProps extends VariantProps<typeof spinnerVariants> {
@@ -48,7 +48,7 @@ interface LoadingOverlayProps {
   children: React.ReactNode;
 }
 
-export function LoadingOverlay({ isLoading, label = "Loading...", children }: LoadingOverlayProps) {
+export function LoadingOverlay({ isLoading, label = 'Loading...', children }: LoadingOverlayProps) {
   return (
     <div className="relative">
       {children}

@@ -15,11 +15,11 @@ interface ResponsiveGridProps {
   className?: string;
 }
 
-export function ResponsiveGrid({ 
-  children, 
+export function ResponsiveGrid({
+  children,
   cols = { default: 1, md: 2, lg: 3 },
   gap = 4,
-  className 
+  className,
 }: ResponsiveGridProps) {
   const gridClasses = [
     `gap-${gap}`,
@@ -28,7 +28,7 @@ export function ResponsiveGrid({
     cols.md && `md:grid-cols-${cols.md}`,
     cols.lg && `lg:grid-cols-${cols.lg}`,
     cols.xl && `xl:grid-cols-${cols.xl}`,
-    cols['2xl'] && `2xl:grid-cols-${cols['2xl']}`
+    cols['2xl'] && `2xl:grid-cols-${cols['2xl']}`,
   ].filter(Boolean).join(' ');
 
   return (
@@ -44,24 +44,24 @@ interface ResponsiveContainerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
-export function ResponsiveContainer({ 
-  children, 
-  className, 
-  size = 'lg' 
+export function ResponsiveContainer({
+  children,
+  className,
+  size = 'lg',
 }: ResponsiveContainerProps) {
   const containerClasses = {
     sm: 'max-w-screen-sm',
-    md: 'max-w-screen-md', 
+    md: 'max-w-screen-md',
     lg: 'max-w-screen-lg',
     xl: 'max-w-screen-xl',
-    full: 'max-w-full'
+    full: 'max-w-full',
   };
 
   return (
     <div className={cn(
       'mx-auto px-4 sm:px-6 lg:px-8',
       containerClasses[size],
-      className
+      className,
     )}>
       {children}
     </div>

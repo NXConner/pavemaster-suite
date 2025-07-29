@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { ReactNode } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface MetricCardProps {
   title: string;
@@ -15,7 +15,7 @@ interface MetricCardProps {
 
 export function MetricCard({ title, value, change, icon, className }: MetricCardProps) {
   return (
-    <Card className={cn("group transition-all duration-300 hover:shadow-lg hover:scale-105 hover-glow animate-fade-in", className)}>
+    <Card className={cn('group transition-all duration-300 hover:shadow-lg hover:scale-105 hover-glow animate-fade-in', className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -29,14 +29,14 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
           </div>
           {change && (
             <div className={cn(
-              "flex items-center text-sm font-medium",
-              change.positive ? "text-success" : "text-destructive"
+              'flex items-center text-sm font-medium',
+              change.positive ? 'text-success' : 'text-destructive',
             )}>
               <span className={cn(
-                "mr-1",
-                change.positive ? "text-success" : "text-destructive"
+                'mr-1',
+                change.positive ? 'text-success' : 'text-destructive',
               )}>
-                {change.positive ? "↗" : "↘"}
+                {change.positive ? '↗' : '↘'}
               </span>
               {change.value}
             </div>

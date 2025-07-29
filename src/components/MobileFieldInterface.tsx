@@ -18,7 +18,7 @@ import {
   Wrench,
   AlertTriangle,
   CheckCircle,
-  Navigation
+  Navigation,
 } from 'lucide-react';
 
 interface LocationData {
@@ -50,7 +50,7 @@ interface MobileFieldInterfaceProps {
   className?: string;
 }
 
-export function MobileFieldInterface({ className = "" }: MobileFieldInterfaceProps) {
+export function MobileFieldInterface({ className = '' }: MobileFieldInterfaceProps) {
   const { toast } = useToast();
   const [location, setLocation] = useState<LocationData | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -62,14 +62,14 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
     loadFieldData();
     getCurrentLocation();
     loadWeatherData();
-    
+
     // Setup online/offline detection
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    
+    const handleOnline = () => { setIsOnline(true); };
+    const handleOffline = () => { setIsOnline(false); };
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -85,7 +85,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
         status: 'pending',
         priority: 'high',
         location: 'Church Parking Lot - Section A',
-        dueTime: '09:00 AM'
+        dueTime: '09:00 AM',
       },
       {
         id: '2',
@@ -94,7 +94,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
         status: 'in_progress',
         priority: 'medium',
         location: 'Church Parking Lot - Section B',
-        dueTime: '09:30 AM'
+        dueTime: '09:30 AM',
       },
       {
         id: '3',
@@ -103,7 +103,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
         status: 'pending',
         priority: 'medium',
         location: 'Church Parking Lot - Overall',
-        dueTime: '10:00 AM'
+        dueTime: '10:00 AM',
       },
       {
         id: '4',
@@ -112,8 +112,8 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
         status: 'pending',
         priority: 'low',
         location: 'Church Parking Lot - Final',
-        dueTime: '04:00 PM'
-      }
+        dueTime: '04:00 PM',
+      },
     ];
     setTasks(mockTasks);
   };
@@ -121,9 +121,9 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       toast({
-        title: "Location Error",
-        description: "Geolocation is not supported by this device",
-        variant: "destructive",
+        title: 'Location Error',
+        description: 'Geolocation is not supported by this device',
+        variant: 'destructive',
       });
       return;
     }
@@ -134,22 +134,22 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           accuracy: position.coords.accuracy,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       },
       (error) => {
         console.error('Error getting location:', error);
         toast({
-          title: "Location Error",
-          description: "Unable to get current location",
-          variant: "destructive",
+          title: 'Location Error',
+          description: 'Unable to get current location',
+          variant: 'destructive',
         });
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000
-      }
+        maximumAge: 60000,
+      },
     );
   };
 
@@ -160,25 +160,25 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
       humidity: 65,
       windSpeed: 8,
       conditions: 'Partly Cloudy',
-      visibility: 10
+      visibility: 10,
     });
   };
 
   const updateTaskStatus = (taskId: string, status: FieldTask['status']) => {
-    setTasks(prev => prev.map(task => 
-      task.id === taskId ? { ...task, status } : task
+    setTasks(prev => prev.map(task =>
+      task.id === taskId ? { ...task, status } : task,
     ));
-    
+
     if (!isOnline) {
       setSyncPending(prev => prev + 1);
       toast({
-        title: "Offline Mode",
-        description: "Changes will sync when connection is restored",
+        title: 'Offline Mode',
+        description: 'Changes will sync when connection is restored',
       });
     } else {
       toast({
-        title: "Task Updated",
-        description: "Task status has been updated",
+        title: 'Task Updated',
+        description: 'Task status has been updated',
       });
     }
   };
@@ -187,16 +187,16 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
     try {
       // In a real mobile app, this would use Capacitor Camera API
       toast({
-        title: "Camera",
-        description: "Photo capture would open camera on mobile device",
+        title: 'Camera',
+        description: 'Photo capture would open camera on mobile device',
       });
       updateTaskStatus(taskId, 'completed');
     } catch (error) {
       console.error('Camera error:', error);
       toast({
-        title: "Camera Error",
-        description: "Unable to access camera",
-        variant: "destructive",
+        title: 'Camera Error',
+        description: 'Unable to access camera',
+        variant: 'destructive',
       });
     }
   };
@@ -204,8 +204,8 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
   const recordMeasurement = (taskId: string) => {
     // Mock measurement recording
     toast({
-      title: "Measurement Recorded",
-      description: "Temperature: 145°F - Within acceptable range",
+      title: 'Measurement Recorded',
+      description: 'Temperature: 145°F - Within acceptable range',
     });
     updateTaskStatus(taskId, 'completed');
   };
@@ -348,7 +348,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => recordMeasurement(task.id)}
+                      onClick={() => { recordMeasurement(task.id); }}
                       className="flex items-center gap-2 text-xs"
                     >
                       <Thermometer className="h-3 w-3" />
@@ -358,7 +358,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                   {task.status === 'pending' && (
                     <Button
                       size="sm"
-                      onClick={() => updateTaskStatus(task.id, 'in_progress')}
+                      onClick={() => { updateTaskStatus(task.id, 'in_progress'); }}
                       className="text-xs"
                     >
                       Start Task
@@ -368,7 +368,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => updateTaskStatus(task.id, 'completed')}
+                      onClick={() => { updateTaskStatus(task.id, 'completed'); }}
                       className="text-xs"
                     >
                       Complete
@@ -391,7 +391,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
             <Button
               variant="outline"
               className="h-20 flex flex-col items-center justify-center gap-2"
-              onClick={() => toast({ title: "Emergency", description: "Emergency contact initiated" })}
+              onClick={() => toast({ title: 'Emergency', description: 'Emergency contact initiated' })}
             >
               <AlertTriangle className="h-6 w-6 text-red-500" />
               <span className="text-xs">Emergency</span>
@@ -409,7 +409,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
             <Button
               variant="outline"
               className="h-20 flex flex-col items-center justify-center gap-2"
-              onClick={() => toast({ title: "Team", description: "Team communication opened" })}
+              onClick={() => toast({ title: 'Team', description: 'Team communication opened' })}
             >
               <Users className="h-6 w-6 text-green-500" />
               <span className="text-xs">Team Chat</span>
@@ -418,7 +418,7 @@ export function MobileFieldInterface({ className = "" }: MobileFieldInterfacePro
             <Button
               variant="outline"
               className="h-20 flex flex-col items-center justify-center gap-2"
-              onClick={() => toast({ title: "Equipment", description: "Equipment status checked" })}
+              onClick={() => toast({ title: 'Equipment', description: 'Equipment status checked' })}
             >
               <Truck className="h-6 w-6 text-orange-500" />
               <span className="text-xs">Equipment</span>
