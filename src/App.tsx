@@ -14,6 +14,9 @@ import WeatherMonitor from "./components/WeatherMonitor";
 import IntelligenceEngine from "./components/IntelligenceEngine";
 import SecurityMonitor from "./components/SecurityMonitor";
 import BlockchainHub from "./components/BlockchainHub";
+import Estimates from "./components/Estimates";
+import CRM from "./components/CRM";
+import FinancialDashboard from "./components/FinancialDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -48,6 +51,9 @@ const App = () => {
               <Route path="intelligence" element={<IntelligenceEngine />} />
               <Route path="security" element={<SecurityMonitor />} />
               <Route path="blockchain" element={<BlockchainHub />} />
+              <Route path="estimates" element={<Estimates />} />
+              <Route path="crm" element={<CRM />} />
+              <Route path="financial" element={<FinancialDashboard />} />
               <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
             </Route>
           </Routes>

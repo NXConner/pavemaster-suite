@@ -16,7 +16,9 @@ import {
   Cloud,
   Brain,
   Shield,
-  Link
+  Link,
+  FileText,
+  DollarSign
 } from 'lucide-react';
 
 const navigation = [
@@ -30,6 +32,9 @@ const navigation = [
   { name: 'AI Engine', href: '/intelligence', icon: Brain },
   { name: 'Security', href: '/security', icon: Shield },
   { name: 'Blockchain', href: '/blockchain', icon: Link },
+  { name: 'Estimates', href: '/estimates', icon: FileText },
+  { name: 'CRM', href: '/crm', icon: Users },
+  { name: 'Financial', href: '/financial', icon: DollarSign },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
