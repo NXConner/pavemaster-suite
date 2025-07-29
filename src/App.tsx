@@ -18,15 +18,19 @@ import NotFound from "./pages/NotFound";
 import ApiDocumentation from "@/components/ApiDocumentation";
 import CostCounter from "@/components/CostCounter";
 import EmployeeTracker from "@/components/EmployeeTracker";
-import OverWatchTOSS from "@/components/OverWatchTOSS";
-import TaskPriorityManager from "@/components/TaskPriorityManager";
-import AIOperationsCenter from "@/components/AIOperationsCenter";
-import AdvancedAnalytics from "@/components/AdvancedAnalytics";
-import MissionControlCenter from "@/components/MissionControlCenter";
-import EnterpriseIntegrations from "@/components/EnterpriseIntegrations";
-import MobileCompanion from "@/components/MobileCompanion";
-import QuantumOperationsCenter from "@/components/QuantumOperationsCenter";
-import UltimateEnhancedMissionControl from "@/components/UltimateEnhancedMissionControl";
+// More dynamic imports for performance
+const OverWatchTOSS = lazy(() => import("@/components/OverWatchTOSS"));
+const TaskPriorityManager = lazy(() => import("@/components/TaskPriorityManager"));
+const AIOperationsCenter = lazy(() => import("@/components/AIOperationsCenter"));
+const AdvancedAnalytics = lazy(() => import("@/components/AdvancedAnalytics"));
+const MissionControlCenter = lazy(() => import("@/components/MissionControlCenter"));
+const EnterpriseIntegrations = lazy(() => import("@/components/EnterpriseIntegrations"));
+const MobileCompanion = lazy(() => import("@/components/MobileCompanion"));
+// Dynamic imports for better performance
+import { lazy, Suspense } from 'react';
+
+const QuantumOperationsCenter = lazy(() => import("@/components/QuantumOperationsCenter"));
+const UltimateEnhancedMissionControl = lazy(() => import("@/components/UltimateEnhancedMissionControl"));
 
 const queryClient = new QueryClient();
 
@@ -52,7 +56,12 @@ const App = () => (
                         <div className="flex flex-1 w-full">
                           <AppSidebar />
                           <main className="flex-1 overflow-auto">
-                            <Routes>
+                            <Suspense fallback={
+                              <div className="flex items-center justify-center h-screen">
+                                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+                              </div>
+                            }>
+                              <Routes>
                               <Route path="/" element={<Index />} />
                               <Route path="/settings" element={<Settings />} />
                               <Route path="/ai" element={<AIHub />} />
@@ -80,7 +89,8 @@ const App = () => (
                               <Route path="/finance" element={<CostCounter />} />
                               <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
                               <Route path="*" element={<NotFound />} />
-                            </Routes>
+                              </Routes>
+                            </Suspense>
                           </main>
                         </div>
                       </>

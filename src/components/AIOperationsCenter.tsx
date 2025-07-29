@@ -425,12 +425,12 @@ const AIOperationsCenter: React.FC = () => {
     if (Math.random() > 0.8) {
       const newInsight: PredictiveInsight = {
         id: `insight_${Date.now()}`,
-        category: ['cost', 'productivity', 'safety', 'resource', 'schedule', 'risk'][Math.floor(Math.random() * 6)] as any,
+        category: (['cost', 'productivity', 'safety', 'resource', 'schedule', 'risk'] as const)[Math.floor(Math.random() * 6)],
         prediction: 'New AI-generated insight based on real-time data analysis.',
         confidence: 80 + Math.random() * 15,
         impact_score: 5 + Math.random() * 5,
         recommended_actions: ['AI-recommended action based on analysis'],
-        time_horizon: ['1h', '24h', '7d', '30d', '90d'][Math.floor(Math.random() * 5)] as any,
+        time_horizon: (['1h', '24h', '7d', '30d', '90d'] as const)[Math.floor(Math.random() * 5)],
         created_at: new Date().toISOString()
       };
 

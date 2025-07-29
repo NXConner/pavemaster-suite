@@ -31,7 +31,7 @@ interface Widget {
   title: string;
   position: { x: number; y: number };
   size: { width: number; height: number };
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   isMinimized: boolean;
   isFullscreen: boolean;
   category: 'surveillance' | 'operations' | 'analytics' | 'communications' | 'security' | 'resources';
@@ -45,16 +45,87 @@ interface DashboardLayout {
   theme: 'dark' | 'light' | 'tactical';
 }
 
+interface EmployeeData {
+  id: string;
+  name: string;
+  status: string;
+  location: { lat: number; lng: number };
+  activity: string;
+}
+
+interface VehicleData {
+  id: string;
+  type: string;
+  status: string;
+  location: { lat: number; lng: number };
+  fuel: number;
+}
+
+interface ProjectData {
+  id: string;
+  name: string;
+  status: string;
+  progress: number;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+}
+
+interface AlertData {
+  id: string;
+  type: string;
+  severity: 'info' | 'warning' | 'error' | 'critical';
+  message: string;
+  timestamp: string;
+}
+
+interface CostData {
+  daily: number;
+  weekly: number;
+  monthly: number;
+  budget: number;
+  variance: number;
+}
+
+interface WeatherData {
+  temperature: number;
+  conditions: string;
+  humidity: number;
+  windSpeed: number;
+  forecast: string;
+}
+
+interface CommunicationData {
+  id: string;
+  channel: string;
+  status: string;
+  participants: number;
+  activity: string;
+}
+
+interface SecurityData {
+  level: string;
+  incidents: number;
+  alerts: number;
+  status: string;
+}
+
+interface SystemData {
+  cpu: number;
+  memory: number;
+  storage: number;
+  uptime: string;
+  connections: number;
+}
+
 interface LiveData {
-  employees: any[];
-  vehicles: any[];
-  projects: any[];
-  alerts: any[];
-  costs: any;
-  weather: any;
-  communications: any[];
-  security: any;
-  system: any;
+  employees: EmployeeData[];
+  vehicles: VehicleData[];
+  projects: ProjectData[];
+  alerts: AlertData[];
+  costs: CostData;
+  weather: WeatherData;
+  communications: CommunicationData[];
+  security: SecurityData;
+  system: SystemData;
 }
 
 const WIDGET_TYPES = {
@@ -178,7 +249,7 @@ const OverWatchTOSS: React.FC = () => {
         clearInterval(refreshIntervalRef.current);
       }
     };
-  }, [userRole]);
+  }, [userRole, loadSavedLayouts, loadDefaultLayout, startDataRefresh]);
 
   // Auto refresh data
   useEffect(() => {
@@ -189,9 +260,9 @@ const OverWatchTOSS: React.FC = () => {
         clearInterval(refreshIntervalRef.current);
       }
     }
-  }, [autoRefresh, refreshInterval]);
+  }, [autoRefresh, refreshInterval, startDataRefresh]);
 
-  const startDataRefresh = () => {
+  const startDataRefresh = useCallback(() => {
     if (refreshIntervalRef.current) {
       clearInterval(refreshIntervalRef.current);
     }
@@ -202,7 +273,7 @@ const OverWatchTOSS: React.FC = () => {
 
     // Initial fetch
     fetchLiveData();
-  };
+  }, [refreshInterval]);
 
   const fetchLiveData = async () => {
     try {
@@ -345,7 +416,7 @@ const OverWatchTOSS: React.FC = () => {
     };
   };
 
-  const loadSavedLayouts = async () => {
+  const loadSavedLayouts = useCallback(async () => {
     const { data, error } = await supabase
       .from('app_configs')
       .select('*')
@@ -360,9 +431,9 @@ const OverWatchTOSS: React.FC = () => {
     if (data && data.length > 0) {
       setSavedLayouts(data[0].value as DashboardLayout[]);
     }
-  };
+  }, [user?.id]);
 
-  const loadDefaultLayout = () => {
+  const loadDefaultLayout = useCallback(() => {
     const defaultWidgets: Widget[] = [
       {
         id: 'live_map_1',
@@ -447,7 +518,7 @@ const OverWatchTOSS: React.FC = () => {
       ...prev,
       widgets: defaultWidgets
     }));
-  };
+  }, []);
 
   const addWidget = (type: string) => {
     const widgetInfo = WIDGET_TYPES[type as keyof typeof WIDGET_TYPES];
@@ -757,7 +828,7 @@ const OverWatchTOSS: React.FC = () => {
               </div>
             </div>
             <div className="space-y-1">
-              {data.security.events?.slice(0, 2).map((event: any, i: number) => (
+              {data.security.events?.slice(0, 2).map((event: { type: string; severity: string; time: string }, i: number) => (
                 <div key={i} className="p-1 bg-muted rounded text-xs">
                   <div className="font-medium truncate">{event.type}</div>
                   <div className="text-muted-foreground truncate">{event.description}</div>
@@ -909,8 +980,8 @@ const OverWatchTOSS: React.FC = () => {
                 Add Widget
               </Button>
 
-              <Select value={currentLayout.theme} onValueChange={(theme) => 
-                setCurrentLayout(prev => ({ ...prev, theme: theme as any }))
+              <Select value={currentLayout.theme} onValueChange={(theme: 'dark' | 'light' | 'tactical') => 
+                setCurrentLayout(prev => ({ ...prev, theme }))
               }>
                 <SelectTrigger className="w-32">
                   <SelectValue />
