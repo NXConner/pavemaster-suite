@@ -157,7 +157,7 @@ const developmentConfig: EnvironmentConfig = {
     }
   },
   database: {
-    url: process.env.VITE_SUPABASE_URL || 'http://localhost:54321',
+    url: import.meta.env.VITE_SUPABASE_URL || 'http://localhost:54321',
     poolSize: 10,
     ssl: false
   },
@@ -194,7 +194,7 @@ const developmentConfig: EnvironmentConfig = {
   },
   integrations: {
     weather: {
-      apiKey: process.env.VITE_WEATHER_API_KEY || 'dev-key',
+      apiKey: import.meta.env.VITE_WEATHER_API_KEY || 'dev-key',
       provider: 'openweather',
       updateInterval: 300000 // 5 minutes
     },
@@ -295,7 +295,7 @@ const stagingConfig: EnvironmentConfig = {
     }
   },
   database: {
-    url: process.env.VITE_SUPABASE_URL || '',
+    url: import.meta.env.VITE_SUPABASE_URL || '',
     poolSize: 20,
     ssl: true
   },
@@ -303,15 +303,15 @@ const stagingConfig: EnvironmentConfig = {
     ...developmentConfig.integrations,
     analytics: {
       google: {
-        trackingId: process.env.VITE_GA_TRACKING_ID || '',
+        trackingId: import.meta.env.VITE_GA_TRACKING_ID || '',
         enabled: true
       },
       mixpanel: {
-        token: process.env.VITE_MIXPANEL_TOKEN || '',
+        token: import.meta.env.VITE_MIXPANEL_TOKEN || '',
         enabled: true
       },
       sentry: {
-        dsn: process.env.VITE_SENTRY_DSN || '',
+        dsn: import.meta.env.VITE_SENTRY_DSN || '',
         enabled: true,
         environment: 'staging'
       }
@@ -326,7 +326,7 @@ const stagingConfig: EnvironmentConfig = {
   },
   security: {
     enableCSP: true,
-    encryptionKey: process.env.VITE_ENCRYPTION_KEY || '',
+    encryptionKey: import.meta.env.VITE_ENCRYPTION_KEY || '',
     apiKeyRotation: true,
     auditLogging: true,
     dataRetentionDays: 90
@@ -365,7 +365,7 @@ const productionConfig: EnvironmentConfig = {
     }
   },
   database: {
-    url: process.env.VITE_SUPABASE_URL || '',
+    url: import.meta.env.VITE_SUPABASE_URL || '',
     poolSize: 50,
     ssl: true
   },
@@ -386,13 +386,13 @@ const productionConfig: EnvironmentConfig = {
   integrations: {
     ...stagingConfig.integrations,
     weather: {
-      apiKey: process.env.VITE_WEATHER_API_KEY || '',
+      apiKey: import.meta.env.VITE_WEATHER_API_KEY || '',
       provider: 'openweather',
       updateInterval: 600000 // 10 minutes
     },
     maps: {
       provider: 'google',
-      apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || '',
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
       defaultZoom: 15
     },
     storage: {
@@ -402,15 +402,15 @@ const productionConfig: EnvironmentConfig = {
     },
     analytics: {
       google: {
-        trackingId: process.env.VITE_GA_TRACKING_ID || '',
+        trackingId: import.meta.env.VITE_GA_TRACKING_ID || '',
         enabled: true
       },
       mixpanel: {
-        token: process.env.VITE_MIXPANEL_TOKEN || '',
+        token: import.meta.env.VITE_MIXPANEL_TOKEN || '',
         enabled: true
       },
       sentry: {
-        dsn: process.env.VITE_SENTRY_DSN || '',
+        dsn: import.meta.env.VITE_SENTRY_DSN || '',
         enabled: true,
         environment: 'production'
       }
@@ -425,7 +425,7 @@ const productionConfig: EnvironmentConfig = {
   },
   security: {
     enableCSP: true,
-    encryptionKey: process.env.VITE_ENCRYPTION_KEY || '',
+    encryptionKey: import.meta.env.VITE_ENCRYPTION_KEY || '',
     apiKeyRotation: true,
     auditLogging: true,
     dataRetentionDays: 365
@@ -433,7 +433,7 @@ const productionConfig: EnvironmentConfig = {
   notifications: {
     push: {
       enabled: true,
-      vapidKey: process.env.VITE_VAPID_KEY || '',
+      vapidKey: import.meta.env.VITE_VAPID_KEY || '',
       serviceWorkerPath: '/sw.js'
     },
     email: {
@@ -448,7 +448,7 @@ const productionConfig: EnvironmentConfig = {
     sms: {
       enabled: true,
       provider: 'twilio',
-      apiKey: process.env.VITE_TWILIO_API_KEY || ''
+      apiKey: import.meta.env.VITE_TWILIO_API_KEY || ''
     }
   },
   monitoring: {

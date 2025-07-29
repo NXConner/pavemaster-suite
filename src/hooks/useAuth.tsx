@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { supabase } from '../integrations/supabase/client';
+import { toast } from './use-toast';
 
 interface AuthResponse {
   error: AuthError | null;
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (event: any, session: any) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
