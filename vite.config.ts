@@ -29,12 +29,6 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: [
-        '@mui/material', 
-        '@mui/icons-material', 
-        '@emotion/react', 
-        '@emotion/styled'
-      ],
       output: {
         // Manual chunk configuration for better code splitting
         manualChunks: {
@@ -59,110 +53,126 @@ export default defineConfig({
           // Charts and data visualization
           'charts-vendor': ['recharts'],
           
-          // Date and utility libraries
-          'utils-vendor': ['date-fns'],
+          // Forms and validation
+          'forms-vendor': [
+            'react-hook-form',
+            '@hookform/resolvers',
+            'zod'
+          ],
           
-          // Supabase and database
-          'supabase': ['@supabase/supabase-js'],
-          'query': ['@tanstack/react-query'],
+          // Date handling
+          'date-vendor': ['date-fns', 'react-day-picker'],
+          
+          // State management and queries
+          'query-vendor': ['@tanstack/react-query', 'zustand'],
+          
+          // Authentication and database
+          'supabase-vendor': ['@supabase/supabase-js'],
           
           // API and documentation
           'api-vendor': ['swagger-ui-react'],
           
-          // Feature-based chunks for existing components
-          'dashboard': [
-            './src/components/Dashboard',
-            './src/components/Analytics'
+          // Mapping libraries - split into chunks for better loading
+          'leaflet-vendor': [
+            'leaflet',
+            'react-leaflet'
           ],
-          'enterprise': [
-            './src/components/CRM',
-            './src/components/Projects'
+          'mapbox-vendor': [
+            'mapbox-gl',
+            'react-map-gl'
           ],
-          'business': [
-            './src/components/Estimates',
-            './src/components/Equipment',
-            './src/components/FinancialDashboard'
+          'openlayers-vendor': [
+            'ol'
           ],
-          'security': [
-            './src/components/SecurityMonitor'
+          'deck-vendor': [
+            'deck.gl'
           ],
-          'intelligence': [
-            './src/components/IntelligenceEngine',
-            './src/components/BlockchainHub'
+          'geo-utils': [
+            '@turf/turf',
+            'proj4',
+            'geolib',
+            'wellknown',
+            'h3-js',
+            'geotiff'
+          ],
+          'maplibre-vendor': [
+            'maplibre-gl'
+          ],
+          'three-vendor': [
+            'three'
           ]
         }
       }
     },
     
-    // Optimize chunk names
-    chunkFileNames: (chunkInfo) => {
-      const facadeModuleId = chunkInfo.facadeModuleId 
-        ? chunkInfo.facadeModuleId.split('/').pop()?.replace('.tsx', '').replace('.ts', '') 
-        : 'chunk';
-      return `js/${facadeModuleId}-[hash].js`;
+    // Target modern browsers
+    target: 'esnext',
+    
+    // Enable source maps in development
+    sourcemap: process.env.NODE_ENV === 'development',
+    
+    // Optimize for production
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: process.env.NODE_ENV === 'production',
+        drop_debugger: process.env.NODE_ENV === 'production'
+      }
     },
     
-    // Optimize asset names
-    assetFileNames: (assetInfo) => {
-      const info = assetInfo.name?.split('.') || [];
-      const ext = info[info.length - 1];
-      
-      if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name || '')) {
-        return `images/[name]-[hash][extname]`;
-      }
-      if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name || '')) {
-        return `fonts/[name]-[hash][extname]`;
-      }
-      return `assets/[name]-[hash][extname]`;
-    },
+    // Asset handling
+    assetsDir: 'assets',
+    assetsInlineLimit: 4096,
     
-    // Increase chunk size warning limit
-    chunkSizeWarningLimit: 1000,
+    // Output options
+    outDir: 'dist',
+    emptyOutDir: true,
     
-    // Optimize build performance
-    reportCompressedSize: false,
+    // CSS code splitting
     cssCodeSplit: true,
-    sourcemap: false // Disable in production for smaller bundle
+    
+    // Report compressed size
+    reportCompressedSize: true,
+    
+    // Chunk size warning limit
+    chunkSizeWarningLimit: 1000
   },
   
-  // Optimize dependencies
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
       'react-router-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-select',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-checkbox',
-      '@radix-ui/react-progress',
-      '@radix-ui/react-toast'
-    ],
-    exclude: [
-      // Exclude heavy dependencies that should be loaded dynamically
-      'swagger-ui-react'
+      'leaflet',
+      'react-leaflet',
+      'mapbox-gl',
+      'react-map-gl',
+      'ol',
+      '@turf/turf',
+      'proj4'
     ]
   },
   
-  // Performance optimizations
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
-    treeShaking: true,
-    minifyIdentifiers: true,
-    minifySyntax: true,
-    minifyWhitespace: true,
-    drop: ['console', 'debugger'], // Remove console.log and debugger in production
+  define: {
+    // Define global constants
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
+    global: 'globalThis',
   },
   
-  // CSS optimizations
   css: {
-    devSourcemap: false,
+    modules: {
+      localsConvention: 'camelCase'
+    },
     preprocessorOptions: {
       scss: {
-        charset: false
+        additionalData: `@import "src/styles/variables.scss";`
       }
     }
+  },
+  
+  esbuild: {
+    target: 'esnext',
+    platform: 'browser'
   }
 });
