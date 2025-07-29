@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Brain, Cpu, Zap, TrendingUp, AlertTriangle, Target, Activity, 
-  BarChart3, PieChart, LineChart, Radar, Globe, Satellite, Shield,
-  Eye, Camera, Mic, Radio, Database, Server, HardDrive, Network,
-  Gauge, Timer, Clock, Calendar, Users, MapPin, Car, DollarSign,
-  Settings, Play, Pause, RotateCcw, Save, Download, Upload
+  BarChart3, Shield, Eye, DollarSign, Database, Calendar, Mic,
+  Play, RotateCcw, Download
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,8 +15,6 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -425,12 +421,12 @@ const AIOperationsCenter: React.FC = () => {
     if (Math.random() > 0.8) {
       const newInsight: PredictiveInsight = {
         id: `insight_${Date.now()}`,
-        category: (['cost', 'productivity', 'safety', 'resource', 'schedule', 'risk'] as const)[Math.floor(Math.random() * 6)],
+        category: (['cost', 'productivity', 'safety', 'resource', 'schedule', 'risk'] as const)[Math.floor(Math.random() * 6)] as 'cost' | 'productivity' | 'safety' | 'resource' | 'schedule' | 'risk',
         prediction: 'New AI-generated insight based on real-time data analysis.',
         confidence: 80 + Math.random() * 15,
         impact_score: 5 + Math.random() * 5,
         recommended_actions: ['AI-recommended action based on analysis'],
-        time_horizon: (['1h', '24h', '7d', '30d', '90d'] as const)[Math.floor(Math.random() * 5)],
+        time_horizon: (['1h', '24h', '7d', '30d', '90d'] as const)[Math.floor(Math.random() * 5)] as '1h' | '24h' | '7d' | '30d' | '90d',
         created_at: new Date().toISOString()
       };
 
@@ -588,7 +584,7 @@ const AIOperationsCenter: React.FC = () => {
             <Switch
               id="ai-enabled"
               checked={isAIEnabled}
-              onCheckedChange={(checked) => {
+              onCheckedChange={(checked: boolean) => {
                 setIsAIEnabled(checked);
                 if (checked) {
                   startAIProcessing();
@@ -944,7 +940,7 @@ const AIOperationsCenter: React.FC = () => {
                   <Label>Processing Power Allocation: {processingPower}%</Label>
                   <Slider
                     value={[processingPower]}
-                    onValueChange={(value) => setProcessingPower(value[0])}
+                    onValueChange={(value: number[]) => setProcessingPower(value[0] || 75)}
                     min={10}
                     max={100}
                     step={5}
@@ -955,7 +951,7 @@ const AIOperationsCenter: React.FC = () => {
                   <Label>Confidence Threshold: {confidenceThreshold}%</Label>
                   <Slider
                     value={[confidenceThreshold]}
-                    onValueChange={(value) => setConfidenceThreshold(value[0])}
+                    onValueChange={(value: number[]) => setConfidenceThreshold(value[0] || 85)}
                     min={50}
                     max={99}
                     step={1}
