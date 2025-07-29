@@ -155,20 +155,109 @@ export default defineConfig(({ mode }) => ({
     cssMinify: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select'],
-          charts: ['recharts'],
-          utils: ['date-fns', 'clsx', 'tailwind-merge'],
-          query: ['@tanstack/react-query'],
-          router: ['react-router-dom'],
-          state: ['zustand'],
+        manualChunks: (id) => {
+          // Vendor chunks - core dependencies
+          if (id.includes('node_modules')) {
+            // React ecosystem
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'vendor-react';
+            }
+            
+            // Large chart libraries
+            if (id.includes('recharts') || id.includes('d3')) {
+              return 'vendor-charts';
+            }
+            
+            // UI component libraries
+            if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+              return 'vendor-ui';
+            }
+            
+            // State management
+            if (id.includes('zustand') || id.includes('@tanstack/react-query')) {
+              return 'vendor-state';
+            }
+            
+            // Utility libraries
+            if (id.includes('date-fns') || id.includes('lodash') || id.includes('clsx')) {
+              return 'vendor-utils';
+            }
+            
+            // Form libraries
+            if (id.includes('react-hook-form') || id.includes('@hookform')) {
+              return 'vendor-forms';
+            }
+            
+            // PDF and export libraries
+            if (id.includes('jspdf') || id.includes('html2canvas') || id.includes('xlsx')) {
+              return 'vendor-export';
+            }
+            
+            // Supabase and auth
+            if (id.includes('@supabase') || id.includes('crypto-js')) {
+              return 'vendor-auth';
+            }
+            
+            // All other vendor packages
+            return 'vendor-misc';
+          }
+          
+          // Application chunks - feature-based splitting
+          
+          // Admin and user management
+          if (id.includes('/admin/') || id.includes('/users/') || id.includes('/roles/')) {
+            return 'feature-admin';
+          }
+          
+          // Analytics and reporting
+          if (id.includes('/analytics/') || id.includes('/reports/') || id.includes('/charts/')) {
+            return 'feature-analytics';
+          }
+          
+          // Project management
+          if (id.includes('/projects/') || id.includes('/tasks/') || id.includes('/scheduling/')) {
+            return 'feature-projects';
+          }
+          
+          // Financial modules
+          if (id.includes('/estimates/') || id.includes('/invoices/') || id.includes('/billing/')) {
+            return 'feature-financial';
+          }
+          
+          // Inventory and assets
+          if (id.includes('/inventory/') || id.includes('/assets/') || id.includes('/equipment/')) {
+            return 'feature-inventory';
+          }
+          
+          // Client and customer management
+          if (id.includes('/clients/') || id.includes('/contacts/') || id.includes('/communications/')) {
+            return 'feature-clients';
+          }
+          
+          // Settings and configuration
+          if (id.includes('/settings/') || id.includes('/config/') || id.includes('/preferences/')) {
+            return 'feature-settings';
+          }
+          
+          // UI components that are shared
+          if (id.includes('/components/ui/')) {
+            return 'shared-ui';
+          }
+          
+          // Shared utilities and hooks
+          if (id.includes('/hooks/') || id.includes('/utils/') || id.includes('/lib/')) {
+            return 'shared-utils';
+          }
+          
+          // Default chunk for remaining code
+          return 'main';
         },
       },
     },
+    // Reduce bundle size warnings - accept larger chunks for feature-rich application
+    chunkSizeWarningLimit: 800,
     // PWA optimizations
     assetsInlineLimit: 4096,
-    chunkSizeWarningLimit: 1000,
     reportCompressedSize: false,
   },
   optimizeDeps: {
@@ -182,6 +271,12 @@ export default defineConfig(({ mode }) => ({
       '@tanstack/react-query',
       'zustand'
     ],
+    exclude: [
+      // Exclude large libraries from pre-bundling to allow chunking
+      'jspdf',
+      'html2canvas',
+      'xlsx'
+    ]
   },
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
