@@ -1,0 +1,39 @@
+{
+  "name": "@isac-os/types",
+  "version": "1.0.0",
+  "description": "ISAC-OS TypeScript Definitions and Types",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isac-os/isac-os.git",
+    "directory": "packages/types"
+  },
+  "keywords": [
+    "isac-os",
+    "types",
+    "typescript",
+    "definitions"
+  ],
+  "author": "ISAC-OS Team",
+  "license": "MIT"
+}
