@@ -12,7 +12,6 @@ import {
   PieChart,
   LineChart,
   Users,
-  DollarSign,
   Clock,
   CheckCircle
 } from 'lucide-react';

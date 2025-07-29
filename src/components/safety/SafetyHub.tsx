@@ -6,7 +6,6 @@ import {
   Shield, 
   AlertTriangle, 
   CheckCircle, 
-  Clock, 
   FileText,
   Users,
   HardHat,
