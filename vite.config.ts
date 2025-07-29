@@ -5,7 +5,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import legacy from '@vitejs/plugin-legacy';
 import { compression } from 'vite-plugin-compression2';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import { splitVendorChunkPlugin } from 'vite';
 import path from 'path';
 
 export default defineConfig(({ command, mode }) => {
@@ -161,9 +160,6 @@ export default defineConfig(({ command, mode }) => {
           }
         }
       }),
-      
-      // Vendor chunk splitting
-      splitVendorChunkPlugin(),
       
       // Bundle visualization (only in production)
       mode === 'production' && visualizer({
