@@ -17,6 +17,12 @@ import BlockchainHub from "./components/BlockchainHub";
 import Estimates from "./components/Estimates";
 import CRM from "./components/CRM";
 import FinancialDashboard from "./components/FinancialDashboard";
+import MobileHub from "./components/mobile/MobileHub";
+import IntegrationHub from "./components/integration/IntegrationHub";
+import SafetyHub from "./components/safety/SafetyHub";
+import ReportsHub from "./components/reports/ReportsHub";
+import EnterpriseHub from "./components/enterprise/EnterpriseHub";
+import AdvancedAI from "./components/ai/AdvancedAI";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -54,6 +60,12 @@ const App = () => {
               <Route path="estimates" element={<Estimates />} />
               <Route path="crm" element={<CRM />} />
               <Route path="financial" element={<FinancialDashboard />} />
+              <Route path="mobile" element={<MobileHub />} />
+              <Route path="integrations" element={<IntegrationHub />} />
+              <Route path="safety" element={<SafetyHub />} />
+              <Route path="reports" element={<ReportsHub />} />
+              <Route path="enterprise" element={<EnterpriseHub />} />
+              <Route path="advanced-ai" element={<AdvancedAI />} />
               <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
             </Route>
           </Routes>

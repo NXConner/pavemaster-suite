@@ -18,7 +18,12 @@ import {
   Shield,
   Link,
   FileText,
-  DollarSign
+  DollarSign,
+  Smartphone,
+  Zap,
+  HardHat,
+  Building,
+  Crown
 } from 'lucide-react';
 
 const navigation = [
@@ -35,6 +40,12 @@ const navigation = [
   { name: 'Estimates', href: '/estimates', icon: FileText },
   { name: 'CRM', href: '/crm', icon: Users },
   { name: 'Financial', href: '/financial', icon: DollarSign },
+  { name: 'Mobile', href: '/mobile', icon: Smartphone },
+  { name: 'Integrations', href: '/integrations', icon: Zap },
+  { name: 'Safety', href: '/safety', icon: HardHat },
+  { name: 'Reports', href: '/reports', icon: BarChart3 },
+  { name: 'Enterprise', href: '/enterprise', icon: Building },
+  { name: 'Advanced AI', href: '/advanced-ai', icon: Crown },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
