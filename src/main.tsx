@@ -1,88 +1,23 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
 import './index.css';
 
-// Initialize advanced systems
-import { initializeBundleOptimization } from '@/lib/bundleOptimization';
-import { initializeAIOptimization } from '@/lib/aiPerformanceOptimizer';
-import { initializeAccessibility } from '@/lib/accessibility';
-import { initializeOfflineSupport } from '@/lib/offline';
-import { performanceMonitor } from '@/lib/performance';
-
-// Start performance monitoring
-const appStartTime = performance.now();
-
-const container = document.getElementById('root');
-if (!container) {
-  throw new Error('Root element not found');
-}
-
-// Initialize all advanced systems
-async function initializeAdvancedSystems(): Promise<void> {
-  console.log('🚀 Initializing Advanced Systems');
-
-  try {
-    // Initialize bundle optimization
-    console.log('📦 Initializing intelligent bundle optimization...');
-    initializeBundleOptimization();
-
-    // Initialize AI performance optimization
-    console.log('🤖 Initializing AI performance optimizer...');
-    initializeAIOptimization();
-
-    // Initialize accessibility system
-    console.log('♿ Initializing accessibility system...');
-    initializeAccessibility();
-
-    // Initialize offline support
-    console.log('📴 Initializing offline support...');
-    await initializeOfflineSupport();
-
-    console.log('✅ All advanced systems initialized successfully');
-  } catch (error) {
-    console.error('❌ Error initializing advanced systems:', error);
-  }
-}
-
-// Render application
-createRoot(container).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
-
-// Initialize advanced systems after initial render
-void initializeAdvancedSystems();
-
-// Record application startup metrics
-const appLoadTime = performance.now() - appStartTime;
-performanceMonitor.recordMetric('app_startup_time', appLoadTime, 'ms', {
-  timestamp: new Date().toISOString(),
-  userAgent: navigator.userAgent,
-  viewport: `${window.innerWidth.toString()}x${window.innerHeight.toString()}`,
-});
-
-// Log startup completion
-console.log(`🎉 PaveMaster Suite loaded in ${appLoadTime.toFixed(2)}ms`);
-
-// Enable performance insights in development
-if (import.meta.env.DEV) {
-  console.log('🔧 Development mode - Performance insights enabled')
-
-  // Make performance tools available globally for debugging
-  ;(window as any).performanceMonitor = performanceMonitor;
-
-  // Log performance metrics every 10 seconds in development
-  setInterval(() => {
-    const metrics = performanceMonitor.exportPerformanceData();
-    if (Object.keys(metrics).length > 0) {
-      console.log('📊 Performance Metrics Update');
-      Object.entries(metrics).forEach(([category, data]) => {
-        if (data.length > 0) {
-          console.log(`${category}:`, data.slice(-5)); // Show last 5 entries
-        }
+// Initialize service worker for PWA support
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
       });
-    }
-  }, 10000);
+  });
 }
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
