@@ -69,30 +69,26 @@ export default defineConfig({
           // API and documentation
           'api-vendor': ['swagger-ui-react'],
           
-          // Feature-based chunks
-          'quantum-ops': [
-            './src/components/QuantumOperationsCenter',
-            './src/components/UltimateEnhancedMissionControl'
-          ],
-          'ai-systems': [
-            './src/components/AIOperationsCenter',
-            './src/components/AIAssistant'
-          ],
-          'analytics': [
-            './src/components/AdvancedAnalytics',
-            './src/components/PredictiveAnalytics',
-            './src/components/PerformanceDashboard'
-          ],
-          'overwatch': [
-            './src/components/OverWatchTOSS'
-          ],
-          'mobile': [
-            './src/components/MobileCompanion',
-            './src/components/MobileFieldInterface'
+          // Feature-based chunks for existing components
+          'dashboard': [
+            './src/components/Dashboard',
+            './src/components/Analytics'
           ],
           'enterprise': [
-            './src/components/EnterpriseIntegrations',
-            './src/components/MissionControlCenter'
+            './src/components/CRM',
+            './src/components/Projects'
+          ],
+          'business': [
+            './src/components/Estimates',
+            './src/components/Equipment',
+            './src/components/FinancialDashboard'
+          ],
+          'security': [
+            './src/components/SecurityMonitor'
+          ],
+          'intelligence': [
+            './src/components/IntelligenceEngine',
+            './src/components/BlockchainHub'
           ]
         }
       }
