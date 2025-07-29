@@ -1,7 +1,7 @@
 {
-  "name": "@isac-os/core",
+  "name": "@isac-os/config",
   "version": "1.0.0",
-  "description": "ISAC-OS Core Business Logic Package",
+  "description": "ISAC-OS Configuration Management",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -11,22 +11,17 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@isac-os/types": "workspace:*",
-    "@isac-os/utils": "workspace:*",
-    "zod": "^3.22.0",
-    "date-fns": "^2.30.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.0",
-    "@types/node": "^20.0.0",
-    "rollup": "^4.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
   },
   "files": [
     "dist",
@@ -35,14 +30,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/isac-os/isac-os.git",
-    "directory": "packages/core"
+    "directory": "packages/config"
   },
   "keywords": [
     "isac-os",
-    "core",
-    "business-logic",
-    "entities",
-    "services"
+    "config",
+    "configuration",
+    "settings"
   ],
   "author": "ISAC-OS Team",
   "license": "MIT"

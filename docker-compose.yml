@@ -28,7 +28,7 @@ services:
 
   # PostgreSQL Database
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: pavemaster-postgres
     environment:
       POSTGRES_DB: pavemasterdb
@@ -51,7 +51,7 @@ services:
 
   # Redis for Caching and Session Management
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: pavemaster-redis
     ports:
       - "6379:6379"
@@ -84,7 +84,7 @@ services:
 
   # Monitoring Service
   prometheus:
-    image: prom/prometheus:v2.45.0
+    image: prom/prometheus:v3.2.0
     container_name: pavemaster-prometheus
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -97,7 +97,7 @@ services:
 
   # Log Management
   grafana:
-    image: grafana/grafana:9.5.3
+    image: grafana/grafana:12.6.1
     container_name: pavemaster-grafana
     ports:
       - "3002:3000"
