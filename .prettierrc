@@ -1,12 +1,11 @@
 {
   "semi": true,
   "trailingComma": "es5",
-  "singleQuote": true,
+  "singleQuote": false,
   "printWidth": 80,
   "tabWidth": 2,
   "useTabs": false,
   "quoteProps": "as-needed",
-  "jsxSingleQuote": false,
   "bracketSpacing": true,
   "bracketSameLine": false,
   "arrowParens": "always",
@@ -14,21 +13,35 @@
   "embeddedLanguageFormatting": "auto",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
+  "jsxSingleQuote": false,
   "proseWrap": "preserve",
   "requirePragma": false,
-  "vueIndentScriptAndStyle": false,
   "overrides": [
-    {
-      "files": "*.md",
-      "options": {
-        "printWidth": 100,
-        "proseWrap": "always"
-      }
-    },
     {
       "files": "*.json",
       "options": {
-        "singleQuote": false
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always",
+        "printWidth": 70
+      }
+    },
+    {
+      "files": "*.yml",
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": "*.yaml",
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": true
       }
     }
   ]
