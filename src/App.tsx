@@ -16,6 +16,10 @@ import Analytics from "./pages/Analytics";
 import Mobile from "./pages/Mobile";
 import NotFound from "./pages/NotFound";
 import ApiDocumentation from "@/components/ApiDocumentation";
+import CostCounter from "@/components/CostCounter";
+import EmployeeTracker from "@/components/EmployeeTracker";
+import OverWatchTOSS from "@/components/OverWatchTOSS";
+import TaskPriorityManager from "@/components/TaskPriorityManager";
 
 const queryClient = new QueryClient();
 
@@ -48,15 +52,19 @@ const App = () => (
                               <Route path="/analytics" element={<Analytics />} />
                               <Route path="/mobile" element={<Mobile />} />
                               <Route path="/api-docs" element={<ApiDocumentation />} />
+                              <Route path="/cost-counter" element={<CostCounter />} />
+                              <Route path="/employee-tracker" element={<EmployeeTracker />} />
+                              <Route path="/overwatch" element={<OverWatchTOSS />} />
+                              <Route path="/task-priorities" element={<TaskPriorityManager />} />
                               {/* Placeholder routes for sidebar items */}
-                              <Route path="/tracking" element={<div className="p-6"><h1>GPS Tracking (Coming Soon)</h1></div>} />
+                              <Route path="/tracking" element={<EmployeeTracker />} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
                               <Route path="/measurements" element={<div className="p-6"><h1>Measurements (Coming Soon)</h1></div>} />
-                              <Route path="/projects" element={<div className="p-6"><h1>Projects (Coming Soon)</h1></div>} />
+                              <Route path="/projects" element={<TaskPriorityManager />} />
                               <Route path="/team" element={<div className="p-6"><h1>Team Management (Coming Soon)</h1></div>} />
                               <Route path="/equipment" element={<div className="p-6"><h1>Equipment (Coming Soon)</h1></div>} />
                               <Route path="/schedule" element={<div className="p-6"><h1>Schedule (Coming Soon)</h1></div>} />
-                              <Route path="/finance" element={<div className="p-6"><h1>Finance (Coming Soon)</h1></div>} />
+                              <Route path="/finance" element={<CostCounter />} />
                               <Route path="/safety" element={<div className="p-6"><h1>Safety (Coming Soon)</h1></div>} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>

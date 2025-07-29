@@ -26,11 +26,14 @@ import {
   MapPin,
   Camera,
   Activity,
-  BookOpen
+  BookOpen,
+  Command,
+  Target
 } from "lucide-react"
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Hub", url: "/ai", icon: Brain },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
