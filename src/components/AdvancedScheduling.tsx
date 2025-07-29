@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Calendar, Clock, Users, Truck, MapPin, Cloud, AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { Calendar, Clock, Users, Truck, MapPin, Cloud, AlertTriangle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 
 interface ScheduleItem {
   id: string;
@@ -27,41 +27,41 @@ export function AdvancedScheduling() {
 
   const mockSchedule: ScheduleItem[] = [
     {
-      id: "1",
-      projectName: "Highway 101 Resurfacing",
-      location: "San Francisco, CA",
-      startTime: "07:00",
-      endTime: "16:00",
-      crew: ["John Smith", "Mike Johnson", "Sarah Davis"],
-      equipment: ["Paver-001", "Roller-003", "Truck-007"],
+      id: '1',
+      projectName: 'Highway 101 Resurfacing',
+      location: 'San Francisco, CA',
+      startTime: '07:00',
+      endTime: '16:00',
+      crew: ['John Smith', 'Mike Johnson', 'Sarah Davis'],
+      equipment: ['Paver-001', 'Roller-003', 'Truck-007'],
       status: 'scheduled',
       weather: 'optimal',
-      priority: 'high'
+      priority: 'high',
     },
     {
-      id: "2",
-      projectName: "Shopping Center Parking",
-      location: "Oakland, CA", 
-      startTime: "08:00",
-      endTime: "15:00",
-      crew: ["Tom Wilson", "Lisa Chen"],
-      equipment: ["Sealcoat-002", "Striping-001"],
+      id: '2',
+      projectName: 'Shopping Center Parking',
+      location: 'Oakland, CA',
+      startTime: '08:00',
+      endTime: '15:00',
+      crew: ['Tom Wilson', 'Lisa Chen'],
+      equipment: ['Sealcoat-002', 'Striping-001'],
       status: 'in-progress',
       weather: 'marginal',
-      priority: 'medium'
+      priority: 'medium',
     },
     {
-      id: "3",
-      projectName: "Industrial Park Access",
-      location: "San Jose, CA",
-      startTime: "09:00", 
-      endTime: "17:00",
-      crew: ["David Brown", "Jennifer Lee", "Carlos Rodriguez"],
-      equipment: ["Paver-002", "Truck-005"],
+      id: '3',
+      projectName: 'Industrial Park Access',
+      location: 'San Jose, CA',
+      startTime: '09:00',
+      endTime: '17:00',
+      crew: ['David Brown', 'Jennifer Lee', 'Carlos Rodriguez'],
+      equipment: ['Paver-002', 'Truck-005'],
       status: 'scheduled',
       weather: 'poor',
-      priority: 'urgent'
-    }
+      priority: 'urgent',
+    },
   ];
 
   const getStatusColor = (status: string) => {
@@ -70,31 +70,31 @@ export function AdvancedScheduling() {
       'in-progress': 'bg-green-100 text-green-800 border-green-200',
       completed: 'bg-gray-100 text-gray-800 border-gray-200',
       delayed: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      cancelled: 'bg-red-100 text-red-800 border-red-200'
+      cancelled: 'bg-red-100 text-red-800 border-red-200',
     };
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
   const getWeatherIcon = (weather: string) => {
-    if (weather === 'poor') return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    if (weather === 'marginal') return <Cloud className="h-4 w-4 text-yellow-500" />;
+    if (weather === 'poor') { return <AlertTriangle className="h-4 w-4 text-red-500" />; }
+    if (weather === 'marginal') { return <Cloud className="h-4 w-4 text-yellow-500" />; }
     return <Cloud className="h-4 w-4 text-green-500" />;
   };
 
   const getPriorityColor = (priority: string) => {
     const colors = {
       low: 'bg-green-500',
-      medium: 'bg-yellow-500', 
+      medium: 'bg-yellow-500',
       high: 'bg-orange-500',
-      urgent: 'bg-red-500'
+      urgent: 'bg-red-500',
     };
     return colors[priority as keyof typeof colors];
   };
 
   const handleReschedule = (itemId: string) => {
     toast({
-      title: "Reschedule Requested",
-      description: "Scheduling system will optimize based on weather and resource availability.",
+      title: 'Reschedule Requested',
+      description: 'Scheduling system will optimize based on weather and resource availability.',
     });
   };
 
@@ -130,11 +130,11 @@ export function AdvancedScheduling() {
             <TabsTrigger value="week">This Week</TabsTrigger>
             <TabsTrigger value="month">This Month</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="week" className="space-y-4">
             <div className="grid gap-4">
               {mockSchedule.map((item) => (
-                <Card key={item.id} className="p-4 border-l-4" style={{borderLeftColor: `var(--${getPriorityColor(item.priority).replace('bg-', '')})`}}>
+                <Card key={item.id} className="p-4 border-l-4" style={{ borderLeftColor: `var(--${getPriorityColor(item.priority).replace('bg-', '')})` }}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
@@ -144,7 +144,7 @@ export function AdvancedScheduling() {
                         </Badge>
                         {getWeatherIcon(item.weather)}
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center space-x-2">
                           <MapPin className="h-4 w-4" />
@@ -159,20 +159,20 @@ export function AdvancedScheduling() {
                           <span>{item.crew.length} crew members</span>
                         </div>
                       </div>
-                      
+
                       <div className="mt-3 flex flex-wrap gap-2">
                         <div className="text-xs">
-                          <span className="font-medium">Crew:</span> {item.crew.join(", ")}
+                          <span className="font-medium">Crew:</span> {item.crew.join(', ')}
                         </div>
                       </div>
-                      
+
                       <div className="mt-2 flex flex-wrap gap-2">
                         <div className="text-xs">
-                          <span className="font-medium">Equipment:</span> {item.equipment.join(", ")}
+                          <span className="font-medium">Equipment:</span> {item.equipment.join(', ')}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <Button variant="outline" size="sm" onClick={() => { handleReschedule(item.id); }}>
                         Reschedule
@@ -186,14 +186,14 @@ export function AdvancedScheduling() {
               ))}
             </div>
           </TabsContent>
-          
+
           <TabsContent value="day" className="space-y-4">
             <div className="text-center text-muted-foreground py-8">
               <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Day view scheduling interface would be implemented here</p>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="month" className="space-y-4">
             <div className="text-center text-muted-foreground py-8">
               <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />

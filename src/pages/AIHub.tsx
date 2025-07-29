@@ -4,17 +4,17 @@ import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import { AIAssistant } from '@/components/AIAssistant';
 import { VoiceInterface } from '@/components/VoiceInterface';
-import { 
-  Brain, 
-  Mic, 
-  MessageSquare, 
-  Calculator, 
-  Settings, 
-  Shield, 
+import {
+  Brain,
+  Mic,
+  MessageSquare,
+  Calculator,
+  Settings,
+  Shield,
   DollarSign,
   Sparkles,
   Zap,
-  Bot
+  Bot,
 } from 'lucide-react';
 
 export default function AIHubPage() {

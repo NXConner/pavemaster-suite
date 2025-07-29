@@ -398,7 +398,7 @@ const defaultConfig: AppConfig = {
 function getCurrentEnvironment(): Environment {
   const env = import.meta.env.MODE as Environment;
   const validEnvironments: Environment[] = ['development', 'staging', 'production', 'test'];
-  
+
   return validEnvironments.includes(env) ? env : 'development';
 }
 
@@ -406,7 +406,7 @@ function getCurrentEnvironment(): Environment {
 function createConfig(): AppConfig {
   const environment = getCurrentEnvironment();
   const envConfig = configurations[environment];
-  
+
   // Deep merge default config with environment-specific config
   const config: AppConfig = {
     ...defaultConfig,

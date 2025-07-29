@@ -84,11 +84,11 @@ const DefaultLoadingFallback = ({ skeleton }: { skeleton: string }) => {
   );
 };
 
-export function LazyLoadWrapper({ 
-  children, 
-  fallback, 
+export function LazyLoadWrapper({
+  children,
+  fallback,
   errorFallback,
-  skeleton = 'custom' 
+  skeleton = 'custom',
 }: LazyLoadWrapperProps) {
   const loadingFallback = fallback || <DefaultLoadingFallback skeleton={skeleton} />;
 
@@ -108,13 +108,13 @@ export function withLazyLoading<P extends object>(
     fallback?: React.ReactNode;
     errorFallback?: React.ReactNode;
     skeleton?: 'page' | 'card' | 'list' | 'custom';
-  }
+  },
 ) {
   const LazyComponent = lazy(importFunc);
-  
+
   return function LazyLoadedComponent(props: P) {
     return (
-      <LazyLoadWrapper 
+      <LazyLoadWrapper
         fallback={options?.fallback}
         errorFallback={options?.errorFallback}
         skeleton={options?.skeleton}
@@ -127,7 +127,7 @@ export function withLazyLoading<P extends object>(
 
 // Hook for preloading components
 export function usePreloadComponent(
-  importFunc: () => Promise<{ default: ComponentType<any> }>
+  importFunc: () => Promise<{ default: ComponentType<any> }>,
 ) {
   const preload = React.useCallback(() => {
     const componentImport = importFunc();
@@ -155,7 +155,7 @@ export function useLazyLoad(threshold = 0.1) {
           setHasLoaded(true);
         }
       },
-      { threshold }
+      { threshold },
     );
 
     const currentRef = ref.current;

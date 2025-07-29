@@ -72,7 +72,7 @@ class AIPerformanceOptimizer {
    */
   private startNewSession(): void {
     const sessionId = crypto.randomUUID();
-    
+
     this.currentSession = {
       id: sessionId,
       startTime: Date.now(),
@@ -87,8 +87,8 @@ class AIPerformanceOptimizer {
         bounceRate: 0,
         engagementScore: 0,
         errorCount: 0,
-        performanceScore: 0
-      }
+        performanceScore: 0,
+      },
     };
 
     this.sessions.set(sessionId, this.currentSession);
@@ -99,11 +99,11 @@ class AIPerformanceOptimizer {
    * Record user action for learning
    */
   recordAction(action: Omit<UserAction, 'timestamp'>): void {
-    if (!this.currentSession) return;
+    if (!this.currentSession) { return; }
 
     const userAction: UserAction = {
       ...action,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.currentSession.actions.push(userAction);
@@ -117,13 +117,13 @@ class AIPerformanceOptimizer {
   private optimizeForSession(session: UserSession): void {
     // Predict user behavior based on device and network
     const predictions = this.predictUserBehavior(session);
-    
+
     // Apply device-specific optimizations
     this.applyDeviceOptimizations(session.deviceType);
-    
+
     // Apply network-specific optimizations
     this.applyNetworkOptimizations(session.networkSpeed);
-    
+
     // Preload predicted resources
     this.preloadPredictedResources(predictions);
   }
@@ -145,7 +145,7 @@ class AIPerformanceOptimizer {
       likelyNextPages: this.predictNextPages(devicePatterns, networkPatterns),
       expectedActions: this.predictNextActions(session),
       sessionDuration: this.predictSessionDuration(session),
-      engagementLevel: this.predictEngagementLevel(session)
+      engagementLevel: this.predictEngagementLevel(session),
     };
   }
 
@@ -175,11 +175,11 @@ class AIPerformanceOptimizer {
   private optimizeForNavigation(action: UserAction): void {
     // Preload likely next pages based on current navigation pattern
     const nextPages = this.predictNextPagesFromNavigation(action.target);
-    
+
     nextPages.forEach(page => {
       intelligentBundleLoader.loadBundle(page.toLowerCase(), () => import('@/pages/Index'), {
         priority: 'high',
-        loadTiming: 'on-interaction'
+        loadTiming: 'on-interaction',
       });
     });
 
@@ -216,13 +216,13 @@ class AIPerformanceOptimizer {
    */
   private optimizeForSearch(action: UserAction): void {
     const query = action.metadata?.query || '';
-    
+
     // Learn from search patterns
     this.learnSearchPattern(query);
-    
+
     // Preload likely results
     this.preloadSearchResults(query);
-    
+
     // Optimize search interface based on device
     if (this.currentSession?.deviceType === 'mobile') {
       this.optimizeMobileSearch();
@@ -235,10 +235,10 @@ class AIPerformanceOptimizer {
   private optimizeForForms(action: UserAction): void {
     // Preload form validation resources
     this.preloadFormValidation();
-    
+
     // Optimize based on form complexity
     const formComplexity = action.metadata?.complexity || 'simple';
-    
+
     if (formComplexity === 'complex') {
       this.enableProgressiveSaving();
       this.preloadRelatedData();
@@ -268,13 +268,13 @@ class AIPerformanceOptimizer {
   private optimizeForMobile(): void {
     // Reduce image quality on mobile
     this.setImageQuality('medium');
-    
+
     // Enable touch-optimized interactions
     this.enableTouchOptimizations();
-    
+
     // Prioritize above-the-fold content
     this.prioritizeATFContent();
-    
+
     // Reduce animation complexity
     this.simplifyAnimations();
   }
@@ -285,13 +285,13 @@ class AIPerformanceOptimizer {
   private optimizeForDesktop(): void {
     // Enable high-quality images
     this.setImageQuality('high');
-    
+
     // Preload more resources
     this.enableDesktopPreloading();
-    
+
     // Enable complex animations
     this.enableFullAnimations();
-    
+
     // Utilize larger viewport
     this.optimizeForLargeViewport();
   }
@@ -319,13 +319,13 @@ class AIPerformanceOptimizer {
   private optimizeForSlowNetwork(): void {
     // Reduce asset quality
     this.setImageQuality('low');
-    
+
     // Disable non-essential features
     this.disableNonEssentialFeatures();
-    
+
     // Enable data saver mode
     this.enableDataSaverMode();
-    
+
     // Prioritize critical resources
     this.prioritizeCriticalResources();
   }
@@ -336,13 +336,13 @@ class AIPerformanceOptimizer {
   private optimizeForFastNetwork(): void {
     // Preload aggressively
     this.enableAggressivePreloading();
-    
+
     // Load high-quality assets
     this.setImageQuality('high');
-    
+
     // Enable all features
     this.enableAllFeatures();
-    
+
     // Preload future user needs
     this.predictivePreload();
   }
@@ -355,43 +355,43 @@ class AIPerformanceOptimizer {
       {
         id: 'mobile-image-optimization',
         condition: (session) => session.deviceType === 'mobile',
-        action: () => this.setImageQuality('medium'),
+        action: () => { this.setImageQuality('medium'); },
         priority: 8,
         effectiveness: 0.85,
-        description: 'Optimize images for mobile devices'
+        description: 'Optimize images for mobile devices',
       },
       {
         id: 'slow-network-optimization',
         condition: (session) => session.networkSpeed === 'slow',
-        action: () => this.enableDataSaverMode(),
+        action: () => { this.enableDataSaverMode(); },
         priority: 9,
         effectiveness: 0.75,
-        description: 'Enable data saver for slow networks'
+        description: 'Enable data saver for slow networks',
       },
       {
         id: 'high-bounce-rate-optimization',
         condition: (session) => session.metrics.bounceRate > 0.8,
-        action: (session) => this.optimizeForRetention(session),
+        action: (session) => { this.optimizeForRetention(session); },
         priority: 7,
         effectiveness: 0.65,
-        description: 'Optimize for user retention'
+        description: 'Optimize for user retention',
       },
       {
         id: 'fast-navigation-optimization',
         condition: (session) => this.detectFastNavigation(session),
-        action: () => this.enableAggressivePreloading(),
+        action: () => { this.enableAggressivePreloading(); },
         priority: 6,
         effectiveness: 0.70,
-        description: 'Preload for fast navigators'
+        description: 'Preload for fast navigators',
       },
       {
         id: 'content-consumer-optimization',
         condition: (session) => this.detectContentConsumer(session),
-        action: () => this.optimizeForContentConsumption(),
+        action: () => { this.optimizeForContentConsumption(); },
         priority: 5,
         effectiveness: 0.60,
-        description: 'Optimize for content consumption'
-      }
+        description: 'Optimize for content consumption',
+      },
     ];
 
     // Apply rules based on priority
@@ -427,11 +427,11 @@ class AIPerformanceOptimizer {
 
     // Find common patterns
     const patterns = this.findPerformancePatterns(recentSessions);
-    
+
     // Update existing patterns or create new ones
     patterns.forEach(pattern => {
       const existing = this.performancePatterns.find(p => p.pattern === pattern.pattern);
-      
+
       if (existing) {
         existing.frequency += pattern.frequency;
         existing.confidence = Math.min(1, existing.confidence + 0.1);
@@ -453,7 +453,7 @@ class AIPerformanceOptimizer {
         .filter(session => rule.condition(session));
 
       if (applicableSessions.length > 0) {
-        const avgPerformance = applicableSessions.reduce((sum, session) => 
+        const avgPerformance = applicableSessions.reduce((sum, session) =>
           sum + session.metrics.performanceScore, 0) / applicableSessions.length;
 
         // Update effectiveness based on performance results
@@ -471,20 +471,20 @@ class AIPerformanceOptimizer {
     const qualitySettings = {
       low: { quality: 0.6, format: 'webp' },
       medium: { quality: 0.8, format: 'webp' },
-      high: { quality: 1.0, format: 'auto' }
+      high: { quality: 1.0, format: 'auto' },
     };
 
     // Apply image quality settings globally
     document.documentElement.style.setProperty(
-      '--image-quality', 
-      qualitySettings[quality].quality.toString()
+      '--image-quality',
+      qualitySettings[quality].quality.toString(),
     );
   }
 
   private enableDataSaverMode(): void {
     // Reduce resource loading
     document.documentElement.classList.add('data-saver-mode');
-    
+
     // Disable non-essential animations
     document.documentElement.style.setProperty('--animation-duration', '0ms');
   }
@@ -492,7 +492,7 @@ class AIPerformanceOptimizer {
   private enableAggressivePreloading(): void {
     // Increase preloading scope
     intelligentBundleLoader.preloadPredictedBundles();
-    
+
     // Preload more resources
     this.preloadCriticalResources();
   }
@@ -500,7 +500,7 @@ class AIPerformanceOptimizer {
   private optimizeForContentConsumption(): void {
     // Preload related content
     this.preloadRelatedContent();
-    
+
     // Optimize reading experience
     this.optimizeReadingExperience();
   }
@@ -508,7 +508,7 @@ class AIPerformanceOptimizer {
   private enableQuickNavigation(): void {
     // Preload navigation targets
     this.preloadNavigationTargets();
-    
+
     // Reduce animation delays
     document.documentElement.style.setProperty('--transition-duration', '100ms');
   }
@@ -516,8 +516,8 @@ class AIPerformanceOptimizer {
   // Detection methods
   private detectDeviceType(): 'mobile' | 'tablet' | 'desktop' {
     const width = window.innerWidth;
-    if (width < 768) return 'mobile';
-    if (width < 1024) return 'tablet';
+    if (width < 768) { return 'mobile'; }
+    if (width < 1024) { return 'tablet'; }
     return 'desktop';
   }
 
@@ -525,9 +525,9 @@ class AIPerformanceOptimizer {
     if ('connection' in navigator) {
       const connection = (navigator as any).connection;
       const effectiveType = connection.effectiveType;
-      
-      if (effectiveType === 'slow-2g' || effectiveType === '2g') return 'slow';
-      if (effectiveType === '3g') return 'medium';
+
+      if (effectiveType === 'slow-2g' || effectiveType === '2g') { return 'slow'; }
+      if (effectiveType === '3g') { return 'medium'; }
       return 'fast';
     }
     return 'medium'; // Default assumption
@@ -535,9 +535,9 @@ class AIPerformanceOptimizer {
 
   private detectFastNavigation(session: UserSession): boolean {
     const navigationActions = session.actions.filter(a => a.type === 'navigation');
-    if (navigationActions.length < 2) return false;
+    if (navigationActions.length < 2) { return false; }
 
-    const avgNavigationTime = navigationActions.reduce((sum, action) => 
+    const avgNavigationTime = navigationActions.reduce((sum, action) =>
       sum + (action.duration || 0), 0) / navigationActions.length;
 
     return avgNavigationTime < 200; // Fast navigation if under 200ms average
@@ -545,7 +545,7 @@ class AIPerformanceOptimizer {
 
   private detectContentConsumer(session: UserSession): boolean {
     const scrollActions = session.actions.filter(a => a.type === 'scroll');
-    const totalScrollTime = scrollActions.reduce((sum, action) => 
+    const totalScrollTime = scrollActions.reduce((sum, action) =>
       sum + (action.duration || 0), 0);
 
     return totalScrollTime > 30000; // Content consumer if scrolling for 30+ seconds
@@ -577,16 +577,16 @@ class AIPerformanceOptimizer {
   private cleanupOldData(): void { /* Implementation */ }
 
   private updateSessionMetrics(): void {
-    if (!this.currentSession) return;
+    if (!this.currentSession) { return; }
 
     const session = this.currentSession;
     const now = Date.now();
-    
+
     session.metrics.totalDuration = now - session.startTime;
     session.metrics.pagesVisited = new Set(
-      session.actions.filter(a => a.type === 'navigation').map(a => a.target)
+      session.actions.filter(a => a.type === 'navigation').map(a => a.target),
     ).size;
-    
+
     // Calculate performance score based on various factors
     session.metrics.performanceScore = this.calculatePerformanceScore(session);
   }
@@ -596,10 +596,10 @@ class AIPerformanceOptimizer {
     let score = 0.5; // Base score
 
     // Bonus for longer sessions (engagement)
-    if (session.metrics.totalDuration > 5 * 60 * 1000) score += 0.2;
+    if (session.metrics.totalDuration > 5 * 60 * 1000) { score += 0.2; }
 
     // Bonus for multiple pages visited
-    if (session.metrics.pagesVisited > 3) score += 0.1;
+    if (session.metrics.pagesVisited > 3) { score += 0.1; }
 
     // Penalty for errors
     score -= session.metrics.errorCount * 0.1;
@@ -612,17 +612,17 @@ class AIPerformanceOptimizer {
     const patterns: PerformancePattern[] = [];
 
     // Pattern: Mobile users with slow networks have poor performance
-    const mobileSlowSessions = sessions.filter(s => 
-      s.deviceType === 'mobile' && s.networkSpeed === 'slow'
+    const mobileSlowSessions = sessions.filter(s =>
+      s.deviceType === 'mobile' && s.networkSpeed === 'slow',
     );
-    
+
     if (mobileSlowSessions.length > 5) {
       patterns.push({
         pattern: 'mobile-slow-network',
         frequency: mobileSlowSessions.length,
         impact: 0.8,
         optimization: 'aggressive-data-saving',
-        confidence: 0.7
+        confidence: 0.7,
       });
     }
 
@@ -646,8 +646,8 @@ class AIPerformanceOptimizer {
   }
 
   private predictEngagementLevel(session: UserSession): 'low' | 'medium' | 'high' {
-    if (session.actions.length > 10) return 'high';
-    if (session.actions.length > 5) return 'medium';
+    if (session.actions.length > 10) { return 'high'; }
+    if (session.actions.length > 5) { return 'medium'; }
     return 'low';
   }
 
@@ -671,7 +671,7 @@ class AIPerformanceOptimizer {
     const predictions: Record<string, string[]> = {
       '/dashboard': ['Projects', 'Analytics'],
       '/projects': ['Estimates', 'Scheduling'],
-      '/estimates': ['Invoices', 'Clients']
+      '/estimates': ['Invoices', 'Clients'],
     };
 
     return predictions[target] || [];
@@ -680,10 +680,10 @@ class AIPerformanceOptimizer {
   private preloadPredictedResources(predictions: any): void {
     // Preload resources based on predictions
     predictions.likelyNextPages.forEach((page: string) => {
-      intelligentBundleLoader.loadBundle(page.toLowerCase(), 
+      intelligentBundleLoader.loadBundle(page.toLowerCase(),
         () => import('@/pages/Index'), {  // Using existing page for now
           priority: 'normal',
-          loadTiming: 'on-idle'
+          loadTiming: 'on-idle',
         });
     });
   }
@@ -696,9 +696,9 @@ class AIPerformanceOptimizer {
 
     // Track navigation
     window.addEventListener('popstate', () => {
-      this.recordAction({ 
-        type: 'navigation', 
-        target: window.location.pathname 
+      this.recordAction({
+        type: 'navigation',
+        target: window.location.pathname,
       });
     });
 
@@ -712,8 +712,8 @@ class AIPerformanceOptimizer {
           target: window.location.pathname,
           metadata: {
             scrollY: window.scrollY,
-            direction: 'down' // Simplified
-          }
+            direction: 'down', // Simplified
+          },
         });
       }, 100);
     }, { passive: true });
@@ -727,7 +727,7 @@ class AIPerformanceOptimizer {
     performancePatterns: PerformancePattern[];
     sessionMetrics: SessionMetrics | null;
     ruleEffectiveness: Array<{ rule: string; effectiveness: number }>;
-  } {
+    } {
     return {
       currentOptimizations: this.optimizationRules
         .filter(rule => this.currentSession && rule.condition(this.currentSession))
@@ -736,8 +736,8 @@ class AIPerformanceOptimizer {
       sessionMetrics: this.currentSession?.metrics || null,
       ruleEffectiveness: this.optimizationRules.map(rule => ({
         rule: rule.description,
-        effectiveness: rule.effectiveness
-      }))
+        effectiveness: rule.effectiveness,
+      })),
     };
   }
 }
@@ -748,7 +748,7 @@ export const aiPerformanceOptimizer = new AIPerformanceOptimizer();
 // Initialize AI performance optimization
 export function initializeAIOptimization(): void {
   console.log('🤖 AI Performance Optimizer initialized');
-  
+
   // Log optimization insights in development
   if (configUtils.getEnvironment() === 'development') {
     setInterval(() => {

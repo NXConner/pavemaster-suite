@@ -13,7 +13,7 @@ const Dashboard = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const ProjectsPage = withLazyLoading(
@@ -24,7 +24,7 @@ const ProjectsPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const EstimatesPage = withLazyLoading(
@@ -35,7 +35,7 @@ const EstimatesPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const InvoicesPage = withLazyLoading(
@@ -46,7 +46,7 @@ const InvoicesPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const ClientsPage = withLazyLoading(
@@ -57,7 +57,7 @@ const ClientsPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const InventoryPage = withLazyLoading(
@@ -68,7 +68,7 @@ const InventoryPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const SchedulingPage = withLazyLoading(
@@ -79,7 +79,7 @@ const SchedulingPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const AnalyticsPage = withLazyLoading(
@@ -90,7 +90,7 @@ const AnalyticsPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const SettingsPage = withLazyLoading(
@@ -101,22 +101,22 @@ const SettingsPage = withLazyLoading(
       return module;
     });
   },
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 const LoginPage = withLazyLoading(
   () => import('@/pages/Login'),
-  { skeleton: 'card' }
+  { skeleton: 'card' },
 );
 
 const SignupPage = withLazyLoading(
   () => import('@/pages/Signup'),
-  { skeleton: 'card' }
+  { skeleton: 'card' },
 );
 
 const NotFoundPage = withLazyLoading(
   () => import('@/pages/NotFound'),
-  { skeleton: 'page' }
+  { skeleton: 'page' },
 );
 
 // Protected Route Component
@@ -192,7 +192,7 @@ export function useRoutePreloading() {
       import('@/pages/Projects').catch(() => {});
     }, 2000);
 
-    return () => clearTimeout(preloadTimer);
+    return () => { clearTimeout(preloadTimer); };
   }, []);
 
   // Preload on hover for navigation links
@@ -226,95 +226,95 @@ export function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
             <PublicRoute>
               <LoginPage />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/signup" 
+        <Route
+          path="/signup"
           element={
             <PublicRoute>
               <SignupPage />
             </PublicRoute>
-          } 
+          }
         />
 
         {/* Protected Routes */}
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/projects/*" 
+        <Route
+          path="/projects/*"
           element={
             <ProtectedRoute>
               <ProjectsPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/estimates/*" 
+        <Route
+          path="/estimates/*"
           element={
             <ProtectedRoute>
               <EstimatesPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/invoices/*" 
+        <Route
+          path="/invoices/*"
           element={
             <ProtectedRoute>
               <InvoicesPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/clients/*" 
+        <Route
+          path="/clients/*"
           element={
             <ProtectedRoute>
               <ClientsPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/inventory/*" 
+        <Route
+          path="/inventory/*"
           element={
             <ProtectedRoute>
               <InventoryPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/scheduling/*" 
+        <Route
+          path="/scheduling/*"
           element={
             <ProtectedRoute>
               <SchedulingPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/analytics/*" 
+        <Route
+          path="/analytics/*"
           element={
             <ProtectedRoute>
               <AnalyticsPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/settings/*" 
+        <Route
+          path="/settings/*"
           element={
             <ProtectedRoute>
               <SettingsPage />
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* Redirects */}

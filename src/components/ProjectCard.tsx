@@ -1,14 +1,14 @@
-import { Calendar, MapPin, Users, DollarSign } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { Calendar, MapPin, Users, DollarSign } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 
 interface ProjectCardProps {
   project: {
     id: string;
     name: string;
     location: string;
-    status: "active" | "completed" | "planned";
+    status: 'active' | 'completed' | 'planned';
     progress: number;
     budget: number;
     spent: number;
@@ -20,10 +20,10 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-success text-success-foreground";
-      case "completed": return "bg-primary text-primary-foreground";
-      case "planned": return "bg-warning text-warning-foreground";
-      default: return "bg-muted text-muted-foreground";
+      case 'active': return 'bg-success text-success-foreground';
+      case 'completed': return 'bg-primary text-primary-foreground';
+      case 'planned': return 'bg-warning text-warning-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -51,7 +51,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
           <Progress value={project.progress} className="h-2" />
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center">
             <Users className="mr-2 h-4 w-4 text-primary" />
@@ -62,7 +62,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <span className="text-muted-foreground">{project.dueDate}</span>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center">
             <DollarSign className="mr-1 h-4 w-4 text-primary" />

@@ -37,20 +37,20 @@ interface AppState {
     global: boolean;
     operations: Record<string, boolean>;
   };
-  
+
   // Actions
   toggleSidebar: () => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
-  
+
   // Notification actions
   addNotification: (notification: Omit<NotificationState, 'id' | 'timestamp'>) => void;
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
-  
+
   // Settings actions
   updateSettings: (settings: Partial<AppSettings>) => void;
   resetSettings: () => void;
-  
+
   // Loading actions
   setGlobalLoading: (loading: boolean) => void;
   setOperationLoading: (operation: string, loading: boolean) => void;
@@ -87,27 +87,29 @@ export const useAppStore = create<AppState>()(
         },
 
         // Sidebar actions
-        toggleSidebar: () =>
+        toggleSidebar: () => {
           set((state) => ({
             ...state,
             sidebarCollapsed: !state.sidebarCollapsed,
-          })),
+          }));
+        },
 
-        setSidebarCollapsed: (collapsed: boolean) =>
+        setSidebarCollapsed: (collapsed: boolean) => {
           set((state) => ({
             ...state,
             sidebarCollapsed: collapsed,
-          })),
+          }));
+        },
 
         // Notification actions
-        addNotification: (notification) =>
+        addNotification: (notification) => {
           set((state) => {
             const newNotification: NotificationState = {
               ...notification,
               id: crypto.randomUUID(),
               timestamp: Date.now(),
             };
-            
+
             const updatedNotifications = [...state.notifications, newNotification];
 
             // Auto-remove notification after duration
@@ -121,59 +123,73 @@ export const useAppStore = create<AppState>()(
               ...state,
               notifications: updatedNotifications,
             };
-          }),
+          });
+        },
 
-        removeNotification: (id: string) =>
+        removeNotification: (id: string) => {
           set((state) => ({
             ...state,
             notifications: state.notifications.filter(n => n.id !== id),
-          })),
+          }));
+        },
 
-        clearNotifications: () =>
+        clearNotifications: () => {
           set((state) => ({
             ...state,
             notifications: [],
-          })),
+          }));
+        },
 
         // Settings actions
-        updateSettings: (newSettings) =>
+        updateSettings: (newSettings) => {
           set((state) => ({
             ...state,
             settings: { ...state.settings, ...newSettings },
-          })),
+          }));
+        },
 
-        resetSettings: () =>
+        resetSettings: () => {
           set((state) => ({
             ...state,
             settings: { ...defaultSettings },
-          })),
+          }));
+        },
 
         // Loading actions
-        setGlobalLoading: (loading: boolean) =>
+        setGlobalLoading: (loading: boolean) => {
           set((state) => ({
             ...state,
             loading: { ...state.loading, global: loading },
-          })),
+          }));
+        },
 
-        setOperationLoading: (operation: string, loading: boolean) =>
+        setOperationLoading: (operation: string, loading: boolean) => {
           set((state) => {
             const operations = { ...state.loading.operations };
             if (loading) {
               operations[operation] = true;
             } else {
-              delete operations[operation];
+              // Use bracket notation to avoid dynamic delete error
+              const newOperations = { ...operations };
+              delete newOperations[operation];
+              return {
+                ...state,
+                loading: { ...state.loading, operations: newOperations },
+              };
             }
             return {
               ...state,
               loading: { ...state.loading, operations },
             };
-          }),
+          });
+        },
 
-        clearAllLoading: () =>
+        clearAllLoading: () => {
           set((state) => ({
             ...state,
             loading: { global: false, operations: {} },
-          })),
+          }));
+        },
       }),
       {
         name: 'pavemaster-app-store',
@@ -181,12 +197,12 @@ export const useAppStore = create<AppState>()(
           sidebarCollapsed: state.sidebarCollapsed,
           settings: state.settings,
         }),
-      }
+      },
     ),
     {
       name: 'PaveMaster App Store',
-    }
-  )
+    },
+  ),
 );
 
 // Selector hooks for optimized re-renders
@@ -194,7 +210,7 @@ export const useSidebarCollapsed = () => useAppStore((state) => state.sidebarCol
 export const useNotifications = () => useAppStore((state) => state.notifications);
 export const useSettings = () => useAppStore((state) => state.settings);
 export const useGlobalLoading = () => useAppStore((state) => state.loading.global);
-export const useOperationLoading = (operation: string) => 
+export const useOperationLoading = (operation: string) =>
   useAppStore((state) => state.loading.operations[operation] ?? false);
 
 // Action hooks

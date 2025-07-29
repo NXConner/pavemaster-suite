@@ -35,14 +35,14 @@ export function AccountSettings() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
-        title: "Profile Updated",
-        description: "Your profile information has been successfully updated.",
+        title: 'Profile Updated',
+        description: 'Your profile information has been successfully updated.',
       });
     } catch (error) {
       toast({
-        title: "Update Failed",
-        description: "Failed to update profile. Please try again.",
-        variant: "destructive",
+        title: 'Update Failed',
+        description: 'Failed to update profile. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -52,9 +52,9 @@ export function AccountSettings() {
   const handlePasswordChange = async () => {
     if (formData.newPassword !== formData.confirmPassword) {
       toast({
-        title: "Password Mismatch",
-        description: "New passwords do not match.",
-        variant: "destructive",
+        title: 'Password Mismatch',
+        description: 'New passwords do not match.',
+        variant: 'destructive',
       });
       return;
     }
@@ -64,15 +64,15 @@ export function AccountSettings() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
-        title: "Password Updated",
-        description: "Your password has been successfully changed.",
+        title: 'Password Updated',
+        description: 'Your password has been successfully changed.',
       });
       setFormData(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }));
     } catch (error) {
       toast({
-        title: "Password Change Failed",
-        description: "Failed to change password. Please try again.",
-        variant: "destructive",
+        title: 'Password Change Failed',
+        description: 'Failed to change password. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -115,7 +115,7 @@ export function AccountSettings() {
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -129,7 +129,7 @@ export function AccountSettings() {
           </div>
 
           <div className="flex justify-end pt-4">
-            <AnimatedButton 
+            <AnimatedButton
               onClick={handleProfileUpdate}
               disabled={isLoading}
               variant="default"
@@ -172,7 +172,7 @@ export function AccountSettings() {
               className="transition-all duration-200 focus:scale-[1.02]"
             />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="newPassword">New Password</Label>
@@ -215,7 +215,7 @@ export function AccountSettings() {
           </div>
 
           <div className="flex justify-end pt-4">
-            <AnimatedButton 
+            <AnimatedButton
               onClick={handlePasswordChange}
               disabled={isLoading || !formData.currentPassword || !formData.newPassword}
               variant="outline"

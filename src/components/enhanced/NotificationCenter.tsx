@@ -33,7 +33,7 @@ const mockNotifications: Notification[] = [
     title: 'Project Completed',
     message: 'Downtown Parking Lot sealcoating has been completed successfully.',
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    read: false
+    read: false,
   },
   {
     id: '2',
@@ -41,7 +41,7 @@ const mockNotifications: Notification[] = [
     title: 'Weather Alert',
     message: 'Rain expected tomorrow. Consider rescheduling outdoor operations.',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    read: false
+    read: false,
   },
   {
     id: '3',
@@ -49,8 +49,8 @@ const mockNotifications: Notification[] = [
     title: 'Equipment Maintenance',
     message: 'Scheduled maintenance for Truck #3 is due next week.',
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    read: true
-  }
+    read: true,
+  },
 ];
 
 const getNotificationIcon = (type: NotificationType) => {
@@ -78,8 +78,8 @@ export function NotificationCenter() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    setNotifications(prev =>
+      prev.map(n => n.id === id ? { ...n, read: true } : n),
     );
   };
 
@@ -98,8 +98,8 @@ export function NotificationCenter() {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
+    if (minutes < 60) { return `${minutes}m ago`; }
+    if (hours < 24) { return `${hours}h ago`; }
     return `${days}d ago`;
   };
 
@@ -109,7 +109,7 @@ export function NotificationCenter() {
         <Button variant="ghost" size="icon" className="relative hover-scale">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <Badge 
+            <Badge
               className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs bg-destructive text-destructive-foreground animate-pulse-glow"
               variant="destructive"
             >
@@ -123,9 +123,9 @@ export function NotificationCenter() {
           <h3 className="font-semibold text-lg">Notifications</h3>
           <div className="flex items-center gap-2">
             {unreadCount > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={markAllAsRead}
                 className="text-xs hover-scale"
               >
@@ -134,7 +134,7 @@ export function NotificationCenter() {
             )}
           </div>
         </div>
-        
+
         <ScrollArea className="h-96">
           <div className="p-2 space-y-2">
             {notifications.length === 0 ? (
@@ -149,7 +149,7 @@ export function NotificationCenter() {
                   className={cn(
                     'p-3 rounded-lg border-l-4 transition-all duration-300 hover:bg-muted/50 group cursor-pointer',
                     getNotificationColor(notification.type),
-                    !notification.read && 'bg-accent/50'
+                    !notification.read && 'bg-accent/50',
                   )}
                   onClick={() => { markAsRead(notification.id); }}
                 >
@@ -161,7 +161,7 @@ export function NotificationCenter() {
                       <div className="flex items-start justify-between">
                         <h4 className={cn(
                           'font-medium text-sm',
-                          !notification.read && 'text-foreground font-semibold'
+                          !notification.read && 'text-foreground font-semibold',
                         )}>
                           {notification.title}
                         </h4>

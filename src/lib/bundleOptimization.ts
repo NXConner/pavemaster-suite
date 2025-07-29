@@ -44,12 +44,12 @@ class IntelligentBundleLoader {
    * Load bundle with intelligent strategies
    */
   async loadBundle(
-    bundleName: string, 
+    bundleName: string,
     importFunc: () => Promise<any>,
-    strategy: BundleLoadStrategy = { priority: 'normal', loadTiming: 'immediate' }
+    strategy: BundleLoadStrategy = { priority: 'normal', loadTiming: 'immediate' },
   ): Promise<any> {
     const startTime = performance.now();
-    
+
     // Check if already loaded
     if (this.loadedBundles.has(bundleName)) {
       return this.getCachedBundle(bundleName);
@@ -85,7 +85,7 @@ class IntelligentBundleLoader {
    */
   preloadPredictedBundles(): void {
     const predictions = this.predictNextBundles();
-    
+
     predictions.forEach(({ bundleName, probability, importFunc }) => {
       if (probability > 0.7 && !this.loadedBundles.has(bundleName)) {
         this.queueIdlePreload(bundleName, importFunc);
@@ -99,24 +99,24 @@ class IntelligentBundleLoader {
   setupProgressiveLoading(): void {
     // Preload critical above-the-fold bundles
     this.preloadCriticalBundles();
-    
+
     // Load secondary bundles on user interaction
     this.setupInteractionPreloading();
-    
+
     // Load tertiary bundles during idle time
     this.setupIdleLoading();
   }
 
   private async executeLoad(
-    bundleName: string, 
-    importFunc: () => Promise<any>, 
-    startTime: number
+    bundleName: string,
+    importFunc: () => Promise<any>,
+    startTime: number,
   ): Promise<any> {
     try {
       const parseStart = performance.now();
       const module = await importFunc();
       const parseEnd = performance.now();
-      
+
       const executionStart = performance.now();
       // Simulate module execution
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -128,7 +128,7 @@ class IntelligentBundleLoader {
         executionTime: executionEnd - executionStart,
         memoryUsage: this.getMemoryUsage(),
         cacheHit: parseEnd - parseStart < 10, // Assume cache hit if very fast
-        networkSpeed: this.networkQuality
+        networkSpeed: this.networkQuality,
       };
 
       this.bundleMetrics.set(bundleName, metrics);
@@ -138,7 +138,7 @@ class IntelligentBundleLoader {
     } catch (error) {
       performanceMonitor.recordMetric('bundle_load_error', 1, 'count', {
         bundleName,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
@@ -146,7 +146,7 @@ class IntelligentBundleLoader {
 
   private evaluateLoadConditions(strategy: BundleLoadStrategy): boolean {
     const { conditions } = strategy;
-    if (!conditions) return true;
+    if (!conditions) { return true; }
 
     // Network condition check
     if (conditions.network && conditions.network !== this.networkQuality) {
@@ -185,7 +185,7 @@ class IntelligentBundleLoader {
 
     return contextPredictions.map(prediction => ({
       ...prediction,
-      probability: Math.min(1, (behaviorScore.get(prediction.bundleName) || 0) * 0.3 + prediction.probability)
+      probability: Math.min(1, (behaviorScore.get(prediction.bundleName) || 0) * 0.3 + prediction.probability),
     }));
   }
 
@@ -195,17 +195,17 @@ class IntelligentBundleLoader {
     if (currentPath.includes('/dashboard')) {
       predictions.push(
         { bundleName: 'projects', probability: 0.8, importFunc: () => import('@/pages/Index') },
-        { bundleName: 'analytics', probability: 0.6, importFunc: () => import('@/pages/Index') }
+        { bundleName: 'analytics', probability: 0.6, importFunc: () => import('@/pages/Index') },
       );
     } else if (currentPath.includes('/projects')) {
       predictions.push(
         { bundleName: 'estimates', probability: 0.9, importFunc: () => import('@/pages/Index') },
-        { bundleName: 'scheduling', probability: 0.7, importFunc: () => import('@/pages/Index') }
+        { bundleName: 'scheduling', probability: 0.7, importFunc: () => import('@/pages/Index') },
       );
     } else if (currentPath.includes('/estimates')) {
       predictions.push(
         { bundleName: 'invoices', probability: 0.8, importFunc: () => import('@/pages/Index') },
-        { bundleName: 'clients', probability: 0.6, importFunc: () => import('@/pages/Index') }
+        { bundleName: 'clients', probability: 0.6, importFunc: () => import('@/pages/Index') },
       );
     }
 
@@ -216,13 +216,13 @@ class IntelligentBundleLoader {
     const criticalBundles = [
       { name: 'ui-components', import: () => import('@/components/ui/button') },
       { name: 'navigation', import: () => import('@/components/ui/card') },
-      { name: 'dashboard-widgets', import: () => import('@/components/ui/badge') }
+      { name: 'dashboard-widgets', import: () => import('@/components/ui/badge') },
     ];
 
     criticalBundles.forEach(({ name, import: importFunc }) => {
-      this.loadBundle(name, importFunc, { 
-        priority: 'critical', 
-        loadTiming: 'immediate' 
+      this.loadBundle(name, importFunc, {
+        priority: 'critical',
+        loadTiming: 'immediate',
       });
     });
   }
@@ -232,7 +232,7 @@ class IntelligentBundleLoader {
     document.addEventListener('mouseenter', (event) => {
       const target = event.target as HTMLElement;
       const link = target.closest('[data-preload]');
-      
+
       if (link) {
         const bundleName = link.getAttribute('data-preload');
         if (bundleName && !this.loadedBundles.has(bundleName)) {
@@ -245,7 +245,7 @@ class IntelligentBundleLoader {
     document.addEventListener('focusin', (event) => {
       const target = event.target as HTMLElement;
       const link = target.closest('[data-preload]');
-      
+
       if (link) {
         const bundleName = link.getAttribute('data-preload');
         if (bundleName && !this.loadedBundles.has(bundleName)) {
@@ -261,7 +261,7 @@ class IntelligentBundleLoader {
         this.preloadPredictedBundles();
         requestIdleCallback(idleLoader, { timeout: 10000 });
       };
-      
+
       requestIdleCallback(idleLoader, { timeout: 5000 });
     }
   }
@@ -269,9 +269,9 @@ class IntelligentBundleLoader {
   private queueIdlePreload(bundleName: string, importFunc: () => Promise<any>): void {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
-        this.loadBundle(bundleName, importFunc, { 
-          priority: 'low', 
-          loadTiming: 'on-idle' 
+        this.loadBundle(bundleName, importFunc, {
+          priority: 'low',
+          loadTiming: 'on-idle',
         });
       }, { timeout: 5000 });
     }
@@ -286,22 +286,22 @@ class IntelligentBundleLoader {
       'inventory': () => import('@/pages/Index'),
       'scheduling': () => import('@/pages/Index'),
       'analytics': () => import('@/pages/Index'),
-      'settings': () => import('@/pages/Index')
+      'settings': () => import('@/pages/Index'),
     };
 
     const importFunc = preloadMap[bundleName];
     if (importFunc) {
-      this.loadBundle(bundleName, importFunc, { 
-        priority: 'high', 
-        loadTiming: 'on-interaction' 
+      this.loadBundle(bundleName, importFunc, {
+        priority: 'high',
+        loadTiming: 'on-interaction',
       });
     }
   }
 
   private queueForLater(
-    bundleName: string, 
-    importFunc: () => Promise<any>, 
-    strategy: BundleLoadStrategy
+    bundleName: string,
+    importFunc: () => Promise<any>,
+    strategy: BundleLoadStrategy,
   ): Promise<any> {
     return new Promise((resolve) => {
       // Queue for appropriate timing
@@ -316,7 +316,7 @@ class IntelligentBundleLoader {
           this.setupVisibilityLoading(bundleName, importFunc);
           break;
       }
-      
+
       // For now, resolve with a placeholder
       resolve({ default: () => null });
     });
@@ -334,13 +334,13 @@ class IntelligentBundleLoader {
 
     // Find elements that might trigger this bundle
     const triggerElements = document.querySelectorAll(`[data-bundle="${bundleName}"]`);
-    triggerElements.forEach(el => observer.observe(el));
+    triggerElements.forEach(el => { observer.observe(el); });
   }
 
   private initializeNetworkMonitoring(): void {
     if ('connection' in navigator) {
       const connection = (navigator as any).connection;
-      
+
       const updateNetworkQuality = () => {
         if (connection.effectiveType === '4g' || connection.effectiveType === '3g') {
           this.networkQuality = 'fast';
@@ -366,33 +366,33 @@ class IntelligentBundleLoader {
   private initializeUserBehaviorTracking(): void {
     // Track page navigation patterns
     let lastPath = window.location.pathname;
-    
+
     const trackNavigation = () => {
       const currentPath = window.location.pathname;
       if (currentPath !== lastPath) {
         this.userBehaviorPattern.push(this.pathToBundleName(currentPath));
-        
+
         // Keep only last 20 interactions
         if (this.userBehaviorPattern.length > 20) {
           this.userBehaviorPattern.shift();
         }
-        
+
         lastPath = currentPath;
       }
     };
 
     // Listen for route changes
     window.addEventListener('popstate', trackNavigation);
-    
+
     // Override pushState and replaceState to catch programmatic navigation
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
-    
+
     history.pushState = function(...args) {
       originalPushState.apply(history, args);
       trackNavigation();
     };
-    
+
     history.replaceState = function(...args) {
       originalReplaceState.apply(history, args);
       trackNavigation();
@@ -405,33 +405,33 @@ class IntelligentBundleLoader {
         if (entry.isIntersecting) {
           const element = entry.target as HTMLElement;
           const bundleName = element.getAttribute('data-lazy-bundle');
-          
+
           if (bundleName && !this.loadedBundles.has(bundleName)) {
             this.preloadBundle(bundleName);
           }
         }
       });
-    }, { 
+    }, {
       threshold: 0.1,
-      rootMargin: '100px' // Start loading 100px before element becomes visible
+      rootMargin: '100px', // Start loading 100px before element becomes visible
     });
 
     // Observe elements that should trigger lazy loading
     document.addEventListener('DOMContentLoaded', () => {
       const lazyElements = document.querySelectorAll('[data-lazy-bundle]');
-      lazyElements.forEach(el => observer.observe(el));
+      lazyElements.forEach(el => { observer.observe(el); });
     });
   }
 
   private pathToBundleName(path: string): string {
-    if (path.includes('/projects')) return 'projects';
-    if (path.includes('/estimates')) return 'estimates';
-    if (path.includes('/invoices')) return 'invoices';
-    if (path.includes('/clients')) return 'clients';
-    if (path.includes('/inventory')) return 'inventory';
-    if (path.includes('/scheduling')) return 'scheduling';
-    if (path.includes('/analytics')) return 'analytics';
-    if (path.includes('/settings')) return 'settings';
+    if (path.includes('/projects')) { return 'projects'; }
+    if (path.includes('/estimates')) { return 'estimates'; }
+    if (path.includes('/invoices')) { return 'invoices'; }
+    if (path.includes('/clients')) { return 'clients'; }
+    if (path.includes('/inventory')) { return 'inventory'; }
+    if (path.includes('/scheduling')) { return 'scheduling'; }
+    if (path.includes('/analytics')) { return 'analytics'; }
+    if (path.includes('/settings')) { return 'settings'; }
     return 'dashboard';
   }
 
@@ -449,14 +449,14 @@ class IntelligentBundleLoader {
 
   private getDeviceType(): 'desktop' | 'mobile' | 'tablet' {
     const width = window.innerWidth;
-    if (width < 768) return 'mobile';
-    if (width < 1024) return 'tablet';
+    if (width < 768) { return 'mobile'; }
+    if (width < 1024) { return 'tablet'; }
     return 'desktop';
   }
 
   private recordUserBehavior(bundleName: string): void {
     this.userBehaviorPattern.push(bundleName);
-    
+
     // Keep pattern manageable
     if (this.userBehaviorPattern.length > 50) {
       this.userBehaviorPattern.shift();
@@ -467,15 +467,15 @@ class IntelligentBundleLoader {
     performanceMonitor.recordMetric(`bundle_load_time_${bundleName}`, metrics.loadTime, 'ms', {
       bundleName,
       cacheHit: metrics.cacheHit,
-      networkSpeed: metrics.networkSpeed
+      networkSpeed: metrics.networkSpeed,
     });
 
     performanceMonitor.recordMetric(`bundle_parse_time_${bundleName}`, metrics.parseTime, 'ms', {
-      bundleName
+      bundleName,
     });
 
     performanceMonitor.recordMetric(`bundle_memory_usage_${bundleName}`, metrics.memoryUsage, 'mb', {
-      bundleName
+      bundleName,
     });
 
     // Log summary for debugging
@@ -498,15 +498,15 @@ class IntelligentBundleLoader {
     cacheHitRate: number;
     memoryEfficiency: number;
     userPatterns: string[];
-  } {
+    } {
     const metrics = Array.from(this.bundleMetrics.values());
-    
+
     return {
       totalBundles: this.loadedBundles.size,
       averageLoadTime: metrics.reduce((sum, m) => sum + m.loadTime, 0) / metrics.length || 0,
       cacheHitRate: metrics.filter(m => m.cacheHit).length / metrics.length || 0,
       memoryEfficiency: metrics.reduce((sum, m) => sum + m.memoryUsage, 0) / metrics.length || 0,
-      userPatterns: [...this.userBehaviorPattern]
+      userPatterns: [...this.userBehaviorPattern],
     };
   }
 }
@@ -517,7 +517,7 @@ export const intelligentBundleLoader = new IntelligentBundleLoader();
 // Initialize progressive loading on app start
 export function initializeBundleOptimization(): void {
   intelligentBundleLoader.setupProgressiveLoading();
-  
+
   // Start predictive preloading after initial load
   setTimeout(() => {
     intelligentBundleLoader.preloadPredictedBundles();

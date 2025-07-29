@@ -6,7 +6,7 @@ import { logSecurityEvent } from '@/lib/security';
 // Enhanced error handling for queries
 function handleQueryError(error: unknown, query: any) {
   const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-  
+
   console.error('Query failed:', {
     queryKey: query.queryKey,
     error: errorMessage,
@@ -50,7 +50,7 @@ function handleQueryError(error: unknown, query: any) {
 // Enhanced mutation error handling
 function handleMutationError(error: unknown, variables: unknown, context: unknown, mutation: any) {
   const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-  
+
   console.error('Mutation failed:', {
     mutationKey: mutation.options.mutationKey,
     error: errorMessage,
@@ -67,7 +67,7 @@ function handleMutationError(error: unknown, variables: unknown, context: unknow
   toast({
     variant: 'destructive',
     title: 'Operation Failed',
-    description: errorMessage.includes('Network Error') 
+    description: errorMessage.includes('Network Error')
       ? 'Please check your connection and try again.'
       : 'The operation could not be completed. Please try again.',
   });
@@ -185,7 +185,7 @@ export const cacheUtils = {
 
   // Remove all cached data for an entity
   removeEntity: (entity: keyof typeof queryKeys) => {
-    return queryClient.removeQueries({
+    queryClient.removeQueries({
       queryKey: [entity],
     });
   },
@@ -213,7 +213,7 @@ export const cacheUtils = {
   optimisticUpdate: async <T>(
     queryKey: readonly unknown[],
     updateFn: (oldData: T | undefined) => T,
-    mutationFn: () => Promise<any>
+    mutationFn: () => Promise<any>,
   ) => {
     // Cancel outgoing refetches
     await queryClient.cancelQueries({ queryKey });
@@ -242,7 +242,7 @@ export const cacheUtils = {
   getCacheStats: () => {
     const queries = queryClient.getQueryCache().getAll();
     const mutations = queryClient.getMutationCache().getAll();
-    
+
     return {
       queriesCount: queries.length,
       mutationsCount: mutations.length,
@@ -266,7 +266,7 @@ export const persistenceUtils = {
         return ['user', 'projects', 'clients'].includes(key as string);
       });
 
-      const persistData = criticalQueries.reduce((acc, query) => {
+      const persistData = criticalQueries.reduce<Record<string, any>>((acc, query) => {
         if (query.state.data) {
           acc[JSON.stringify(query.queryKey)] = {
             data: query.state.data,
@@ -274,7 +274,7 @@ export const persistenceUtils = {
           };
         }
         return acc;
-      }, {} as Record<string, any>);
+      }, {});
 
       localStorage.setItem('pavemaster-cache', JSON.stringify(persistData));
     } catch (error) {
@@ -302,7 +302,7 @@ export const persistenceUtils = {
 // Auto-persist cache on page unload
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', persistenceUtils.persistCriticalData);
-  
+
   // Restore cache on app start
   persistenceUtils.restorePersistedData();
 }

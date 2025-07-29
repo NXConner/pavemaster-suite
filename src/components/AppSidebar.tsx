@@ -9,8 +9,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { NavLink, useLocation } from "react-router-dom"
+} from '@/components/ui/sidebar';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home,
   BarChart3,
@@ -26,50 +26,50 @@ import {
   MapPin,
   Camera,
   Activity,
-  BookOpen
-} from "lucide-react"
+  BookOpen,
+} from 'lucide-react';
 
 const mainItems = [
-  { title: "Dashboard", url: "/", icon: Home },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "AI Hub", url: "/ai", icon: Brain },
-  { title: "API Docs", url: "/api-docs", icon: BookOpen },
-  { title: "Settings", url: "/settings", icon: Settings },
-]
+  { title: 'Dashboard', url: '/', icon: Home },
+  { title: 'Analytics', url: '/analytics', icon: BarChart3 },
+  { title: 'AI Hub', url: '/ai', icon: Brain },
+  { title: 'API Docs', url: '/api-docs', icon: BookOpen },
+  { title: 'Settings', url: '/settings', icon: Settings },
+];
 
 const fieldItems = [
-  { title: "Mobile Field", url: "/mobile", icon: Smartphone },
-  { title: "GPS Tracking", url: "/tracking", icon: MapPin },
-  { title: "Photo Reports", url: "/photos", icon: Camera },
-  { title: "Measurements", url: "/measurements", icon: Activity },
-]
+  { title: 'Mobile Field', url: '/mobile', icon: Smartphone },
+  { title: 'GPS Tracking', url: '/tracking', icon: MapPin },
+  { title: 'Photo Reports', url: '/photos', icon: Camera },
+  { title: 'Measurements', url: '/measurements', icon: Activity },
+];
 
 const managementItems = [
-  { title: "Projects", url: "/projects", icon: FileText },
-  { title: "Team", url: "/team", icon: Users },
-  { title: "Equipment", url: "/equipment", icon: Wrench },
-  { title: "Schedule", url: "/schedule", icon: Calendar },
-  { title: "Finance", url: "/finance", icon: DollarSign },
-  { title: "Safety", url: "/safety", icon: Shield },
-]
+  { title: 'Projects', url: '/projects', icon: FileText },
+  { title: 'Team', url: '/team', icon: Users },
+  { title: 'Equipment', url: '/equipment', icon: Wrench },
+  { title: 'Schedule', url: '/schedule', icon: Calendar },
+  { title: 'Finance', url: '/finance', icon: DollarSign },
+  { title: 'Safety', url: '/safety', icon: Shield },
+];
 
 export function AppSidebar() {
-  const { open } = useSidebar()
-  const location = useLocation()
-  const currentPath = location.pathname
+  const { open } = useSidebar();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  const isActive = (path: string) => currentPath === path
+  const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-primary text-primary-foreground font-medium" : "hover:bg-muted/50"
+    isActive ? 'bg-primary text-primary-foreground font-medium' : 'hover:bg-muted/50';
 
   // Check if any item in a group is active to keep the group expanded
-  const isMainExpanded = mainItems.some((item) => isActive(item.url))
-  const isFieldExpanded = fieldItems.some((item) => isActive(item.url))
-  const isManagementExpanded = managementItems.some((item) => isActive(item.url))
+  const isMainExpanded = mainItems.some((item) => isActive(item.url));
+  const isFieldExpanded = fieldItems.some((item) => isActive(item.url));
+  const isManagementExpanded = managementItems.some((item) => isActive(item.url));
 
   return (
     <Sidebar
-      className={open ? "w-60" : "w-14"}
+      className={open ? 'w-60' : 'w-14'}
       collapsible="icon"
     >
       <SidebarTrigger className="m-2 self-end" />
@@ -133,5 +133,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

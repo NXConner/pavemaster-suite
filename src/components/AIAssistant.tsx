@@ -5,16 +5,16 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { 
-  Bot, 
-  User, 
-  Send, 
-  Loader2, 
-  Brain, 
+import {
+  Bot,
+  User,
+  Send,
+  Loader2,
+  Brain,
   MessageSquare,
   Sparkles,
   Mic,
-  Volume2
+  Volume2,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { VoiceInterface } from './VoiceInterface';
@@ -32,7 +32,7 @@ interface AIAssistantProps {
   context?: string;
 }
 
-export function AIAssistant({ className = "", context = "general" }: AIAssistantProps) {
+export function AIAssistant({ className = '', context = 'general' }: AIAssistantProps) {
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -54,38 +54,38 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
       role,
       content,
       timestamp: new Date(),
-      type
+      type,
     };
-    
+
     setMessages(prev => [...prev, newMessage]);
     return newMessage;
   };
 
   const sendMessage = async (message: string, type: 'text' | 'voice' = 'text') => {
-    if (!message.trim()) return;
+    if (!message.trim()) { return; }
 
     addMessage('user', message, type);
     setIsLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('ai-assistant', {
-        body: { 
+        body: {
           message,
           context,
-          conversation: messages.slice(-10) // Send last 10 messages for context
-        }
+          conversation: messages.slice(-10), // Send last 10 messages for context
+        },
       });
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       addMessage('assistant', data.response, type);
     } catch (error) {
       console.error('Error sending message:', error);
       addMessage('assistant', 'Sorry, I encountered an error. Please try again.', type);
       toast({
-        title: "Error",
-        description: "Failed to get AI response",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to get AI response',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -109,13 +109,13 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
   const getSystemPrompts = () => {
     switch (context) {
       case 'pavement':
-        return "You are a specialized AI assistant for pavement and asphalt operations. Help with calculations, material specs, and best practices.";
+        return 'You are a specialized AI assistant for pavement and asphalt operations. Help with calculations, material specs, and best practices.';
       case 'project':
-        return "You are a project management AI assistant. Help with scheduling, resource allocation, and project coordination.";
+        return 'You are a project management AI assistant. Help with scheduling, resource allocation, and project coordination.';
       case 'safety':
-        return "You are a safety AI assistant for construction operations. Focus on safety protocols, compliance, and risk management.";
+        return 'You are a safety AI assistant for construction operations. Focus on safety protocols, compliance, and risk management.';
       default:
-        return "You are a helpful AI assistant for the Pavement Performance Suite application.";
+        return 'You are a helpful AI assistant for the Pavement Performance Suite application.';
     }
   };
 
@@ -132,7 +132,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant={showVoiceInterface ? "default" : "outline"}
+              variant={showVoiceInterface ? 'default' : 'outline'}
               size="sm"
               onClick={() => { setShowVoiceInterface(!showVoiceInterface); }}
             >
@@ -162,7 +162,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
                 <p className="text-sm">{getSystemPrompts()}</p>
               </div>
             )}
-            
+
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -175,7 +175,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
                     <Bot className="h-4 w-4 text-primary-foreground" />
                   </div>
                 )}
-                
+
                 <div
                   className={`max-w-[80%] rounded-lg px-4 py-2 ${
                     message.role === 'user'
@@ -204,7 +204,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
                 )}
               </div>
             ))}
-            
+
             {isLoading && (
               <div className="flex gap-3 justify-start">
                 <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center">
@@ -218,7 +218,7 @@ export function AIAssistant({ className = "", context = "general" }: AIAssistant
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>

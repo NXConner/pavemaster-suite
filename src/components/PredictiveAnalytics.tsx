@@ -20,7 +20,7 @@ import {
   Legend,
   ResponsiveContainer,
   Area,
-  AreaChart
+  AreaChart,
 } from 'recharts';
 import {
   TrendingUp,
@@ -34,7 +34,7 @@ import {
   Brain,
   Target,
   Calendar,
-  Wrench
+  Wrench,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -97,7 +97,7 @@ interface PredictiveAnalyticsProps {
   className?: string;
 }
 
-export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps) {
+export function PredictiveAnalytics({ className = '' }: PredictiveAnalyticsProps) {
   const { toast } = useToast();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
           projectsCompleted: 24,
           onTimeDelivery: 87,
           costEfficiency: 94,
-          qualityScore: 91
+          qualityScore: 91,
         },
         predictions: {
           equipmentMaintenance: [
@@ -126,45 +126,45 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
               name: 'Asphalt Paver #1',
               riskLevel: 'high',
               daysUntilMaintenance: 5,
-              confidence: 89
+              confidence: 89,
             },
             {
               id: 'eq-002',
               name: 'Roller Compactor #2',
               riskLevel: 'medium',
               daysUntilMaintenance: 14,
-              confidence: 76
+              confidence: 76,
             },
             {
               id: 'eq-003',
               name: 'Truck #3',
               riskLevel: 'low',
               daysUntilMaintenance: 45,
-              confidence: 92
-            }
+              confidence: 92,
+            },
           ],
           projectDelays: [
             {
               projectId: 'proj-001',
               name: 'Church Parking Lot Repair',
               delayRisk: 23,
-              factors: ['Weather conditions', 'Material delivery']
+              factors: ['Weather conditions', 'Material delivery'],
             },
             {
               projectId: 'proj-002',
               name: 'Highway Sealcoating',
               delayRisk: 67,
-              factors: ['Traffic restrictions', 'Equipment availability']
-            }
+              factors: ['Traffic restrictions', 'Equipment availability'],
+            },
           ],
           costOverruns: [
             {
               projectId: 'proj-002',
               name: 'Highway Sealcoating',
               overrunRisk: 45,
-              estimatedOverrun: 8500
-            }
-          ]
+              estimatedOverrun: 8500,
+            },
+          ],
         },
         trends: {
           monthlyRevenue: [
@@ -173,7 +173,7 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
             { month: 'Mar', revenue: 78000, target: 85000 },
             { month: 'Apr', revenue: 88000, target: 90000 },
             { month: 'May', revenue: 95000, target: 90000 },
-            { month: 'Jun', revenue: 102000, target: 95000 }
+            { month: 'Jun', revenue: 102000, target: 95000 },
           ],
           projectEfficiency: [
             { month: 'Jan', efficiency: 85, industry: 82 },
@@ -181,14 +181,14 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
             { month: 'Mar', efficiency: 82, industry: 81 },
             { month: 'Apr', efficiency: 91, industry: 84 },
             { month: 'May', efficiency: 94, industry: 85 },
-            { month: 'Jun', efficiency: 96, industry: 86 }
+            { month: 'Jun', efficiency: 96, industry: 86 },
           ],
           costSavings: [
             { category: 'Fuel Optimization', savings: 12500, potential: 18000 },
             { category: 'Route Planning', savings: 8200, potential: 15000 },
             { category: 'Equipment Efficiency', savings: 15600, potential: 22000 },
-            { category: 'Material Waste', savings: 6800, potential: 12000 }
-          ]
+            { category: 'Material Waste', savings: 6800, potential: 12000 },
+          ],
         },
         insights: [
           {
@@ -197,7 +197,7 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
             title: 'Equipment Maintenance Alert',
             description: 'Asphalt Paver #1 requires immediate maintenance based on usage patterns',
             impact: 'high',
-            actionRequired: true
+            actionRequired: true,
           },
           {
             id: '2',
@@ -205,7 +205,7 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
             title: 'Route Optimization Opportunity',
             description: 'Optimizing delivery routes could save 15% on fuel costs',
             impact: 'medium',
-            actionRequired: false
+            actionRequired: false,
           },
           {
             id: '3',
@@ -213,18 +213,18 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
             title: 'Seasonal Demand Spike',
             description: 'Church projects typically increase 40% in spring - prepare inventory',
             impact: 'high',
-            actionRequired: false
-          }
-        ]
+            actionRequired: false,
+          },
+        ],
       };
 
       setData(mockData);
     } catch (error) {
       console.error('Error loading analytics data:', error);
       toast({
-        title: "Error",
-        description: "Failed to load analytics data",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load analytics data',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -235,8 +235,8 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
     try {
       // Note: Would require AI API key
       toast({
-        title: "AI Analysis",
-        description: "AI insights would be generated with proper API configuration",
+        title: 'AI Analysis',
+        description: 'AI insights would be generated with proper API configuration',
       });
     } catch (error) {
       console.error('Error generating insights:', error);
@@ -276,7 +276,7 @@ export function PredictiveAnalytics({ className = "" }: PredictiveAnalyticsProps
     );
   }
 
-  if (!data) return null;
+  if (!data) { return null; }
 
   return (
     <div className={`space-y-6 ${className}`}>

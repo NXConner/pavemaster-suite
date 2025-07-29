@@ -17,7 +17,7 @@ export function useRealtimeUpdates() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) { return; }
 
     // Create a channel for real-time updates
     const channel = supabase
@@ -27,7 +27,7 @@ export function useRealtimeUpdates() {
         {
           event: '*',
           schema: 'public',
-          table: 'projects'
+          table: 'projects',
         },
         (payload) => {
           console.log('Projects change received:', payload);
@@ -37,17 +37,17 @@ export function useRealtimeUpdates() {
             eventType: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
             new: payload.new,
             old: payload.old,
-            timestamp: new Date()
+            timestamp: new Date(),
           };
           setUpdates(prev => [update, ...prev.slice(0, 49)]); // Keep last 50 updates
-        }
+        },
       )
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'gps_locations'
+          table: 'gps_locations',
         },
         (payload) => {
           console.log('GPS location change received:', payload);
@@ -57,17 +57,17 @@ export function useRealtimeUpdates() {
             eventType: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
             new: payload.new,
             old: payload.old,
-            timestamp: new Date()
+            timestamp: new Date(),
           };
           setUpdates(prev => [update, ...prev.slice(0, 49)]);
-        }
+        },
       )
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'devices'
+          table: 'devices',
         },
         (payload) => {
           console.log('Device change received:', payload);
@@ -77,10 +77,10 @@ export function useRealtimeUpdates() {
             eventType: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
             new: payload.new,
             old: payload.old,
-            timestamp: new Date()
+            timestamp: new Date(),
           };
           setUpdates(prev => [update, ...prev.slice(0, 49)]);
-        }
+        },
       )
       .subscribe((status) => {
         console.log('Realtime subscription status:', status);
@@ -99,6 +99,6 @@ export function useRealtimeUpdates() {
   return {
     updates,
     isConnected,
-    clearUpdates
+    clearUpdates,
   };
 }

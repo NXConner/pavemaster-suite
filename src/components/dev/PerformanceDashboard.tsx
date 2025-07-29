@@ -3,20 +3,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Activity, 
-  Zap, 
-  Brain, 
-  Monitor, 
-  Network, 
-  HardDrive, 
+import {
+  Activity,
+  Zap,
+  Brain,
+  Monitor,
+  Network,
+  HardDrive,
   Eye,
   Download,
   Upload,
   Clock,
   TrendingUp,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 import { performanceMonitor } from '@/lib/performance';
 import { intelligentBundleLoader } from '@/lib/bundleOptimization';
@@ -61,12 +61,12 @@ export function PerformanceDashboard() {
     };
 
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    return () => { window.removeEventListener('keydown', handleKeyPress); };
   }, [isVisible]);
 
   // Collect performance data
   useEffect(() => {
-    if (!isCollecting) return;
+    if (!isCollecting) { return; }
 
     const interval = setInterval(() => {
       updateMetrics();
@@ -74,50 +74,50 @@ export function PerformanceDashboard() {
       updateAIInsights();
     }, 2000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [isCollecting]);
 
   const updateMetrics = () => {
     const coreWebVitals = getCoreWebVitals();
     const memoryUsage = getMemoryUsage();
     const networkInfo = getNetworkInfo();
-    
+
     const newMetrics: PerformanceMetric[] = [
       {
         name: 'First Contentful Paint',
         value: coreWebVitals.fcp,
         unit: 'ms',
         status: coreWebVitals.fcp < 1500 ? 'excellent' : coreWebVitals.fcp < 2500 ? 'good' : 'warning',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         name: 'Largest Contentful Paint',
         value: coreWebVitals.lcp,
         unit: 'ms',
         status: coreWebVitals.lcp < 2500 ? 'excellent' : coreWebVitals.lcp < 4000 ? 'good' : 'warning',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         name: 'Cumulative Layout Shift',
         value: coreWebVitals.cls,
         unit: '',
         status: coreWebVitals.cls < 0.1 ? 'excellent' : coreWebVitals.cls < 0.25 ? 'good' : 'warning',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         name: 'Memory Usage',
         value: memoryUsage,
         unit: 'MB',
         status: memoryUsage < 50 ? 'excellent' : memoryUsage < 100 ? 'good' : 'warning',
-        trend: 'stable'
+        trend: 'stable',
       },
       {
         name: 'Network Speed',
         value: networkInfo.downlink,
         unit: 'Mbps',
         status: networkInfo.downlink > 10 ? 'excellent' : networkInfo.downlink > 2 ? 'good' : 'warning',
-        trend: 'stable'
-      }
+        trend: 'stable',
+      },
     ];
 
     setMetrics(newMetrics);
@@ -139,7 +139,7 @@ export function PerformanceDashboard() {
       fcp: performance.now() < 2000 ? Math.random() * 1000 + 500 : Math.random() * 1500 + 1000,
       lcp: performance.now() < 3000 ? Math.random() * 1500 + 1000 : Math.random() * 2000 + 1500,
       cls: Math.random() * 0.2,
-      fid: Math.random() * 50 + 10
+      fid: Math.random() * 50 + 10,
     };
   };
 
@@ -155,7 +155,7 @@ export function PerformanceDashboard() {
       const connection = (navigator as any).connection;
       return {
         downlink: connection.downlink || Math.random() * 20 + 5,
-        effectiveType: connection.effectiveType || '4g'
+        effectiveType: connection.effectiveType || '4g',
       };
     }
     return { downlink: Math.random() * 20 + 5, effectiveType: '4g' };
@@ -185,7 +185,7 @@ export function PerformanceDashboard() {
     return (
       <div className="fixed bottom-4 right-4 z-50">
         <Button
-          onClick={() => setIsVisible(true)}
+          onClick={() => { setIsVisible(true); }}
           variant="outline"
           size="sm"
           className="bg-background/80 backdrop-blur-sm"
@@ -203,20 +203,20 @@ export function PerformanceDashboard() {
         <div className="flex items-center gap-2">
           <Activity className="w-5 h-5" />
           <h2 className="text-lg font-semibold">Performance Dashboard</h2>
-          <Badge variant={isCollecting ? "default" : "secondary"}>
-            {isCollecting ? "Live" : "Paused"}
+          <Badge variant={isCollecting ? 'default' : 'secondary'}>
+            {isCollecting ? 'Live' : 'Paused'}
           </Badge>
         </div>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => setIsCollecting(!isCollecting)}
+            onClick={() => { setIsCollecting(!isCollecting); }}
             variant="outline"
             size="sm"
           >
-            {isCollecting ? "Pause" : "Resume"}
+            {isCollecting ? 'Pause' : 'Resume'}
           </Button>
           <Button
-            onClick={() => setIsVisible(false)}
+            onClick={() => { setIsVisible(false); }}
             variant="outline"
             size="sm"
           >
@@ -283,7 +283,7 @@ export function PerformanceDashboard() {
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div className="bg-blue-600 h-2 rounded-full" style={{ width: '15%' }}></div>
                   </div>
-                  
+
                   <div className="flex justify-between text-sm">
                     <span>Rendering Performance</span>
                     <span>Excellent</span>
@@ -417,8 +417,8 @@ export function PerformanceDashboard() {
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-1">
-                            <div 
-                              className="bg-blue-600 h-1 rounded-full" 
+                            <div
+                              className="bg-blue-600 h-1 rounded-full"
                               style={{ width: `${rule.effectiveness * 100}%` }}
                             ></div>
                           </div>
@@ -466,8 +466,8 @@ export function PerformanceDashboard() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Online Status</span>
-                      <Badge variant={navigator.onLine ? "default" : "destructive"}>
-                        {navigator.onLine ? "Online" : "Offline"}
+                      <Badge variant={navigator.onLine ? 'default' : 'destructive'}>
+                        {navigator.onLine ? 'Online' : 'Offline'}
                       </Badge>
                     </div>
                   </div>

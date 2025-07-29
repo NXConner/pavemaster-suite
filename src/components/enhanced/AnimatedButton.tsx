@@ -15,28 +15,28 @@ const animatedButtonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground hover:scale-105',
         link: 'text-primary underline-offset-4 hover:underline story-link',
         glow: 'bg-gradient-primary text-primary-foreground hover:animate-pulse-glow hover:scale-105',
-        shimmer: 'bg-primary text-primary-foreground hover:animate-shimmer'
+        shimmer: 'bg-primary text-primary-foreground hover:animate-shimmer',
       },
       size: {
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10'
+        icon: 'h-10 w-10',
       },
       animation: {
         none: '',
         scale: 'hover:scale-105',
         rotate: 'hover:rotate-1',
         pulse: 'hover:animate-pulse',
-        bounce: 'hover:animate-bounce'
-      }
+        bounce: 'hover:animate-bounce',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
-      animation: 'scale'
-    }
-  }
+      animation: 'scale',
+    },
+  },
 );
 
 export interface AnimatedButtonProps
@@ -55,7 +55,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 AnimatedButton.displayName = 'AnimatedButton';
 

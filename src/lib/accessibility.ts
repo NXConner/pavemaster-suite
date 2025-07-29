@@ -9,7 +9,7 @@ export const colorContrast = {
   // Calculate relative luminance
   getRelativeLuminance: (color: string): number => {
     const rgb = colorContrast.hexToRgb(color);
-    if (!rgb) return 0;
+    if (!rgb) { return 0; }
 
     const { r, g, b } = rgb;
     const [rs, gs, bs] = [r, g, b].map(c => {
@@ -26,7 +26,7 @@ export const colorContrast = {
     return result ? {
       r: parseInt(result[1], 16),
       g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
+      b: parseInt(result[3], 16),
     } : null;
   },
 
@@ -55,7 +55,7 @@ export const colorContrast = {
   findAccessibleColor: (baseColor: string, backgroundColor: string, targetRatio = 4.5): string => {
     let color = baseColor;
     const baseRgb = colorContrast.hexToRgb(color);
-    if (!baseRgb) return color;
+    if (!baseRgb) { return color; }
 
     // Try darkening/lightening the color to meet contrast requirements
     for (let i = 0; i < 100; i++) {
@@ -90,10 +90,10 @@ export const screenReader = {
     announcement.style.width = '1px';
     announcement.style.height = '1px';
     announcement.style.overflow = 'hidden';
-    
+
     document.body.appendChild(announcement);
     announcement.textContent = message;
-    
+
     // Remove after announcement
     setTimeout(() => {
       document.body.removeChild(announcement);
@@ -102,19 +102,19 @@ export const screenReader = {
 
   // Check if screen reader is active
   isScreenReaderActive: (): boolean => {
-    return window.speechSynthesis !== undefined || 
-           navigator.userAgent.includes('NVDA') ||
-           navigator.userAgent.includes('JAWS') ||
-           window.navigator.userAgent.includes('VoiceOver');
+    return window.speechSynthesis !== undefined
+           || navigator.userAgent.includes('NVDA')
+           || navigator.userAgent.includes('JAWS')
+           || window.navigator.userAgent.includes('VoiceOver');
   },
 
   // Get appropriate label for element
   getAccessibleLabel: (element: HTMLElement): string => {
-    return element.getAttribute('aria-label') ||
-           element.getAttribute('aria-labelledby') ||
-           element.textContent ||
-           element.getAttribute('title') ||
-           '';
+    return element.getAttribute('aria-label')
+           || element.getAttribute('aria-labelledby')
+           || element.textContent
+           || element.getAttribute('title')
+           || '';
   },
 };
 
@@ -123,30 +123,28 @@ export const keyboardNavigation = {
   // Trap focus within an element
   trapFocus: (element: HTMLElement) => {
     const focusableElements = element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    ) as NodeListOf<HTMLElement>;
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
 
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== 'Tab') { return; }
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
           e.preventDefault();
           lastElement.focus();
         }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
+      } else if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
       }
     };
 
     element.addEventListener('keydown', handleTabKey);
-    
+
     // Focus first element
     firstElement?.focus();
 
@@ -165,7 +163,7 @@ export const keyboardNavigation = {
     };
 
     document.addEventListener('keydown', handleEscape);
-    
+
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
@@ -173,10 +171,10 @@ export const keyboardNavigation = {
 
   // Check if element is focusable
   isFocusable: (element: HTMLElement): boolean => {
-    return !element.hasAttribute('disabled') &&
-           !element.hasAttribute('hidden') &&
-           element.tabIndex !== -1 &&
-           element.offsetParent !== null;
+    return !element.hasAttribute('disabled')
+           && !element.hasAttribute('hidden')
+           && element.tabIndex !== -1
+           && element.offsetParent !== null;
   },
 };
 
@@ -185,7 +183,7 @@ export function useFocusTrap(isActive: boolean) {
   const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!isActive || !containerRef.current) return;
+    if (!isActive || !containerRef.current) { return; }
 
     const cleanup = keyboardNavigation.trapFocus(containerRef.current);
     return cleanup;
@@ -261,7 +259,7 @@ export function useHighContrastMode() {
     };
 
     mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    return () => { mediaQuery.removeEventListener('change', handleChange); };
   }, []);
 
   return isHighContrast;
@@ -280,7 +278,7 @@ export function useReducedMotion() {
     };
 
     mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    return () => { mediaQuery.removeEventListener('change', handleChange); };
   }, []);
 
   return prefersReducedMotion;
@@ -302,7 +300,7 @@ export const skipNavigation = {
     skipLink.href = `#${targetId}`;
     skipLink.textContent = label;
     skipLink.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded';
-    
+
     return skipLink;
   },
 
@@ -352,15 +350,15 @@ export const accessibilityTest = {
 
     headings.forEach((heading, index) => {
       const level = parseInt(heading.tagName.charAt(1));
-      
+
       if (index === 0 && level !== 1) {
         issues.push('Page should start with h1');
       }
-      
+
       if (level > lastLevel + 1) {
         issues.push(`Heading level jump from h${lastLevel} to h${level}`);
       }
-      
+
       lastLevel = level;
     });
 
@@ -375,7 +373,7 @@ export const accessibilityTest = {
     inputs.forEach((input, index) => {
       const hasLabel = input.id && document.querySelector(`label[for="${input.id}"]`);
       const hasAriaLabel = input.getAttribute('aria-label') || input.getAttribute('aria-labelledby');
-      
+
       if (!hasLabel && !hasAriaLabel) {
         issues.push(`Form control ${index + 1} missing label`);
       }
@@ -431,7 +429,7 @@ export function initializeAccessibility() {
     setTimeout(() => {
       const audit = accessibilityTest.runFullAudit();
       const totalIssues = Object.values(audit).flat().length;
-      
+
       if (totalIssues > 0) {
         console.group('♿ Accessibility Audit Results');
         Object.entries(audit).forEach(([category, issues]) => {

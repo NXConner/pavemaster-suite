@@ -10,19 +10,19 @@ const statusIndicatorVariants = cva(
         offline: 'text-destructive',
         away: 'text-warning',
         busy: 'text-warning',
-        idle: 'text-muted-foreground'
+        idle: 'text-muted-foreground',
       },
       size: {
         sm: 'text-xs',
         default: 'text-sm',
-        lg: 'text-base'
-      }
+        lg: 'text-base',
+      },
     },
     defaultVariants: {
       status: 'online',
-      size: 'default'
-    }
-  }
+      size: 'default',
+    },
+  },
 );
 
 const dotVariants = cva(
@@ -34,19 +34,19 @@ const dotVariants = cva(
         offline: 'bg-destructive',
         away: 'bg-warning animate-pulse',
         busy: 'bg-warning animate-pulse',
-        idle: 'bg-muted-foreground'
+        idle: 'bg-muted-foreground',
       },
       size: {
         sm: 'w-2 h-2',
         default: 'w-3 h-3',
-        lg: 'w-4 h-4'
-      }
+        lg: 'w-4 h-4',
+      },
     },
     defaultVariants: {
       status: 'online',
-      size: 'default'
-    }
-  }
+      size: 'default',
+    },
+  },
 );
 
 interface StatusIndicatorProps extends VariantProps<typeof statusIndicatorVariants> {
@@ -55,12 +55,12 @@ interface StatusIndicatorProps extends VariantProps<typeof statusIndicatorVarian
   className?: string;
 }
 
-export function StatusIndicator({ 
-  status, 
-  size, 
-  label, 
-  showDot = true, 
-  className 
+export function StatusIndicator({
+  status,
+  size,
+  label,
+  showDot = true,
+  className,
 }: StatusIndicatorProps) {
   return (
     <div className={cn(statusIndicatorVariants({ status, size }), className)}>

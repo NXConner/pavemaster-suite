@@ -10,25 +10,25 @@ import { configUtils } from '@/config/environment';
 const createAdvancedLazyComponent = (
   importFunc: () => Promise<{ default: React.ComponentType<any> }>,
   componentName: string,
-  preloadTriggers: string[] = []
+  preloadTriggers: string[] = [],
 ) => {
   const LazyComponent = React.lazy(async () => {
     const start = performance.now();
-    
+
     try {
       const module = await importFunc();
-      
+
       const loadTime = performance.now() - start;
       performanceMonitor.recordMetric(`route_load_${componentName}`, loadTime, 'ms', {
         cached: loadTime < 50,
         componentName,
       });
-      
+
       return module;
     } catch (error) {
       performanceMonitor.recordMetric('route_load_error', 1, 'count', {
         componentName,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
@@ -43,7 +43,7 @@ const createAdvancedLazyComponent = (
   React.useEffect(() => {
     const currentPath = window.location.pathname;
     const shouldPreload = preloadTriggers.some(trigger => currentPath.includes(trigger));
-    
+
     if (shouldPreload) {
       preload();
     }
@@ -63,75 +63,75 @@ const createAdvancedLazyComponent = (
 const Dashboard = createAdvancedLazyComponent(
   () => import('@/pages/Index'),
   'dashboard',
-  ['/'] // Preload on homepage
+  ['/'], // Preload on homepage
 );
 
 const ProjectsPage = createAdvancedLazyComponent(
   () => import('@/pages/Projects'),
   'projects',
-  ['/dashboard', '/'] // Preload from dashboard
+  ['/dashboard', '/'], // Preload from dashboard
 );
 
 const EstimatesPage = createAdvancedLazyComponent(
   () => import('@/pages/Estimates'),
   'estimates',
-  ['/projects', '/dashboard'] // Preload from related pages
+  ['/projects', '/dashboard'], // Preload from related pages
 );
 
 const InvoicesPage = createAdvancedLazyComponent(
   () => import('@/pages/Invoices'),
   'invoices',
-  ['/estimates', '/projects'] // Preload from related pages
+  ['/estimates', '/projects'], // Preload from related pages
 );
 
 const ClientsPage = createAdvancedLazyComponent(
   () => import('@/pages/Clients'),
   'clients',
-  ['/projects', '/dashboard'] // Preload from related pages
+  ['/projects', '/dashboard'], // Preload from related pages
 );
 
 const InventoryPage = createAdvancedLazyComponent(
   () => import('@/pages/Inventory'),
   'inventory',
-  ['/projects'] // Preload from projects
+  ['/projects'], // Preload from projects
 );
 
 const SchedulingPage = createAdvancedLazyComponent(
   () => import('@/pages/Scheduling'),
   'scheduling',
-  ['/projects', '/dashboard'] // Preload from related pages
+  ['/projects', '/dashboard'], // Preload from related pages
 );
 
 // Analytics page - only load if feature is enabled
-const AnalyticsPage = configUtils.isFeatureEnabled('enableAnalytics') 
+const AnalyticsPage = configUtils.isFeatureEnabled('enableAnalytics')
   ? createAdvancedLazyComponent(
-      () => import('@/pages/Analytics'),
-      'analytics',
-      ['/dashboard'] // Preload from dashboard if analytics enabled
-    )
+    () => import('@/pages/Analytics'),
+    'analytics',
+    ['/dashboard'], // Preload from dashboard if analytics enabled
+  )
   : null;
 
 const SettingsPage = createAdvancedLazyComponent(
   () => import('@/pages/Settings'),
-  'settings'
+  'settings',
   // No auto-preload for settings
 );
 
 // Auth pages
 const LoginPage = createAdvancedLazyComponent(
   () => import('@/pages/Login'),
-  'login'
+  'login',
 );
 
 const SignupPage = createAdvancedLazyComponent(
   () => import('@/pages/Signup'),
-  'signup'
+  'signup',
 );
 
 // Error pages
 const NotFoundPage = createAdvancedLazyComponent(
   () => import('@/pages/NotFound'),
-  'not-found'
+  'not-found',
 );
 
 // Protected Route with performance tracking
@@ -151,7 +151,7 @@ function ProtectedRoute({ children, requiredFeature, requiredRole, fallback }: P
       performanceMonitor.recordMetric('auth_check_duration', 0, 'ms', {
         authenticated: !!user,
         requiredFeature,
-        requiredRole
+        requiredRole,
       });
     }
   }, [loading, user, requiredFeature, requiredRole]);
@@ -218,7 +218,7 @@ function PublicRoute({ children }: PublicRouteProps) {
 export function useIntelligentPreloading() {
   React.useEffect(() => {
     const currentPath = window.location.pathname;
-    
+
     // Preload based on current page context
     const preloadStrategies = {
       '/dashboard': () => {
@@ -242,7 +242,7 @@ export function useIntelligentPreloading() {
         // From clients, users often go to projects or estimates
         ProjectsPage.preload();
         EstimatesPage.preload();
-      }
+      },
     };
 
     // Execute preload strategy for current page
@@ -263,7 +263,7 @@ export function useIntelligentPreloading() {
           AnalyticsPage.preload();
         }
       };
-      
+
       requestIdleCallback(idleCallback, { timeout: 5000 });
     }
   }, []);
@@ -300,100 +300,100 @@ export function OptimizedAppRouter() {
       <ErrorBoundary>
         <Routes>
           {/* Public Routes */}
-          <Route 
-            path="/login" 
+          <Route
+            path="/login"
             element={
               <PublicRoute>
                 <LoginPage />
               </PublicRoute>
-            } 
+            }
           />
-          <Route 
-            path="/signup" 
+          <Route
+            path="/signup"
             element={
               <PublicRoute>
                 <SignupPage />
               </PublicRoute>
-            } 
+            }
           />
 
           {/* Protected Routes */}
-          <Route 
-            path="/dashboard" 
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/projects/*" 
+          <Route
+            path="/projects/*"
             element={
               <ProtectedRoute>
                 <ProjectsPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/estimates/*" 
+          <Route
+            path="/estimates/*"
             element={
               <ProtectedRoute>
                 <EstimatesPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/invoices/*" 
+          <Route
+            path="/invoices/*"
             element={
               <ProtectedRoute>
                 <InvoicesPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/clients/*" 
+          <Route
+            path="/clients/*"
             element={
               <ProtectedRoute>
                 <ClientsPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/inventory/*" 
+          <Route
+            path="/inventory/*"
             element={
               <ProtectedRoute>
                 <InventoryPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/scheduling/*" 
+          <Route
+            path="/scheduling/*"
             element={
               <ProtectedRoute>
                 <SchedulingPage />
               </ProtectedRoute>
-            } 
+            }
           />
 
           {/* Feature-gated routes */}
           {configUtils.isFeatureEnabled('enableAnalytics') && AnalyticsPage && (
-            <Route 
-              path="/analytics/*" 
+            <Route
+              path="/analytics/*"
               element={
                 <ProtectedRoute requiredFeature="enableAnalytics">
                   <AnalyticsPage />
                 </ProtectedRoute>
-              } 
+              }
             />
           )}
 
-          <Route 
-            path="/settings/*" 
+          <Route
+            path="/settings/*"
             element={
               <ProtectedRoute>
                 <SettingsPage />
               </ProtectedRoute>
-            } 
+            }
           />
 
           {/* Redirects */}

@@ -45,7 +45,7 @@ export function SecurityMonitor() {
   const loadSecurityData = async () => {
     try {
       setIsLoading(true);
-      
+
       // Load security audit logs
       const { data: events, error: eventsError } = await supabase
         .from('security_audit_log')
@@ -66,55 +66,54 @@ export function SecurityMonitor() {
           value: 3,
           trend: 'down',
           severity: 'medium',
-          description: 'Number of failed authentication attempts in the last 24 hours'
+          description: 'Number of failed authentication attempts in the last 24 hours',
         },
         {
           title: 'Active Sessions',
           value: 12,
           trend: 'stable',
           severity: 'low',
-          description: 'Currently active user sessions'
+          description: 'Currently active user sessions',
         },
         {
           title: 'RLS Policies Active',
           value: 28,
           trend: 'up',
           severity: 'low',
-          description: 'Row Level Security policies protecting database tables'
+          description: 'Row Level Security policies protecting database tables',
         },
         {
           title: 'Suspicious Activities',
           value: 0,
           trend: 'stable',
           severity: 'low',
-          description: 'Potential security threats detected'
+          description: 'Potential security threats detected',
         },
         {
           title: 'Data Access Violations',
           value: 1,
           trend: 'down',
           severity: 'medium',
-          description: 'Unauthorized data access attempts'
+          description: 'Unauthorized data access attempts',
         },
         {
           title: 'API Rate Limits Hit',
           value: 5,
           trend: 'up',
           severity: 'medium',
-          description: 'Number of rate limit violations'
-        }
+          description: 'Number of rate limit violations',
+        },
       ];
 
       setMetrics(mockMetrics);
-      
+
       // Calculate overall security score
       const criticalIssues = mockMetrics.filter(m => m.severity === 'critical').length;
       const highIssues = mockMetrics.filter(m => m.severity === 'high').length;
       const mediumIssues = mockMetrics.filter(m => m.severity === 'medium').length;
-      
+
       const score = Math.max(50, 100 - (criticalIssues * 30) - (highIssues * 15) - (mediumIssues * 5));
       setOverallScore(score);
-      
     } catch (error) {
       console.error('Error loading security data:', error);
     } finally {
@@ -133,8 +132,8 @@ export function SecurityMonitor() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
+    if (score >= 90) { return 'text-green-600'; }
+    if (score >= 70) { return 'text-yellow-600'; }
     return 'text-red-600';
   };
 
@@ -259,24 +258,24 @@ export function SecurityMonitor() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full justify-start"
             onClick={() => logSecurityEvent('manual_security_scan_initiated', 'system')}
           >
             <Shield className="h-4 w-4 mr-2" />
             Run Security Scan
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full justify-start"
             onClick={() => window.open('/settings', '_blank')}
           >
             <Lock className="h-4 w-4 mr-2" />
             Review Security Settings
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full justify-start"
             onClick={() => logSecurityEvent('security_audit_requested', 'system')}
           >

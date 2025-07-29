@@ -1,6 +1,6 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import 'https://deno.land/x/xhr@0.1.0/mod.ts';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,27 +8,27 @@ const corsHeaders = {
 };
 
 // Rate limiting storage
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 function checkRateLimit(identifier: string, maxRequests: number = 15, windowMinutes: number = 15): boolean {
-  const now = Date.now()
-  const windowMs = windowMinutes * 60 * 1000
-  const existing = rateLimitMap.get(identifier)
-  
+  const now = Date.now();
+  const windowMs = windowMinutes * 60 * 1000;
+  const existing = rateLimitMap.get(identifier);
+
   // Clean up expired entries
   if (existing && now > existing.resetTime) {
-    rateLimitMap.delete(identifier)
+    rateLimitMap.delete(identifier);
   }
-  
-  const current = rateLimitMap.get(identifier) || { count: 0, resetTime: now + windowMs }
-  
+
+  const current = rateLimitMap.get(identifier) || { count: 0, resetTime: now + windowMs };
+
   if (current.count >= maxRequests) {
-    return false
+    return false;
   }
-  
-  current.count++
-  rateLimitMap.set(identifier, current)
-  return true
+
+  current.count++;
+  rateLimitMap.set(identifier, current);
+  return true;
 }
 
 function sanitizeInput(input: string): string {
@@ -36,41 +36,41 @@ function sanitizeInput(input: string): string {
     .trim()
     .slice(0, 2000) // Limit message length
     .replace(/[<>]/g, '') // Remove potential HTML tags
-    .replace(/['"]/g, '') // Remove quotes to prevent injection
+    .replace(/['"]/g, ''); // Remove quotes to prevent injection
 }
 
 function validateRequest(body: any): { isValid: boolean; errors: string[] } {
-  const errors: string[] = []
-  
+  const errors: string[] = [];
+
   if (!body.message || typeof body.message !== 'string') {
-    errors.push('Message is required and must be a string')
+    errors.push('Message is required and must be a string');
   }
-  
+
   if (body.message && body.message.length > 2000) {
-    errors.push('Message too long (max 2000 characters)')
+    errors.push('Message too long (max 2000 characters)');
   }
-  
+
   if (body.context && typeof body.context !== 'string') {
-    errors.push('Context must be a string')
+    errors.push('Context must be a string');
   }
-  
+
   if (body.conversation && !Array.isArray(body.conversation)) {
-    errors.push('Conversation must be an array')
+    errors.push('Conversation must be an array');
   }
-  
+
   if (body.conversation && body.conversation.length > 20) {
-    errors.push('Conversation history too long')
+    errors.push('Conversation history too long');
   }
-  
+
   return {
     isValid: errors.length === 0,
-    errors
-  }
+    errors,
+  };
 }
 
 const systemPrompts = {
-  general: `You are an AI assistant for the Pavement Performance Suite application. You help with general queries about the application, navigation, and basic functionality.`,
-  
+  general: 'You are an AI assistant for the Pavement Performance Suite application. You help with general queries about the application, navigation, and basic functionality.',
+
   pavement: `You are a specialized AI assistant for pavement and asphalt operations. You have extensive knowledge about:
 - Asphalt mix designs and specifications
 - Pavement construction best practices
@@ -119,7 +119,7 @@ Always prioritize safety in your recommendations and provide specific, actionabl
 - Invoice management
 - Financial reporting and analysis
 
-Provide practical financial guidance for small business owners in the construction industry.`
+Provide practical financial guidance for small business owners in the construction industry.`,
 };
 
 serve(async (req) => {
@@ -131,11 +131,11 @@ serve(async (req) => {
   try {
     // Get request body with size limit
     const body = await req.json().catch(() => null);
-    
+
     if (!body) {
       throw new Error('Invalid request body');
     }
-    
+
     // Validate request
     const validation = validateRequest(body);
     if (!validation.isValid) {
@@ -144,10 +144,10 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    
+
     // Get client IP for rate limiting
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
-    
+
     // Check rate limit
     if (!checkRateLimit(clientIP)) {
       console.warn(`Rate limit exceeded for IP: ${clientIP}`);
@@ -156,13 +156,13 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    
+
     const { message, context = 'general', conversation = [] } = body;
 
     // Sanitize inputs
     const sanitizedMessage = sanitizeInput(message);
     const sanitizedContext = context ? sanitizeInput(context) : 'general';
-    
+
     if (!sanitizedMessage) {
       throw new Error('Message is required');
     }
@@ -178,15 +178,15 @@ serve(async (req) => {
     const messages = [
       {
         role: 'system',
-        content: systemPrompts[sanitizedContext as keyof typeof systemPrompts] || systemPrompts.general
-      }
+        content: systemPrompts[sanitizedContext as keyof typeof systemPrompts] || systemPrompts.general,
+      },
     ];
 
     // Add conversation history (last 5 messages for security)
     if (conversation.length > 0) {
       const recentMessages = conversation.slice(-5).map((msg: any) => ({
         role: msg.role === 'user' ? 'user' : 'assistant', // Sanitize role
-        content: sanitizeInput(msg.content || '')
+        content: sanitizeInput(msg.content || ''),
       })).filter(msg => msg.content.length > 0);
       messages.push(...recentMessages);
     }
@@ -194,7 +194,7 @@ serve(async (req) => {
     // Add current message
     messages.push({
       role: 'user',
-      content: sanitizedMessage
+      content: sanitizedMessage,
     });
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -224,10 +224,10 @@ serve(async (req) => {
 
     console.log('AI response generated successfully');
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       response: aiResponse,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

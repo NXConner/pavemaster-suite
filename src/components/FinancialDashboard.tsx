@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { DollarSign, TrendingUp, TrendingDown, Calculator, CreditCard, Receipt, Target, AlertCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from 'react';
+import { DollarSign, TrendingUp, TrendingDown, Calculator, CreditCard, Receipt, Target, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FinancialMetric {
   id: string;
@@ -38,16 +38,16 @@ export function FinancialDashboard() {
       change: 12.5,
       trend: 'up',
       target: '$2,500,000',
-      category: 'revenue'
+      category: 'revenue',
     },
     {
-      id: '2', 
+      id: '2',
       label: 'Operating Expenses',
       value: '$1,850,000',
       change: -3.2,
       trend: 'down',
       target: '$1,800,000',
-      category: 'expenses'
+      category: 'expenses',
     },
     {
       id: '3',
@@ -56,7 +56,7 @@ export function FinancialDashboard() {
       change: 18.7,
       trend: 'up',
       target: '$700,000',
-      category: 'profit'
+      category: 'profit',
     },
     {
       id: '4',
@@ -65,8 +65,8 @@ export function FinancialDashboard() {
       change: 2.1,
       trend: 'up',
       target: '25%',
-      category: 'profit'
-    }
+      category: 'profit',
+    },
   ];
 
   const projectFinancials: ProjectFinancial[] = [
@@ -77,7 +77,7 @@ export function FinancialDashboard() {
       spent: 285000,
       remaining: 165000,
       profitMargin: 18.5,
-      status: 'on-budget'
+      status: 'on-budget',
     },
     {
       id: '2',
@@ -86,7 +86,7 @@ export function FinancialDashboard() {
       spent: 118500,
       remaining: 6500,
       profitMargin: 22.3,
-      status: 'under-budget'
+      status: 'under-budget',
     },
     {
       id: '3',
@@ -95,19 +95,19 @@ export function FinancialDashboard() {
       spent: 295000,
       remaining: -20000,
       profitMargin: 12.1,
-      status: 'over-budget'
-    }
+      status: 'over-budget',
+    },
   ];
 
   const getTrendIcon = (trend: string) => {
-    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-500" />;
+    if (trend === 'up') { return <TrendingUp className="h-4 w-4 text-green-500" />; }
+    if (trend === 'down') { return <TrendingDown className="h-4 w-4 text-red-500" />; }
     return <div className="h-4 w-4 bg-gray-400 rounded-full" />;
   };
 
   const getTrendColor = (trend: string, change: number) => {
-    if (trend === 'up' && change > 0) return 'text-green-600';
-    if (trend === 'down' && change < 0) return 'text-red-600';
+    if (trend === 'up' && change > 0) { return 'text-green-600'; }
+    if (trend === 'down' && change < 0) { return 'text-red-600'; }
     return 'text-muted-foreground';
   };
 
@@ -115,7 +115,7 @@ export function FinancialDashboard() {
     const colors = {
       'on-budget': 'bg-green-100 text-green-800 border-green-200',
       'under-budget': 'bg-blue-100 text-blue-800 border-blue-200',
-      'over-budget': 'bg-red-100 text-red-800 border-red-200'
+      'over-budget': 'bg-red-100 text-red-800 border-red-200',
     };
     return colors[status as keyof typeof colors];
   };
@@ -127,7 +127,7 @@ export function FinancialDashboard() {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -223,13 +223,13 @@ export function FinancialDashboard() {
                       <div className="text-lg font-semibold">{project.profitMargin}%</div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Budget Utilization</span>
                       <span>{getBudgetProgress(project.spent, project.budget).toFixed(1)}%</span>
                     </div>
-                    <Progress 
+                    <Progress
                       value={getBudgetProgress(project.spent, project.budget)}
                       className={project.spent > project.budget ? 'bg-red-100' : 'bg-green-100'}
                     />

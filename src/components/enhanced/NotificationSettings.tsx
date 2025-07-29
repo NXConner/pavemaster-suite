@@ -91,14 +91,14 @@ export function NotificationSettings() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
-        title: "Preferences Saved",
-        description: "Your notification preferences have been updated successfully.",
+        title: 'Preferences Saved',
+        description: 'Your notification preferences have been updated successfully.',
       });
     } catch (error) {
       toast({
-        title: "Save Failed",
-        description: "Failed to save preferences. Please try again.",
-        variant: "destructive",
+        title: 'Save Failed',
+        description: 'Failed to save preferences. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -396,7 +396,7 @@ export function NotificationSettings() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <AnimatedButton 
+        <AnimatedButton
           onClick={handleSavePreferences}
           disabled={isLoading}
           variant="default"

@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Settings, Layout, Eye, EyeOff, GripVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { Settings, Layout, Eye, EyeOff, GripVertical } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 
 interface DashboardWidget {
   id: string;
@@ -31,10 +31,10 @@ export function DashboardCustomizer() {
   ]);
 
   const toggleWidget = (widgetId: string) => {
-    setWidgets(prev => prev.map(widget => 
-      widget.id === widgetId 
+    setWidgets(prev => prev.map(widget =>
+      widget.id === widgetId
         ? { ...widget, enabled: !widget.enabled }
-        : widget
+        : widget,
     ));
   };
 
@@ -43,13 +43,13 @@ export function DashboardCustomizer() {
       metrics: 'bg-primary/10 text-primary',
       projects: 'bg-secondary/10 text-secondary',
       activity: 'bg-info/10 text-info',
-      tools: 'bg-success/10 text-success'
+      tools: 'bg-success/10 text-success',
     };
     return colors[category as keyof typeof colors] || 'bg-muted';
   };
 
   const groupedWidgets = widgets.reduce<Record<string, DashboardWidget[]>>((acc, widget) => {
-    if (!acc[widget.category]) acc[widget.category] = [];
+    if (!acc[widget.category]) { acc[widget.category] = []; }
     acc[widget.category].push(widget);
     return acc;
   }, {});
@@ -69,7 +69,7 @@ export function DashboardCustomizer() {
             <span>Dashboard Customization</span>
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           <div className="text-sm text-muted-foreground">
             Customize which widgets appear on your dashboard and arrange them to suit your workflow.

@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
-    
+
     this.setState({
       error,
       errorInfo,
@@ -72,7 +72,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 An unexpected error occurred. We apologize for the inconvenience.
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="text-sm bg-muted p-3 rounded border">
@@ -124,7 +124,7 @@ export class ErrorBoundary extends Component<Props, State> {
 export function useErrorHandler() {
   return (error: Error, errorInfo?: ErrorInfo) => {
     console.error('Error handled by hook:', error, errorInfo);
-    
+
     // You can integrate with error reporting services here
     if (typeof window !== 'undefined') {
       // Report to error tracking service
@@ -142,15 +142,15 @@ export function useErrorHandler() {
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
   fallback?: ReactNode,
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
+  onError?: (error: Error, errorInfo: ErrorInfo) => void,
 ) {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary fallback={fallback} onError={onError}>
       <Component {...props} />
     </ErrorBoundary>
   );
-  
+
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
+
   return WrappedComponent;
 }

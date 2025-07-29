@@ -8,10 +8,10 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   // Test directory
   testDir: './src/test/e2e',
-  
+
   // Global test timeout
   timeout: 30 * 1000,
-  
+
   // Test configuration
   expect: {
     // Maximum time expect() should wait for the condition to be met
@@ -61,7 +61,7 @@ export default defineConfig({
 
     // Browser context options
     ignoreHTTPSErrors: true,
-    
+
     // Viewport size
     viewport: { width: 1280, height: 720 },
 
@@ -92,7 +92,7 @@ export default defineConfig({
     // Desktop browsers
     {
       name: 'chromium-desktop',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         // Enable experimental features for testing
         launchOptions: {
@@ -136,7 +136,7 @@ export default defineConfig({
     // High DPI displays
     {
       name: 'chromium-hidpi',
-      use: { 
+      use: {
         ...devices['Desktop Chrome HiDPI'],
         deviceScaleFactor: 2,
       },
@@ -145,7 +145,7 @@ export default defineConfig({
     // Dark mode testing
     {
       name: 'chromium-dark',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         colorScheme: 'dark',
       },
@@ -154,7 +154,7 @@ export default defineConfig({
     // Slow network simulation
     {
       name: 'chromium-slow-network',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         launchOptions: {
           args: ['--enable-features=NetworkService'],
@@ -169,7 +169,7 @@ export default defineConfig({
     // Accessibility testing
     {
       name: 'chromium-accessibility',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         // Force high contrast mode
         forcedColors: 'active',
@@ -181,7 +181,7 @@ export default defineConfig({
     // Performance testing
     {
       name: 'chromium-performance',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         launchOptions: {
           args: [

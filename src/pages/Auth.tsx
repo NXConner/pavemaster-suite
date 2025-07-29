@@ -26,11 +26,11 @@ export default function Auth() {
     e.preventDefault();
     setLoading(true);
     setValidationErrors([]);
-    
+
     const formData = new FormData(e.currentTarget);
     const email = sanitizeInput(formData.get('email') as string);
     const password = formData.get('password') as string;
-    
+
     // Validate input
     const errors: string[] = [];
     if (!validateEmail(email)) {
@@ -39,13 +39,13 @@ export default function Auth() {
     if (!password) {
       errors.push('Password is required');
     }
-    
+
     if (errors.length > 0) {
       setValidationErrors(errors);
       setLoading(false);
       return;
     }
-    
+
     await signIn(email, password);
     setLoading(false);
   };
@@ -54,37 +54,37 @@ export default function Auth() {
     e.preventDefault();
     setLoading(true);
     setValidationErrors([]);
-    
+
     const formData = new FormData(e.currentTarget);
     const email = sanitizeInput(formData.get('email') as string);
     const password = formData.get('password') as string;
     const firstName = sanitizeInput(formData.get('firstName') as string);
     const lastName = sanitizeInput(formData.get('lastName') as string);
-    
+
     // Validate input
     const errors: string[] = [];
     if (!validateEmail(email)) {
       errors.push('Please enter a valid email address');
     }
-    
+
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
       errors.push(...passwordValidation.errors);
     }
-    
+
     if (!firstName.trim()) {
       errors.push('First name is required');
     }
     if (!lastName.trim()) {
       errors.push('Last name is required');
     }
-    
+
     if (errors.length > 0) {
       setValidationErrors(errors);
       setLoading(false);
       return;
     }
-    
+
     await signUp(email, password, firstName, lastName);
     setLoading(false);
   };
@@ -93,22 +93,22 @@ export default function Auth() {
     e.preventDefault();
     setLoading(true);
     setValidationErrors([]);
-    
+
     const formData = new FormData(e.currentTarget);
     const email = sanitizeInput(formData.get('email') as string);
-    
+
     // Validate input
     const errors: string[] = [];
     if (!validateEmail(email)) {
       errors.push('Please enter a valid email address');
     }
-    
+
     if (errors.length > 0) {
       setValidationErrors(errors);
       setLoading(false);
       return;
     }
-    
+
     const { error } = await resetPassword(email);
     if (!error) {
       setResetMode(false);
@@ -176,10 +176,10 @@ export default function Auth() {
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Send Reset Link
                 </Button>
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  className="w-full" 
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full"
                   onClick={() => { setResetMode(false); }}
                   disabled={loading}
                 >
@@ -194,119 +194,119 @@ export default function Auth() {
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
 
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn}>
-                <CardHeader className="space-y-1">
-                  <CardTitle className="text-xl">Welcome back</CardTitle>
-                  <CardDescription>
+              <TabsContent value="signin">
+                <form onSubmit={handleSignIn}>
+                  <CardHeader className="space-y-1">
+                    <CardTitle className="text-xl">Welcome back</CardTitle>
+                    <CardDescription>
                     Sign in to your PaveMaster account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-2">
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex flex-col space-y-2">
+                    <Button type="submit" className="w-full" disabled={loading}>
+                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Sign In
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    className="w-full text-sm" 
-                    onClick={() => { setResetMode(true); }}
-                    disabled={loading}
-                  >
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="w-full text-sm"
+                      onClick={() => { setResetMode(true); }}
+                      disabled={loading}
+                    >
                     Forgot your password?
-                  </Button>
-                </CardFooter>
-              </form>
-            </TabsContent>
+                    </Button>
+                  </CardFooter>
+                </form>
+              </TabsContent>
 
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp}>
-                <CardHeader className="space-y-1">
-                  <CardTitle className="text-xl">Create account</CardTitle>
-                  <CardDescription>
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp}>
+                  <CardHeader className="space-y-1">
+                    <CardTitle className="text-xl">Create account</CardTitle>
+                    <CardDescription>
                     Set up your PaveMaster account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First name</Label>
+                        <Input
+                          id="firstName"
+                          name="firstName"
+                          type="text"
+                          placeholder="John"
+                          required
+                          disabled={loading}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last name</Label>
+                        <Input
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          placeholder="Doe"
+                          required
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">First name</Label>
+                      <Label htmlFor="email">Email</Label>
                       <Input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        placeholder="John"
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="your@email.com"
                         required
                         disabled={loading}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Last name</Label>
+                      <Label htmlFor="password">Password</Label>
                       <Input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        placeholder="Doe"
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Strong password"
                         required
                         disabled={loading}
                       />
                     </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Strong password"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  </CardContent>
+                  <CardFooter>
+                    <Button type="submit" className="w-full" disabled={loading}>
+                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Create Account
-                  </Button>
-                </CardFooter>
-              </form>
-            </TabsContent>
+                    </Button>
+                  </CardFooter>
+                </form>
+              </TabsContent>
             </Tabs>
           )}
         </Card>

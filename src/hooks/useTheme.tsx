@@ -77,9 +77,9 @@ const defaultTheme: Theme = {
       'primary-foreground': '0 0% 100%',
       secondary: '217.2 32.6% 17.5%',
       'secondary-foreground': '210 40% 98%',
-    }
+    },
   },
-  is_system: true
+  is_system: true,
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -95,7 +95,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // Apply theme to document
   const applyTheme = (theme: Theme, mode: ThemeMode) => {
     const root = document.documentElement;
-    const actualMode = mode === 'system' 
+    const actualMode = mode === 'system'
       ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
       : mode;
 
@@ -118,7 +118,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     if (wallpaper) {
       root.style.setProperty('--wallpaper-url', `url('${wallpaper.image_url}')`);
-      root.style.setProperty('background-image', `var(--wallpaper-url)`);
+      root.style.setProperty('background-image', 'var(--wallpaper-url)');
       root.style.setProperty('background-size', 'cover');
       root.style.setProperty('background-position', 'center');
       root.style.setProperty('background-attachment', 'fixed');
@@ -140,13 +140,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         .order('is_system', { ascending: false })
         .order('name');
 
-      if (error) throw error;
+      if (error) { throw error; }
       const transformedThemes = (data || []).map((theme: DbTheme): Theme => ({
         id: theme.id,
         name: theme.name,
         description: theme.description || undefined,
         colors: theme.colors as { light: Record<string, string>; dark: Record<string, string> },
-        is_system: theme.is_system
+        is_system: theme.is_system,
       }));
       setThemes(transformedThemes);
     } catch (error) {
@@ -154,7 +154,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       toast({
         variant: 'destructive',
         title: 'Error loading themes',
-        description: 'Failed to load available themes'
+        description: 'Failed to load available themes',
       });
     }
   };
@@ -168,7 +168,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         .order('is_system', { ascending: false })
         .order('name');
 
-      if (error) throw error;
+      if (error) { throw error; }
       const transformedWallpapers = (data || []).map((wallpaper: DbWallpaper): Wallpaper => ({
         id: wallpaper.id,
         name: wallpaper.name,
@@ -176,7 +176,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         image_url: wallpaper.image_url,
         thumbnail_url: wallpaper.thumbnail_url || undefined,
         category: wallpaper.category,
-        is_system: wallpaper.is_system
+        is_system: wallpaper.is_system,
       }));
       setWallpapers(transformedWallpapers);
     } catch (error) {
@@ -184,14 +184,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       toast({
         variant: 'destructive',
         title: 'Error loading wallpapers',
-        description: 'Failed to load available wallpapers'
+        description: 'Failed to load available wallpapers',
       });
     }
   };
 
   // Load user preferences
   const loadPreferences = async () => {
-    if (!user) return;
+    if (!user) { return; }
 
     try {
       const { data, error } = await supabase
@@ -200,14 +200,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         .eq('user_id', user.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') { throw error; }
 
       if (data) {
         setPreferences({
           theme_id: data.theme_id || undefined,
           wallpaper_id: data.wallpaper_id || undefined,
           theme_mode: data.theme_mode as ThemeMode,
-          custom_settings: (data.custom_settings as Record<string, any>) || {}
+          custom_settings: (data.custom_settings as Record<string, any>) || {},
         });
 
         if (data.themes) {
@@ -216,7 +216,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             name: data.themes.name,
             description: data.themes.description || undefined,
             colors: data.themes.colors as { light: Record<string, string>; dark: Record<string, string> },
-            is_system: data.themes.is_system
+            is_system: data.themes.is_system,
           };
           setCurrentTheme(theme);
         }
@@ -228,7 +228,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             image_url: data.wallpapers.image_url,
             thumbnail_url: data.wallpapers.thumbnail_url || undefined,
             category: data.wallpapers.category,
-            is_system: data.wallpapers.is_system
+            is_system: data.wallpapers.is_system,
           };
           setCurrentWallpaper(wallpaper);
         }
@@ -246,7 +246,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       await Promise.all([
         refreshThemes(),
         refreshWallpapers(),
-        loadPreferences()
+        loadPreferences(),
       ]);
       setLoading(false);
     };
@@ -268,7 +268,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (themeMode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => { applyTheme(currentTheme, themeMode); };
-      
+
       mediaQuery.addEventListener('change', handleChange);
       return () => { mediaQuery.removeEventListener('change', handleChange); };
     }
@@ -276,7 +276,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Save preferences to database
   const savePreferences = async (updates: Partial<UserPreferences>) => {
-    if (!user) return;
+    if (!user) { return; }
 
     try {
       const { error } = await supabase
@@ -285,10 +285,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           user_id: user.id,
           ...preferences,
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         });
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       setPreferences(prev => ({ ...prev, ...updates } as UserPreferences));
     } catch (error) {
@@ -296,34 +296,34 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       toast({
         variant: 'destructive',
         title: 'Error saving preferences',
-        description: 'Failed to save your theme preferences'
+        description: 'Failed to save your theme preferences',
       });
     }
   };
 
   const setTheme = async (themeId: string) => {
     const theme = themes.find(t => t.id === themeId);
-    if (!theme) return;
+    if (!theme) { return; }
 
     setCurrentTheme(theme);
     await savePreferences({ theme_id: themeId });
 
     toast({
       title: 'Theme updated',
-      description: `Switched to ${theme.name} theme`
+      description: `Switched to ${theme.name} theme`,
     });
   };
 
   const setWallpaper = async (wallpaperId: string) => {
     const wallpaper = wallpapers.find(w => w.id === wallpaperId);
-    if (!wallpaper) return;
+    if (!wallpaper) { return; }
 
     setCurrentWallpaper(wallpaper);
     await savePreferences({ wallpaper_id: wallpaperId });
 
     toast({
       title: 'Wallpaper updated',
-      description: `Switched to ${wallpaper.name} wallpaper`
+      description: `Switched to ${wallpaper.name} wallpaper`,
     });
   };
 
@@ -333,12 +333,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     toast({
       title: 'Theme mode updated',
-      description: `Switched to ${mode} mode`
+      description: `Switched to ${mode} mode`,
     });
   };
 
   const createCustomTheme = async (theme: Omit<Theme, 'id' | 'is_system'>) => {
-    if (!user) return;
+    if (!user) { return; }
 
     try {
       const { data, error } = await supabase
@@ -349,41 +349,41 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           colors: theme.colors,
           created_by: user.id,
           is_public: false,
-          is_system: false
+          is_system: false,
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       await refreshThemes();
       toast({
         title: 'Custom theme created',
-        description: `Created ${theme.name} theme`
+        description: `Created ${theme.name} theme`,
       });
     } catch (error) {
       console.error('Error creating theme:', error);
       toast({
         variant: 'destructive',
         title: 'Error creating theme',
-        description: 'Failed to create custom theme'
+        description: 'Failed to create custom theme',
       });
     }
   };
 
   const uploadWallpaper = async (file: File, name: string, description?: string) => {
-    if (!user) return;
+    if (!user) { return; }
 
     try {
       // Upload to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-      
+
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('wallpapers')
         .upload(fileName, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) { throw uploadError; }
 
       const { data: { publicUrl } } = supabase.storage
         .from('wallpapers')
@@ -399,22 +399,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           created_by: user.id,
           is_public: false,
           is_system: false,
-          category: 'custom'
+          category: 'custom',
         });
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       await refreshWallpapers();
       toast({
         title: 'Wallpaper uploaded',
-        description: `Uploaded ${name} wallpaper`
+        description: `Uploaded ${name} wallpaper`,
       });
     } catch (error) {
       console.error('Error uploading wallpaper:', error);
       toast({
         variant: 'destructive',
         title: 'Error uploading wallpaper',
-        description: 'Failed to upload wallpaper'
+        description: 'Failed to upload wallpaper',
       });
     }
   };
@@ -434,7 +434,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       createCustomTheme,
       uploadWallpaper,
       refreshThemes,
-      refreshWallpapers
+      refreshWallpapers,
     }}>
       {children}
     </ThemeContext.Provider>

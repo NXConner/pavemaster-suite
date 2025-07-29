@@ -12,7 +12,7 @@ import {
   Activity,
   Download,
   Settings,
-  Users
+  Users,
 } from 'lucide-react';
 
 export default function MobilePage() {
@@ -215,10 +215,10 @@ export default function MobilePage() {
                       <li>Run on device: <code className="bg-background px-1 rounded">npx cap run ios/android</code></li>
                     </ol>
                   </div>
-                  
+
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <p className="text-sm text-blue-700">
-                      <strong>Note:</strong> Native mobile features like camera, GPS, and offline storage 
+                      <strong>Note:</strong> Native mobile features like camera, GPS, and offline storage
                       work best in the native app. The web version provides a preview of the mobile interface.
                     </p>
                   </div>

@@ -15,8 +15,8 @@ export function RealtimeDashboard() {
   const { onlineUsers, isTracking, updateStatus, totalOnlineUsers } = useUserPresence();
   const [selectedTable, setSelectedTable] = useState<string>('all');
 
-  const filteredUpdates = selectedTable === 'all' 
-    ? updates 
+  const filteredUpdates = selectedTable === 'all'
+    ? updates
     : updates.filter(update => update.table === selectedTable);
 
   const getUpdateIcon = (eventType: string) => {
@@ -44,9 +44,9 @@ export function RealtimeDashboard() {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
 
-    if (seconds < 60) return `${seconds}s ago`;
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
+    if (seconds < 60) { return `${seconds}s ago`; }
+    if (minutes < 60) { return `${minutes}m ago`; }
+    if (hours < 24) { return `${hours}h ago`; }
     return timestamp.toLocaleDateString();
   };
 
@@ -65,8 +65,8 @@ export function RealtimeDashboard() {
             {isConnected ? <Wifi className="h-4 w-4 text-success" /> : <WifiOff className="h-4 w-4 text-destructive" />}
           </CardHeader>
           <CardContent>
-            <StatusIndicator 
-              status={isConnected ? 'online' : 'offline'} 
+            <StatusIndicator
+              status={isConnected ? 'online' : 'offline'}
               label={isConnected ? 'Connected' : 'Disconnected'}
             />
           </CardContent>
@@ -138,7 +138,7 @@ export function RealtimeDashboard() {
           <CardContent>
             {/* Table Filter */}
             <div className="flex flex-wrap gap-2 mb-4">
-              <Badge 
+              <Badge
                 variant={selectedTable === 'all' ? 'default' : 'secondary'}
                 className="cursor-pointer hover-scale"
                 onClick={() => { setSelectedTable('all'); }}
@@ -146,7 +146,7 @@ export function RealtimeDashboard() {
                 All ({updates.length})
               </Badge>
               {Object.entries(tableStats).map(([table, count]) => (
-                <Badge 
+                <Badge
                   key={table}
                   variant={selectedTable === table ? 'default' : 'secondary'}
                   className="cursor-pointer hover-scale"
@@ -171,7 +171,7 @@ export function RealtimeDashboard() {
               ) : (
                 <div className="space-y-2">
                   {filteredUpdates.map((update) => (
-                    <div 
+                    <div
                       key={update.id}
                       className="p-3 rounded-lg border hover:bg-muted/50 transition-colors animate-slide-up"
                     >
@@ -227,13 +227,13 @@ export function RealtimeDashboard() {
               ) : (
                 <div className="space-y-3">
                   {onlineUsers.map((user) => (
-                    <div 
+                    <div
                       key={user.user_id}
                       className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <StatusIndicator 
-                          status={user.status === 'online' ? 'online' : 'away'} 
+                        <StatusIndicator
+                          status={user.status === 'online' ? 'online' : 'away'}
                           size="sm"
                         />
                         <div>

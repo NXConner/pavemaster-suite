@@ -31,19 +31,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-        
+
         if (event === 'SIGNED_IN') {
           toast({
-            title: "Welcome!",
-            description: "You have been signed in successfully.",
+            title: 'Welcome!',
+            description: 'You have been signed in successfully.',
           });
         } else if (event === 'SIGNED_OUT') {
           toast({
-            title: "Signed out",
-            description: "You have been signed out.",
+            title: 'Signed out',
+            description: 'You have been signed out.',
           });
         }
-      }
+      },
     );
 
     // Get initial session
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -67,20 +67,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         data: {
           first_name: firstName,
           last_name: lastName,
-        }
-      }
+        },
+      },
     });
 
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Sign up failed",
+        variant: 'destructive',
+        title: 'Sign up failed',
         description: error.message,
       });
     } else {
       toast({
-        title: "Check your email",
-        description: "We sent you a confirmation link.",
+        title: 'Check your email',
+        description: 'We sent you a confirmation link.',
       });
     }
 
@@ -95,8 +95,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Sign in failed",
+        variant: 'destructive',
+        title: 'Sign in failed',
         description: error.message,
       });
     }
@@ -108,8 +108,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Error signing out",
+        variant: 'destructive',
+        title: 'Error signing out',
         description: error.message,
       });
     }
@@ -120,27 +120,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth`,
       });
-      
+
       if (error) {
         toast({
-          variant: "destructive",
-          title: "Error sending reset email",
+          variant: 'destructive',
+          title: 'Error sending reset email',
           description: error.message,
         });
         return { error };
-      } else {
-        toast({
-          title: "Password reset email sent!",
-          description: "Check your inbox for the reset link.",
-        });
-        return { error: null };
       }
+      toast({
+        title: 'Password reset email sent!',
+        description: 'Check your inbox for the reset link.',
+      });
+      return { error: null };
     } catch (error: any) {
       console.error('Password reset error:', error);
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred",
+        variant: 'destructive',
+        title: 'Error',
+        description: 'An unexpected error occurred',
       });
       return { error };
     }

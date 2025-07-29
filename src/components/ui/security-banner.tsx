@@ -1,6 +1,6 @@
-import { AlertTriangle, Shield, Check } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, Shield, Check } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 
 interface SecurityBannerProps {
   level: 'secure' | 'warning' | 'critical';

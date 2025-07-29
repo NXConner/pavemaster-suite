@@ -17,7 +17,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from 'recharts';
 import {
   TrendingUp,
@@ -32,7 +32,7 @@ import {
   Activity,
   Wrench,
   Fuel,
-  MapPin
+  MapPin,
 } from 'lucide-react';
 
 interface PerformanceMetric {
@@ -87,7 +87,7 @@ interface PerformanceDashboardProps {
   className?: string;
 }
 
-export function PerformanceDashboard({ className = "" }: PerformanceDashboardProps) {
+export function PerformanceDashboard({ className = '' }: PerformanceDashboardProps) {
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [projectMetrics, setProjectMetrics] = useState<ProjectMetrics | null>(null);
@@ -112,7 +112,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: '%',
           trend: 'up',
           change: 3.2,
-          category: 'efficiency'
+          category: 'efficiency',
         },
         {
           id: '2',
@@ -122,7 +122,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: '$',
           trend: 'down',
           change: -12.5,
-          category: 'cost'
+          category: 'cost',
         },
         {
           id: '3',
@@ -132,7 +132,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: '%',
           trend: 'up',
           change: 2.8,
-          category: 'quality'
+          category: 'quality',
         },
         {
           id: '4',
@@ -142,7 +142,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: 'incidents',
           trend: 'down',
           change: -60,
-          category: 'safety'
+          category: 'safety',
         },
         {
           id: '5',
@@ -152,7 +152,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: 'index',
           trend: 'up',
           change: 8.4,
-          category: 'efficiency'
+          category: 'efficiency',
         },
         {
           id: '6',
@@ -162,8 +162,8 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           unit: '%',
           trend: 'down',
           change: -28,
-          category: 'cost'
-        }
+          category: 'cost',
+        },
       ];
 
       const mockProjectMetrics: ProjectMetrics = {
@@ -172,7 +172,7 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
         onTimeDelivery: 87,
         underBudget: 76,
         qualityScore: 94,
-        customerSatisfaction: 96
+        customerSatisfaction: 96,
       };
 
       const mockOperationalData: OperationalData = {
@@ -182,20 +182,20 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           { equipment: 'Roller Compactor #2', utilization: 91, maintenance: 92, efficiency: 94 },
           { equipment: 'Dump Truck #1', utilization: 76, maintenance: 85, efficiency: 82 },
           { equipment: 'Dump Truck #2', utilization: 82, maintenance: 90, efficiency: 88 },
-          { equipment: 'Seal Coating Unit', utilization: 78, maintenance: 94, efficiency: 85 }
+          { equipment: 'Seal Coating Unit', utilization: 78, maintenance: 94, efficiency: 85 },
         ],
         crewPerformance: [
           { crew: 'Crew Alpha', productivity: 115, safety: 98, hours: 184 },
           { crew: 'Crew Beta', productivity: 108, safety: 96, hours: 172 },
           { crew: 'Crew Gamma', productivity: 112, safety: 100, hours: 168 },
-          { crew: 'Crew Delta', productivity: 95, safety: 94, hours: 156 }
+          { crew: 'Crew Delta', productivity: 95, safety: 94, hours: 156 },
         ],
         costBreakdown: [
           { category: 'Materials', amount: 125000, budget: 130000, variance: -3.8 },
           { category: 'Labor', amount: 85000, budget: 82000, variance: 3.7 },
           { category: 'Equipment', amount: 45000, budget: 48000, variance: -6.3 },
           { category: 'Fuel', amount: 18500, budget: 22000, variance: -15.9 },
-          { category: 'Overhead', amount: 12000, budget: 12000, variance: 0 }
+          { category: 'Overhead', amount: 12000, budget: 12000, variance: 0 },
         ],
         monthlyTrends: [
           { month: 'Jan', revenue: 285000, costs: 198000, profit: 87000, projects: 6 },
@@ -203,8 +203,8 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
           { month: 'Mar', revenue: 298000, costs: 208000, profit: 90000, projects: 6 },
           { month: 'Apr', revenue: 365000, costs: 255000, profit: 110000, projects: 8 },
           { month: 'May', revenue: 412000, costs: 288000, profit: 124000, projects: 9 },
-          { month: 'Jun', revenue: 445000, costs: 311000, profit: 134000, projects: 10 }
-        ]
+          { month: 'Jun', revenue: 445000, costs: 311000, profit: 134000, projects: 10 },
+        ],
       };
 
       setMetrics(mockMetrics);
@@ -213,9 +213,9 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
     } catch (error) {
       console.error('Error loading performance data:', error);
       toast({
-        title: "Error",
-        description: "Failed to load performance data",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load performance data',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -303,9 +303,9 @@ export function PerformanceDashboard({ className = "" }: PerformanceDashboardPro
                 {metric.value}{metric.unit}
               </div>
               <div className="flex items-center justify-between mt-2">
-                <Progress 
-                  value={(metric.value / metric.target) * 100} 
-                  className="flex-1 mr-2" 
+                <Progress
+                  value={(metric.value / metric.target) * 100}
+                  className="flex-1 mr-2"
                 />
                 <span className="text-xs text-muted-foreground">
                   Target: {metric.target}{metric.unit}

@@ -34,7 +34,7 @@ class OfflineStorage {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.version);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => { reject(request.error); };
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
@@ -63,46 +63,46 @@ class OfflineStorage {
   }
 
   async addOperation(operation: OfflineOperation): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['operations'], 'readwrite');
       const store = transaction.objectStore('operations');
       const request = store.add(operation);
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(); };
     });
   }
 
   async getOperations(): Promise<OfflineOperation[]> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['operations'], 'readonly');
       const store = transaction.objectStore('operations');
       const request = store.getAll();
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(request.result); };
     });
   }
 
   async removeOperation(id: string): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['operations'], 'readwrite');
       const store = transaction.objectStore('operations');
       const request = store.delete(id);
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(); };
     });
   }
 
   async cacheData(key: string, data: any): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     const cacheEntry = {
       key,
@@ -115,20 +115,20 @@ class OfflineStorage {
       const store = transaction.objectStore('cache');
       const request = store.put(cacheEntry);
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(); };
     });
   }
 
   async getCachedData(key: string): Promise<any | null> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['cache'], 'readonly');
       const store = transaction.objectStore('cache');
       const request = store.get(key);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => { reject(request.error); };
       request.onsuccess = () => {
         const result = request.result;
         resolve(result ? result.data : null);
@@ -137,27 +137,27 @@ class OfflineStorage {
   }
 
   async setMetadata(key: string, value: any): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['metadata'], 'readwrite');
       const store = transaction.objectStore('metadata');
       const request = store.put({ key, value });
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(); };
     });
   }
 
   async getMetadata(key: string): Promise<any | null> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) { throw new Error('Database not initialized'); }
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['metadata'], 'readonly');
       const store = transaction.objectStore('metadata');
       const request = store.get(key);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => { reject(request.error); };
       request.onsuccess = () => {
         const result = request.result;
         resolve(result ? result.value : null);
@@ -177,7 +177,7 @@ class OfflineManager {
 
   async initialize(): Promise<void> {
     await offlineStorage.initialize();
-    
+
     // Set up background sync registration
     if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
       try {
@@ -198,7 +198,7 @@ class OfflineManager {
     };
 
     await offlineStorage.addOperation(fullOperation);
-    
+
     // Try to sync immediately if online
     if (navigator.onLine) {
       this.sync();
@@ -222,7 +222,7 @@ class OfflineManager {
           await offlineStorage.removeOperation(operation.id);
         } catch (error) {
           console.error('Failed to sync operation:', operation, error);
-          
+
           // Increment retry count
           operation.retryCount++;
           operation.lastError = error instanceof Error ? error.message : 'Unknown error';
@@ -249,7 +249,7 @@ class OfflineManager {
   private async executeOperation(operation: OfflineOperation): Promise<void> {
     // This would be implemented based on your API structure
     const { type, entity, data } = operation;
-    
+
     const apiUrl = `/api/${entity}`;
     let response: Response;
 
@@ -261,7 +261,7 @@ class OfflineManager {
           body: JSON.stringify(data),
         });
         break;
-      
+
       case 'update':
         response = await fetch(`${apiUrl}/${data.id}`, {
           method: 'PUT',
@@ -269,13 +269,13 @@ class OfflineManager {
           body: JSON.stringify(data),
         });
         break;
-      
+
       case 'delete':
         response = await fetch(`${apiUrl}/${data.id}`, {
           method: 'DELETE',
         });
         break;
-      
+
       default:
         throw new Error(`Unknown operation type: ${type}`);
     }
@@ -360,13 +360,13 @@ export function useOfflineOperations() {
       updateLastSyncTime();
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [updatePendingCount, updateLastSyncTime]);
 
   const queueOperation = useCallback(async (
     type: 'create' | 'update' | 'delete',
     entity: string,
-    data: any
+    data: any,
   ) => {
     await offlineManager.queueOperation({ type, entity, data });
     updatePendingCount();
@@ -402,12 +402,12 @@ export function setupServiceWorkerMessaging() {
         case 'BACKGROUND_SYNC':
           offlineManager.sync();
           break;
-        
+
         case 'CACHE_UPDATED':
           // Handle cache updates
           console.log('Cache updated:', payload);
           break;
-        
+
         case 'OFFLINE_FALLBACK':
           // Handle offline fallback
           console.log('Offline fallback triggered:', payload);
@@ -424,7 +424,7 @@ export function useOfflineNotification() {
   const { addNotification, removeNotification } = useAppActions();
 
   useEffect(() => {
-    let notificationId: string | null = null;
+    const notificationId: string | null = null;
 
     if (!isOnline) {
       addNotification({
@@ -456,7 +456,7 @@ export async function initializeOfflineSupport() {
   try {
     await offlineManager.initialize();
     setupServiceWorkerMessaging();
-    
+
     // Set up periodic sync
     setInterval(() => {
       if (navigator.onLine) {
