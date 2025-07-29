@@ -58,14 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     try {
-      // Rate limiting check
-      const clientIP = 'client-ip'; // In production, get actual IP
-      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
-        p_identifier: clientIP,
-        p_action: 'signup',
-        p_limit: 5,
-        p_window_minutes: 15
-      });
+  // Enhanced rate limiting with real IP detection
+  const clientIP = await getClientIP();
+  const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+    p_identifier: clientIP,
+    p_action: 'signup_attempt',
+    p_limit: 3,
+    p_window_minutes: 15
+  });
 
       if (!canProceed) {
         const error = { message: 'Too many signup attempts. Please try again later.' };
@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error };
       }
 
-      const redirectUrl = `${window.location.origin}/dashboard`;
+      const redirectUrl = `${window.location.origin}/`;
       
       const { error } = await supabase.auth.signUp({
         email,
@@ -125,13 +125,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Enhanced IP detection function
+  const getClientIP = async (): Promise<string> => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch {
+      return 'unknown';
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
-      // Rate limiting check
-      const clientIP = 'client-ip'; // In production, get actual IP
+      // Enhanced rate limiting check with real IP
+      const clientIP = await getClientIP();
       const { data: canProceed } = await supabase.rpc('check_rate_limit', {
         p_identifier: `${clientIP}-${email}`,
-        p_action: 'signin',
+        p_action: 'login_attempt',
         p_limit: 5,
         p_window_minutes: 15
       });

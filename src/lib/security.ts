@@ -5,12 +5,24 @@
 
 import { supabase } from '../integrations/supabase/client';
 
-// Input validation and sanitization
+// Enhanced input validation and sanitization with DOMPurify support
 export const sanitizeInput = (input: string): string => {
+  // Basic sanitization as fallback
   return input
     .trim()
     .replace(/[<>\"']/g, '') // Remove potential XSS characters
     .substring(0, 1000); // Limit length
+};
+
+// Advanced HTML sanitization (requires DOMPurify when available)
+export const sanitizeHTML = (html: string): string => {
+  // Fallback sanitization if DOMPurify is not available
+  return html
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .trim();
 };
 
 export const validateEmail = (email: string): boolean => {

@@ -5,12 +5,15 @@ import { Input } from '../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/use-toast';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, AlertTriangle } from 'lucide-react';
+import { validatePassword, validateEmail, sanitizeInput } from '../lib/security';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+  const [emailError, setEmailError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -31,15 +34,33 @@ export default function AuthPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Enhanced client-side validation
+    const emailValidation = validateEmail(formData.email);
+    if (!emailValidation) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+    setEmailError('');
+
+    if (isSignUp) {
+      const passwordValidation = validatePassword(formData.password);
+      if (!passwordValidation.isValid) {
+        setPasswordErrors(passwordValidation.errors);
+        return;
+      }
+      setPasswordErrors([]);
+    }
+
     setLoading(true);
 
     try {
       if (isSignUp) {
         const { error } = await signUp(
-          formData.email,
+          sanitizeInput(formData.email),
           formData.password,
-          formData.firstName,
-          formData.lastName
+          sanitizeInput(formData.firstName),
+          sanitizeInput(formData.lastName)
         );
         if (!error) {
           toast({
@@ -48,7 +69,7 @@ export default function AuthPage() {
           });
         }
       } else {
-        const { error } = await signIn(formData.email, formData.password);
+        const { error } = await signIn(sanitizeInput(formData.email), formData.password);
         if (!error) {
           navigate('/dashboard');
         }
@@ -65,10 +86,20 @@ export default function AuthPage() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+
+    // Real-time validation feedback
+    if (name === 'email') {
+      setEmailError('');
+    }
+    if (name === 'password' && isSignUp) {
+      const validation = validatePassword(value);
+      setPasswordErrors(validation.isValid ? [] : validation.errors);
+    }
   };
 
   return (
@@ -125,31 +156,51 @@ export default function AuthPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
+                className={emailError ? 'border-red-500' : ''}
               />
+              {emailError && (
+                <div className="flex items-center space-x-1 mt-1">
+                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                  <span className="text-sm text-red-500">{emailError}</span>
+                </div>
+              )}
             </div>
             
-            <div className="relative">
-              <Input
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
+            <div>
+              <div className="relative">
+                <Input
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className={passwordErrors.length > 0 ? 'border-red-500' : ''}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              {passwordErrors.length > 0 && isSignUp && (
+                <div className="mt-2 space-y-1">
+                  {passwordErrors.map((error, index) => (
+                    <div key={index} className="flex items-center space-x-1">
+                      <AlertTriangle className="h-3 w-3 text-red-500" />
+                      <span className="text-xs text-red-500">{error}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
