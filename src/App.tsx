@@ -8,6 +8,9 @@ import Dashboard from "./components/Dashboard";
 import Projects from "./components/Projects";
 import Equipment from "./components/Equipment";
 import TeamManagement from "./components/TeamManagement";
+import IoTHub from "./components/IoTHub";
+import Analytics from "./components/Analytics";
+import WeatherMonitor from "./components/WeatherMonitor";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -36,6 +39,9 @@ const App = () => {
               <Route path="projects" element={<Projects />} />
               <Route path="equipment" element={<Equipment />} />
               <Route path="team" element={<TeamManagement />} />
+              <Route path="iot" element={<IoTHub />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="weather" element={<WeatherMonitor />} />
               <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
             </Route>
           </Routes>

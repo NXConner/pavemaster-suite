@@ -10,7 +10,10 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Wifi,
+  BarChart3,
+  Cloud
 } from 'lucide-react';
 
 const navigation = [
@@ -18,6 +21,9 @@ const navigation = [
   { name: 'Projects', href: '/projects', icon: Briefcase },
   { name: 'Equipment', href: '/equipment', icon: Wrench },
   { name: 'Team', href: '/team', icon: Users },
+  { name: 'IoT Hub', href: '/iot', icon: Wifi },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Weather', href: '/weather', icon: Cloud },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
