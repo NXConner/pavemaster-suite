@@ -4,9 +4,6 @@
  */
 
 import { performanceMonitor } from './performance';
-import { advancedSecurity } from './advancedSecurity';
-import { developerPlatform } from './developerPlatform';
-import { supabase } from '@/integrations/supabase/client';
 
 // Partner Ecosystem Core Interfaces
 export interface Partner {
@@ -870,6 +867,14 @@ export interface TrainingCost {
   paid: boolean;
   pricing: PricingTier[];
   discounts: Discount[];
+}
+
+export interface PricingTier {
+  name: string;
+  price: number;
+  currency: string;
+  features: string[];
+  limitations?: string[];
 }
 
 export interface Discount {
@@ -2005,9 +2010,7 @@ export interface DocumentSignature {
 
 class PartnerEcosystem {
   private partners: Map<string, Partner> = new Map();
-  private certifications: Map<string, PartnerCertification> = new Map();
   private integrations: Map<string, PartnerIntegration> = new Map();
-  private contracts: Map<string, PartnerContract> = new Map();
   private isInitialized = false;
 
   // Ecosystem metrics

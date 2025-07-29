@@ -4,10 +4,6 @@
  */
 
 import { performanceMonitor } from './performance';
-import { advancedSecurity } from './advancedSecurity';
-import { partnerEcosystem } from './partnerEcosystem';
-import { developerPlatform } from './developerPlatform';
-import { supabase } from '@/integrations/supabase/client';
 
 // Integration Hub Core Interfaces
 export interface IntegrationHub {
@@ -3107,14 +3103,12 @@ export interface OptimizationRecommendation {
 }
 
 class IntegrationHubManager {
-  private hubs: Map<string, IntegrationHub> = new Map();
   private connectors: Map<string, SoftwareConnector> = new Map();
   private workflows: Map<string, IntegrationWorkflow> = new Map();
   private isInitialized = false;
 
   // Integration metrics
   private integrationMetrics: Map<string, any> = new Map();
-  private connectionStats: Map<string, any> = new Map();
 
   constructor() {
     this.initializeIntegrationHub();

@@ -3,10 +3,7 @@
  * iOS/Android native applications with offline capabilities and cross-platform sync
  */
 
-import { performanceMonitor } from './performance';
-import { advancedSecurity } from './advancedSecurity';
-import { partnerEcosystem } from './partnerEcosystem';
-import { supabase } from '@/integrations/supabase/client';
+// Mobile native apps implementation
 
 // Mobile Native Apps Core Interfaces
 export interface MobileApp {
@@ -2184,10 +2181,6 @@ export interface AnalyticsPrivacy {
 class MobileNativeApps {
   private apps: Map<string, MobileApp> = new Map();
   private isInitialized = false;
-
-  // Mobile metrics
-  private mobileMetrics: Map<string, any> = new Map();
-  private usageStats: Map<string, any> = new Map();
 
   constructor() {
     this.initializeMobileFramework();
