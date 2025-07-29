@@ -1,7 +1,7 @@
 import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import { performanceMonitor } from '@/lib/performance';
-import { logSecurityEvent } from '@/lib/security';
+// Note: logSecurityEvent function will be implemented when security module is complete
 
 // Enhanced error handling for queries
 function handleQueryError(error: unknown, query: any) {
@@ -15,7 +15,8 @@ function handleQueryError(error: unknown, query: any) {
 
   // Log security events for authentication errors
   if (errorMessage.includes('401') || errorMessage.includes('unauthorized')) {
-    logSecurityEvent('unauthorized_api_access', 'query', String(query.queryKey[0]));
+    // logSecurityEvent('unauthorized_api_access', 'query', String(query.queryKey[0]));
+    console.warn('Unauthorized API access attempt:', query.queryKey);
   }
 
   // Track API failures
@@ -48,7 +49,7 @@ function handleQueryError(error: unknown, query: any) {
 }
 
 // Enhanced mutation error handling
-function handleMutationError(error: unknown, variables: unknown, context: unknown, mutation: any) {
+function handleMutationError(error: unknown, variables: unknown, _context: unknown, mutation: any) {
   const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
 
   console.error('Mutation failed:', {
@@ -76,7 +77,7 @@ function handleMutationError(error: unknown, variables: unknown, context: unknow
 // Create query cache with error handling
 const queryCache = new QueryCache({
   onError: handleQueryError,
-  onSuccess: (data, query) => {
+  onSuccess: (_data, query) => {
     // Track successful queries
     performanceMonitor.recordMetric('api_success', 1, 'count', {
       queryKey: query.queryKey,
@@ -87,7 +88,7 @@ const queryCache = new QueryCache({
 // Create mutation cache with error handling
 const mutationCache = new MutationCache({
   onError: handleMutationError,
-  onSuccess: (data, variables, context, mutation) => {
+  onSuccess: (_data, _variables, _context, mutation) => {
     // Track successful mutations
     performanceMonitor.recordMetric('mutation_success', 1, 'count', {
       mutationKey: mutation.options.mutationKey,
