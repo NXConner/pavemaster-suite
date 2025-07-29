@@ -48,7 +48,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     
     // In production, you would send this to your error monitoring service
     // Example: Sentry, LogRocket, etc.
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env.PROD) {
       // sendErrorToMonitoringService(error, errorInfo);
     }
   }
@@ -78,7 +78,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 function DefaultErrorFallback({ error, errorInfo, resetError }: ErrorFallbackProps) {
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = import.meta.env.DEV;
 
   const goHome = () => {
     window.location.href = '/';
