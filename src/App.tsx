@@ -5,6 +5,9 @@ import { Toaster } from "./components/ui/toaster";
 import AuthPage from "./components/AuthPage";
 import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
+import Projects from "./components/Projects";
+import Equipment from "./components/Equipment";
+import TeamManagement from "./components/TeamManagement";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -30,9 +33,9 @@ const App = () => {
             }>
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="projects" element={<div>Projects Page - Coming Soon</div>} />
-              <Route path="equipment" element={<div>Equipment Page - Coming Soon</div>} />
-              <Route path="team" element={<div>Team Page - Coming Soon</div>} />
+              <Route path="projects" element={<Projects />} />
+              <Route path="equipment" element={<Equipment />} />
+              <Route path="team" element={<TeamManagement />} />
               <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
             </Route>
           </Routes>
