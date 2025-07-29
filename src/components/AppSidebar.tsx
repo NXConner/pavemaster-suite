@@ -29,7 +29,8 @@ import {
   BookOpen,
   Command,
   Target,
-  Satellite
+  Satellite,
+  Plug
 } from "lucide-react"
 
 const mainItems = [
@@ -38,7 +39,8 @@ const mainItems = [
   { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
   { title: "AI Operations", url: "/ai-operations", icon: Brain },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "AI Hub", url: "/ai", icon: Brain },
+  { title: "Integrations", url: "/integrations", icon: Plug },
+  { title: "Mobile", url: "/mobile", icon: Smartphone },
   { title: "API Docs", url: "/api-docs", icon: BookOpen },
   { title: "Settings", url: "/settings", icon: Settings },
 ]

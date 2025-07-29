@@ -23,6 +23,8 @@ import TaskPriorityManager from "@/components/TaskPriorityManager";
 import AIOperationsCenter from "@/components/AIOperationsCenter";
 import AdvancedAnalytics from "@/components/AdvancedAnalytics";
 import MissionControlCenter from "@/components/MissionControlCenter";
+import EnterpriseIntegrations from "@/components/EnterpriseIntegrations";
+import MobileCompanion from "@/components/MobileCompanion";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +55,7 @@ const App = () => (
                               <Route path="/settings" element={<Settings />} />
                               <Route path="/ai" element={<AIHub />} />
                               <Route path="/analytics" element={<AdvancedAnalytics />} />
-                              <Route path="/mobile" element={<Mobile />} />
+                              <Route path="/mobile" element={<MobileCompanion />} />
                               <Route path="/api-docs" element={<ApiDocumentation />} />
                               <Route path="/cost-counter" element={<CostCounter />} />
                               <Route path="/employee-tracker" element={<EmployeeTracker />} />
@@ -62,6 +64,8 @@ const App = () => (
                               <Route path="/ai-operations" element={<AIOperationsCenter />} />
                               <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                               <Route path="/mission-control" element={<MissionControlCenter />} />
+                              <Route path="/integrations" element={<EnterpriseIntegrations />} />
+                              <Route path="/mobile" element={<MobileCompanion />} />
                               {/* Placeholder routes for sidebar items */}
                               <Route path="/tracking" element={<EmployeeTracker />} />
                               <Route path="/photos" element={<div className="p-6"><h1>Photo Reports (Coming Soon)</h1></div>} />
