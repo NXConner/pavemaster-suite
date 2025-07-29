@@ -22,7 +22,12 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Zap,
+  FileText,
+  Building,
+  ShieldCheck,
+  Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -41,6 +46,11 @@ const navigationItems = [
   { icon: Shield, label: 'Security', path: '/security', roles: ['super_admin'] },
   { icon: Blocks, label: 'Blockchain', path: '/blockchain', roles: ['super_admin'] },
   { icon: Smartphone, label: 'Mobile', path: '/mobile', roles: ['super_admin', 'admin', 'manager'] },
+  { icon: Zap, label: 'Integrations', path: '/integrations', roles: ['super_admin', 'admin'] },
+  { icon: ShieldCheck, label: 'Safety', path: '/safety', roles: ['super_admin', 'admin', 'manager'] },
+  { icon: FileText, label: 'Reports', path: '/reports', roles: ['super_admin', 'admin', 'manager'] },
+  { icon: Building, label: 'Enterprise', path: '/enterprise', roles: ['super_admin'] },
+  { icon: Sparkles, label: 'Advanced AI', path: '/advanced-ai', roles: ['super_admin'] },
   { icon: Settings, label: 'Settings', path: '/settings', roles: ['super_admin', 'admin', 'manager', 'employee'] },
 ];
 
