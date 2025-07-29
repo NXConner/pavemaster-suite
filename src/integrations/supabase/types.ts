@@ -352,6 +352,30 @@ export type Database = {
           },
         ]
       }
+      budget_categories: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           billing_info: Json | null
@@ -2528,27 +2552,27 @@ export type Database = {
       rate_limits: {
         Row: {
           action: string
-          count: number | null
-          created_at: string | null
+          count: number
+          created_at: string
           id: string
           identifier: string
-          window_start: string | null
+          window_start: string
         }
         Insert: {
           action: string
-          count?: number | null
-          created_at?: string | null
+          count?: number
+          created_at?: string
           id?: string
           identifier: string
-          window_start?: string | null
+          window_start?: string
         }
         Update: {
           action?: string
-          count?: number | null
-          created_at?: string | null
+          count?: number
+          created_at?: string
           id?: string
           identifier?: string
-          window_start?: string | null
+          window_start?: string
         }
         Relationships: []
       }
@@ -4208,9 +4232,17 @@ export type Database = {
         Args: { "": string }
         Returns: unknown
       }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_proj4_from_srid: {
         Args: { "": number }
         Returns: string
+      }
+      get_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
       }
       get_user_role: {
         Args: Record<PropertyKey, never>
@@ -4266,6 +4298,10 @@ export type Database = {
       hnswhandler: {
         Args: { "": unknown }
         Returns: unknown
+      }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       ivfflat_bit_support: {
         Args: { "": unknown }
