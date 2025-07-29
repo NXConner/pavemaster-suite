@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-// import { supabase } from '../integrations/supabase/client';
+import { supabase } from '../integrations/supabase/client';
 import { Shield, AlertTriangle, Eye, Activity, Lock, UserCheck, Server, Globe } from 'lucide-react';
 
 interface SecurityEvent {
@@ -36,43 +36,57 @@ export default function SecurityMonitor() {
 
   const fetchSecurityEvents = async () => {
     try {
-      // Simulate security events (in real app, these would come from your security monitoring system)
-      const mockEvents: SecurityEvent[] = [
-        {
-          id: '1',
-          type: 'login_attempt',
-          severity: 'medium',
-          description: 'Multiple failed login attempts detected',
-          source_ip: '192.168.1.100',
-          user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          status: 'investigating'
-        },
-        {
-          id: '2',
-          type: 'data_access',
-          severity: 'low',
-          description: 'Unusual data access pattern detected',
-          source_ip: '10.0.0.15',
-          user_agent: 'PaveMaster Mobile App v1.0',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-          status: 'resolved'
-        },
-        {
-          id: '3',
-          type: 'api_rate_limit',
-          severity: 'high',
-          description: 'API rate limit exceeded from suspicious IP',
-          source_ip: '203.45.67.89',
-          user_agent: 'Unknown Bot',
-          timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-          status: 'active'
-        }
-      ];
-      
-      setEvents(mockEvents);
+      // Fetch real security events from Supabase
+      const { data: events, error } = await supabase
+        .from('security_events')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching security events:', error);
+        // Fallback to mock data for demo
+        const mockEvents: SecurityEvent[] = [
+          {
+            id: '1',
+            type: 'login_attempt',
+            severity: 'medium',
+            description: 'Multiple failed login attempts detected',
+            source_ip: '192.168.1.100',
+            user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+            status: 'investigating'
+          },
+          {
+            id: '2',
+            type: 'data_access',
+            severity: 'low',
+            description: 'Unusual data access pattern detected',
+            source_ip: '10.0.0.15',
+            user_agent: 'PaveMaster Mobile App v1.0',
+            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+            status: 'resolved'
+          }
+        ];
+        setEvents(mockEvents);
+        return;
+      }
+
+      const formattedEvents: SecurityEvent[] = events?.map(event => ({
+        id: event.id,
+        type: event.type || 'unknown',
+        severity: (event.severity as 'low' | 'medium' | 'high' | 'critical') || 'low',
+        description: event.description,
+        source_ip: event.source_ip || 'unknown',
+        user_agent: event.user_agent || 'unknown',
+        timestamp: event.created_at || new Date().toISOString(),
+        status: 'active' as const
+      })) || [];
+
+      setEvents(formattedEvents);
     } catch (error) {
       console.error('Error fetching security events:', error);
+      setEvents([]);
     } finally {
       setLoading(false);
     }

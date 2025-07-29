@@ -4,7 +4,7 @@ import { supabase } from '../integrations/supabase/client';
 import { toast } from './use-toast';
 
 interface AuthResponse {
-  error: AuthError | null;
+  error: AuthError | { message: string } | null;
 }
 
 interface AuthContextType {
@@ -57,51 +57,134 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    try {
+      // Rate limiting check
+      const clientIP = 'client-ip'; // In production, get actual IP
+      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+        p_identifier: clientIP,
+        p_action: 'signup',
+        p_limit: 5,
+        p_window_minutes: 15
+      });
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          first_name: firstName,
-          last_name: lastName,
+      if (!canProceed) {
+        const error = { message: 'Too many signup attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
+
+      const redirectUrl = `${window.location.origin}/dashboard`;
+      
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
+      // Log security event
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signup',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      }
+
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Sign up failed',
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: 'Check your email',
+          description: 'We sent you a confirmation link.',
+        });
+      }
+
+      return { error };
+    } catch (err: any) {
+      const error = { message: 'An unexpected error occurred' };
       toast({
         variant: 'destructive',
-        title: 'Sign up failed',
+        title: 'Error',
         description: error.message,
       });
-    } else {
-      toast({
-        title: 'Check your email',
-        description: 'We sent you a confirmation link.',
-      });
+      return { error };
     }
-
-    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // Rate limiting check
+      const clientIP = 'client-ip'; // In production, get actual IP
+      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+        p_identifier: `${clientIP}-${email}`,
+        p_action: 'signin',
+        p_limit: 5,
+        p_window_minutes: 15
+      });
 
-    if (error) {
+      if (!canProceed) {
+        const error = { message: 'Too many login attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      // Log security event
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signin',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      } else {
+        // Log failed login attempt
+        await supabase.rpc('log_security_event', {
+          p_action: 'failed_signin',
+          p_resource_type: 'auth',
+          p_details: { email, error: error.message, timestamp: new Date().toISOString() }
+        });
+      }
+
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Sign in failed',
+          description: error.message,
+        });
+      }
+
+      return { error };
+    } catch (err: any) {
+      const error = { message: 'An unexpected error occurred' };
       toast({
         variant: 'destructive',
-        title: 'Sign in failed',
+        title: 'Error',
         description: error.message,
       });
+      return { error };
     }
-
-    return { error };
   };
 
   const signOut = async () => {
