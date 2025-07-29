@@ -1,87 +1,74 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/AppSidebar"
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
-import { ThemeProvider } from "@/hooks/useTheme";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Settings from "./pages/Settings";
-import AIHub from "./pages/AIHub";
-import Analytics from "./pages/Analytics";
-import Mobile from "./pages/Mobile";
-import NotFound from "./pages/NotFound";
-import ApiDocumentation from "@/components/ApiDocumentation";
-import Tracking from "./pages/Tracking";
-import Photos from "./pages/Photos";
-import Measurements from "./pages/Measurements";
-import Projects from "./pages/Projects";
-import Team from "./pages/Team";
-import Equipment from "./pages/Equipment";
-import Schedule from "./pages/Schedule";
-import Finance from "./pages/Finance";
-import Safety from "./pages/Safety";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "./components/ui/toaster";
+import AuthPage from "./components/AuthPage";
+import Layout from "./components/Layout";
+import Dashboard from "./components/Dashboard";
+import Projects from "./components/Projects";
+import Equipment from "./components/Equipment";
+import TeamManagement from "./components/TeamManagement";
+import IoTHub from "./components/IoTHub";
+import Analytics from "./components/Analytics";
+import WeatherMonitor from "./components/WeatherMonitor";
+import IntelligenceEngine from "./components/IntelligenceEngine";
+import SecurityMonitor from "./components/SecurityMonitor";
+import BlockchainHub from "./components/BlockchainHub";
+import Estimates from "./components/Estimates";
+import CRM from "./components/CRM";
+import FinancialDashboard from "./components/FinancialDashboard";
+import MobileHub from "./components/mobile/MobileHub";
+import IntegrationHub from "./components/integration/IntegrationHub";
+import SafetyHub from "./components/safety/SafetyHub";
+import ReportsHub from "./components/reports/ReportsHub";
+import EnterpriseHub from "./components/enterprise/EnterpriseHub";
+import AdvancedAI from "./components/ai/AdvancedAI";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <SidebarProvider>
-              <div className="min-h-screen flex w-full">
-                <Routes>
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/*" element={
-                    <ProtectedRoute>
-                      <>
-                        <header className="h-12 flex items-center border-b bg-background px-4 w-full">
-                          <SidebarTrigger className="mr-2" />
-                          <h2 className="font-semibold">PaveMaster Suite</h2>
-                        </header>
-                        <div className="flex flex-1 w-full">
-                          <AppSidebar />
-                          <main className="flex-1 overflow-auto">
-                            <Routes>
-                              <Route path="/" element={<Index />} />
-                              <Route path="/settings" element={<Settings />} />
-                              <Route path="/ai" element={<AIHub />} />
-                              <Route path="/analytics" element={<Analytics />} />
-                              <Route path="/mobile" element={<Mobile />} />
-                              <Route path="/api-docs" element={<ApiDocumentation />} />
-                              {/* Main application routes */}
-                              <Route path="/tracking" element={<Tracking />} />
-                              <Route path="/photos" element={<Photos />} />
-                              <Route path="/measurements" element={<Measurements />} />
-                              <Route path="/projects" element={<Projects />} />
-                              <Route path="/team" element={<Team />} />
-                              <Route path="/equipment" element={<Equipment />} />
-                              <Route path="/schedule" element={<Schedule />} />
-                              <Route path="/finance" element={<Finance />} />
-                              <Route path="/safety" element={<Safety />} />
-                              <Route path="*" element={<NotFound />} />
-                            </Routes>
-                          </main>
-                        </div>
-                      </>
-                    </ProtectedRoute>
-                  } />
-                </Routes>
-              </div>
-            </SidebarProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="equipment" element={<Equipment />} />
+          <Route path="team" element={<TeamManagement />} />
+          <Route path="iot" element={<IoTHub />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="weather" element={<WeatherMonitor />} />
+          <Route path="intelligence" element={<IntelligenceEngine />} />
+          <Route path="security" element={<SecurityMonitor />} />
+          <Route path="blockchain" element={<BlockchainHub />} />
+          <Route path="estimates" element={<Estimates />} />
+          <Route path="crm" element={<CRM />} />
+          <Route path="financial" element={<FinancialDashboard />} />
+          <Route path="mobile" element={<MobileHub />} />
+          <Route path="integrations" element={<IntegrationHub />} />
+          <Route path="safety" element={<SafetyHub />} />
+          <Route path="reports" element={<ReportsHub />} />
+          <Route path="enterprise" element={<EnterpriseHub />} />
+          <Route path="advanced-ai" element={<AdvancedAI />} />
+          <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
+        </Route>
+      </Routes>
+      <Toaster />
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -1,16 +1,20 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import type { User, Session, AuthError } from '@supabase/supabase-js';
+import { supabase } from '../integrations/supabase/client';
+import { toast } from './use-toast';
+
+interface AuthResponse {
+  error: AuthError | { message: string } | null;
+}
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<AuthResponse>;
+  signIn: (email: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<AuthResponse>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,27 +27,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (event: any, session: any) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-        
+
         if (event === 'SIGNED_IN') {
           toast({
-            title: "Welcome!",
-            description: "You have been signed in successfully.",
+            title: 'Welcome!',
+            description: 'You have been signed in successfully.',
           });
         } else if (event === 'SIGNED_OUT') {
           toast({
-            title: "Signed out",
-            description: "You have been signed out.",
+            title: 'Signed out',
+            description: 'You have been signed out.',
           });
         }
-      }
+      },
     );
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -53,59 +57,153 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-        }
-      }
-    });
+    try {
+  // Enhanced rate limiting with real IP detection
+  const clientIP = await getClientIP();
+  const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+    p_identifier: clientIP,
+    p_action: 'signup_attempt',
+    p_limit: 3,
+    p_window_minutes: 15
+  });
 
-    if (error) {
+      if (!canProceed) {
+        const error = { message: 'Too many signup attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
+
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+          },
+        },
+      });
+
+      // Log security event
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signup',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      }
+
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Sign up failed',
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: 'Check your email',
+          description: 'We sent you a confirmation link.',
+        });
+      }
+
+      return { error };
+    } catch (err: any) {
+      const error = { message: 'An unexpected error occurred' };
       toast({
-        variant: "destructive",
-        title: "Sign up failed",
+        variant: 'destructive',
+        title: 'Error',
         description: error.message,
       });
-    } else {
-      toast({
-        title: "Check your email",
-        description: "We sent you a confirmation link.",
-      });
+      return { error };
     }
+  };
 
-    return { error };
+  // Enhanced IP detection function
+  const getClientIP = async (): Promise<string> => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch {
+      return 'unknown';
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // Enhanced rate limiting check with real IP
+      const clientIP = await getClientIP();
+      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
+        p_identifier: `${clientIP}-${email}`,
+        p_action: 'login_attempt',
+        p_limit: 5,
+        p_window_minutes: 15
+      });
 
-    if (error) {
+      if (!canProceed) {
+        const error = { message: 'Too many login attempts. Please try again later.' };
+        toast({
+          variant: 'destructive',
+          title: 'Rate limit exceeded',
+          description: error.message,
+        });
+        return { error };
+      }
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      // Log security event
+      if (!error) {
+        await supabase.rpc('log_security_event', {
+          p_action: 'user_signin',
+          p_resource_type: 'auth',
+          p_details: { email, timestamp: new Date().toISOString() }
+        });
+      } else {
+        // Log failed login attempt
+        await supabase.rpc('log_security_event', {
+          p_action: 'failed_signin',
+          p_resource_type: 'auth',
+          p_details: { email, error: error.message, timestamp: new Date().toISOString() }
+        });
+      }
+
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Sign in failed',
+          description: error.message,
+        });
+      }
+
+      return { error };
+    } catch (err: any) {
+      const error = { message: 'An unexpected error occurred' };
       toast({
-        variant: "destructive",
-        title: "Sign in failed",
+        variant: 'destructive',
+        title: 'Error',
         description: error.message,
       });
+      return { error };
     }
-
-    return { error };
   };
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Error signing out",
+        variant: 'destructive',
+        title: 'Error signing out',
         description: error.message,
       });
     }
@@ -116,27 +214,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth`,
       });
-      
+
       if (error) {
         toast({
-          variant: "destructive",
-          title: "Error sending reset email",
+          variant: 'destructive',
+          title: 'Error sending reset email',
           description: error.message,
         });
         return { error };
-      } else {
-        toast({
-          title: "Password reset email sent!",
-          description: "Check your inbox for the reset link.",
-        });
-        return { error: null };
       }
+      toast({
+        title: 'Password reset email sent!',
+        description: 'Check your inbox for the reset link.',
+      });
+      return { error: null };
     } catch (error: any) {
       console.error('Password reset error:', error);
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred",
+        variant: 'destructive',
+        title: 'Error',
+        description: 'An unexpected error occurred',
       });
       return { error };
     }

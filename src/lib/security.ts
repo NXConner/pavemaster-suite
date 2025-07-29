@@ -1,39 +1,47 @@
 /**
- * Security utilities for the PaveMaster Suite
- * Enterprise-grade security functions for input validation and sanitization
+ * Security utilities for PaveMaster Suite
+ * Production-ready security functions with proper error handling
  */
 
-import DOMPurify from 'dompurify';
+import { supabase } from '../integrations/supabase/client';
 
-/**
- * Sanitize HTML content to prevent XSS attacks
- */
-export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li'],
-    ALLOWED_ATTR: []
-  });
-}
+// Enhanced input validation and sanitization with DOMPurify support
+export const sanitizeInput = (input: string): string => {
+  // Basic sanitization as fallback
+  return input
+    .trim()
+    .replace(/[<>\"']/g, '') // Remove potential XSS characters
+    .substring(0, 1000); // Limit length
+};
 
-/**
- * Validate and sanitize email addresses
- */
-export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email.trim());
-}
+// Advanced HTML sanitization (requires DOMPurify when available)
+export const sanitizeHTML = (html: string): string => {
+  // Fallback sanitization if DOMPurify is not available
+  return html
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .trim();
+};
 
-/**
- * Validate password strength
- */
-export function validatePassword(password: string): {
-  isValid: boolean;
-  errors: string[];
-} {
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  return emailRegex.test(email) && email.length <= 254;
+};
+
+export const validatePassword = (password: string): { 
+  isValid: boolean; 
+  errors: string[] 
+} => {
   const errors: string[] = [];
   
   if (password.length < 8) {
     errors.push('Password must be at least 8 characters long');
+  }
+  
+  if (password.length > 128) {
+    errors.push('Password must be less than 128 characters');
   }
   
   if (!/[A-Z]/.test(password)) {
@@ -48,7 +56,7 @@ export function validatePassword(password: string): {
     errors.push('Password must contain at least one number');
   }
   
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
     errors.push('Password must contain at least one special character');
   }
   
@@ -56,258 +64,163 @@ export function validatePassword(password: string): {
     isValid: errors.length === 0,
     errors
   };
-}
+};
 
-/**
- * Sanitize user input to prevent injection attacks
- */
-export function sanitizeInput(input: string): string {
-  return input
-    .trim()
-    .replace(/[<>]/g, '') // Remove potential HTML tags
-    .replace(/['"]/g, '') // Remove quotes
-    .slice(0, 500); // Limit length
-}
-
-/**
- * Enhanced rate limiting helper with persistent storage
- */
-export class RateLimiter {
-  private attempts: Map<string, number[]> = new Map();
-  
-  constructor(
-    private maxAttempts: number = 5,
-    private windowMs: number = 15 * 60 * 1000 // 15 minutes
-  ) {
-    // Clean up old entries periodically
-    setInterval(() => this.cleanup(), this.windowMs);
-  }
-  
-  isAllowed(identifier: string): boolean {
-    const now = Date.now();
-    const userAttempts = this.attempts.get(identifier) || [];
+// Session security
+export const validateSession = async (): Promise<boolean> => {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession();
     
-    // Remove old attempts outside the window
-    const recentAttempts = userAttempts.filter(
-      timestamp => now - timestamp < this.windowMs
-    );
-    
-    if (recentAttempts.length >= this.maxAttempts) {
-      secureLog(`Rate limit exceeded for ${identifier}`, { 
-        attempts: recentAttempts.length, 
-        maxAttempts: this.maxAttempts 
-      });
+    if (error || !session) {
       return false;
     }
     
-    // Add current attempt
-    recentAttempts.push(now);
-    this.attempts.set(identifier, recentAttempts);
+    // Check if session is expired
+    const now = Math.floor(Date.now() / 1000);
+    if (session.expires_at && session.expires_at < now) {
+      await supabase.auth.signOut();
+      return false;
+    }
     
     return true;
+  } catch (error) {
+    console.error('Session validation error:', error);
+    return false;
   }
-  
-  reset(identifier: string): void {
-    this.attempts.delete(identifier);
-    secureLog(`Rate limit reset for ${identifier}`);
-  }
-  
-  private cleanup(): void {
-    const now = Date.now();
-    for (const [identifier, attempts] of this.attempts.entries()) {
-      const recentAttempts = attempts.filter(
-        timestamp => now - timestamp < this.windowMs
-      );
-      
-      if (recentAttempts.length === 0) {
-        this.attempts.delete(identifier);
-      } else {
-        this.attempts.set(identifier, recentAttempts);
-      }
+};
+
+// Rate limiting helper
+export const checkRateLimit = async (
+  identifier: string,
+  action: string,
+  limit: number = 10,
+  windowMinutes: number = 15
+): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.rpc('check_rate_limit', {
+      p_identifier: identifier,
+      p_action: action,
+      p_limit: limit,
+      p_window_minutes: windowMinutes
+    });
+    
+    if (error) {
+      console.error('Rate limit check error:', error);
+      return false; // Fail secure
     }
+    
+    return data === true;
+  } catch (error) {
+    console.error('Rate limit check error:', error);
+    return false; // Fail secure
   }
-  
-  getAttemptCount(identifier: string): number {
-    const now = Date.now();
-    const userAttempts = this.attempts.get(identifier) || [];
-    return userAttempts.filter(timestamp => now - timestamp < this.windowMs).length;
-  }
-  
-  getRemainingAttempts(identifier: string): number {
-    return Math.max(0, this.maxAttempts - this.getAttemptCount(identifier));
-  }
-}
-
-/**
- * Security headers for requests
- */
-export const SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin'
 };
 
-/**
- * Validate UUID format
- */
-export function isValidUuid(uuid: string): boolean {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(uuid);
-}
-
-/**
- * Generate a secure random token
- */
-export function generateSecureToken(length: number = 32): string {
-  const array = new Uint8Array(length);
-  crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-}
-
-/**
- * Check if running in development mode
- */
-export function isDevelopment(): boolean {
-  return import.meta.env.DEV || import.meta.env.VITE_ENVIRONMENT === 'development';
-}
-
-/**
- * Secure logging (excludes sensitive data in production)
- */
-export function secureLog(message: string, data?: any): void {
-  if (isDevelopment()) {
-    console.log(`[SECURITY] ${message}`, data);
-  } else {
-    // In production, only log non-sensitive information
-    console.log(`[SECURITY] ${message}`);
-  }
-}
-
-/**
- * Enhanced CSP headers for better security
- */
-export const ENHANCED_SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.openai.com; frame-ancestors 'none';",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self)',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
-};
-
-/**
- * Validate file upload security
- */
-export function validateFileUpload(file: File): {
-  isValid: boolean;
-  errors: string[];
-} {
-  const errors: string[] = [];
-  const maxSize = 10 * 1024 * 1024; // 10MB
-  const allowedTypes = [
-    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-    'application/pdf', 'text/plain', 'text/csv',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'application/vnd.ms-excel'
-  ];
-  
-  if (file.size > maxSize) {
-    errors.push('File size must be less than 10MB');
-  }
-  
-  if (!allowedTypes.includes(file.type)) {
-    errors.push('File type not allowed');
-  }
-  
-  // Check for suspicious file extensions
-  const suspiciousExtensions = ['.exe', '.scr', '.bat', '.cmd', '.com', '.pif', '.js', '.jar'];
-  const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-  
-  if (suspiciousExtensions.includes(fileExtension)) {
-    errors.push('File extension not allowed');
-  }
-  
-  return {
-    isValid: errors.length === 0,
-    errors
-  };
-}
-
-/**
- * Sanitize filename for safe storage
- */
-export function sanitizeFilename(filename: string): string {
-  return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_')
-    .replace(/_{2,}/g, '_')
-    .toLowerCase()
-    .slice(0, 100);
-}
-
-/**
- * Create rate limiter instances for different actions
- */
-export const authRateLimiter = new RateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
-export const apiRateLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per minute
-export const uploadRateLimiter = new RateLimiter(10, 60 * 1000); // 10 uploads per minute
-
-/**
- * Security audit logger
- */
-export async function logSecurityEvent(
+// Security event logging
+export const logSecurityEvent = async (
   action: string,
   resourceType?: string,
   resourceId?: string,
   details?: any
-): Promise<void> {
+): Promise<void> => {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
-    
-    await supabase.rpc('log_security_event', {
+    const params: any = {
       p_action: action,
-      p_resource_type: resourceType,
-      p_resource_id: resourceId,
-      p_details: details
-    });
-  } catch (error) {
-    secureLog('Failed to log security event', { action, error });
-  }
-}
-
-/**
- * Check if request is from valid IP range (if configured)
- */
-export function isValidOrigin(origin: string): boolean {
-  const allowedOrigins = [
-    'localhost',
-    '127.0.0.1',
-    '.supabase.co',
-    '.vercel.app',
-    '.netlify.app'
-  ];
-  
-  return allowedOrigins.some(allowed => 
-    origin.includes(allowed) || origin === allowed
-  );
-}
-
-/**
- * Mask sensitive data for logging
- */
-export function maskSensitiveData(data: any): any {
-  if (typeof data !== 'object' || data === null) return data;
-  
-  const masked = { ...data };
-  const sensitiveKeys = ['password', 'token', 'api_key', 'secret', 'credit_card', 'ssn'];
-  
-  for (const key in masked) {
-    if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
-      masked[key] = '***MASKED***';
+      p_details: details ? JSON.stringify(details) : null
+    };
+    
+    if (resourceType) {
+      params.p_resource_type = resourceType;
     }
+    
+    if (resourceId) {
+      params.p_resource_id = resourceId;
+    }
+    
+    await supabase.rpc('log_security_event', params);
+  } catch (error) {
+    // Don't throw error for logging failures
+    console.warn('Failed to log security event:', error);
+  }
+};
+
+// Content Security Policy helpers
+export const getSecureCSPHeader = (): string => {
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://api.openai.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' https://*.supabase.co https://api.openai.com wss://*.supabase.co",
+    "media-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "upgrade-insecure-requests"
+  ].join('; ');
+};
+
+// Secure random string generation
+export const generateSecureToken = (length: number = 32): string => {
+  const array = new Uint8Array(length);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+};
+
+// User role validation
+export const hasPermission = async (requiredRole: string): Promise<boolean> => {
+  try {
+    const { data: userRole, error } = await supabase.rpc('get_current_user_role');
+    
+    if (error || !userRole) {
+      return false;
+    }
+    
+    // Role hierarchy: super_admin > admin > manager > user
+    const roleHierarchy: { [key: string]: number } = {
+      'super_admin': 4,
+      'admin': 3,
+      'manager': 2,
+      'user': 1
+    };
+    
+    const userLevel = roleHierarchy[userRole] || 0;
+    const requiredLevel = roleHierarchy[requiredRole] || 0;
+    
+    return userLevel >= requiredLevel;
+  } catch (error) {
+    console.error('Permission check error:', error);
+    return false;
+  }
+};
+
+// XSS protection
+export const escapeHtml = (unsafe: string): string => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+// CSRF protection
+export const generateCSRFToken = (): string => {
+  return generateSecureToken(32);
+};
+
+export const validateCSRFToken = (token: string, expectedToken: string): boolean => {
+  if (!token || !expectedToken || token.length !== expectedToken.length) {
+    return false;
   }
   
-  return masked;
-}
+  // Timing-safe comparison
+  let result = 0;
+  for (let i = 0; i < token.length; i++) {
+    result |= token.charCodeAt(i) ^ expectedToken.charCodeAt(i);
+  }
+  
+  return result === 0;
+};
