@@ -1,6 +1,6 @@
 import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
-import { toast } from '@/hooks/use-toast';
-import { performanceMonitor } from '@/lib/performance';
+import { toast } from '../hooks/use-toast';
+import { performanceMonitor } from './performance';
 // Note: logSecurityEvent function will be implemented when security module is complete
 
 // Enhanced error handling for queries
