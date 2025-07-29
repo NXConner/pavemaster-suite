@@ -78,7 +78,7 @@
     "recharts": "^2.12.7",
     "sonner": "^1.5.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-react": "^5.27.0",
+    "swagger-ui-react": "^3.29.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.3",
@@ -102,14 +102,14 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "lighthouse-ci": "^1.1.0",
-    "lovable-tagger": "^1.1.8",
+    "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
     "terser": "^5.43.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1",
+    "vite": "^7.0.6",
     "vite-bundle-analyzer": "^0.7.0",
-    "vitest": "^1.0.0"
+    "vitest": "^3.2.4"
   }
 }
