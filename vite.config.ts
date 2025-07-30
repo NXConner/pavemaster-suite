@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import legacy from '@vitejs/plugin-legacy';
-import { compression } from 'vite-plugin-compression2';
+
 import { createHtmlPlugin } from 'vite-plugin-html';
 import path from 'path';
 
@@ -29,7 +29,7 @@ export default defineConfig(({ command, mode }) => {
     
     // Server configuration
     server: {
-      port: parseInt(env.VITE_DEV_PORT) || 3000,
+      port: 8080,
       open: true,
       proxy: {
         '/api': {
@@ -181,13 +181,6 @@ export default defineConfig(({ command, mode }) => {
         ]
       }),
       
-      // Compression plugin
-      compression({
-        algorithm: 'brotli',
-        exclude: [/\.(br)$/, /\.(gz)$/],
-        threshold: 1024,
-        minRatio: 0.8
-      }),
       
       // HTML plugin for dynamic HTML generation
       createHtmlPlugin({
@@ -241,7 +234,11 @@ export default defineConfig(({ command, mode }) => {
         '@capacitor/geolocation',
         '@capacitor/device',
         '@capacitor/network',
-        '@capacitor/preferences'
+        '@capacitor/preferences',
+        '@capacitor/haptics',
+        '@capacitor/filesystem',
+        '@capacitor/motion',
+        '@capacitor/keyboard'
       ],
       exclude: ['@capacitor/ios', '@capacitor/android']
     }
