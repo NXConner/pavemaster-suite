@@ -3,7 +3,7 @@ import * as React from 'react';
 import type {
   ToastActionElement,
   ToastProps,
-} from '../components/ui/toast';
+} from '@/components/ui/toast';
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -156,7 +156,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open: boolean) => {
+      onOpenChange: (open) => {
         if (!open) { dismiss(); }
       },
     },
@@ -185,13 +185,7 @@ function useToast() {
   return {
     ...state,
     toast,
-    dismiss: (toastId?: string) => { 
-      if (toastId) {
-        dispatch({ type: 'DISMISS_TOAST', toastId });
-      } else {
-        dispatch({ type: 'DISMISS_TOAST' });
-      }
-    },
+    dismiss: (toastId?: string) => { dispatch({ type: 'DISMISS_TOAST', toastId }); },
   };
 }
 

@@ -1,120 +1,135 @@
-# 🚀 Pavement Performance Suite
+# 🚧 Pavement Performance Suite
 
-## 🎯 Project Overview
+## 🌟 Project Overview
+An AI-powered, enterprise-grade platform for asphalt paving operations, specializing in church parking lot management and optimization.
 
-Pavement Performance Suite is a comprehensive software solution for asphalt paving and sealing businesses, designed to streamline project management, cost estimation, and operational efficiency.
+### 🎯 Core Mission
+Empower small to medium-sized paving businesses with cutting-edge technology for efficient project management, precise estimations, and data-driven decision-making.
 
-## 📦 Features
-
-- 🏗️ Project Management
-- 💰 Cost Estimation
-- 📊 Performance Tracking
-- 🚧 Equipment Management
-- 🤖 AI-Powered Insights
-
-## 🛠️ Technology Stack
-
-- **Frontend**: React with TypeScript
-- **Backend**: Node.js with Express
-- **Database**: PostgreSQL with Supabase
-- **Authentication**: JWT
+## 🛠 Technology Stack
+- **Frontend**: React 18, Next.js 14, TypeScript
+- **Backend**: Supabase, PostgreSQL
+- **State Management**: Zustand
+- **UI Library**: Shadcn/UI, Tailwind CSS
+- **Authentication**: Supabase Auth
 - **Deployment**: Docker, GitHub Actions
-
-## 📋 Documentation
-
-### Deployment
-For comprehensive deployment instructions, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-
-### API Documentation
-Explore our OpenAPI specification in [docs/openapi.yaml](docs/openapi.yaml)
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16.14.0+
-- npm 8.5.0+
-- Docker 20.10.12+
-- Supabase CLI
+- Node.js 18+
+- pnpm or npm
+- Supabase Account
+- Docker (optional)
 
-### Installation
+### Installation Steps
+1. Clone the repository
 ```bash
-# Clone the repository
 git clone https://github.com/your-org/pavement-performance-suite.git
 cd pavement-performance-suite
-
-# Install dependencies
-npm install
-
-# Copy environment template
-cp .env.example .env
-
-# Initialize Supabase
-supabase init
-supabase migration up
-
-# Start development server
-npm run dev
 ```
 
-## 🔐 Environment Configuration
+2. Install Dependencies
+```bash
+pnpm install
+```
 
-Create `.env` files for different environments. See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed configuration.
+3. Set Up Environment
+```bash
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+```
+
+4. Run Database Migrations
+```bash
+pnpm supabase:migrate
+```
+
+5. Start Development Server
+```bash
+pnpm dev
+```
+
+## 🔐 Authentication Roles
+- **Super Admin**: Full system access
+- **Admin**: Manage users, projects
+- **Manager**: Project oversight
+- **Field Crew**: Operational tasks
+- **Client**: Limited project visibility
+
+## 📊 Key Features
+
+### Project Management
+- Complete project lifecycle tracking
+- Church-specific workflow optimization
+- Resource allocation and scheduling
+
+### Estimation Tools
+- Visual parking lot layout design
+- Precise material and cost calculations
+- Dynamic pricing models
+
+### Equipment Tracking
+- Asset management
+- Maintenance scheduling
+- IoT device integration
+
+### Weather & Environmental Monitoring
+- Real-time weather impact predictions
+- Temperature tracking for optimal operations
+
+### AI-Powered Insights
+- Predictive maintenance
+- Performance optimization
+- Quality control predictions
 
 ## 🧪 Testing
-
 ```bash
-# Run unit tests
-npm test
-
-# Run integration tests
-npm run test:integration
-
-# Run end-to-end tests
-npm run test:e2e
+pnpm test:unit      # Run unit tests
+pnpm test:integration  # Run integration tests
+pnpm test:e2e       # Run end-to-end tests
 ```
 
-## 🐳 Docker Deployment
+## 🚢 Deployment
+- **Staging**: Automatically deployed on merge to `develop`
+- **Production**: Automatically deployed on merge to `main`
 
+### Docker Deployment
 ```bash
-# Build development image
-docker build -t pavement-performance-dev -f Dockerfile.dev .
-
-# Start development environment
-docker-compose -f docker-compose.dev.yml up -d
+docker-compose up --build
 ```
-
-## 📊 Monitoring & Logging
-
-- **Logging**: Structured JSON logging
-- **Error Tracking**: Sentry
-- **Performance**: Prometheus, Grafana
-
-## 🔒 Security
-
-- Row Level Security (RLS)
-- JWT Authentication
-- Environment-specific secrets management
 
 ## 🤝 Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push and create Pull Request
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+### Contribution Guidelines
+- Follow TypeScript best practices
+- 100% test coverage for new features
+- Update documentation
+- Adhere to our Code of Conduct
 
-## 📝 License
+## 📜 License
+MIT License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🛡️ Security
+- Regular vulnerability scanning
+- GDPR compliant
+- SOC 2 considerations
 
 ## 📞 Support
+For issues, feature requests, or support:
+- Email: support@pavemastersuit.com
+- GitHub Issues
 
-For deployment issues or support, contact: support@pavementperformance.com
+## 🌐 Roadmap
+Check our [IMPLEMENTATION_STRATEGY.md](IMPLEMENTATION_STRATEGY.md) for detailed feature roadmap
 
-## 🚀 Roadmap
-
-- [x] Core Project Management
-- [x] Equipment Tracking
-- [ ] AI Predictive Maintenance
-- [ ] Mobile Application
-- [ ] Advanced Reporting Tools
+## 💡 Unique Value Proposition
+Transforming church parking lot management through technology, precision, and intelligent design.
 
 ---
 
-**Deploy with Confidence, Operate with Excellence** 🚀🛠️
+**Built with ❤️ for the Paving Industry**

@@ -1,130 +1,242 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
+import legacy from '@vitejs/plugin-legacy';
+import { compression } from 'vite-plugin-compression2';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import path from 'path';
 
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  plugins: [
-    react(),
-    mode === 'development' && componentTagger(),
-  ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-  build: {
-    // Optimize bundle size
-    target: 'esnext',
-    minify: 'esbuild',
-    cssMinify: true,
+export default defineConfig(({ command, mode }) => {
+  // Load env file based on `mode`
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
+    // Base configuration
+    base: env.VITE_APP_BASE_URL || '/',
     
-    // Enable advanced code splitting
-    rollupOptions: {
-      output: {
-        // Manual chunks for better code splitting
-        manualChunks: {
-          // Core React and routing
-          'react-vendor': ['react', 'react-dom'],
-          'router': ['react-router-dom'],
-          
-          // UI Components and utilities
-          'ui-vendor': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-select',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-avatar',
-            '@radix-ui/react-checkbox',
-            '@radix-ui/react-progress',
-            '@radix-ui/react-toast',
-            'lucide-react',
-            'clsx',
-            'tailwind-merge'
-          ],
-          
-          // Charts and data visualization
-          'charts-vendor': ['recharts'],
-          
-          // Date and utility libraries
-          'utils-vendor': ['date-fns'],
-          
-          // Supabase and database
-          'supabase': ['@supabase/supabase-js'],
-          'query': ['@tanstack/react-query'],
-          
-          // API and documentation
-          'api-vendor': ['swagger-ui-react']
-        },
-        
-        // Optimize chunk names
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId 
-            ? chunkInfo.facadeModuleId.split('/').pop()?.replace('.tsx', '').replace('.ts', '') 
-            : 'chunk';
-          return `js/${facadeModuleId}-[hash].js`;
-        },
-        
-        // Optimize asset names
-        assetFileNames: (assetInfo) => {
-          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name || '')) {
-            return `images/[name]-[hash][extname]`;
-          }
-          if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name || '')) {
-            return `fonts/[name]-[hash][extname]`;
-          }
-          return `assets/[name]-[hash][extname]`;
+    // Resolve configuration
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@components': path.resolve(__dirname, './src/components'),
+        '@services': path.resolve(__dirname, './src/services'),
+        '@utils': path.resolve(__dirname, './src/utils'),
+        '@assets': path.resolve(__dirname, './src/assets')
+      },
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
+    },
+    
+    // Server configuration
+    server: {
+      port: parseInt(env.VITE_DEV_PORT) || 3000,
+      open: true,
+      proxy: {
+        '/api': {
+          target: env.VITE_API_BASE_URL || 'http://localhost:8000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
         }
+      },
+      hmr: {
+        overlay: true
       }
     },
     
-    // Optimize build performance
-    reportCompressedSize: false,
-    chunkSizeWarningLimit: 600,
+    // Build configuration
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: mode === 'development',
+      minify: mode === 'production' ? 'terser' : false,
+      
+      // Mobile-optimized build settings
+      target: ['es2015', 'safari11'],
+      cssTarget: 'chrome61',
+      
+      // Chunk and code splitting
+              rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom'],
+              mobile: ['@capacitor/core', '@capacitor/camera', '@capacitor/geolocation'],
+              charts: ['recharts'],
+              utils: ['date-fns', 'clsx', 'zod']
+            }
+          }
+        },
+      
+      // Terser configuration for production
+      terserOptions: {
+        compress: {
+          drop_console: mode === 'production',
+          drop_debugger: mode === 'production'
+        }
+      },
+      
+      // Performance optimizations
+      chunkSizeWarningLimit: 1000,
+      cssCodeSplit: true,
+      cssMinify: true
+    },
     
-    // Enable advanced optimizations
-    cssCodeSplit: true,
-    sourcemap: false, // Disable in production for smaller bundle
-  },
-  
-  // Optimize dependencies
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-router-dom',
-      '@supabase/supabase-js',
-      '@tanstack/react-query',
-      'lucide-react',
-      'recharts'
-    ],
-    exclude: [
-      // Exclude heavy dependencies that should be loaded dynamically
-      'swagger-ui-react'
-    ]
-  },
-  
-  // Performance optimizations
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
-    treeShaking: true,
-    minifyIdentifiers: true,
-    minifySyntax: true,
-    minifyWhitespace: true,
-    drop: ['console', 'debugger'], // Remove console.log and debugger in production
-  },
-  
-  // CSS optimizations
-  css: {
-    devSourcemap: false,
-    preprocessorOptions: {
-      scss: {
-        charset: false
+    // Plugins configuration
+    plugins: [
+      // React plugin with SWC for faster compilation
+      react(),
+      
+      // Progressive Web App support
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        manifest: {
+          name: env.VITE_APP_NAME || 'PaveMaster Suite',
+          short_name: env.VITE_APP_SHORT_NAME || 'PaveMaster',
+          description: env.VITE_APP_DESCRIPTION || 'AI-assisted pavement analysis and performance tracking',
+          theme_color: '#ffffff',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          scope: '/',
+          start_url: '/',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            }
+          ]
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
+          maximumFileSizeToCacheInBytes: 3000000,
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                }
+              }
+            },
+            {
+              urlPattern: /^https:\/\/api\.pavementperformancesuite\.com\/.*/i,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'api-cache',
+                networkTimeoutSeconds: 10,
+                expiration: {
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 60 // 1 hour
+                }
+              }
+            }
+          ]
+        }
+      }),
+      
+      // Legacy browser support
+      legacy({
+        targets: ['defaults', 'not IE 11'],
+        additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+        renderLegacyChunks: true,
+        polyfills: [
+          'es.symbol',
+          'es.array.filter',
+          'es.promise',
+          'es.promise.finally',
+          'es/map',
+          'es/set',
+          'es.array.for-each',
+          'es.object.define-properties',
+          'es.object.define-property',
+          'es.object.get-own-property-descriptor',
+          'es.object.get-own-property-descriptors',
+          'es.object.keys',
+          'es.object.to-string',
+          'web.dom-collections.for-each',
+          'esnext.global-this',
+          'esnext.string.match-all'
+        ]
+      }),
+      
+      // Compression plugin
+      compression({
+        algorithm: 'brotli',
+        exclude: [/\.(br)$/, /\.(gz)$/],
+        threshold: 1024,
+        minRatio: 0.8
+      }),
+      
+      // HTML plugin for dynamic HTML generation
+      createHtmlPlugin({
+        minify: mode === 'production',
+        inject: {
+          data: {
+            title: env.VITE_APP_NAME || 'PaveMaster Suite',
+            description: env.VITE_APP_DESCRIPTION || 'AI-assisted pavement analysis'
+          }
+        }
+      }),
+      
+      // Bundle visualization (only in production)
+      mode === 'production' && visualizer({
+        filename: './stats.html',
+        title: 'PaveMaster Suite - Bundle Analysis',
+        open: false,
+        gzipSize: true,
+        brotliSize: true
+      })
+    ].filter(Boolean),
+    
+    // CSS preprocessor options
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "@/styles/variables.scss";`
+        }
+      },
+      devSourcemap: true
+    },
+    
+    // Test configuration
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/test/setup.ts',
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html']
       }
+    },
+
+    // Optimize dependencies for mobile
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@capacitor/core',
+        '@capacitor/camera',
+        '@capacitor/geolocation',
+        '@capacitor/device',
+        '@capacitor/network',
+        '@capacitor/preferences'
+      ],
+      exclude: ['@capacitor/ios', '@capacitor/android']
     }
-  }
-}));
+  };
+});

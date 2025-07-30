@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { AlertCircle, CheckCircle, Info, AlertTriangle, X } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 
 const alertVariants = cva(
@@ -8,55 +8,28 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-background text-foreground border-border',
-        destructive: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
-        warning: 'border-yellow-500/50 text-yellow-900 bg-yellow-50 dark:bg-yellow-950 dark:text-yellow-100 [&>svg]:text-yellow-600',
-        success: 'border-green-500/50 text-green-900 bg-green-50 dark:bg-green-950 dark:text-green-100 [&>svg]:text-green-600',
-        info: 'border-blue-500/50 text-blue-900 bg-blue-50 dark:bg-blue-950 dark:text-blue-100 [&>svg]:text-blue-600',
+        default: 'bg-background text-foreground',
+        destructive:
+          'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
       },
     },
     defaultVariants: {
       variant: 'default',
     },
-  }
+  },
 );
 
 const Alert = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants> & {
-    dismissible?: boolean;
-    onDismiss?: () => void;
-  }
->(({ className, variant, dismissible, onDismiss, children, ...props }, ref) => {
-  const [isVisible, setIsVisible] = React.useState(true);
-
-  const handleDismiss = () => {
-    setIsVisible(false);
-    onDismiss?.();
-  };
-
-  if (!isVisible) return null;
-
-  return (
-    <div
-      ref={ref}
-      role="alert"
-      className={cn(alertVariants({ variant }), className)}
-      {...props}
-    >
-      {children}
-      {dismissible && (
-        <button
-          onClick={handleDismiss}
-          className="absolute top-2 right-2 p-1 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
-      )}
-    </div>
-  );
-});
+  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
+>(({ className, variant, ...props }, ref) => (
+  <div
+    ref={ref}
+    role="alert"
+    className={cn(alertVariants({ variant }), className)}
+    {...props}
+  />
+));
 Alert.displayName = 'Alert';
 
 const AlertTitle = React.forwardRef<
@@ -83,19 +56,4 @@ const AlertDescription = React.forwardRef<
 ));
 AlertDescription.displayName = 'AlertDescription';
 
-const AlertIcon = ({ variant }: { variant?: VariantProps<typeof alertVariants>['variant'] }) => {
-  switch (variant) {
-    case 'destructive':
-      return <AlertCircle className="h-4 w-4" />;
-    case 'warning':
-      return <AlertTriangle className="h-4 w-4" />;
-    case 'success':
-      return <CheckCircle className="h-4 w-4" />;
-    case 'info':
-      return <Info className="h-4 w-4" />;
-    default:
-      return <Info className="h-4 w-4" />;
-  }
-};
-
-export { Alert, AlertTitle, AlertDescription, AlertIcon };
+export { Alert, AlertTitle, AlertDescription };

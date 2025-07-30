@@ -1,237 +1,180 @@
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import {
-  Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  FormProvider,
-  useFormContext,
+import React, { 
+  createContext, 
+  useContext, 
+  useState, 
+  useCallback, 
+  ReactNode 
+} from 'react';
+import { 
+  useForm, 
+  FormProvider, 
+  UseFormReturn, 
+  FieldValues, 
+  SubmitHandler 
 } from 'react-hook-form';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { 
+  Box, 
+  BoxProps, 
+  Typography 
+} from '@mui/material';
+import { COLOR_PALETTE } from '@/styles/design-system';
+import Button from './Button';
+import Input from './Input';
 
-const Form = FormProvider;
+// Form Context for advanced form management
+interface FormContextType {
+  isSubmitting: boolean;
+  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> = {
-  name: TName;
-};
+const FormContext = createContext<FormContextType | undefined>(undefined);
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
-);
+// Form Component Props
+interface FormProps<T extends FieldValues> extends BoxProps {
+  schema: z.ZodType<T>;
+  onSubmit: SubmitHandler<T>;
+  children: (methods: UseFormReturn<T>) => ReactNode;
+  title?: string;
+  description?: string;
+}
 
-const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->({
+// Main Form Component
+export function Form<T extends FieldValues>({
+  schema,
+  onSubmit,
+  children,
+  title,
+  description,
+  ...boxProps
+}: FormProps<T>) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Initialize react-hook-form with zod validation
+  const methods = useForm<T>({
+    resolver: zodResolver(schema),
+    mode: 'onChange'
+  });
+
+  // Enhanced submit handler with loading state
+  const handleSubmit = useCallback(async (data: T) => {
+    setIsSubmitting(true);
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [onSubmit]);
+
+  return (
+    <FormContext.Provider value={{ isSubmitting, setIsSubmitting }}>
+      <FormProvider {...methods}>
+        <Box 
+          component="form" 
+          onSubmit={methods.handleSubmit(handleSubmit)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            maxWidth: 600,
+            margin: 'auto',
+            padding: 3,
+            borderRadius: 2,
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            backgroundColor: 'white'
+          }}
+          {...boxProps}
+        >
+          {title && (
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                color: COLOR_PALETTE.primary[700],
+                marginBottom: 2,
+                textAlign: 'center'
+              }}
+            >
+              {title}
+            </Typography>
+          )}
+          {description && (
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: COLOR_PALETTE.secondary[600],
+                marginBottom: 2,
+                textAlign: 'center'
+              }}
+            >
+              {description}
+            </Typography>
+          )}
+          {children(methods)}
+        </Box>
+      </FormProvider>
+    </FormContext.Provider>
+  );
+}
+
+// Form Field Component for consistent field rendering
+export function FormField({
+  name,
+  label,
+  type = 'text',
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: {
+  name: string;
+  label: string;
+  type?: string;
+}) {
+  const { register, formState: { errors } } = useForm();
+
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
+    <Input
+      label={label}
+      type={type}
+      {...register(name)}
+      {...props}
+      errorMessage={errors[name]?.message as string}
+      fullWidth
+    />
   );
-};
+}
 
-const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext);
-  const itemContext = React.useContext(FormItemContext);
-  const { getFieldState, formState } = useFormContext();
-
-  const fieldState = getFieldState(fieldContext.name, formState);
-
-  if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>');
+// Submit Button Component
+export function FormSubmitButton({
+  children = 'Submit',
+  ...props
+}: React.ComponentProps<typeof Button>) {
+  const context = useContext(FormContext);
+  
+  if (!context) {
+    throw new Error('FormSubmitButton must be used within a Form');
   }
 
-  const { id } = itemContext;
-
-  return {
-    id,
-    name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
-    ...fieldState,
-  };
-};
-
-type FormItemContextValue = {
-  id: string;
-};
-
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-);
-
-const FormItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const id = React.useId();
-
   return (
-    <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('space-y-2', className)} {...props} />
-    </FormItemContext.Provider>
-  );
-});
-FormItem.displayName = 'FormItem';
-
-const FormLabel = React.forwardRef<
-  React.ElementRef<typeof Label>,
-  React.ComponentPropsWithoutRef<typeof Label> & {
-    required?: boolean;
-  }
->(({ className, required, children, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
-
-  return (
-    <Label
-      ref={ref}
-      className={cn(
-        error && 'text-destructive',
-        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-        className
-      )}
-      htmlFor={formItemId}
+    <Button
+      type="submit"
+      variant="primary"
+      loading={context.isSubmitting}
+      fullWidth
       {...props}
     >
       {children}
-      {required && <span className="text-destructive ml-1">*</span>}
-    </Label>
+    </Button>
   );
-});
-FormLabel.displayName = 'FormLabel';
+}
 
-const FormControl = React.forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
-
-  return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
-  );
-});
-FormControl.displayName = 'FormControl';
-
-const FormDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
-
-  return (
-    <p
-      ref={ref}
-      id={formDescriptionId}
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    />
-  );
-});
-FormDescription.displayName = 'FormDescription';
-
-const FormMessage = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
-
-  if (!body) {
-    return null;
+// Utility hook for form context
+export function useFormContext() {
+  const context = useContext(FormContext);
+  if (!context) {
+    throw new Error('useFormContext must be used within a Form');
   }
+  return context;
+}
 
-  return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn('text-sm font-medium text-destructive', className)}
-      {...props}
-    >
-      {body}
-    </p>
-  );
-});
-FormMessage.displayName = 'FormMessage';
-
-// Form Section Component
-const FormSection = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    title?: string;
-    description?: string;
-  }
->(({ className, title, description, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('space-y-6 border-b border-border pb-6 last:border-b-0', className)}
-    {...props}
-  >
-    {(title || description) && (
-      <div className="space-y-1">
-        {title && (
-          <h3 className="text-lg font-medium leading-6 text-foreground">
-            {title}
-          </h3>
-        )}
-        {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
-        )}
-      </div>
-    )}
-    <div className="space-y-4">{children}</div>
-  </div>
-));
-FormSection.displayName = 'FormSection';
-
-// Form Grid Component
-const FormGrid = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    cols?: 1 | 2 | 3 | 4;
-  }
->(({ className, cols = 1, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'grid gap-4',
-      cols === 1 && 'grid-cols-1',
-      cols === 2 && 'grid-cols-1 md:grid-cols-2',
-      cols === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-      cols === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-      className
-    )}
-    {...props}
-  />
-));
-FormGrid.displayName = 'FormGrid';
-
-export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-  FormSection,
-  FormGrid,
-};
+export default Form;

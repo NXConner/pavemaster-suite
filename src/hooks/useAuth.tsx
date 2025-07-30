@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import type { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase } from '../integrations/supabase/client';
-import { toast } from './use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthResponse {
-  error: AuthError | { message: string } | null;
+  error: AuthError | null;
 }
 
 interface AuthContextType {
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event: any, session: any) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }: any) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -57,140 +57,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    try {
-      const clientIP = await getClientIP();
-      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
-        p_identifier: clientIP,
-        p_action: 'signup_attempt',
-        p_limit: 3,
-        p_window_minutes: 15
-      });
+    const redirectUrl = `${window.location.origin}/`;
 
-      if (!canProceed) {
-        const error = { message: 'Too many signup attempts. Please try again later.' };
-        toast({
-          variant: 'destructive',
-          title: 'Rate limit exceeded',
-          description: error.message,
-        });
-        return { error };
-      }
-
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-          },
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          first_name: firstName,
+          last_name: lastName,
         },
-      });
+      },
+    });
 
-      if (!error) {
-        await supabase.rpc('log_security_event', {
-          p_action: 'user_signup',
-          p_resource_type: 'auth',
-          p_details: { email, timestamp: new Date().toISOString() }
-        });
-      }
-
-      if (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Sign up failed',
-          description: error.message,
-        });
-      } else {
-        toast({
-          title: 'Check your email',
-          description: 'We sent you a confirmation link.',
-        });
-      }
-
-      return { error };
-    } catch (err: any) {
-      const error = { message: 'An unexpected error occurred' };
+    if (error) {
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Sign up failed',
         description: error.message,
       });
-      return { error };
+    } else {
+      toast({
+        title: 'Check your email',
+        description: 'We sent you a confirmation link.',
+      });
     }
-  };
 
-  const getClientIP = async (): Promise<string> => {
-    try {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      return data.ip;
-    } catch {
-      return 'unknown';
-    }
+    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    try {
-      const clientIP = await getClientIP();
-      const { data: canProceed } = await supabase.rpc('check_rate_limit', {
-        p_identifier: `${clientIP}-${email}`,
-        p_action: 'login_attempt',
-        p_limit: 5,
-        p_window_minutes: 15
-      });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (!canProceed) {
-        const error = { message: 'Too many login attempts. Please try again later.' };
-        toast({
-          variant: 'destructive',
-          title: 'Rate limit exceeded',
-          description: error.message,
-        });
-        return { error };
-      }
-      
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (!error) {
-        await supabase.rpc('log_security_event', {
-          p_action: 'user_signin',
-          p_resource_type: 'auth',
-          p_details: { email, timestamp: new Date().toISOString() }
-        });
-      } else {
-        // Log failed login attempt
-        await supabase.rpc('log_security_event', {
-          p_action: 'failed_signin',
-          p_resource_type: 'auth',
-          p_details: { email, error: error.message, timestamp: new Date().toISOString() }
-        });
-      }
-
-      if (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Sign in failed',
-          description: error.message,
-        });
-      }
-
-      return { error };
-    } catch (err: any) {
-      const error = { message: 'An unexpected error occurred' };
+    if (error) {
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Sign in failed',
         description: error.message,
       });
-      return { error };
     }
+
+    return { error };
   };
 
   const signOut = async () => {

@@ -1,70 +1,127 @@
-import { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, TrendingDown, CreditCard, Receipt, BarChart3 } from 'lucide-react';
+import { useState } from 'react';
+import { DollarSign, TrendingUp, TrendingDown, Calculator, CreditCard, Receipt, Target, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface FinancialData {
-  revenue: {
-    current: number;
-    previous: number;
-    change: number;
-  };
-  expenses: {
-    current: number;
-    previous: number;
-    change: number;
-  };
-  profit: {
-    current: number;
-    previous: number;
-    change: number;
-  };
-  cashFlow: {
-    current: number;
-    previous: number;
-    change: number;
-  };
+interface FinancialMetric {
+  id: string;
+  label: string;
+  value: string;
+  change: number;
+  trend: 'up' | 'down' | 'stable';
+  target?: string;
+  category: 'revenue' | 'expenses' | 'profit' | 'budget';
 }
 
-export default function FinancialDashboard() {
-  const [financialData, setFinancialData] = useState<FinancialData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState('month');
+interface ProjectFinancial {
+  id: string;
+  name: string;
+  budget: number;
+  spent: number;
+  remaining: number;
+  profitMargin: number;
+  status: 'on-budget' | 'over-budget' | 'under-budget';
+}
 
-  useEffect(() => {
-    fetchFinancialData();
-  }, [period]);
+export function FinancialDashboard() {
+  const [timeframe, setTimeframe] = useState<'month' | 'quarter' | 'year'>('month');
 
-  const fetchFinancialData = async () => {
-    try {
-      // Mock financial data
-      const mockData: FinancialData = {
-        revenue: {
-          current: 85000,
-          previous: 72000,
-          change: 18.1
-        },
-        expenses: {
-          current: 45000,
-          previous: 48000,
-          change: -6.3
-        },
-        profit: {
-          current: 40000,
-          previous: 24000,
-          change: 66.7
-        },
-        cashFlow: {
-          current: 35000,
-          previous: 20000,
-          change: 75.0
-        }
-      };
-      
-      setFinancialData(mockData);
-    } catch (error) {
-      console.error('Error fetching financial data:', error);
-    } finally {
-      setLoading(false);
-    }
+  const metrics: FinancialMetric[] = [
+    {
+      id: '1',
+      label: 'Total Revenue',
+      value: '$2,425,000',
+      change: 12.5,
+      trend: 'up',
+      target: '$2,500,000',
+      category: 'revenue',
+    },
+    {
+      id: '2',
+      label: 'Operating Expenses',
+      value: '$1,850,000',
+      change: -3.2,
+      trend: 'down',
+      target: '$1,800,000',
+      category: 'expenses',
+    },
+    {
+      id: '3',
+      label: 'Net Profit',
+      value: '$575,000',
+      change: 18.7,
+      trend: 'up',
+      target: '$700,000',
+      category: 'profit',
+    },
+    {
+      id: '4',
+      label: 'Profit Margin',
+      value: '23.7%',
+      change: 2.1,
+      trend: 'up',
+      target: '25%',
+      category: 'profit',
+    },
+  ];
+
+  const projectFinancials: ProjectFinancial[] = [
+    {
+      id: '1',
+      name: 'Highway 101 Resurfacing',
+      budget: 450000,
+      spent: 285000,
+      remaining: 165000,
+      profitMargin: 18.5,
+      status: 'on-budget',
+    },
+    {
+      id: '2',
+      name: 'Shopping Center Parking',
+      budget: 125000,
+      spent: 118500,
+      remaining: 6500,
+      profitMargin: 22.3,
+      status: 'under-budget',
+    },
+    {
+      id: '3',
+      name: 'Industrial Park Access',
+      budget: 275000,
+      spent: 295000,
+      remaining: -20000,
+      profitMargin: 12.1,
+      status: 'over-budget',
+    },
+  ];
+
+  const getTrendIcon = (trend: string) => {
+    if (trend === 'up') { return <TrendingUp className="h-4 w-4 text-green-500" />; }
+    if (trend === 'down') { return <TrendingDown className="h-4 w-4 text-red-500" />; }
+    return <div className="h-4 w-4 bg-gray-400 rounded-full" />;
+  };
+
+  const getTrendColor = (trend: string, change: number) => {
+    if (trend === 'up' && change > 0) { return 'text-green-600'; }
+    if (trend === 'down' && change < 0) { return 'text-red-600'; }
+    return 'text-muted-foreground';
+  };
+
+  const getStatusColor = (status: string) => {
+    const colors = {
+      'on-budget': 'bg-green-100 text-green-800 border-green-200',
+      'under-budget': 'bg-blue-100 text-blue-800 border-blue-200',
+      'over-budget': 'bg-red-100 text-red-800 border-red-200',
+    };
+    return colors[status as keyof typeof colors];
+  };
+
+  const getBudgetProgress = (spent: number, budget: number) => {
+    return Math.min((spent / budget) * 100, 100);
   };
 
   const formatCurrency = (amount: number) => {
@@ -74,177 +131,142 @@ export default function FinancialDashboard() {
     }).format(amount);
   };
 
-  const formatPercentage = (value: number) => {
-    return `${value > 0 ? '+' : ''}${value.toFixed(1)}%`;
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading financial data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!financialData) {
-    return (
-      <div className="text-center py-16">
-        <p className="text-muted-foreground">No financial data available</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Financial Dashboard</h1>
-          <p className="text-muted-foreground">Track revenue, expenses, and profitability</p>
-        </div>
-        <div className="flex gap-2">
-          {['week', 'month', 'quarter', 'year'].map((p) => (
-            <button
-              key={p}
-              className={`px-3 py-1 rounded-md text-sm ${
-                period === p 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              }`}
-              onClick={() => setPeriod(p)}
-            >
-              {p.charAt(0).toUpperCase() + p.slice(1)}
-            </button>
-          ))}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-foreground">Financial Dashboard</h2>
+        <div className="flex items-center space-x-2">
+          <Select value={timeframe} onValueChange={(value: 'month' | 'quarter' | 'year') => { setTimeframe(value); }}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="month">This Month</SelectItem>
+              <SelectItem value="quarter">This Quarter</SelectItem>
+              <SelectItem value="year">This Year</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button variant="outline" size="sm">
+            <Receipt className="h-4 w-4 mr-2" />
+            Generate Report
+          </Button>
         </div>
       </div>
 
-      {/* Key Metrics */}
+      {/* Key Financial Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Revenue</h3>
-            <DollarSign className="h-4 w-4 text-green-600" />
-          </div>
-          <div className="text-2xl font-bold">{formatCurrency(financialData.revenue.current)}</div>
-          <div className="flex items-center gap-1 text-sm mt-1">
-            {financialData.revenue.change > 0 ? (
-              <TrendingUp className="h-3 w-3 text-green-600" />
-            ) : (
-              <TrendingDown className="h-3 w-3 text-red-600" />
-            )}
-            <span className={financialData.revenue.change > 0 ? 'text-green-600' : 'text-red-600'}>
-              {formatPercentage(financialData.revenue.change)}
-            </span>
-            <span className="text-muted-foreground">vs last {period}</span>
-          </div>
-        </div>
-
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Expenses</h3>
-            <CreditCard className="h-4 w-4 text-red-600" />
-          </div>
-          <div className="text-2xl font-bold">{formatCurrency(financialData.expenses.current)}</div>
-          <div className="flex items-center gap-1 text-sm mt-1">
-            {financialData.expenses.change > 0 ? (
-              <TrendingUp className="h-3 w-3 text-red-600" />
-            ) : (
-              <TrendingDown className="h-3 w-3 text-green-600" />
-            )}
-            <span className={financialData.expenses.change > 0 ? 'text-red-600' : 'text-green-600'}>
-              {formatPercentage(financialData.expenses.change)}
-            </span>
-            <span className="text-muted-foreground">vs last {period}</span>
-          </div>
-        </div>
-
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Profit</h3>
-            <TrendingUp className="h-4 w-4 text-blue-600" />
-          </div>
-          <div className="text-2xl font-bold">{formatCurrency(financialData.profit.current)}</div>
-          <div className="flex items-center gap-1 text-sm mt-1">
-            {financialData.profit.change > 0 ? (
-              <TrendingUp className="h-3 w-3 text-green-600" />
-            ) : (
-              <TrendingDown className="h-3 w-3 text-red-600" />
-            )}
-            <span className={financialData.profit.change > 0 ? 'text-green-600' : 'text-red-600'}>
-              {formatPercentage(financialData.profit.change)}
-            </span>
-            <span className="text-muted-foreground">vs last {period}</span>
-          </div>
-        </div>
-
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Cash Flow</h3>
-            <Receipt className="h-4 w-4 text-purple-600" />
-          </div>
-          <div className="text-2xl font-bold">{formatCurrency(financialData.cashFlow.current)}</div>
-          <div className="flex items-center gap-1 text-sm mt-1">
-            {financialData.cashFlow.change > 0 ? (
-              <TrendingUp className="h-3 w-3 text-green-600" />
-            ) : (
-              <TrendingDown className="h-3 w-3 text-red-600" />
-            )}
-            <span className={financialData.cashFlow.change > 0 ? 'text-green-600' : 'text-red-600'}>
-              {formatPercentage(financialData.cashFlow.change)}
-            </span>
-            <span className="text-muted-foreground">vs last {period}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Section */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Revenue Trend</h3>
-            <BarChart3 className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <div className="h-64 flex items-center justify-center text-muted-foreground">
-            Revenue Chart Placeholder
-          </div>
-        </div>
-
-        <div className="border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Expense Breakdown</h3>
-            <BarChart3 className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <div className="h-64 flex items-center justify-center text-muted-foreground">
-            Expense Chart Placeholder
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Transactions */}
-      <div className="border rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>
-        <div className="space-y-3">
-          {[
-            { id: 1, description: 'Grace Baptist Church - Parking Lot Sealcoating', amount: 12000, date: '2024-01-15', type: 'income' },
-            { id: 2, description: 'Equipment Rental - Asphalt Roller', amount: -800, date: '2024-01-14', type: 'expense' },
-            { id: 3, description: 'First Presbyterian - Crack Sealing', amount: 5500, date: '2024-01-12', type: 'income' },
-            { id: 4, description: 'Material Purchase - Sealcoat', amount: -2500, date: '2024-01-10', type: 'expense' }
-          ].map((transaction) => (
-            <div key={transaction.id} className="flex items-center justify-between py-2 border-b last:border-b-0">
-              <div>
-                <p className="font-medium">{transaction.description}</p>
-                <p className="text-sm text-muted-foreground">{transaction.date}</p>
+        {metrics.map((metric) => (
+          <Card key={metric.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {metric.label}
+              </CardTitle>
+              {getTrendIcon(metric.trend)}
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground mb-1">
+                {metric.value}
               </div>
-              <div className={`font-semibold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {transaction.amount > 0 ? '+' : ''}{formatCurrency(Math.abs(transaction.amount))}
+              <div className="flex items-center justify-between">
+                <span className={`text-xs font-medium ${getTrendColor(metric.trend, metric.change)}`}>
+                  {metric.change > 0 ? '+' : ''}{metric.change}%
+                </span>
+                {metric.target && (
+                  <span className="text-xs text-muted-foreground">
+                    Target: {metric.target}
+                  </span>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
+
+      <Tabs defaultValue="projects" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="projects">Project Financials</TabsTrigger>
+          <TabsTrigger value="cash-flow">Cash Flow</TabsTrigger>
+          <TabsTrigger value="expenses">Expense Breakdown</TabsTrigger>
+          <TabsTrigger value="forecasting">Forecasting</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="projects" className="space-y-4">
+          <div className="grid gap-4">
+            {projectFinancials.map((project) => (
+              <Card key={project.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">{project.name}</CardTitle>
+                    <Badge variant="outline" className={getStatusColor(project.status)}>
+                      {project.status.replace('-', ' ')}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Budget</div>
+                      <div className="text-lg font-semibold">{formatCurrency(project.budget)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Spent</div>
+                      <div className="text-lg font-semibold">{formatCurrency(project.spent)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Remaining</div>
+                      <div className={`text-lg font-semibold ${project.remaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                        {formatCurrency(project.remaining)}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">Profit Margin</div>
+                      <div className="text-lg font-semibold">{project.profitMargin}%</div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Budget Utilization</span>
+                      <span>{getBudgetProgress(project.spent, project.budget).toFixed(1)}%</span>
+                    </div>
+                    <Progress
+                      value={getBudgetProgress(project.spent, project.budget)}
+                      className={project.spent > project.budget ? 'bg-red-100' : 'bg-green-100'}
+                    />
+                    {project.spent > project.budget && (
+                      <div className="flex items-center space-x-2 text-sm text-red-600">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Over budget by {formatCurrency(project.spent - project.budget)}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="cash-flow" className="space-y-4">
+          <div className="text-center text-muted-foreground py-8">
+            <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Cash flow analysis and forecasting charts would be implemented here</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="expenses" className="space-y-4">
+          <div className="text-center text-muted-foreground py-8">
+            <Calculator className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Detailed expense breakdown and categorization would be implemented here</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="forecasting" className="space-y-4">
+          <div className="text-center text-muted-foreground py-8">
+            <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Financial forecasting and projection models would be implemented here</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

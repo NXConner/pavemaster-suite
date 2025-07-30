@@ -1,1 +1,39 @@
-project_id = "vodglzbgqsafghlihivy"
+[global]
+project_id = "pavement-performance-suite"
+database_version = "15"
+
+[auth]
+site_url = "https://pavementperformancesuite.com"
+additional_redirect_urls = ["https://www.pavementperformancesuite.com"]
+jwt_expiration = 3600
+enable_email_signup = true
+enable_email_confirmations = true
+
+[database]
+max_connections = 100
+connection_timeout = 10
+idle_timeout = 30
+max_lifetime = 1800
+
+[storage]
+file_size_limit = 50 # MB
+allowed_mime_types = [
+    "image/jpeg",
+    "image/png",
+    "application/pdf",
+    "text/csv"
+]
+
+[functions]
+timeout_seconds = 10
+memory_mb = 256
+
+[edge]
+enabled = true
+cdn_cache_max_age = 3600 # 1 hour
+
+[security]
+rate_limit_requests = 100
+rate_limit_window_seconds = 60
+enable_hsts = true
+csp_policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https:"
