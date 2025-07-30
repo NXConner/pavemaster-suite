@@ -726,3 +726,6 @@ class MobileService {
 // Export singleton instance
 export const mobileService = new MobileService();
 export default mobileService;
+
+// Ensure all types are exported
+export type { MobileCapabilities, LocationData, PhotoData, OfflineData, NotificationPayload };

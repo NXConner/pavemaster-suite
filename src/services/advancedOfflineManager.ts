@@ -637,3 +637,6 @@ class AdvancedOfflineManager {
 
 export const advancedOfflineManager = new AdvancedOfflineManager();
 export default advancedOfflineManager;
+
+// Ensure all types are exported
+export type { OfflineEntity, SyncConflict, SyncStats, OfflineConfig };
