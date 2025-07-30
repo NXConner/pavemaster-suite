@@ -58,10 +58,17 @@ export default defineConfig(({ command, mode }) => {
               rollupOptions: {
           output: {
             manualChunks: {
-              vendor: ['react', 'react-dom'],
+              react: ['react', 'react-dom'],
               mobile: ['@capacitor/core', '@capacitor/camera', '@capacitor/geolocation'],
               charts: ['recharts'],
-              utils: ['date-fns', 'clsx', 'zod']
+              ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
+              radix: ['@radix-ui/react-accordion', '@radix-ui/react-alert-dialog', '@radix-ui/react-select', '@radix-ui/react-scroll-area'],
+              lucide: ['lucide-react'],
+              supabase: ['@supabase/supabase-js'],
+              utils: ['date-fns', 'clsx', 'zod'],
+              query: ['@tanstack/react-query'],
+              forms: ['react-hook-form', '@hookform/resolvers'],
+              dnd: ['react-beautiful-dnd']
             }
           }
         },
@@ -75,7 +82,7 @@ export default defineConfig(({ command, mode }) => {
       },
       
       // Performance optimizations
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 2000,
       cssCodeSplit: true,
       cssMinify: true
     },
@@ -120,7 +127,7 @@ export default defineConfig(({ command, mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
-          maximumFileSizeToCacheInBytes: 3000000,
+          maximumFileSizeToCacheInBytes: 5000000,
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-07-30T05:07:43.688Z",
+  "buildSize": {
+    "totalSize": 17089686,
+    "totalFiles": 1270,
+    "fileTypes": {
+      ".js": {
+        "count": 1050,
+        "size": 10119402
+      },
+      ".br": {
+        "count": 102,
+        "size": 2285261
+      },
+      ".gz": {
+        "count": 102,
+        "size": 2867254
+      },
+      ".css": {
+        "count": 3,
+        "size": 261793
+      },
+      ".jpg": {
+        "count": 6,
+        "size": 1524942
+      },
+      ".ico": {
+        "count": 1,
+        "size": 7645
+      },
+      ".html": {
+        "count": 1,
+        "size": 2926
+      },
+      ".webmanifest": {
+        "count": 1,
+        "size": 490
+      },
+      ".svg": {
+        "count": 1,
+        "size": 3253
+      },
+      ".txt": {
+        "count": 1,
+        "size": 160
+      },
+      ".xml": {
+        "count": 1,
+        "size": 1475
+      },
+      ".json": {
+        "count": 1,
+        "size": 15085
+      }
+    }
+  },
+  "assetOptimization": {
+    "images": [
+      "/workspace/dist/assets/dashboard-hero-avy3Gmtc.jpg",
+      "/workspace/dist/placeholder.svg",
+      "/workspace/dist/wallpapers/construction-site.jpg",
+      "/workspace/dist/wallpapers/forest-landscape.jpg",
+      "/workspace/dist/wallpapers/ocean-view.jpg",
+      "/workspace/dist/wallpapers/steel-structure.jpg",
+      "/workspace/dist/wallpapers/urban-blueprint.jpg"
+    ],
+    "fonts": [],
+    "videos": []
+  },
+  "compressionEfficiency": {
+    "brotli": {
+      "count": 102,
+      "originalSize": 9811134,
+      "compressedSize": 2285261
+    },
+    "gzip": {
+      "count": 102,
+      "originalSize": 9811134,
+      "compressedSize": 2867254
+    },
+    "uncompressed": {
+      "count": 1066,
+      "size": 11937171
+    }
+  },
+  "loadingPerformance": {
+    "totalJSSize": 10119402,
+    "totalCSSSize": 261793,
+    "totalCriticalSize": 10381195,
+    "estimatedLoadTimes": {
+      "Fast 3G": 49.5013952255249,
+      "4G": 19.80055809020996,
+      "Broadband": 7.920223236083984
+    }
+  },
+  "recommendations": []
+}
