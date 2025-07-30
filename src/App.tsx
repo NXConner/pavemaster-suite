@@ -31,6 +31,7 @@ const EnterpriseIntegrations = lazy(() => import("@/components/EnterpriseIntegra
 const MobileCompanion = lazy(() => import("@/components/MobileCompanion"));
 const QuantumOperationsCenter = lazy(() => import("@/components/QuantumOperationsCenter"));
 const UltimateEnhancedMissionControl = lazy(() => import("@/components/UltimateEnhancedMissionControl"));
+const MaximizedCompanionApp = lazy(() => import("@/components/MaximizedCompanionApp"));
 
 // Lazy load non-critical pages for better performance
 const Settings = lazy(() => import("./pages/Settings"));
@@ -118,6 +119,7 @@ const App = () => (
                                   <Route path="/mobile-companion" element={<MobileCompanion />} />
                                   <Route path="/quantum" element={<QuantumOperationsCenter />} />
                                   <Route path="/ultimate-mission-control" element={<UltimateEnhancedMissionControl />} />
+                                  <Route path="/maximized-companion" element={<MaximizedCompanionApp />} />
                                   
                                   {/* Feature pages */}
                                   <Route path="/tracking" element={<Tracking />} />
