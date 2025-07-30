@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import legacy from '@vitejs/plugin-legacy';
-
+import { componentTagger } from "lovable-tagger";
 import { createHtmlPlugin } from 'vite-plugin-html';
 import path from 'path';
 
@@ -29,6 +29,7 @@ export default defineConfig(({ command, mode }) => {
     
     // Server configuration
     server: {
+      host: "::",
       port: 8080,
       open: true,
       proxy: {
@@ -91,6 +92,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       // React plugin with SWC for faster compilation
       react(),
+      mode === 'development' && componentTagger(),
       
       // Progressive Web App support
       VitePWA({
@@ -178,7 +180,7 @@ export default defineConfig(({ command, mode }) => {
           'web.dom-collections.for-each',
           'esnext.global-this',
           'esnext.string.match-all'
-        ]
+      ].filter(Boolean)
       }),
       
       

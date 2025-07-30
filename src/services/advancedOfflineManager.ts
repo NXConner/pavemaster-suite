@@ -1,4 +1,4 @@
-import { openDB, IDBPDatabase, IDBPTransaction } from 'idb';
+import { openDB, type IDBPDatabase, type IDBPTransaction } from 'idb';
 import mobileService from './mobileService';
 
 // Types for offline data management

@@ -721,6 +721,8 @@ class MobileService {
   }
 }
 
+// Note: MobileCapabilities, LocationData, and PhotoData are already defined above
+
 // Export singleton instance
 export const mobileService = new MobileService();
 export default mobileService;
