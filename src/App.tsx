@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { JargonProvider } from "@/contexts/JargonContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageLoading } from "@/components/Loading";
@@ -53,6 +54,8 @@ const PredictiveAnalytics = lazy(() => import("./components/PredictiveAnalytics"
 const IoTDashboard = lazy(() => import("./components/IoTDashboard"));
 const GlobalExpansion = lazy(() => import("./components/GlobalExpansion"));
 const VeteranResources = lazy(() => import("./pages/VeteranResources"));
+const EnhancedVeteranResources = lazy(() => import("./pages/EnhancedVeteranResources"));
+const JargonControlPanel = lazy(() => import("./components/JargonControlPanel"));
 const FleetManagement = lazy(() => import("./pages/FleetManagement"));
 const CompanyResources = lazy(() => import("./pages/CompanyResources"));
 
@@ -70,7 +73,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <ThemeProvider>
-        <TooltipProvider>
+        <JargonProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -138,6 +142,8 @@ const App = () => (
                                   
                                   {/* Company Features */}
                                   <Route path="/veterans" element={<VeteranResources />} />
+                                  <Route path="/veterans-enhanced" element={<EnhancedVeteranResources />} />
+                                  <Route path="/jargon-control" element={<JargonControlPanel />} />
                                   <Route path="/fleet" element={<FleetManagement />} />
                                   <Route path="/resources" element={<CompanyResources />} />
                                   
@@ -154,7 +160,8 @@ const App = () => (
               </div>
             </SidebarProvider>
           </BrowserRouter>
-        </TooltipProvider>
+          </TooltipProvider>
+        </JargonProvider>
       </ThemeProvider>
     </AuthProvider>
   </QueryClientProvider>
