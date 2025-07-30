@@ -42,8 +42,9 @@ import {
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Maximized Companion", url: "/maximized-companion", icon: Monitor },
   { title: "Ultimate Mission Control", url: "/ultimate-mission-control", icon: Target },
-  { title: "Quantum Operations", url: "/quantum", icon: Zap },
+  { title: "Advanced Operations", url: "/advanced-ops", icon: Zap },
   { title: "Mission Control", url: "/mission-control", icon: Satellite },
   { title: "OverWatch TOSS", url: "/overwatch", icon: Command },
   { title: "AI Operations", url: "/ai-operations", icon: Brain },
