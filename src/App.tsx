@@ -21,7 +21,8 @@ import NotFound from "./pages/NotFound";
 import CostCounter from "@/components/CostCounter";
 import EmployeeTracker from "@/components/EmployeeTracker";
 import SuperAdminCostCounter from "@/components/SuperAdminCostCounter";
-import UniversalCalculator from "@/components/UniversalCalculator";
+import UltimateCostAnalytics from "@/components/UltimateCostAnalytics";
+import UltimateCalculatorSuite from "@/components/UltimateCalculatorSuite";
 
 // Advanced components with lazy loading for performance
 const OverWatchTOSS = lazy(() => import("@/components/OverWatchTOSS"));
@@ -113,9 +114,10 @@ const App = () => (
                                   <Route path="/api-docs" element={<ApiDocumentation />} />
                                   
                                   {/* Advanced Feature Routes */}
-                                  <Route path="/cost-counter" element={<CostCounter />} />
-                                  <Route path="/super-admin-costs" element={<SuperAdminCostCounter />} />
-                                  <Route path="/employee-tracker" element={<EmployeeTracker />} />
+                                                  <Route path="/cost-counter" element={<CostCounter />} />
+                <Route path="/super-admin-costs" element={<SuperAdminCostCounter />} />
+                <Route path="/ultimate-cost-analytics" element={<UltimateCostAnalytics />} />
+                <Route path="/employee-tracker" element={<EmployeeTracker />} />
                                   <Route path="/overwatch" element={<OverWatchTOSS />} />
                                   <Route path="/task-priorities" element={<TaskPriorityManager />} />
                                   <Route path="/ai-operations" element={<AIOperationsCenter />} />
@@ -160,7 +162,7 @@ const App = () => (
                                 </Routes>
                               </Suspense>
                             </ErrorBoundary>
-                            <UniversalCalculator />
+                            <UltimateCalculatorSuite />
                           </main>
                         </div>
                       </>
