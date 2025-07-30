@@ -29,7 +29,7 @@ const AdvancedAnalytics = lazy(() => import("@/components/AdvancedAnalytics"));
 const MissionControlCenter = lazy(() => import("@/components/MissionControlCenter"));
 const EnterpriseIntegrations = lazy(() => import("@/components/EnterpriseIntegrations"));
 const MobileCompanion = lazy(() => import("@/components/MobileCompanion"));
-const QuantumOperationsCenter = lazy(() => import("@/components/QuantumOperationsCenter"));
+const AdvancedOperationsCenter = lazy(() => import("@/components/AdvancedOperationsCenter"));
 const UltimateEnhancedMissionControl = lazy(() => import("@/components/UltimateEnhancedMissionControl"));
 const MaximizedCompanionApp = lazy(() => import("@/components/MaximizedCompanionApp"));
 
@@ -117,7 +117,7 @@ const App = () => (
                                   <Route path="/mission-control" element={<MissionControlCenter />} />
                                   <Route path="/integrations" element={<EnterpriseIntegrations />} />
                                   <Route path="/mobile-companion" element={<MobileCompanion />} />
-                                  <Route path="/quantum" element={<QuantumOperationsCenter />} />
+                                  <Route path="/advanced-ops" element={<AdvancedOperationsCenter />} />
                                   <Route path="/ultimate-mission-control" element={<UltimateEnhancedMissionControl />} />
                                   <Route path="/maximized-companion" element={<MaximizedCompanionApp />} />
                                   

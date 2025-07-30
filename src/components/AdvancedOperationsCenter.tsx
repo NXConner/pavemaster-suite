@@ -28,22 +28,22 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
-interface QuantumProcessor {
+interface AdvancedProcessor {
   id: string;
   name: string;
-  type: 'quantum_ai' | 'neural_network' | 'decision_tree' | 'pattern_recognition' | 'predictive_modeling' | 'optimization_engine';
-  qubits: number;
-  coherence_time: number;
-  gate_fidelity: number;
+  type: 'ai_analytics' | 'neural_network' | 'decision_tree' | 'pattern_recognition' | 'predictive_modeling' | 'optimization_engine';
+  cores: number;
+  processing_time: number;
+  accuracy: number;
   processing_power: number;
-  quantum_state: 'superposition' | 'entangled' | 'collapsed' | 'error_corrected';
+  processing_state: 'analyzing' | 'optimizing' | 'completed' | 'calibrated';
   current_task: string;
   efficiency: number;
-  temperature: number;
+  load_percentage: number;
 }
 
-interface MultidimensionalData {
-  dimension: string;
+interface AnalyticsData {
+  category: string;
   data_points: number;
   compression_ratio: number;
   processing_speed: number;
@@ -55,7 +55,7 @@ interface MultidimensionalData {
 interface AdvancedSensor {
   id: string;
   name: string;
-  type: 'biometric' | 'environmental' | 'motion' | 'proximity' | 'thermal' | 'electromagnetic' | 'acoustic' | 'optical';
+  type: 'environmental' | 'motion' | 'proximity' | 'thermal' | 'acoustic' | 'optical' | 'pressure' | 'vibration';
   location: { x: number; y: number; z: number };
   range: number;
   precision: number;
@@ -95,25 +95,25 @@ interface SystemOptimization {
   risk_assessment: number;
 }
 
-const QuantumOperationsCenter: React.FC = () => {
+const AdvancedOperationsCenter: React.FC = () => {
   const { user } = useAuth();
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [quantumProcessors, setQuantumProcessors] = useState<QuantumProcessor[]>([]);
-  const [multidimensionalData, setMultidimensionalData] = useState<MultidimensionalData[]>([]);
+  const [advancedProcessors, setAdvancedProcessors] = useState<AdvancedProcessor[]>([]);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData[]>([]);
   const [advancedSensors, setAdvancedSensors] = useState<AdvancedSensor[]>([]);
   const [predictiveScenarios, setPredictiveScenarios] = useState<PredictiveScenario[]>([]);
   const [systemOptimizations, setSystemOptimizations] = useState<SystemOptimization[]>([]);
-  const [quantumEntanglement, setQuantumEntanglement] = useState(87.4);
-  const [dimensionalProcessing, setDimensionalProcessing] = useState(true);
-  const [neuralInterfaceActive, setNeuralInterfaceActive] = useState(false);
-  const [timeDistortionField, setTimeDistortionField] = useState(1.0);
-  const [realityAugmentation, setRealityAugmentation] = useState(false);
-  const [consciousnessSync, setConsciousnessSync] = useState(false);
-  const [quantumTunneling, setQuantumTunneling] = useState(23.7);
-  const [parallelUniverseMonitoring, setParallelUniverseMonitoring] = useState(false);
+  const [processingEfficiency, setProcessingEfficiency] = useState(87.4);
+  const [dataProcessingEnabled, setDataProcessingEnabled] = useState(true);
+  const [aiInterfaceActive, setAiInterfaceActive] = useState(false);
+  const [processingSpeedMultiplier, setProcessingSpeedMultiplier] = useState(1.0);
+  const [enhancedAnalytics, setEnhancedAnalytics] = useState(false);
+  const [systemSync, setSystemSync] = useState(false);
+  const [optimizationLevel, setOptimizationLevel] = useState(23.7);
+  const [continuousMonitoring, setContinuousMonitoring] = useState(false);
 
-  const quantumInterval = useRef<NodeJS.Timeout>();
-  const dimensionalMatrix = useRef<Float32Array>();
+  const processingInterval = useRef<NodeJS.Timeout>();
+  const dataMatrix = useRef<Float32Array>();
 
   useEffect(() => {
     const checkUserRole = async () => {
@@ -138,65 +138,65 @@ const QuantumOperationsCenter: React.FC = () => {
 
   useEffect(() => {
     if (userRole && userRole === 'super_admin') {
-      initializeQuantumSystems();
-      startQuantumProcessing();
+      initializeAdvancedSystems();
+      startAdvancedProcessing();
     }
 
     return () => {
-      if (quantumInterval.current) {
-        clearInterval(quantumInterval.current);
+      if (processingInterval.current) {
+        clearInterval(processingInterval.current);
       }
     };
   }, [userRole]);
 
-  const initializeQuantumSystems = async () => {
-    // Initialize quantum processors
-    const processors: QuantumProcessor[] = [
+  const initializeAdvancedSystems = async () => {
+    // Initialize advanced processors
+    const processors: AdvancedProcessor[] = [
       {
-        id: 'qpu_001',
-        name: 'Quantum AI Nexus',
-        type: 'quantum_ai',
-        qubits: 1024,
-        coherence_time: 150.5,
-        gate_fidelity: 99.97,
+        id: 'apu_001',
+        name: 'AI Analytics Hub',
+        type: 'ai_analytics',
+        cores: 1024,
+        processing_time: 150.5,
+        accuracy: 99.97,
         processing_power: 10000000,
-        quantum_state: 'superposition',
-        current_task: 'Multidimensional workforce optimization',
+        processing_state: 'analyzing',
+        current_task: 'Workforce optimization analysis',
         efficiency: 94.7,
-        temperature: 0.015
+        load_percentage: 15
       },
       {
-        id: 'qpu_002',
-        name: 'Neural Quantum Interface',
+        id: 'apu_002',
+        name: 'Neural Processing Interface',
         type: 'neural_network',
-        qubits: 512,
-        coherence_time: 87.3,
-        gate_fidelity: 99.84,
+        cores: 512,
+        processing_time: 87.3,
+        accuracy: 99.84,
         processing_power: 7500000,
-        quantum_state: 'entangled',
+        processing_state: 'optimizing',
         current_task: 'Predictive behavior analysis',
         efficiency: 92.1,
-        temperature: 0.021
+        load_percentage: 21
       },
       {
-        id: 'qpu_003',
-        name: 'Temporal Optimization Engine',
+        id: 'apu_003',
+        name: 'Performance Optimization Engine',
         type: 'optimization_engine',
-        qubits: 256,
-        coherence_time: 203.7,
-        gate_fidelity: 99.91,
+        cores: 256,
+        processing_time: 203.7,
+        accuracy: 99.91,
         processing_power: 5000000,
-        quantum_state: 'error_corrected',
-        current_task: 'Time-space resource allocation',
+        processing_state: 'calibrated',
+        current_task: 'Resource allocation optimization',
         efficiency: 96.3,
-        temperature: 0.009
+        load_percentage: 9
       }
     ];
 
-    // Initialize multidimensional data streams
-    const dataStreams: MultidimensionalData[] = [
+    // Initialize analytics data streams
+    const dataStreams: AnalyticsData[] = [
       {
-        dimension: 'Temporal Analytics',
+        category: 'Performance Analytics',
         data_points: 50000000,
         compression_ratio: 0.001,
         processing_speed: 15.7,
@@ -205,7 +205,7 @@ const QuantumOperationsCenter: React.FC = () => {
         real_time_factor: 0.1
       },
       {
-        dimension: 'Spatial Mapping',
+        category: 'Site Mapping',
         data_points: 75000000,
         compression_ratio: 0.0008,
         processing_speed: 23.4,
@@ -214,7 +214,7 @@ const QuantumOperationsCenter: React.FC = () => {
         real_time_factor: 0.05
       },
       {
-        dimension: 'Behavioral Patterns',
+        category: 'Operational Patterns',
         data_points: 25000000,
         compression_ratio: 0.002,
         processing_speed: 8.9,
@@ -338,8 +338,8 @@ const QuantumOperationsCenter: React.FC = () => {
       }
     ];
 
-    setQuantumProcessors(processors);
-    setMultidimensionalData(dataStreams);
+    setAdvancedProcessors(processors);
+    setAnalyticsData(dataStreams);
     setAdvancedSensors(sensors);
     setPredictiveScenarios(scenarios);
     setSystemOptimizations(optimizations);
@@ -351,36 +351,36 @@ const QuantumOperationsCenter: React.FC = () => {
     }
   };
 
-  const startQuantumProcessing = () => {
-    quantumInterval.current = setInterval(() => {
-      updateQuantumStates();
-      processMultidimensionalData();
+  const startAdvancedProcessing = () => {
+    processingInterval.current = setInterval(() => {
+      updateProcessingStates();
+      processAnalyticsData();
       optimizeSystemPerformance();
     }, 100); // Ultra-high frequency processing
   };
 
-  const updateQuantumStates = useCallback(() => {
-    setQuantumProcessors(prev => prev.map(processor => ({
+  const updateProcessingStates = useCallback(() => {
+    setAdvancedProcessors(prev => prev.map(processor => ({
       ...processor,
       efficiency: Math.min(99.9, processor.efficiency + (Math.random() - 0.5) * 0.1),
-      temperature: Math.max(0.001, processor.temperature + (Math.random() - 0.5) * 0.002),
-      coherence_time: Math.max(50, processor.coherence_time + (Math.random() - 0.5) * 2),
-      quantum_state: Math.random() > 0.95 ? 
-        (['superposition', 'entangled', 'collapsed', 'error_corrected'][Math.floor(Math.random() * 4)] as any) : 
-        processor.quantum_state
+      load_percentage: Math.max(1, processor.load_percentage + (Math.random() - 0.5) * 2),
+      processing_time: Math.max(50, processor.processing_time + (Math.random() - 0.5) * 2),
+      processing_state: Math.random() > 0.95 ? 
+        (['analyzing', 'optimizing', 'completed', 'calibrated'][Math.floor(Math.random() * 4)] as any) : 
+        processor.processing_state
     })));
 
-    setQuantumEntanglement(prev => 
+    setProcessingEfficiency(prev => 
       Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 0.5))
     );
 
-    setQuantumTunneling(prev => 
+    setOptimizationLevel(prev => 
       Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 0.3))
     );
   }, []);
 
-  const processMultidimensionalData = useCallback(() => {
-    setMultidimensionalData(prev => prev.map(data => ({
+  const processAnalyticsData = useCallback(() => {
+    setAnalyticsData(prev => prev.map(data => ({
       ...data,
       processing_speed: Math.max(1, data.processing_speed + (Math.random() - 0.5) * 0.5),
       accuracy: Math.min(99.99, Math.max(95, data.accuracy + (Math.random() - 0.5) * 0.1)),
@@ -992,4 +992,4 @@ const QuantumOperationsCenter: React.FC = () => {
   );
 };
 
-export default QuantumOperationsCenter;
+export default AdvancedOperationsCenter;
