@@ -372,13 +372,13 @@ const AsphaltEnhancedOverlaySystem: React.FC = () => {
         cloudy: 1.2,
         overcast: 1.4,
         rainy: 1.8
-      }[environmentalConditions.weather as keyof typeof {clear: 1.0, cloudy: 1.2, overcast: 1.4, rainy: 1.8}] || 1.0,
+      }[environmentalConditions.weather as 'clear' | 'cloudy' | 'overcast' | 'rainy'] || 1.0,
       
       lightingMultiplier: {
         natural: 1.0,
         artificial: 1.3,
         mixed: 1.1
-      }[environmentalConditions.lighting as keyof typeof {natural: 1.0, artificial: 1.3, mixed: 1.1}] || 1.0
+      }[environmentalConditions.lighting as 'natural' | 'artificial' | 'mixed'] || 1.0
     };
 
     const totalMultiplier = optimizationFactors.conditionMultiplier * 

@@ -366,7 +366,7 @@ const ComprehensiveMappingSystem: React.FC = () => {
 
         <div className="flex items-center space-x-2">
           {/* View Mode Toggle */}
-          <Select value={viewMode} onValueChange={(value: 'v'>) => setViewMode(value)}>
+          <Select value={viewMode} onValueChange={(value: '2d' | '3d') => setViewMode(value)}>
             <SelectTrigger className="w-24">
               <SelectValue />
             </SelectTrigger>
