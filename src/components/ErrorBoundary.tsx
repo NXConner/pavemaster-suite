@@ -11,7 +11,8 @@ interface ErrorBoundaryState {
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback?: React.ComponentType<ErrorFallbackProps>;
+  fallback?: React.ComponentType<ErrorFallbackProps> | React.ReactNode;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
 interface ErrorFallbackProps {
@@ -43,6 +44,11 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       errorInfo,
     });
 
+    // Call onError callback if provided
+    if (this.props.onError) {
+      this.props.onError(error, errorInfo);
+    }
+
     // Log error to monitoring service in production
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
@@ -63,9 +69,25 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
   render() {
     if (this.state.hasError && this.state.error) {
-      const FallbackComponent = this.props.fallback || DefaultErrorFallback;
+      if (this.props.fallback) {
+        // If fallback is a React node, render it directly
+        if (React.isValidElement(this.props.fallback)) {
+          return this.props.fallback;
+        }
+        // If fallback is a component, render it with props
+        const FallbackComponent = this.props.fallback as React.ComponentType<ErrorFallbackProps>;
+        return (
+          <FallbackComponent
+            error={this.state.error}
+            errorInfo={this.state.errorInfo!}
+            resetError={this.resetError}
+          />
+        );
+      }
+      
+      // Use default fallback
       return (
-        <FallbackComponent
+        <DefaultErrorFallback
           error={this.state.error}
           errorInfo={this.state.errorInfo!}
           resetError={this.resetError}

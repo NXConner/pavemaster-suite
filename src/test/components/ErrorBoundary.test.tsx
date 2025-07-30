@@ -40,8 +40,8 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('An unexpected error occurred. We apologize for the inconvenience.')).toBeInTheDocument();
+    expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('We apologize for the inconvenience. An unexpected error has occurred.')).toBeInTheDocument();
 
     consoleSpy.mockRestore();
   });
@@ -57,7 +57,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Custom error message')).toBeInTheDocument();
-    expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+    expect(screen.queryByText('Oops! Something went wrong')).not.toBeInTheDocument();
 
     consoleSpy.mockRestore();
   });
@@ -82,8 +82,19 @@ describe('ErrorBoundary', () => {
     consoleSpy.mockRestore();
   });
 
-  it('reloads page when reload button is clicked', () => {
+  it('navigates home when go home button is clicked', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const originalHref = window.location.href;
+    
+    // Mock window.location.href setter
+    delete (window as any).location;
+    window.location = { ...originalLocation, href: originalHref } as any;
+    
+    const hrefSetter = vi.fn();
+    Object.defineProperty(window.location, 'href', {
+      set: hrefSetter,
+      get: () => originalHref
+    });
 
     render(
       <ErrorBoundary>
@@ -91,8 +102,8 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    fireEvent.click(screen.getByText('Reload Page'));
-    expect(window.location.reload).toHaveBeenCalled();
+    fireEvent.click(screen.getByText('Go Home'));
+    expect(hrefSetter).toHaveBeenCalledWith('/');
 
     consoleSpy.mockRestore();
   });
@@ -100,23 +111,30 @@ describe('ErrorBoundary', () => {
   it('resets error state when try again button is clicked', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { rerender } = render(
+    // Create a stateful component that can stop throwing
+    let shouldThrow = true;
+    function ConditionalThrowError() {
+      if (shouldThrow) {
+        throw new Error('Test error');
+      }
+      return <div>No error</div>;
+    }
+
+    render(
       <ErrorBoundary>
-        <ThrowError shouldThrow={true} />
+        <ConditionalThrowError />
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument();
 
+    // Stop the component from throwing
+    shouldThrow = false;
+
+    // Click the Try Again button - this calls resetError internally
     fireEvent.click(screen.getByText('Try Again'));
 
-    // Re-render with no error
-    rerender(
-      <ErrorBoundary>
-        <ThrowError shouldThrow={false} />
-      </ErrorBoundary>,
-    );
-
+    // After clicking Try Again, the error boundary should reset and show children again
     expect(screen.getByText('No error')).toBeInTheDocument();
 
     consoleSpy.mockRestore();
