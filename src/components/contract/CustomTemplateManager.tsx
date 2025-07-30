@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import DOMPurify from 'dompurify';
 import { 
   Upload, Download, FileText, Edit3, Save, Check, X, Plus, Trash2, 
   Eye, Settings, AlertTriangle, Shield, Calendar, User, Building,
@@ -836,15 +837,23 @@ const CustomTemplateManager: React.FC = () => {
           <ScrollArea className="h-96 border rounded p-4">
             <div className="prose max-w-none">
               {selectedContract ? (
-                <div dangerouslySetInnerHTML={{ 
-                  __html: 'Contract preview would be generated here...' 
-                }} />
+                <div>Contract preview would be generated here...</div>
               ) : selectedTemplate ? (
-                <div dangerouslySetInnerHTML={{ 
-                  __html: selectedTemplate.content.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, 
-                    '<span class="bg-yellow-200 px-1 rounded">[[$1]]</span>'
-                  )
-                }} />
+                <div 
+                  dangerouslySetInnerHTML={{ 
+                    __html: DOMPurify.sanitize(
+                      selectedTemplate.content.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, 
+                        '<span class="bg-yellow-200 px-1 rounded">[[$1]]</span>'
+                      ),
+                      {
+                        ALLOWED_TAGS: ['span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'strong', 'em', 'ul', 'ol', 'li'],
+                        ALLOWED_ATTR: ['class'],
+                        FORBID_SCRIPTS: true,
+                        FORBID_TAGS: ['script', 'object', 'embed', 'link', 'style', 'meta']
+                      }
+                    )
+                  }} 
+                />
               ) : null}
             </div>
           </ScrollArea>
