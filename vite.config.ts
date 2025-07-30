@@ -5,7 +5,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import legacy from '@vitejs/plugin-legacy';
 import { compression } from 'vite-plugin-compression2';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import { splitVendorChunkPlugin } from 'vite';
 import path from 'path';
 
 export default defineConfig(({ command, mode }) => {
@@ -51,23 +50,21 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: mode === 'development',
       minify: mode === 'production' ? 'terser' : false,
       
+      // Mobile-optimized build settings
+      target: ['es2015', 'safari11'],
+      cssTarget: 'chrome61',
+      
       // Chunk and code splitting
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            // Advanced code splitting
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-            if (id.includes('/src/components/')) {
-              return 'components';
-            }
-            if (id.includes('/src/services/')) {
-              return 'services';
+              rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom'],
+              mobile: ['@capacitor/core', '@capacitor/camera', '@capacitor/geolocation'],
+              charts: ['recharts'],
+              utils: ['date-fns', 'clsx', 'zod']
             }
           }
-        }
-      },
+        },
       
       // Terser configuration for production
       terserOptions: {
@@ -93,10 +90,15 @@ export default defineConfig(({ command, mode }) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
-          name: env.VITE_APP_NAME || 'Pavement Performance Suite',
+          name: env.VITE_APP_NAME || 'PaveMaster Suite',
           short_name: env.VITE_APP_SHORT_NAME || 'PaveMaster',
           description: env.VITE_APP_DESCRIPTION || 'AI-assisted pavement analysis and performance tracking',
           theme_color: '#ffffff',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          scope: '/',
+          start_url: '/',
           icons: [
             {
               src: 'pwa-192x192.png',
@@ -107,11 +109,18 @@ export default defineConfig(({ command, mode }) => {
               src: 'pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
             }
           ]
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
+          maximumFileSizeToCacheInBytes: 3000000,
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -142,13 +151,35 @@ export default defineConfig(({ command, mode }) => {
       
       // Legacy browser support
       legacy({
-        targets: ['defaults', 'not IE 11']
+        targets: ['defaults', 'not IE 11'],
+        additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+        renderLegacyChunks: true,
+        polyfills: [
+          'es.symbol',
+          'es.array.filter',
+          'es.promise',
+          'es.promise.finally',
+          'es/map',
+          'es/set',
+          'es.array.for-each',
+          'es.object.define-properties',
+          'es.object.define-property',
+          'es.object.get-own-property-descriptor',
+          'es.object.get-own-property-descriptors',
+          'es.object.keys',
+          'es.object.to-string',
+          'web.dom-collections.for-each',
+          'esnext.global-this',
+          'esnext.string.match-all'
+        ]
       }),
       
       // Compression plugin
       compression({
         algorithm: 'brotli',
-        exclude: [/\.(br)$/, /\.(gz)$/]
+        exclude: [/\.(br)$/, /\.(gz)$/],
+        threshold: 1024,
+        minRatio: 0.8
       }),
       
       // HTML plugin for dynamic HTML generation
@@ -156,22 +187,21 @@ export default defineConfig(({ command, mode }) => {
         minify: mode === 'production',
         inject: {
           data: {
-            title: env.VITE_APP_NAME || 'Pavement Performance Suite',
+            title: env.VITE_APP_NAME || 'PaveMaster Suite',
             description: env.VITE_APP_DESCRIPTION || 'AI-assisted pavement analysis'
           }
         }
       }),
       
-      // Vendor chunk splitting
-      splitVendorChunkPlugin(),
-      
       // Bundle visualization (only in production)
       mode === 'production' && visualizer({
         filename: './stats.html',
-        title: 'Pavement Performance Suite - Bundle Analysis',
-        open: false
+        title: 'PaveMaster Suite - Bundle Analysis',
+        open: false,
+        gzipSize: true,
+        brotliSize: true
       })
-    ],
+    ].filter(Boolean),
     
     // CSS preprocessor options
     css: {
@@ -192,6 +222,21 @@ export default defineConfig(({ command, mode }) => {
         provider: 'v8',
         reporter: ['text', 'json', 'html']
       }
+    },
+
+    // Optimize dependencies for mobile
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@capacitor/core',
+        '@capacitor/camera',
+        '@capacitor/geolocation',
+        '@capacitor/device',
+        '@capacitor/network',
+        '@capacitor/preferences'
+      ],
+      exclude: ['@capacitor/ios', '@capacitor/android']
     }
   };
 });

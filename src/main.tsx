@@ -10,6 +10,10 @@ import { initializeAccessibility } from '@/lib/accessibility';
 import { initializeOfflineSupport } from '@/lib/offline';
 import { performanceMonitor } from '@/lib/performance';
 
+// Initialize mobile service and advanced offline manager
+import mobileService from '@/services/mobileService';
+import advancedOfflineManager from '@/services/advancedOfflineManager';
+
 // Start performance monitoring
 const appStartTime = performance.now();
 
@@ -38,6 +42,24 @@ async function initializeAdvancedSystems(): Promise<void> {
     // Initialize offline support
     console.log('📴 Initializing offline support...');
     await initializeOfflineSupport();
+
+    // Initialize mobile service if on mobile platform
+    console.log('📱 Initializing mobile service...');
+    try {
+      await mobileService.initialize();
+      console.log('✅ Mobile service initialized successfully');
+    } catch (error) {
+      console.log('ℹ️ Mobile service not available (running in browser)');
+    }
+
+    // Initialize advanced offline manager
+    console.log('💾 Initializing advanced offline manager...');
+    try {
+      await advancedOfflineManager.initialize();
+      console.log('✅ Advanced offline manager initialized successfully');
+    } catch (error) {
+      console.log('ℹ️ Advanced offline manager initialization failed:', error);
+    }
 
     console.log('✅ All advanced systems initialized successfully');
   } catch (error) {
@@ -72,6 +94,8 @@ if (import.meta.env.DEV) {
 
   // Make performance tools available globally for debugging
   ;(window as any).performanceMonitor = performanceMonitor;
+  ;(window as any).mobileService = mobileService;
+  ;(window as any).advancedOfflineManager = advancedOfflineManager;
 
   // Log performance metrics every 10 seconds in development
   setInterval(() => {
