@@ -261,7 +261,21 @@ class MobileManager extends EventEmitter {
     }
 
     private async syncDataToServer(offlineData: OfflineData) {
-        // Placeholder for actual server sync logic
+        // Actual server sync implementation
+        const response = await fetch(`${this.config.serverUrl}/api/sync`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.config.authToken}`
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Sync failed: ${response.statusText}`);
+        }
+        
+        return await response.json();
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 // Simulate network request

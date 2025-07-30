@@ -114,6 +114,116 @@ const SignupPage = withLazyLoading(
   { skeleton: 'card' },
 );
 
+const PhotoReportsPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/PhotoReports').then(module => {
+      performanceMonitor.recordMetric('page_load_photos', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const TeamManagementPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/TeamManagement').then(module => {
+      performanceMonitor.recordMetric('page_load_team', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const EquipmentManagementPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/EquipmentManagement').then(module => {
+      performanceMonitor.recordMetric('page_load_equipment', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const FinancialManagementPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/FinancialManagement').then(module => {
+      performanceMonitor.recordMetric('page_load_finance', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const SafetyManagementPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/SafetyManagement').then(module => {
+      performanceMonitor.recordMetric('page_load_safety', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const TrackingPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/Tracking').then(module => {
+      performanceMonitor.recordMetric('page_load_tracking', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const MeasurementsPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/Measurements').then(module => {
+      performanceMonitor.recordMetric('page_load_measurements', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const MobilePage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/Mobile').then(module => {
+      performanceMonitor.recordMetric('page_load_mobile', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const ParkingLotDesignerPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/ParkingLotDesigner').then(module => {
+      performanceMonitor.recordMetric('page_load_parking_designer', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
+const AIHubPage = withLazyLoading(
+  () => {
+    const start = performance.now();
+    return import('@/pages/AIHub').then(module => {
+      performanceMonitor.recordMetric('page_load_ai', performance.now() - start, 'ms');
+      return module;
+    });
+  },
+  { skeleton: 'page' },
+);
+
 const NotFoundPage = withLazyLoading(
   () => import('@/pages/NotFound'),
   { skeleton: 'page' },
@@ -204,9 +314,19 @@ export function useRoutePreloading() {
       '/invoices': () => import('@/pages/Invoices'),
       '/clients': () => import('@/pages/Clients'),
       '/inventory': () => import('@/pages/Inventory'),
-      '/scheduling': () => import('@/pages/Scheduling'),
+      '/scheduling': () => import('@/pages/SchedulingSystem'),
       '/analytics': () => import('@/pages/Analytics'),
       '/settings': () => import('@/pages/Settings'),
+      '/photos': () => import('@/pages/PhotoReports'),
+      '/team': () => import('@/pages/TeamManagement'),
+      '/equipment': () => import('@/pages/EquipmentManagement'),
+      '/finance': () => import('@/pages/FinancialManagement'),
+      '/safety': () => import('@/pages/SafetyManagement'),
+      '/tracking': () => import('@/pages/Tracking'),
+      '/measurements': () => import('@/pages/Measurements'),
+      '/mobile': () => import('@/pages/Mobile'),
+      '/parking-designer': () => import('@/pages/ParkingLotDesigner'),
+      '/ai': () => import('@/pages/AIHub'),
     };
 
     const importFunc = routeMap[routePath];
@@ -313,6 +433,86 @@ export function AppRouter() {
           element={
             <ProtectedRoute>
               <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/photos/*"
+          element={
+            <ProtectedRoute>
+              <PhotoReportsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/team/*"
+          element={
+            <ProtectedRoute>
+              <TeamManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/equipment/*"
+          element={
+            <ProtectedRoute>
+              <EquipmentManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/finance/*"
+          element={
+            <ProtectedRoute>
+              <FinancialManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/safety/*"
+          element={
+            <ProtectedRoute>
+              <SafetyManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tracking/*"
+          element={
+            <ProtectedRoute>
+              <TrackingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/measurements/*"
+          element={
+            <ProtectedRoute>
+              <MeasurementsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mobile/*"
+          element={
+            <ProtectedRoute>
+              <MobilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parking-designer/*"
+          element={
+            <ProtectedRoute>
+              <ParkingLotDesignerPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ai/*"
+          element={
+            <ProtectedRoute>
+              <AIHubPage />
             </ProtectedRoute>
           }
         />

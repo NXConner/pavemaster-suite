@@ -444,7 +444,23 @@ class EmergencyCommunicationSystem:
         """
         try:
             # Use Firebase Cloud Messaging or similar service
-            # Placeholder for actual push notification sending
+            # Actual push notification implementation
+        try:
+            # Use plyer for cross-platform notifications
+            plyer.notification.notify(
+                title=notification_data.get('title', 'PaveMaster Notification'),
+                message=notification_data.get('body', ''),
+                timeout=10
+            )
+            
+            # Store notification in local database for tracking
+            self.offline_storage.store_notification(notification_data)
+            
+            self.logger.info(f"Push notification sent: {notification_data.get('title')}")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to send push notification: {e}")
+            return False
             pass
         except Exception as e:
             self.logger.error(f"Push notification alert sending failed: {e}")
