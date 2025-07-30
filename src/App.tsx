@@ -20,6 +20,8 @@ import NotFound from "./pages/NotFound";
 // Component imports for features that need direct loading
 import CostCounter from "@/components/CostCounter";
 import EmployeeTracker from "@/components/EmployeeTracker";
+import SuperAdminCostCounter from "@/components/SuperAdminCostCounter";
+import UniversalCalculator from "@/components/UniversalCalculator";
 
 // Advanced components with lazy loading for performance
 const OverWatchTOSS = lazy(() => import("@/components/OverWatchTOSS"));
@@ -59,6 +61,8 @@ const EnhancedVeteranResources = lazy(() => import("./pages/EnhancedVeteranResou
 const JargonControlPanel = lazy(() => import("./components/JargonControlPanel"));
 const FleetManagement = lazy(() => import("./pages/FleetManagement"));
 const CompanyResources = lazy(() => import("./pages/CompanyResources"));
+const VirginiaIndustryStandards = lazy(() => import("./pages/VirginiaIndustryStandards"));
+const MaterialsSpecPage = lazy(() => import("./pages/MaterialsSpecPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,7 +101,7 @@ const App = () => (
                         </header>
                         <div className="flex flex-1 w-full">
                           <AppSidebar />
-                          <main className="flex-1 overflow-auto">
+                          <main className="flex-1 overflow-auto relative">
                             <ErrorBoundary>
                               <Suspense fallback={<PageLoading title="Loading page..." />}>
                                 <Routes>
@@ -110,6 +114,7 @@ const App = () => (
                                   
                                   {/* Advanced Feature Routes */}
                                   <Route path="/cost-counter" element={<CostCounter />} />
+                                  <Route path="/super-admin-costs" element={<SuperAdminCostCounter />} />
                                   <Route path="/employee-tracker" element={<EmployeeTracker />} />
                                   <Route path="/overwatch" element={<OverWatchTOSS />} />
                                   <Route path="/task-priorities" element={<TaskPriorityManager />} />
@@ -148,11 +153,14 @@ const App = () => (
                                   <Route path="/jargon-control" element={<JargonControlPanel />} />
                                   <Route path="/fleet" element={<FleetManagement />} />
                                   <Route path="/resources" element={<CompanyResources />} />
+                                  <Route path="/virginia-standards" element={<VirginiaIndustryStandards />} />
+                                  <Route path="/materials-specs" element={<MaterialsSpecPage />} />
                                   
                                   <Route path="*" element={<NotFound />} />
                                 </Routes>
                               </Suspense>
                             </ErrorBoundary>
+                            <UniversalCalculator />
                           </main>
                         </div>
                       </>
