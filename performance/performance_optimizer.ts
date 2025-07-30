@@ -1,4 +1,4 @@
-import { performance, PerformanceObserver } from 'perf_hooks';
+import { PerformanceObserver } from 'perf_hooks';
 import * as v8 from 'v8';
 import * as os from 'os';
 import * as cluster from 'cluster';
@@ -40,7 +40,7 @@ interface OptimizationStrategy {
 class PerformanceOptimizer extends EventEmitter {
     private performanceMetrics: PerformanceMetric[] = [];
     private optimizationStrategies: Map<string, OptimizationStrategy> = new Map();
-    private performanceObserver: PerformanceObserver;
+    private performanceObserver: PerformanceObserver | null = null;
 
     constructor() {
         super();
@@ -52,15 +52,17 @@ class PerformanceOptimizer extends EventEmitter {
     private initializePerformanceObserver() {
         this.performanceObserver = new PerformanceObserver((list) => {
             const entry = list.getEntries()[0];
-            this.recordPerformanceMetric({
-                name: entry.name,
-                duration: entry.duration,
-                timestamp: Date.now(),
-                type: this.inferMetricType(entry.name)
-            });
+            if (entry) {
+                this.recordPerformanceMetric({
+                    name: entry.name,
+                    duration: entry.duration,
+                    timestamp: Date.now(),
+                    type: this.inferMetricType(entry.name)
+                });
+            }
         });
 
-        this.performanceObserver.observe({ 
+        this.performanceObserver?.observe({ 
             entryTypes: ['measure', 'function'] 
         });
     }
@@ -172,18 +174,19 @@ class PerformanceOptimizer extends EventEmitter {
         const totalMemory = os.totalmem();
         const freeMemory = os.freemem();
 
+        const diskUsage = this.getDiskUsage();
         return {
-            cpuUsage: os.cpus().map(cpu => cpu.times).reduce((acc, times) => {
-                const total = Object.values(times).reduce((a, b) => a + b, 0);
+            cpuUsage: os.cpus().map((cpu: any) => cpu.times).reduce((acc: number, times: any) => {
+                const total = Object.values(times).reduce((a, b) => (Number(a) + Number(b)), 0);
                 const idle = times.idle;
-                return acc + ((total - idle) / total) * 100;
+                return acc + (((total as number) - idle) / (total as number)) * 100;
             }, 0) / os.cpus().length,
             memoryUsage: {
                 total: totalMemory,
                 used: totalMemory - freeMemory,
                 free: freeMemory
             },
-            diskUsage: this.getDiskUsage()
+            ...(diskUsage && { diskUsage })
         };
     }
 
@@ -201,15 +204,16 @@ class PerformanceOptimizer extends EventEmitter {
             metrics: {
                 total: metrics.length,
                 byType: metrics.reduce((acc, metric) => {
-                    acc[metric.type] = (acc[metric.type] || 0) + 1;
+                    (acc as Record<string, number>)[metric.type] = ((acc as Record<string, number>)[metric.type] || 0) + 1;
                     return acc;
-                }, {}),
+                }, {} as Record<string, number>),
                 averageDurations: metrics.reduce((acc, metric) => {
-                    acc[metric.type] = acc[metric.type] 
-                        ? (acc[metric.type] + metric.duration) / 2 
+                    const currentAvg = (acc as Record<string, number>)[metric.type];
+                    (acc as Record<string, number>)[metric.type] = currentAvg 
+                        ? (currentAvg + metric.duration) / 2 
                         : metric.duration;
                     return acc;
-                }, {})
+                }, {} as Record<string, number>)
             },
             optimizationStrategies: strategies,
             resourceUsage,
@@ -229,7 +233,7 @@ class PerformanceOptimizer extends EventEmitter {
 
         // Performance metric recommendations
         Object.entries(report.metrics.averageDurations).forEach(([type, avgDuration]) => {
-            if (avgDuration > 200) {
+            if (typeof avgDuration === 'number' && avgDuration > 200) {
                 recommendations.push(`Optimize ${type} performance - current average duration exceeds 200ms`);
             }
         });
@@ -251,7 +255,7 @@ class PerformanceOptimizer extends EventEmitter {
 
     // Cluster-based Performance Scaling
     public setupClusterPerformance(workerCount?: number) {
-        if (!cluster.isPrimary) return;
+        if (!(cluster as any).isPrimary) return;
 
         const numCPUs = workerCount || os.cpus().length;
 
@@ -259,13 +263,13 @@ class PerformanceOptimizer extends EventEmitter {
 
         // Fork workers
         for (let i = 0; i < numCPUs; i++) {
-            cluster.fork();
+            (cluster as any).fork();
         }
 
-        cluster.on('exit', (worker, code, signal) => {
+        (cluster as any).on('exit', (worker: any, _code: any, _signal: any) => {
             console.log(`worker ${worker.process.pid} died`);
             // Automatically restart worker
-            cluster.fork();
+            (cluster as any).fork();
         });
 
         this.emit('cluster-performance-setup', { workerCount: numCPUs });

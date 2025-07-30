@@ -36,7 +36,11 @@ interface EncryptionConfig {
 class SecurityConfiguration extends EventEmitter {
     private securityPolicies: Map<string, SecurityPolicy> = new Map();
     private auditLog: AuditLogEntry[] = [];
-    private encryptionConfig: EncryptionConfig;
+    private encryptionConfig: EncryptionConfig = {
+        algorithm: 'aes-256-gcm',
+        keyLength: 32,
+        saltRounds: 12
+    };
 
     constructor() {
         super();
@@ -127,12 +131,12 @@ class SecurityConfiguration extends EventEmitter {
         try {
             const secretKey = this.getSecretKey();
             return jwt.verify(token, secretKey) as Record<string, any>;
-        } catch (error) {
+        } catch (error: any) {
             this.logAuditEvent({
                 action: 'token-verification-failed',
                 category: 'authentication',
                 severity: 'error',
-                details: { error: error.message }
+                details: { error: error?.message || 'Unknown verification error' }
             });
             return null;
         }
@@ -166,7 +170,7 @@ class SecurityConfiguration extends EventEmitter {
         return {
             encryptedData: encrypted,
             iv: iv.toString('hex'),
-            authTag: cipher.getAuthTag().toString('hex')
+            authTag: (cipher as any).getAuthTag().toString('hex')
         };
     }
 
@@ -184,7 +188,7 @@ class SecurityConfiguration extends EventEmitter {
             Buffer.from(iv, 'hex')
         );
         
-        decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+        (decipher as any).setAuthTag(Buffer.from(authTag, 'hex'));
         
         let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
         decrypted += decipher.final('utf8');
@@ -302,13 +306,13 @@ class SecurityConfiguration extends EventEmitter {
             auditLogSummary: {
                 totalEntries: this.auditLog.length,
                 entriesByCategory: this.auditLog.reduce((acc, entry) => {
-                    acc[entry.category] = (acc[entry.category] || 0) + 1;
+                    (acc as Record<string, number>)[entry.category] = ((acc as Record<string, number>)[entry.category] || 0) + 1;
                     return acc;
-                }, {}),
+                }, {} as Record<string, number>),
                 entriesBySeverity: this.auditLog.reduce((acc, entry) => {
-                    acc[entry.severity] = (acc[entry.severity] || 0) + 1;
+                    (acc as Record<string, number>)[entry.severity] = ((acc as Record<string, number>)[entry.severity] || 0) + 1;
                     return acc;
-                }, {})
+                }, {} as Record<string, number>)
             }
         };
     }

@@ -126,7 +126,7 @@ class PerformanceAudit {
         let criticalRecommendations = 0;
 
         this.moduleProfiles.forEach((profile, moduleName) => {
-            systemReport.modulePerformance[moduleName] = {
+            (systemReport.modulePerformance as Record<string, any>)[moduleName] = {
                 metrics: profile.metrics,
                 recommendations: profile.recommendations
             };
@@ -137,11 +137,11 @@ class PerformanceAudit {
 
         // Global performance recommendations
         if (totalRecommendations > 5) {
-            systemReport.globalRecommendations.push('Multiple performance bottlenecks detected. Consider comprehensive system optimization.');
+            (systemReport.globalRecommendations as string[]).push('Multiple performance bottlenecks detected. Consider comprehensive system optimization.');
         }
 
         if (criticalRecommendations > 0) {
-            systemReport.globalRecommendations.push(`Critical performance issues found: ${criticalRecommendations} modules require immediate attention.`);
+            (systemReport.globalRecommendations as string[]).push(`Critical performance issues found: ${criticalRecommendations} modules require immediate attention.`);
         }
 
         // V8 optimization suggestions
@@ -149,7 +149,7 @@ class PerformanceAudit {
         const heapUtilization = (heapStats.used_heap_size / heapStats.total_heap_size) * 100;
 
         if (heapUtilization > 70) {
-            systemReport.globalRecommendations.push(`High V8 heap utilization: ${heapUtilization.toFixed(2)}%. Consider memory optimization techniques.`);
+            (systemReport.globalRecommendations as string[]).push(`High V8 heap utilization: ${heapUtilization.toFixed(2)}%. Consider memory optimization techniques.`);
         }
 
         return systemReport;
@@ -157,7 +157,7 @@ class PerformanceAudit {
 
     public runComprehensivePerformanceTests() {
         // Simulate performance tests for each module
-        this.moduleProfiles.forEach((profile, moduleName) => {
+        this.moduleProfiles.forEach((_profile, moduleName) => {
             try {
                 // Example performance test - replace with actual module-specific tests
                 this.measureModulePerformance(moduleName, () => {

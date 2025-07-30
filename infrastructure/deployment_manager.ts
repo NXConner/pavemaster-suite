@@ -223,14 +223,14 @@ class DeploymentManager extends EventEmitter {
                     strategy: environment.deploymentStrategy 
                 }
             });
-        } catch (error) {
+        } catch (error: any) {
             this.emit('deployment-failure', {
                 type: 'failure',
                 timestamp: Date.now(),
                 environment: environmentName,
                 details: { 
                     configVersion: config.version,
-                    error: error.message 
+                    error: error?.message || 'Unknown deployment error'
                 }
             });
         }
@@ -375,9 +375,13 @@ class DeploymentManager extends EventEmitter {
             analysisProcess.on('close', (code) => {
                 if (code === 0) {
                     // Analyze deployment metrics
-                    const deploymentMetrics = JSON.parse(output);
-                    // Implement canary analysis logic
-                    resolve();
+                    try {
+                        JSON.parse(output); // Validate JSON but don't store unused variable
+                        // Implement canary analysis logic
+                        resolve();
+                    } catch {
+                        reject(new Error(`Invalid deployment metrics for ${service.name}`));
+                    }
                 } else {
                     reject(new Error(`Canary deployment analysis failed for ${service.name}`));
                 }
@@ -407,14 +411,14 @@ class DeploymentManager extends EventEmitter {
                     config.environments.find(env => env.name === environmentName)!
                 );
             }
-        } catch (error) {
+        } catch (error: any) {
             this.emit('rollback-failure', {
                 type: 'failure',
                 timestamp: Date.now(),
                 environment: environmentName,
                 details: { 
                     configVersion: config.version,
-                    error: error.message 
+                    error: error?.message || 'Unknown rollback error'
                 }
             });
         }

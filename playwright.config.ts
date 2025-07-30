@@ -15,16 +15,15 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'test-results/test-results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
-    ['github'], // GitHub Actions integration
+    ['html', { outputFolder: 'test-results/html-report' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['line']
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:8080',
-
+    baseURL: 'http://localhost:8080',
+    
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     
@@ -38,25 +37,10 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     
     /* Global timeout for all actions */
-    actionTimeout: 30000,
+    actionTimeout: 10000,
     
-    /* Global timeout for navigation */
+    /* Navigation timeout */
     navigationTimeout: 30000,
-    
-    /* Global test timeout */
-    testTimeout: 120000,
-    
-    /* Ignore HTTPS errors */
-    ignoreHTTPSErrors: true,
-    
-    /* Extra HTTP headers */
-    extraHTTPHeaders: {
-      'Accept': 'application/json',
-      'Accept-Language': 'en-US,en;q=0.9',
-    },
-    
-    /* User agent */
-    userAgent: 'PaveMaster-E2E-Tests/1.0',
   },
 
   /* Configure projects for major browsers */
@@ -64,85 +48,68 @@ export default defineConfig({
     {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
+      teardown: 'cleanup',
     },
-    
-    // Desktop browsers
+
+    {
+      name: 'cleanup',
+      testMatch: /.*\.cleanup\.ts/,
+    },
+
     {
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        // Enable developer tools in headed mode
-        devtools: !process.env.CI,
       },
       dependencies: ['setup'],
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { 
+        ...devices['Desktop Firefox'] 
+      },
       dependencies: ['setup'],
     },
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { 
+        ...devices['Desktop Safari'] 
+      },
       dependencies: ['setup'],
     },
 
     /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: { 
+        ...devices['Pixel 5'] 
+      },
       dependencies: ['setup'],
     },
     {
       name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-      dependencies: ['setup'],
-    },
-
-    /* Test against tablet viewports. */
-    {
-      name: 'Tablet Chrome',
-      use: { ...devices['Galaxy Tab S4'] },
-      dependencies: ['setup'],
-    },
-    {
-      name: 'Tablet Safari',
-      use: { ...devices['iPad Pro'] },
-      dependencies: ['setup'],
-    },
-
-    /* High DPI displays */
-    {
-      name: 'High DPI',
-      use: {
-        ...devices['Desktop Chrome'],
-        deviceScaleFactor: 2,
-        viewport: { width: 1920, height: 1080 },
+      use: { 
+        ...devices['iPhone 12'] 
       },
       dependencies: ['setup'],
     },
 
-    /* Accessibility testing */
+    /* Test against branded browsers. */
     {
-      name: 'accessibility',
-      testMatch: /.*\.a11y\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
+      name: 'Microsoft Edge',
+      use: { 
+        ...devices['Desktop Edge'],
+        channel: 'msedge' 
+      },
       dependencies: ['setup'],
     },
-
-    /* Performance testing */
     {
-      name: 'performance',
-      testMatch: /.*\.perf\.spec\.ts/,
+      name: 'Google Chrome',
       use: { 
         ...devices['Desktop Chrome'],
-        // Enable performance metrics
-        extraHTTPHeaders: {
-          'Accept': 'application/json',
-          'Cache-Control': 'no-cache',
-        },
+        channel: 'chrome' 
       },
       dependencies: ['setup'],
     },
@@ -152,9 +119,29 @@ export default defineConfig({
       name: 'api',
       testMatch: /.*\.api\.spec\.ts/,
       use: {
-        // No browser context for API tests
-        baseURL: process.env.API_BASE_URL || 'http://localhost:3000/api',
+        baseURL: 'http://localhost:8080/api',
       },
+      dependencies: ['setup'],
+    },
+
+    /* Performance testing */
+    {
+      name: 'performance',
+      testMatch: /.*\.performance\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Accessibility testing */
+    {
+      name: 'accessibility',
+      testMatch: /.*\.a11y\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
     },
 
     /* Visual regression testing */
@@ -163,36 +150,103 @@ export default defineConfig({
       testMatch: /.*\.visual\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        // Disable animations for consistent screenshots
-        reducedMotion: 'reduce',
       },
       dependencies: ['setup'],
     },
 
     /* Cross-browser compatibility testing */
     {
-      name: 'edge',
-      use: { ...devices['Desktop Edge'] },
+      name: 'cross-browser',
+      testMatch: /.*\.cross-browser\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
       dependencies: ['setup'],
     },
 
-    /* Legacy browser support */
+    /* Load testing */
     {
-      name: 'chrome-old',
+      name: 'load',
+      testMatch: /.*\.load\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        channel: 'chrome-beta', // Test against beta version
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Security testing */
+    {
+      name: 'security',
+      testMatch: /.*\.security\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Integration testing */
+    {
+      name: 'integration',
+      testMatch: /.*\.integration\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Component testing */
+    {
+      name: 'component',
+      testMatch: /.*\.component\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* User journey testing */
+    {
+      name: 'user-journey',
+      testMatch: /.*\.journey\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Database testing */
+    {
+      name: 'database',
+      testMatch: /.*\.db\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Feature testing */
+    {
+      name: 'features',
+      testMatch: /.*\.feature\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
+
+    /* Regression testing */
+    {
+      name: 'regression',
+      testMatch: /.*\.regression\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
       },
       dependencies: ['setup'],
     },
   ],
 
-  /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/global-setup.ts'),
-  globalTeardown: require.resolve('./tests/global-teardown.ts'),
-
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  outputDir: 'test-results/',
+  outputDir: 'test-results',
 
   /* Run your local dev server before starting the tests */
   webServer: {
@@ -200,50 +254,30 @@ export default defineConfig({
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
-    env: {
-      NODE_ENV: 'test',
-      VITE_ENVIRONMENT: 'test',
-    },
   },
 
-  /* Test configuration overrides for CI */
-  ...(process.env.CI && {
-    workers: 1,
-    retries: 3,
-    timeout: 300000, // 5 minutes for CI
-    use: {
-      video: 'on-failure',
-      screenshot: 'only-on-failure',
-      trace: 'retain-on-failure',
-    },
-  }),
+  /* Global Setup and Teardown */
+  globalSetup: require.resolve('./tests/e2e/global-setup.ts'),
+  globalTeardown: require.resolve('./tests/e2e/global-teardown.ts'),
 
-  /* Expect options */
+  /* Test timeout */
+  timeout: 30000,
+
+  /* Expect timeout */
   expect: {
-    /* Timeout for expect assertions */
-    timeout: 10000,
-    
-    /* Threshold for visual comparisons */
-    threshold: 0.2,
-    
-    /* Animation handling */
-    toHaveScreenshot: {
-      animations: 'disabled',
-      threshold: 0.2,
-    },
-    
-    /* Maximum allowed pixel difference for visual comparisons */
-    toMatchSnapshot: {
-      threshold: 0.2,
-    },
+    timeout: 5000,
   },
 
-  /* Test metadata */
-  metadata: {
-    testType: 'e2e',
-    environment: process.env.NODE_ENV || 'development',
-    version: process.env.npm_package_version || '1.0.0',
-    browser: 'multi-browser',
-    platform: process.platform,
+  /* Retry configuration - already set above */
+
+  /* Reporting configuration */
+  reportSlowTests: {
+    max: 5,
+    threshold: 15000,
   },
+
+  /* Update snapshots configuration */
+  updateSnapshots: 'missing',
+
+  /* Additional configuration */
 });
