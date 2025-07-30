@@ -76,7 +76,7 @@ export const FILE_UPLOAD_CONFIG = {
 
 // Password Policy Configuration
 export const PASSWORD_POLICY = {
-  minLength: 8,
+  minLength: 12,
   maxLength: 128,
   requireUppercase: true,
   requireLowercase: true,

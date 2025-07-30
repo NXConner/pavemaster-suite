@@ -475,6 +475,95 @@ export class PasswordValidator {
   }
 }
 
+// Rate limiter for authentication
+export class AuthRateLimiter {
+  private static attempts: Map<string, { count: number; resetTime: number }> = new Map();
+  private static blacklist: Set<string> = new Set();
+
+  static async checkRateLimit(identifier: string, action: string = 'auth'): Promise<boolean> {
+    const key = `${identifier}-${action}`;
+    const now = Date.now();
+    
+    // Check if identifier is blacklisted
+    if (this.blacklist.has(identifier)) {
+      return false;
+    }
+
+    const attempt = this.attempts.get(key);
+    const config = securityConfig;
+
+    if (!attempt) {
+      this.attempts.set(key, { count: 1, resetTime: now + (config.lockoutDuration * 60 * 1000) });
+      return true;
+    }
+
+    // Reset if window has passed
+    if (now > attempt.resetTime) {
+      this.attempts.set(key, { count: 1, resetTime: now + (config.lockoutDuration * 60 * 1000) });
+      return true;
+    }
+
+    // Increment attempts
+    attempt.count++;
+
+    // Check if limit exceeded
+    if (attempt.count > config.maxLoginAttempts) {
+      this.blacklist.add(identifier);
+      
+      // Log security event
+      await this.logSecurityEvent(identifier, action, attempt.count);
+      
+      // Auto-remove from blacklist after extended period
+      setTimeout(() => {
+        this.blacklist.delete(identifier);
+        this.attempts.delete(key);
+      }, config.lockoutDuration * 60 * 1000 * 2); // Double the lockout time for blacklist
+      
+      return false;
+    }
+
+    return true;
+  }
+
+  static async reset(identifier: string, action: string = 'auth'): Promise<void> {
+    const key = `${identifier}-${action}`;
+    this.attempts.delete(key);
+    this.blacklist.delete(identifier);
+  }
+
+  static getRemainingAttempts(identifier: string, action: string = 'auth'): number {
+    const key = `${identifier}-${action}`;
+    const attempt = this.attempts.get(key);
+    
+    if (!attempt) return securityConfig.maxLoginAttempts;
+    
+    const remaining = securityConfig.maxLoginAttempts - attempt.count;
+    return Math.max(0, remaining);
+  }
+
+  private static async logSecurityEvent(identifier: string, action: string, attemptCount: number): Promise<void> {
+    try {
+      await supabase.rpc('log_security_event', {
+        p_action: 'RATE_LIMIT_EXCEEDED',
+        p_resource_type: 'authentication',
+        p_details: {
+          identifier,
+          action,
+          attemptCount,
+          timestamp: new Date().toISOString()
+        }
+      });
+    } catch (error) {
+      console.error('Failed to log security event:', error);
+    }
+  }
+
+  static getAttemptInfo(identifier: string, action: string = 'auth'): { count: number; resetTime: number } | null {
+    const key = `${identifier}-${action}`;
+    return this.attempts.get(key) || null;
+  }
+}
+
 // Session manager
 export class SessionManager {
   private static sessionTimer: NodeJS.Timeout | null = null;

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import type { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { AuthRateLimiter, PasswordValidator } from '@/lib/security';
 
 interface AuthResponse {
   error: AuthError | null;
@@ -59,6 +60,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
 
+    // Validate password strength
+    const passwordValidation = PasswordValidator.validatePassword(password);
+    if (!passwordValidation.isValid) {
+      toast({
+        variant: 'destructive',
+        title: 'Password too weak',
+        description: passwordValidation.errors[0],
+      });
+      return { error: { message: passwordValidation.errors.join(', ') } as AuthError };
+    }
+
+    // Check rate limit
+    const canAttempt = await AuthRateLimiter.checkRateLimit(email, 'signup');
+    if (!canAttempt) {
+      const remaining = AuthRateLimiter.getRemainingAttempts(email, 'signup');
+      toast({
+        variant: 'destructive',
+        title: 'Too many attempts',
+        description: `Please wait before trying again. Attempts remaining: ${remaining}`,
+      });
+      return { error: { message: 'Rate limit exceeded' } as AuthError };
+    }
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -78,6 +102,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: error.message,
       });
     } else {
+      // Reset rate limit on success
+      await AuthRateLimiter.reset(email, 'signup');
       toast({
         title: 'Check your email',
         description: 'We sent you a confirmation link.',
@@ -88,6 +114,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    // Check rate limit
+    const canAttempt = await AuthRateLimiter.checkRateLimit(email, 'signin');
+    if (!canAttempt) {
+      const remaining = AuthRateLimiter.getRemainingAttempts(email, 'signin');
+      toast({
+        variant: 'destructive',
+        title: 'Account temporarily locked',
+        description: `Too many failed attempts. Please wait before trying again. Attempts remaining: ${remaining}`,
+      });
+      return { error: { message: 'Rate limit exceeded' } as AuthError };
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -99,6 +137,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: 'Sign in failed',
         description: error.message,
       });
+    } else {
+      // Reset rate limit on success
+      await AuthRateLimiter.reset(email, 'signin');
     }
 
     return { error };
