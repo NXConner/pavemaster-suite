@@ -6,7 +6,9 @@ import {
   Crosshair, Radar, Globe, FileText, Camera, Phone, MessageSquare,
   BarChart3, PieChart, LineChart, Video, Mic, Database, Server,
   Lock, Key, Bell, Calendar, Timer, Gauge, ThermometerSun, Battery,
-  Wifi, Signal, Bluetooth, Cpu, HardDrive, MemoryStick, Power
+  Wifi, Signal, Bluetooth, Cpu, HardDrive, MemoryStick, Power,
+  Brain, Atom, CloudLightning, Layers, Search, Filter, Sparkles,
+  ShieldCheck, Fingerprint, Eye as EyeIcon, Scan, TrendingDown
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+
+// Advanced Services Integration
+import { advancedAIService } from '@/services/advancedAIService';
+import { quantumComputingService } from '@/services/quantumComputingService';
+import { performanceMonitoringService } from '@/services/performanceMonitoringService';
+import { zeroTrustSecurityService } from '@/services/zeroTrustSecurityService';
+import { iotEdgeComputingService } from '@/services/iotEdgeComputingService';
+import { blockchainIntegrityService } from '@/services/blockchainIntegrityService';
+import { intelligentAutomationService } from '@/services/intelligentAutomationService';
+import { arVrVisualizationService } from '@/services/arVrVisualizationService';
+import { environmentalMonitoringService } from '@/services/environmentalMonitoringService';
+import { globalInfrastructureService } from '@/services/globalInfrastructureService';
+import { biometricAuthService } from '@/services/biometricAuthService';
+import { visualDefectMappingService } from '@/services/visualDefectMappingService';
+import { aiDefectDetectionService } from '@/services/aiDefectDetectionService';
+import { optimizedAIModelService } from '@/services/optimizedAIModelService';
 
 interface Widget {
   id: string;
@@ -106,6 +124,11 @@ interface SecurityData {
   incidents: number;
   alerts: number;
   status: string;
+  threatLevel: 'low' | 'medium' | 'high' | 'critical';
+  zeroTrustScore: number;
+  biometricEvents: number;
+  vulnerabilities: number;
+  blockchainIntegrity: number;
 }
 
 interface SystemData {
@@ -114,6 +137,58 @@ interface SystemData {
   storage: number;
   uptime: string;
   connections: number;
+  aiModelPerformance: AIModelMetrics;
+  quantumCoherence: number;
+  networkLatency: number;
+  throughput: number;
+}
+
+interface AIModelMetrics {
+  accuracy: number;
+  inferenceTime: number;
+  modelsActive: number;
+  predictionConfidence: number;
+  anomalyScore: number;
+  trainingStatus: 'training' | 'ready' | 'updating' | 'error';
+}
+
+interface QuantumMetrics {
+  qubits: number;
+  coherenceTime: number;
+  gateErrorRate: number;
+  entanglementDepth: number;
+  quantumVolume: number;
+  optimizationJobs: number;
+  quantumAdvantage: boolean;
+  processingPower: number;
+}
+
+interface EnvironmentalData {
+  carbonFootprint: number;
+  energyEfficiency: number;
+  sustainabilityScore: number;
+  wasteReduction: number;
+  renewableEnergy: number;
+  environmentalCompliance: number;
+}
+
+interface AdvancedAnalytics {
+  predictiveAccuracy: number;
+  anomalyDetection: number;
+  sentimentScore: number;
+  patternRecognition: number;
+  defectDetectionRate: number;
+  optimizationGains: number;
+}
+
+interface IoTDeviceData {
+  deviceId: string;
+  type: string;
+  status: 'online' | 'offline' | 'maintenance';
+  batteryLevel: number;
+  signalStrength: number;
+  lastUpdate: string;
+  sensorReadings: Record<string, number>;
 }
 
 interface LiveData {
@@ -126,56 +201,107 @@ interface LiveData {
   communications: CommunicationData[];
   security: SecurityData;
   system: SystemData;
+  quantumMetrics: QuantumMetrics;
+  environmental: EnvironmentalData;
+  analytics: AdvancedAnalytics;
+  iotDevices: IoTDeviceData[];
+  biometricAuth: BiometricAuthData;
+  blockchainAudit: BlockchainAuditData;
+}
+
+interface BiometricAuthData {
+  authenticationsToday: number;
+  failedAttempts: number;
+  averageAuthTime: number;
+  securityLevel: 'low' | 'medium' | 'high' | 'maximum';
+  biometricTypes: string[];
+}
+
+interface BlockchainAuditData {
+  transactionsToday: number;
+  blockHeight: number;
+  integrityScore: number;
+  lastAudit: string;
+  consensusHealth: number;
 }
 
 const WIDGET_TYPES = {
-  // Surveillance & Tracking
-  live_map: { icon: MapPin, title: 'Live Tactical Map', category: 'surveillance' },
-  employee_tracker: { icon: Users, title: 'Personnel Tracker', category: 'surveillance' },
-  vehicle_tracker: { icon: Car, title: 'Vehicle Fleet Tracker', category: 'surveillance' },
-  geofence_monitor: { icon: Radar, title: 'Perimeter Monitor', category: 'surveillance' },
-  route_playback: { icon: Navigation, title: 'Route Playback', category: 'surveillance' },
-  thermal_overlay: { icon: ThermometerSun, title: 'Thermal Overlay', category: 'surveillance' },
+  // Surveillance & Tracking (Enhanced with AI)
+  live_map: { icon: MapPin, title: 'AI-Enhanced Tactical Map', category: 'surveillance' },
+  employee_tracker: { icon: Users, title: 'AI Personnel Tracker', category: 'surveillance' },
+  vehicle_tracker: { icon: Car, title: 'Smart Fleet Tracker', category: 'surveillance' },
+  geofence_monitor: { icon: Radar, title: 'AI Perimeter Monitor', category: 'surveillance' },
+  route_playback: { icon: Navigation, title: 'ML Route Analysis', category: 'surveillance' },
+  thermal_overlay: { icon: ThermometerSun, title: 'Thermal AI Analysis', category: 'surveillance' },
+  facial_recognition: { icon: EyeIcon, title: 'Biometric Recognition', category: 'surveillance' },
+  behavior_analysis: { icon: Brain, title: 'AI Behavior Analysis', category: 'surveillance' },
+  predictive_tracking: { icon: TrendingUp, title: 'Predictive Movement', category: 'surveillance' },
   
-  // Operations & Analytics
-  cost_counter: { icon: DollarSign, title: 'Cost Operations Center', category: 'operations' },
-  time_tracker: { icon: Clock, title: 'Time Tracking Hub', category: 'operations' },
-  project_overview: { icon: Target, title: 'Mission Overview', category: 'operations' },
-  task_priorities: { icon: Command, title: 'Task Command', category: 'operations' },
-  resource_allocation: { icon: Database, title: 'Resource Management', category: 'operations' },
-  equipment_status: { icon: Server, title: 'Equipment Status', category: 'operations' },
+  // Operations & Analytics (Quantum-Enhanced)
+  cost_counter: { icon: DollarSign, title: 'Quantum Cost Analysis', category: 'operations' },
+  time_tracker: { icon: Clock, title: 'AI Time Optimization', category: 'operations' },
+  project_overview: { icon: Target, title: 'Mission Intelligence', category: 'operations' },
+  task_priorities: { icon: Command, title: 'AI Task Command', category: 'operations' },
+  resource_allocation: { icon: Database, title: 'Quantum Resource Mgmt', category: 'operations' },
+  equipment_status: { icon: Server, title: 'IoT Equipment Monitor', category: 'operations' },
+  workflow_automation: { icon: Sparkles, title: 'Intelligent Automation', category: 'operations' },
+  optimization_engine: { icon: Atom, title: 'Quantum Optimization', category: 'operations' },
   
-  // Analytics & Intelligence
-  performance_metrics: { icon: BarChart3, title: 'Performance Intel', category: 'analytics' },
-  predictive_analytics: { icon: TrendingUp, title: 'Predictive Analysis', category: 'analytics' },
-  cost_analytics: { icon: PieChart, title: 'Financial Intelligence', category: 'analytics' },
-  efficiency_monitor: { icon: Gauge, title: 'Efficiency Monitor', category: 'analytics' },
-  trend_analysis: { icon: LineChart, title: 'Trend Analysis', category: 'analytics' },
+  // Analytics & Intelligence (ML-Powered)
+  performance_metrics: { icon: BarChart3, title: 'AI Performance Intel', category: 'analytics' },
+  predictive_analytics: { icon: TrendingUp, title: 'ML Predictive Engine', category: 'analytics' },
+  cost_analytics: { icon: PieChart, title: 'Financial AI Analysis', category: 'analytics' },
+  efficiency_monitor: { icon: Gauge, title: 'Efficiency AI Monitor', category: 'analytics' },
+  trend_analysis: { icon: LineChart, title: 'ML Trend Analysis', category: 'analytics' },
   kpi_dashboard: { icon: Activity, title: 'KPI Command Center', category: 'analytics' },
+  anomaly_detection: { icon: Search, title: 'AI Anomaly Detection', category: 'analytics' },
+  sentiment_analysis: { icon: Brain, title: 'NLP Sentiment Engine', category: 'analytics' },
+  defect_detection: { icon: Scan, title: 'AI Defect Detection', category: 'analytics' },
   
-  // Communications
-  comms_center: { icon: MessageSquare, title: 'Communications Hub', category: 'communications' },
-  alert_system: { icon: Bell, title: 'Alert Command', category: 'communications' },
-  notification_center: { icon: Radio, title: 'Notification Center', category: 'communications' },
-  emergency_comms: { icon: Phone, title: 'Emergency Comms', category: 'communications' },
-  video_feed: { icon: Video, title: 'Video Surveillance', category: 'communications' },
-  audio_monitor: { icon: Mic, title: 'Audio Monitor', category: 'communications' },
+  // Communications (AI-Enhanced)
+  comms_center: { icon: MessageSquare, title: 'AI Communications Hub', category: 'communications' },
+  alert_system: { icon: Bell, title: 'Intelligent Alert System', category: 'communications' },
+  notification_center: { icon: Radio, title: 'Smart Notifications', category: 'communications' },
+  emergency_comms: { icon: Phone, title: 'Emergency AI Comms', category: 'communications' },
+  video_feed: { icon: Video, title: 'AI Video Surveillance', category: 'communications' },
+  audio_monitor: { icon: Mic, title: 'Audio Intelligence', category: 'communications' },
+  translation_engine: { icon: Globe, title: 'AI Translation Hub', category: 'communications' },
+  voice_assistant: { icon: Mic, title: 'AI Voice Assistant', category: 'communications' },
   
-  // Security & Compliance
-  security_monitor: { icon: Shield, title: 'Security Command', category: 'security' },
-  access_control: { icon: Lock, title: 'Access Control', category: 'security' },
-  compliance_tracker: { icon: Key, title: 'Compliance Monitor', category: 'security' },
-  threat_detection: { icon: Crosshair, title: 'Threat Detection', category: 'security' },
-  audit_log: { icon: FileText, title: 'Audit Intelligence', category: 'security' },
-  incident_tracker: { icon: AlertTriangle, title: 'Incident Command', category: 'security' },
+  // Security & Compliance (Zero-Trust Enhanced)
+  security_monitor: { icon: Shield, title: 'Zero-Trust Security', category: 'security' },
+  access_control: { icon: Lock, title: 'Biometric Access Control', category: 'security' },
+  compliance_tracker: { icon: Key, title: 'AI Compliance Monitor', category: 'security' },
+  threat_detection: { icon: Crosshair, title: 'AI Threat Detection', category: 'security' },
+  audit_log: { icon: FileText, title: 'Blockchain Audit Trail', category: 'security' },
+  incident_tracker: { icon: AlertTriangle, title: 'AI Incident Command', category: 'security' },
+  vulnerability_scanner: { icon: ShieldCheck, title: 'AI Vulnerability Scan', category: 'security' },
+  penetration_testing: { icon: Fingerprint, title: 'Auto Pen Testing', category: 'security' },
+  fraud_detection: { icon: Filter, title: 'AI Fraud Detection', category: 'security' },
   
-  // System Resources
-  system_monitor: { icon: Cpu, title: 'System Monitor', category: 'resources' },
-  network_status: { icon: Wifi, title: 'Network Status', category: 'resources' },
-  device_health: { icon: Battery, title: 'Device Health', category: 'resources' },
-  signal_strength: { icon: Signal, title: 'Signal Monitor', category: 'resources' },
-  bandwidth_monitor: { icon: Satellite, title: 'Bandwidth Monitor', category: 'resources' },
-  power_management: { icon: Power, title: 'Power Management', category: 'resources' }
+  // System Resources (Enhanced Monitoring)
+  system_monitor: { icon: Cpu, title: 'AI System Monitor', category: 'resources' },
+  network_status: { icon: Wifi, title: 'Network Intelligence', category: 'resources' },
+  device_health: { icon: Battery, title: 'IoT Device Health', category: 'resources' },
+  signal_strength: { icon: Signal, title: 'Signal Intelligence', category: 'resources' },
+  bandwidth_monitor: { icon: Satellite, title: 'Bandwidth Optimizer', category: 'resources' },
+  power_management: { icon: Power, title: 'Smart Power Mgmt', category: 'resources' },
+  
+  // Quantum Computing
+  quantum_processor: { icon: Atom, title: 'Quantum Processor', category: 'quantum' },
+  quantum_algorithms: { icon: CloudLightning, title: 'Quantum Algorithms', category: 'quantum' },
+  quantum_optimization: { icon: TrendingUp, title: 'Quantum Optimization', category: 'quantum' },
+  quantum_entanglement: { icon: Layers, title: 'Quantum Entanglement', category: 'quantum' },
+  
+  // Environmental & Sustainability
+  environmental_monitor: { icon: Globe, title: 'Environmental AI', category: 'environmental' },
+  carbon_tracker: { icon: Layers, title: 'Carbon Intelligence', category: 'environmental' },
+  sustainability_metrics: { icon: TrendingDown, title: 'Sustainability AI', category: 'environmental' },
+  
+  // AR/VR & 3D
+  ar_visualization: { icon: Camera, title: 'AR Visualization', category: 'visualization' },
+  vr_training: { icon: Video, title: 'VR Training Center', category: 'visualization' },
+  3d_scanning: { icon: Scan, title: '3D Scanning Interface', category: 'visualization' }
 };
 
 const OverWatchTOSS: React.FC = () => {
@@ -203,7 +329,13 @@ const OverWatchTOSS: React.FC = () => {
     weather: {},
     communications: [],
     security: {},
-    system: {}
+    system: {},
+    quantumMetrics: {},
+    environmental: {},
+    analytics: {},
+    iotDevices: [],
+    biometricAuth: {},
+    blockchainAudit: {}
   });
   const [militaryJargon, setMilitaryJargon] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -285,7 +417,13 @@ const OverWatchTOSS: React.FC = () => {
         costsData,
         communicationsData,
         securityData,
-        systemData
+        systemData,
+        quantumMetricsData,
+        environmentalData,
+        analyticsData,
+        iotDevicesData,
+        biometricAuthData,
+        blockchainAuditData
       ] = await Promise.all([
         fetchEmployees(),
         fetchVehicles(),
@@ -294,7 +432,13 @@ const OverWatchTOSS: React.FC = () => {
         fetchCosts(),
         fetchCommunications(),
         fetchSecurity(),
-        fetchSystemData()
+        fetchSystemData(),
+        fetchQuantumMetrics(),
+        fetchEnvironmentalData(),
+        fetchAnalytics(),
+        fetchIoTDevices(),
+        fetchBiometricAuth(),
+        fetchBlockchainAudit()
       ]);
 
       setLiveData({
@@ -306,7 +450,13 @@ const OverWatchTOSS: React.FC = () => {
         weather: await fetchWeather(),
         communications: communicationsData || [],
         security: securityData || {},
-        system: systemData || {}
+        system: systemData || {},
+        quantumMetrics: quantumMetricsData || {},
+        environmental: environmentalData || {},
+        analytics: analyticsData || {},
+        iotDevices: iotDevicesData || [],
+        biometricAuth: biometricAuthData || {},
+        blockchainAudit: blockchainAuditData || {}
       });
     } catch (error) {
       console.error('Error fetching live data:', error);
@@ -406,6 +556,73 @@ const OverWatchTOSS: React.FC = () => {
     };
   };
 
+  const fetchQuantumMetrics = async () => {
+    // Mock quantum metrics - in production, integrate with quantum computing service
+    return {
+      qubits: Math.floor(Math.random() * 100) + 50,
+      coherenceTime: Math.floor(Math.random() * 1000) + 100,
+      gateErrorRate: Math.random() * 0.01,
+      entanglementDepth: Math.floor(Math.random() * 10) + 5,
+      quantumVolume: Math.floor(Math.random() * 1000) + 500,
+      optimizationJobs: Math.floor(Math.random() * 100) + 20,
+      quantumAdvantage: Math.random() > 0.5,
+      processingPower: Math.floor(Math.random() * 1000) + 500
+    };
+  };
+
+  const fetchEnvironmentalData = async () => {
+    // Mock environmental data - in production, integrate with environmental monitoring service
+    return {
+      carbonFootprint: Math.floor(Math.random() * 1000) + 500,
+      energyEfficiency: Math.random() * 0.1,
+      sustainabilityScore: Math.random() * 100,
+      wasteReduction: Math.random() * 0.5,
+      renewableEnergy: Math.random() * 0.8,
+      environmentalCompliance: Math.random() * 100
+    };
+  };
+
+  const fetchAnalytics = async () => {
+    // Mock analytics data - in production, integrate with advanced AI service
+    return {
+      predictiveAccuracy: Math.random() * 0.95,
+      anomalyDetection: Math.random() * 0.90,
+      sentimentScore: Math.random() * 0.85,
+      patternRecognition: Math.random() * 0.92,
+      defectDetectionRate: Math.random() * 0.98,
+      optimizationGains: Math.random() * 0.90
+    };
+  };
+
+  const fetchIoTDevices = async () => {
+    const { data } = await supabase
+      .from('iot_devices')
+      .select('*');
+    return data;
+  };
+
+  const fetchBiometricAuth = async () => {
+    // Mock biometric auth data - in production, integrate with biometric auth service
+    return {
+      authenticationsToday: Math.floor(Math.random() * 100) + 50,
+      failedAttempts: Math.floor(Math.random() * 10) + 5,
+      averageAuthTime: Math.floor(Math.random() * 100) + 50,
+      securityLevel: ['low', 'medium', 'high', 'maximum'][Math.floor(Math.random() * 4)],
+      biometricTypes: ['fingerprint', 'face', 'iris', 'voice'][Math.floor(Math.random() * 4)]
+    };
+  };
+
+  const fetchBlockchainAudit = async () => {
+    // Mock blockchain audit data - in production, integrate with blockchain integrity service
+    return {
+      transactionsToday: Math.floor(Math.random() * 100) + 50,
+      blockHeight: Math.floor(Math.random() * 1000) + 500,
+      integrityScore: Math.random() * 100,
+      lastAudit: '2h ago',
+      consensusHealth: Math.random() * 100
+    };
+  };
+
   const fetchWeather = async () => {
     // Mock weather data - in production, integrate with weather API
     return {
@@ -435,82 +652,149 @@ const OverWatchTOSS: React.FC = () => {
 
   const loadDefaultLayout = useCallback(() => {
     const defaultWidgets: Widget[] = [
+      // Primary Tactical Overview
       {
         id: 'live_map_1',
         type: 'live_map',
-        title: 'Tactical Overview',
+        title: 'AI-Enhanced Tactical Overview',
         position: { x: 0, y: 0 },
         size: { width: 6, height: 4 },
-        config: { theme: 'tactical', showGeofences: true },
+        config: { theme: 'tactical', showGeofences: true, aiEnhanced: true },
         isMinimized: false,
         isFullscreen: false,
         category: 'surveillance'
       },
+      // Quantum Computing Core
+      {
+        id: 'quantum_processor_1',
+        type: 'quantum_processor',
+        title: 'Quantum Processing Core',
+        position: { x: 6, y: 0 },
+        size: { width: 3, height: 2 },
+        config: { showQuantumState: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'quantum'
+      },
+      // AI Operations Center
+      {
+        id: 'performance_metrics_1',
+        type: 'performance_metrics',
+        title: 'AI Performance Intel',
+        position: { x: 9, y: 0 },
+        size: { width: 3, height: 2 },
+        config: { aiEnhanced: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'analytics'
+      },
+      // Personnel Tracking with AI
       {
         id: 'employee_tracker_1',
         type: 'employee_tracker',
-        title: 'Personnel Status',
-        position: { x: 6, y: 0 },
+        title: 'AI Personnel Intelligence',
+        position: { x: 6, y: 2 },
         size: { width: 3, height: 2 },
-        config: { showTracking: true },
+        config: { showBehaviorAnalysis: true, predictiveTracking: true },
         isMinimized: false,
         isFullscreen: false,
         category: 'surveillance'
       },
-      {
-        id: 'cost_counter_1',
-        type: 'cost_counter',
-        title: 'Financial Ops',
-        position: { x: 9, y: 0 },
-        size: { width: 3, height: 2 },
-        config: { viewMode: 'daily' },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'operations'
-      },
-      {
-        id: 'alert_system_1',
-        type: 'alert_system',
-        title: 'Alert Command',
-        position: { x: 6, y: 2 },
-        size: { width: 6, height: 2 },
-        config: { priority: 'high' },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'communications'
-      },
-      {
-        id: 'system_monitor_1',
-        type: 'system_monitor',
-        title: 'System Status',
-        position: { x: 0, y: 4 },
-        size: { width: 4, height: 2 },
-        config: { detailed: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'resources'
-      },
+      // Zero-Trust Security
       {
         id: 'security_monitor_1',
         type: 'security_monitor',
-        title: 'Security Command',
-        position: { x: 4, y: 4 },
-        size: { width: 4, height: 2 },
-        config: { showThreats: true },
+        title: 'Zero-Trust Security Command',
+        position: { x: 9, y: 2 },
+        size: { width: 3, height: 2 },
+        config: { zeroTrust: true, threatDetection: true },
         isMinimized: false,
         isFullscreen: false,
         category: 'security'
       },
+      // Advanced Analytics Engine
       {
-        id: 'performance_metrics_1',
-        type: 'performance_metrics',
-        title: 'Performance Intel',
-        position: { x: 8, y: 4 },
+        id: 'predictive_analytics_1',
+        type: 'predictive_analytics',
+        title: 'ML Predictive Engine',
+        position: { x: 0, y: 4 },
         size: { width: 4, height: 2 },
-        config: { timeframe: 'today' },
+        config: { mlModels: true, realTimeAnalysis: true },
         isMinimized: false,
         isFullscreen: false,
         category: 'analytics'
+      },
+      // Environmental Monitoring
+      {
+        id: 'environmental_monitor_1',
+        type: 'environmental_monitor',
+        title: 'Environmental AI',
+        position: { x: 4, y: 4 },
+        size: { width: 4, height: 2 },
+        config: { sustainabilityTracking: true, carbonIntelligence: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'environmental'
+      },
+      // IoT Device Management
+      {
+        id: 'device_health_1',
+        type: 'device_health',
+        title: 'IoT Device Intelligence',
+        position: { x: 8, y: 4 },
+        size: { width: 4, height: 2 },
+        config: { iotIntegration: true, edgeComputing: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'resources'
+      },
+      // Anomaly Detection
+      {
+        id: 'anomaly_detection_1',
+        type: 'anomaly_detection',
+        title: 'AI Anomaly Detection',
+        position: { x: 0, y: 6 },
+        size: { width: 3, height: 2 },
+        config: { realTimeDetection: true, mlModels: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'analytics'
+      },
+      // Biometric Access Control
+      {
+        id: 'access_control_1',
+        type: 'access_control',
+        title: 'Biometric Access Control',
+        position: { x: 3, y: 6 },
+        size: { width: 3, height: 2 },
+        config: { biometricAuth: true, zeroTrust: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'security'
+      },
+      // Blockchain Audit Trail
+      {
+        id: 'audit_log_1',
+        type: 'audit_log',
+        title: 'Blockchain Audit Intelligence',
+        position: { x: 6, y: 6 },
+        size: { width: 3, height: 2 },
+        config: { blockchainEnabled: true, immutableAudit: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'security'
+      },
+      // Intelligent Automation
+      {
+        id: 'workflow_automation_1',
+        type: 'workflow_automation',
+        title: 'Intelligent Automation Hub',
+        position: { x: 9, y: 6 },
+        size: { width: 3, height: 2 },
+        config: { aiDriven: true, quantumOptimized: true },
+        isMinimized: false,
+        isFullscreen: false,
+        category: 'operations'
       }
     ];
 
@@ -1083,12 +1367,15 @@ const OverWatchTOSS: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="surveillance">Surveillance</SelectItem>
-                  <SelectItem value="operations">Operations</SelectItem>
-                  <SelectItem value="analytics">Analytics</SelectItem>
+                  <SelectItem value="surveillance">Surveillance & AI</SelectItem>
+                  <SelectItem value="operations">Operations & Quantum</SelectItem>
+                  <SelectItem value="analytics">Analytics & ML</SelectItem>
                   <SelectItem value="communications">Communications</SelectItem>
-                  <SelectItem value="security">Security</SelectItem>
-                  <SelectItem value="resources">Resources</SelectItem>
+                  <SelectItem value="security">Security & Zero-Trust</SelectItem>
+                  <SelectItem value="resources">Resources & IoT</SelectItem>
+                  <SelectItem value="quantum">Quantum Computing</SelectItem>
+                  <SelectItem value="environmental">Environmental & Sustainability</SelectItem>
+                  <SelectItem value="visualization">AR/VR & 3D</SelectItem>
                 </SelectContent>
               </Select>
               
