@@ -5,6 +5,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import legacy from '@vitejs/plugin-legacy';
 import { compression } from 'vite-plugin-compression2';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { componentTagger } from 'lovable-tagger';
 import path from 'path';
 
 export default defineConfig(({ command, mode }) => {
@@ -29,6 +30,7 @@ export default defineConfig(({ command, mode }) => {
     
     // Server configuration
     server: {
+      host: "::",
       port: 8080,
       open: true,
       proxy: {
@@ -139,6 +141,9 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       // React plugin with SWC for faster compilation
       react(),
+      
+      // Component tagger for Lovable development features
+      mode === 'development' && componentTagger(),
       
       // Progressive Web App support
       VitePWA({
