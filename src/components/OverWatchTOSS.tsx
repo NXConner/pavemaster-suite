@@ -27,6 +27,36 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
+// Advanced Visualization Libraries
+import { 
+  LineChart as RechartsLineChart, 
+  AreaChart, 
+  BarChart as RechartsBarChart,
+  PieChart as RechartsPieChart,
+  RadarChart,
+  ScatterChart,
+  ComposedChart,
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer,
+  Line,
+  Area,
+  Bar,
+  Pie,
+  Cell,
+  Radar as RechartsRadar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Scatter,
+  ReferenceLine
+} from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSpring, animated } from 'react-spring';
+
 // Advanced Services Integration
 import { advancedAIService } from '@/services/advancedAIService';
 import { quantumComputingService } from '@/services/quantumComputingService';
@@ -346,6 +376,130 @@ const OverWatchTOSS: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const refreshIntervalRef = useRef<NodeJS.Timeout>();
 
+  // Chart data for advanced visualizations
+  const [chartData, setChartData] = useState({
+    quantumPerformance: [],
+    aiMetrics: [],
+    securityTrends: [],
+    environmentalData: [],
+    iotDeviceMetrics: [],
+    systemPerformance: []
+  });
+
+  // Generate real-time chart data
+  const generateChartData = useCallback(() => {
+    const now = new Date();
+    const timePoints = Array.from({ length: 20 }, (_, i) => {
+      const time = new Date(now.getTime() - (19 - i) * 60000); // Last 20 minutes
+      return {
+        time: time.toLocaleTimeString('en-US', { hour12: false }),
+        timestamp: time.getTime()
+      };
+    });
+
+    // Quantum Performance Data
+    const quantumData = timePoints.map(point => ({
+      ...point,
+      qubits: 50 + Math.random() * 100,
+      coherence: 100 + Math.random() * 1000,
+      fidelity: 0.85 + Math.random() * 0.15,
+      errors: Math.random() * 0.1,
+      optimization: 500 + Math.random() * 1000
+    }));
+
+    // AI Metrics Data
+    const aiData = timePoints.map(point => ({
+      ...point,
+      accuracy: 0.85 + Math.random() * 0.15,
+      inference: 50 + Math.random() * 50,
+      confidence: 0.8 + Math.random() * 0.2,
+      throughput: 100 + Math.random() * 200,
+      anomalies: Math.random() * 10
+    }));
+
+    // Security Trends Data
+    const securityData = timePoints.map(point => ({
+      ...point,
+      trustScore: 85 + Math.random() * 15,
+      threats: Math.floor(Math.random() * 5),
+      vulnerabilities: Math.floor(Math.random() * 3),
+      incidents: Math.floor(Math.random() * 2),
+      integrity: 95 + Math.random() * 5
+    }));
+
+    // Environmental Data
+    const environmentalData = timePoints.map(point => ({
+      ...point,
+      carbon: 1200 + Math.random() * 100,
+      energy: 0.7 + Math.random() * 0.3,
+      sustainability: 80 + Math.random() * 20,
+      renewable: 0.6 + Math.random() * 0.3,
+      efficiency: 0.75 + Math.random() * 0.25
+    }));
+
+    // IoT Device Metrics
+    const iotData = timePoints.map(point => ({
+      ...point,
+      online: 40 + Math.floor(Math.random() * 10),
+      offline: Math.floor(Math.random() * 3),
+      battery: 80 + Math.random() * 20,
+      signal: -50 + Math.random() * 20,
+      throughput: 100 + Math.random() * 100
+    }));
+
+    // System Performance Data
+    const systemData = timePoints.map(point => ({
+      ...point,
+      cpu: Math.random() * 100,
+      memory: Math.random() * 100,
+      network: 5 + Math.random() * 20,
+      storage: 50 + Math.random() * 40,
+      requests: 1000 + Math.random() * 500
+    }));
+
+    setChartData({
+      quantumPerformance: quantumData,
+      aiMetrics: aiData,
+      securityTrends: securityData,
+      environmentalData: environmentalData,
+      iotDeviceMetrics: iotData,
+      systemPerformance: systemData
+    });
+  }, []);
+
+  // Color schemes for different chart types
+  const COLORS = {
+    quantum: ['#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe'],
+    ai: ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe'],
+    security: ['#ef4444', '#f87171', '#fca5a5', '#fecaca'],
+    environmental: ['#10b981', '#34d399', '#6ee7b7', '#a7f3d0'],
+    iot: ['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a'],
+    system: ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe']
+  };
+
+  // Animation variants for widgets
+  const widgetVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: { 
+        type: "spring", 
+        stiffness: 300, 
+        damping: 30 
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.8, 
+      y: -20,
+      transition: { 
+        duration: 0.2 
+      }
+    }
+  };
+
   // Check admin access
   useEffect(() => {
     const checkUserRole = async () => {
@@ -401,11 +555,13 @@ const OverWatchTOSS: React.FC = () => {
 
     refreshIntervalRef.current = setInterval(() => {
       fetchLiveData();
+      generateChartData();
     }, refreshInterval * 1000);
 
     // Initial fetch
     fetchLiveData();
-  }, [refreshInterval]);
+    generateChartData();
+  }, [refreshInterval, generateChartData]);
 
   const fetchLiveData = async () => {
     try {
@@ -971,22 +1127,38 @@ const OverWatchTOSS: React.FC = () => {
     };
 
     return (
-      <Card
+      <motion.div
         key={widget.id}
         className={`absolute border transition-all duration-200 ${
           selectedWidget === widget.id ? 'ring-2 ring-primary' : ''
         } ${widget.isMinimized ? 'h-12' : ''}`}
         style={style}
         onClick={() => setSelectedWidget(selectedWidget === widget.id ? null : widget.id)}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        variants={widgetVariants}
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <CardHeader className="pb-2 min-h-12">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm flex items-center space-x-2">
-              <IconComponent className="h-4 w-4" />
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+              >
+                <IconComponent className="h-4 w-4" />
+              </motion.div>
               <span className="truncate">{widget.title}</span>
             </CardTitle>
             {isCustomizing && (
-              <div className="flex items-center space-x-1">
+              <motion.div 
+                className="flex items-center space-x-1"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
                 <Button
                   variant="ghost"
                   size="sm"
@@ -1017,16 +1189,18 @@ const OverWatchTOSS: React.FC = () => {
                 >
                   <X className="h-3 w-3" />
                 </Button>
-              </div>
+              </motion.div>
             )}
           </div>
         </CardHeader>
         {!widget.isMinimized && (
           <CardContent className="p-2 overflow-hidden">
-            {renderWidgetContent(widget)}
+            <AnimatePresence mode="wait">
+              {renderWidgetContent(widget)}
+            </AnimatePresence>
           </CardContent>
         )}
-      </Card>
+      </motion.div>
     );
   };
 
@@ -1143,54 +1317,201 @@ const OverWatchTOSS: React.FC = () => {
 
       case 'security_monitor':
         return (
-          <div className="space-y-2">
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="text-center">
+          <motion.div 
+            className="h-full space-y-2"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="grid grid-cols-3 gap-1 text-xs">
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-green-500">{data.security.zeroTrustScore?.toFixed(0) || 98}</div>
                 <div className="text-muted-foreground">Trust Score</div>
-              </div>
-              <div className="text-center">
+              </motion.div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-yellow-500">{data.security.vulnerabilities || 2}</div>
                 <div className="text-muted-foreground">Vulnerabilities</div>
-              </div>
-              <div className="text-center">
+              </motion.div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-blue-500">{data.security.biometricEvents || 127}</div>
                 <div className="text-muted-foreground">Biometric</div>
-              </div>
+              </motion.div>
             </div>
+
+            {/* Security Trends Composed Chart */}
+            <div className="h-20">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={chartData.securityTrends.slice(-8)}>
+                  <XAxis 
+                    dataKey="time" 
+                    axisLine={false} 
+                    tickLine={false}
+                    tick={{ fontSize: 8, fill: '#6b7280' }}
+                  />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                      border: 'none', 
+                      borderRadius: '4px',
+                      fontSize: '10px'
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="trustScore"
+                    fill="url(#trustGradient)"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                  />
+                  <Bar 
+                    dataKey="threats" 
+                    fill="#ef4444" 
+                    opacity={0.6}
+                    radius={[2, 2, 0, 0]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="integrity"
+                    stroke="#8b5cf6"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <defs>
+                    <linearGradient id="trustGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+
             <div className="space-y-1">
               <div className="flex justify-between text-xs">
                 <span>Threat Level:</span>
-                <Badge 
-                  variant={data.security.threatLevel === 'low' ? 'default' : 
-                          data.security.threatLevel === 'medium' ? 'secondary' : 'destructive'} 
-                  className="text-xs"
+                <motion.div
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, delay: 0.2 }}
                 >
-                  {data.security.threatLevel || 'low'}
-                </Badge>
+                  <Badge 
+                    variant={data.security.threatLevel === 'low' ? 'default' : 
+                            data.security.threatLevel === 'medium' ? 'secondary' : 'destructive'} 
+                    className="text-xs"
+                  >
+                    {data.security.threatLevel || 'low'}
+                  </Badge>
+                </motion.div>
               </div>
               <div className="flex justify-between text-xs">
                 <span>Blockchain Integrity:</span>
                 <span className="text-green-400">{data.security.blockchainIntegrity?.toFixed(0) || 100}%</span>
               </div>
-              <Progress value={data.security.blockchainIntegrity || 100} className="h-1" />
+              <div className="relative">
+                <Progress value={data.security.blockchainIntegrity || 100} className="h-1" />
+                <motion.div 
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.security.blockchainIntegrity || 100}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                />
+              </div>
             </div>
-          </div>
+          </motion.div>
         );
 
       case 'performance_metrics':
         return (
-          <div className="h-full space-y-2">
+          <motion.div 
+            className="h-full space-y-2"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="text-center">
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-green-500">{(data.system.aiModelPerformance?.accuracy * 100 || 94).toFixed(0)}%</div>
                 <div className="text-muted-foreground">AI Accuracy</div>
-              </div>
-              <div className="text-center">
+              </motion.div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-blue-500">{data.system.aiModelPerformance?.inferenceTime || 87}ms</div>
                 <div className="text-muted-foreground">Inference</div>
-              </div>
+              </motion.div>
             </div>
+
+            {/* AI Performance Radar Chart */}
+            <div className="h-24">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart data={[
+                  {
+                    metric: 'Accuracy',
+                    value: (data.system.aiModelPerformance?.accuracy * 100 || 94),
+                    fullMark: 100
+                  },
+                  {
+                    metric: 'Speed',
+                    value: 100 - (data.system.aiModelPerformance?.inferenceTime || 87),
+                    fullMark: 100
+                  },
+                  {
+                    metric: 'Confidence',
+                    value: (data.system.aiModelPerformance?.predictionConfidence * 100 || 92),
+                    fullMark: 100
+                  },
+                  {
+                    metric: 'Throughput',
+                    value: 85,
+                    fullMark: 100
+                  },
+                  {
+                    metric: 'Reliability',
+                    value: 88,
+                    fullMark: 100
+                  }
+                ]}>
+                  <PolarGrid />
+                  <PolarAngleAxis 
+                    dataKey="metric" 
+                    tick={{ fontSize: 8, fill: '#6b7280' }}
+                  />
+                  <PolarRadiusAxis 
+                    angle={90} 
+                    domain={[0, 100]} 
+                    tick={false}
+                  />
+                  <RechartsRadar
+                    name="AI Performance"
+                    dataKey="value"
+                    stroke="#3b82f6"
+                    fill="#3b82f6"
+                    fillOpacity={0.3}
+                    strokeWidth={2}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+
             <div className="space-y-1">
               <div className="flex justify-between text-xs">
                 <span>Active Models:</span>
@@ -1202,44 +1523,135 @@ const OverWatchTOSS: React.FC = () => {
                 <span>Confidence:</span>
                 <span className="text-green-400">{(data.system.aiModelPerformance?.predictionConfidence * 100 || 92).toFixed(0)}%</span>
               </div>
-              <Progress value={data.system.aiModelPerformance?.predictionConfidence * 100 || 92} className="h-1" />
+              <div className="relative">
+                <Progress value={data.system.aiModelPerformance?.predictionConfidence * 100 || 92} className="h-1" />
+                <motion.div 
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-blue-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.system.aiModelPerformance?.predictionConfidence * 100 || 92}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                />
+              </div>
               <div className="flex items-center justify-between text-xs">
                 <span>Status:</span>
-                <div className="flex items-center space-x-1">
+                <motion.div 
+                  className="flex items-center space-x-1"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-green-400">{data.system.aiModelPerformance?.trainingStatus || 'ready'}</span>
-                </div>
+                </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         );
 
       case 'environmental_monitor':
         return (
-          <div className="h-full space-y-2">
+          <motion.div 
+            className="h-full space-y-2"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded">
+              <motion.div 
+                className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-green-400">{(data.environmental.sustainabilityScore || 85).toFixed(0)}</div>
                 <div className="text-muted-foreground">Sustainability</div>
-              </div>
-              <div className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded">
+              </motion.div>
+              <motion.div 
+                className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <div className="font-bold text-teal-400">{(data.environmental.carbonFootprint || 1250).toFixed(0)}kg</div>
                 <div className="text-muted-foreground">Carbon</div>
-              </div>
+              </motion.div>
             </div>
+
+            {/* Environmental Trends Area Chart */}
+            <div className="h-20">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData.environmentalData.slice(-8)}>
+                  <XAxis 
+                    dataKey="time" 
+                    axisLine={false} 
+                    tickLine={false}
+                    tick={{ fontSize: 8, fill: '#6b7280' }}
+                  />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                      border: 'none', 
+                      borderRadius: '4px',
+                      fontSize: '10px'
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="sustainability"
+                    stroke="#10b981"
+                    fill="url(#sustainabilityGradient)"
+                    strokeWidth={2}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="efficiency"
+                    stroke="#06b6d4"
+                    fill="url(#efficiencyGradient)"
+                    strokeWidth={2}
+                    fillOpacity={0.3}
+                  />
+                  <defs>
+                    <linearGradient id="sustainabilityGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="efficiencyGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.6}/>
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
             <div className="space-y-1">
               <div className="flex justify-between text-xs">
                 <span>Energy Efficiency:</span>
                 <span className="text-green-400">{(data.environmental.energyEfficiency * 100 || 78).toFixed(0)}%</span>
               </div>
-              <Progress value={data.environmental.energyEfficiency * 100 || 78} className="h-1" />
+              <div className="relative">
+                <Progress value={data.environmental.energyEfficiency * 100 || 78} className="h-1" />
+                <motion.div 
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.environmental.energyEfficiency * 100 || 78}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                />
+              </div>
               <div className="flex justify-between text-xs">
                 <span>Renewable Energy:</span>
                 <span className="text-blue-400">{(data.environmental.renewableEnergy * 100 || 65).toFixed(0)}%</span>
               </div>
-              <Progress value={data.environmental.renewableEnergy * 100 || 65} className="h-1" />
+              <div className="relative">
+                <Progress value={data.environmental.renewableEnergy * 100 || 65} className="h-1" />
+                <motion.div 
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.environmental.renewableEnergy * 100 || 65}%` }}
+                  transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+                />
+              </div>
             </div>
-          </div>
+          </motion.div>
         );
 
       case 'anomaly_detection':
@@ -1697,6 +2109,109 @@ const OverWatchTOSS: React.FC = () => {
           </div>
         );
 
+      case 'quantum_processor':
+        return (
+          <motion.div 
+            className="h-full space-y-2"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <motion.div 
+                className="text-center p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <animated.div className="font-bold text-purple-400">
+                  {data.quantumMetrics.qubits || 0}
+                </animated.div>
+                <div className="text-muted-foreground">Qubits</div>
+              </motion.div>
+              <motion.div 
+                className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <div className="font-bold text-cyan-400">{data.quantumMetrics.coherenceTime || 0}μs</div>
+                <div className="text-muted-foreground">Coherence</div>
+              </motion.div>
+            </div>
+            
+            {/* Real-time Quantum Performance Chart */}
+            <div className="h-20">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsLineChart data={chartData.quantumPerformance.slice(-10)}>
+                  <XAxis 
+                    dataKey="time" 
+                    axisLine={false} 
+                    tickLine={false}
+                    tick={{ fontSize: 8, fill: '#6b7280' }}
+                  />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                      border: 'none', 
+                      borderRadius: '4px',
+                      fontSize: '10px'
+                    }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="qubits" 
+                    stroke="#8b5cf6" 
+                    strokeWidth={2}
+                    dot={false}
+                    activeDot={{ r: 3, fill: '#8b5cf6' }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="coherence" 
+                    stroke="#06b6d4" 
+                    strokeWidth={2}
+                    dot={false}
+                    yAxisId="right"
+                  />
+                </RechartsLineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Quantum Volume:</span>
+                <span className="text-purple-400 font-bold">{data.quantumMetrics.quantumVolume || 0}</span>
+              </div>
+              <div className="relative">
+                <Progress value={(data.quantumMetrics.processingPower || 0) / 10} className="h-1" />
+                <motion.div 
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(data.quantumMetrics.processingPower || 0) / 10}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                />
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Active Jobs:</span>
+                <Badge variant={data.quantumMetrics.optimizationJobs > 0 ? "default" : "outline"} className="text-xs">
+                  {data.quantumMetrics.optimizationJobs || 0}
+                </Badge>
+              </div>
+              {data.quantumMetrics.quantumAdvantage && (
+                <motion.div 
+                  className="flex items-center space-x-1 text-xs text-green-400"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Atom className="h-3 w-3" />
+                  <span>Quantum Advantage Active</span>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        );
+
       default:
         return (
           <div className="h-full flex items-center justify-center text-muted-foreground">
@@ -1886,7 +2401,7 @@ const OverWatchTOSS: React.FC = () => {
 
       {/* Main Dashboard Grid */}
       <div className="relative p-4">
-        <div
+        <motion.div
           ref={gridRef}
           className={`relative min-h-screen ${isCustomizing ? 'bg-grid-pattern' : ''}`}
           style={{
@@ -1894,9 +2409,14 @@ const OverWatchTOSS: React.FC = () => {
               'radial-gradient(circle, rgba(100,100,100,0.2) 1px, transparent 1px)' : 'none',
             backgroundSize: '80px 80px'
           }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          {currentLayout.widgets.map(renderWidget)}
-        </div>
+          <AnimatePresence>
+            {currentLayout.widgets.map(renderWidget)}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Widget Selector Modal */}
