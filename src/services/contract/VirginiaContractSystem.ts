@@ -366,8 +366,8 @@ export class VirginiaContractSystem extends EventEmitter {
         <td>{{description}}</td>
         <td>{{quantity}}</td>
         <td>{{unit}}</td>
-        <td>${{unitPrice}}</td>
-        <td>${{totalPrice}}</td>
+        <td>\${{unitPrice}}</td>
+        <td>\${{totalPrice}}</td>
       </tr>
       {{/each}}
     </tbody>
@@ -382,14 +382,14 @@ export class VirginiaContractSystem extends EventEmitter {
   <h4>MILESTONES:</h4>
   <ul>
     {{#each project.timeline.milestones}}
-    <li>{{description}} - {{date}} {{#if payment}}(Payment: ${{payment}}){{/if}}</li>
+    <li>{{description}} - {{date}} {{#if payment}}(Payment: \${{payment}}){{/if}}</li>
     {{/each}}
   </ul>
 </section>
 
 <section class="payment-terms">
   <h3>PAYMENT TERMS</h3>
-  <p><strong>Total Contract Amount:</strong> ${{payment.totalAmount}}</p>
+  <p><strong>Total Contract Amount:</strong> $\${payment.totalAmount}</p>
   <p><strong>Payment Structure:</strong> {{payment.structure}}</p>
   
   <h4>PAYMENT SCHEDULE:</h4>
@@ -406,7 +406,7 @@ export class VirginiaContractSystem extends EventEmitter {
       {{#each payment.schedule}}
       <tr>
         <td>{{description}}</td>
-        <td>${{amount}}</td>
+        <td>\${{amount}}</td>
         <td>{{dueDate}}</td>
         <td>{{condition}}</td>
       </tr>
@@ -424,7 +424,7 @@ export class VirginiaContractSystem extends EventEmitter {
   <p>Contractor warrants all workmanship for {{legal.warranty.workmanship}} years and materials for {{legal.warranty.materials}} years from completion date.</p>
   
   <h4>INSURANCE AND BONDING:</h4>
-  <p>Contractor shall maintain comprehensive general liability insurance of not less than ${{legal.liability.limits}} and shall provide performance and payment bonds as required by Virginia law.</p>
+  <p>Contractor shall maintain comprehensive general liability insurance of not less than \${{legal.liability.limits}} and shall provide performance and payment bonds as required by Virginia law.</p>
   
   <h4>PERMITS AND COMPLIANCE:</h4>
   <p>Contractor shall obtain all necessary permits and comply with all applicable Virginia state and local regulations, including but not limited to:</p>
@@ -604,16 +604,16 @@ export class VirginiaContractSystem extends EventEmitter {
       <tr><th>Service</th><th>Quantity</th><th>Unit Price</th><th>Total</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sealcoating</td><td>{{sealcoat.area}} sq ft</td><td>${{sealcoat.unitPrice}}</td><td>${{sealcoat.totalCost}}</td></tr>
+      <tr><td>Sealcoating</td><td>{{sealcoat.area}} sq ft</td><td>\${{sealcoat.unitPrice}}</td><td>\${{sealcoat.totalCost}}</td></tr>
       {{#if crackFilling.included}}
-      <tr><td>Crack Filling</td><td>{{crackFilling.linearFeet}} lin ft</td><td>${{crackFilling.unitPrice}}</td><td>${{crackFilling.totalCost}}</td></tr>
+      <tr><td>Crack Filling</td><td>{{crackFilling.linearFeet}} lin ft</td><td>\${{crackFilling.unitPrice}}</td><td>\${{crackFilling.totalCost}}</td></tr>
       {{/if}}
       {{#if striping.included}}
-      <tr><td>Line Striping</td><td>{{striping.linearFeet}} lin ft</td><td>${{striping.unitPrice}}</td><td>${{striping.totalCost}}</td></tr>
+      <tr><td>Line Striping</td><td>{{striping.linearFeet}} lin ft</td><td>\${{striping.unitPrice}}</td><td>\${{striping.totalCost}}</td></tr>
       {{/if}}
     </tbody>
     <tfoot>
-      <tr><td colspan="3"><strong>TOTAL:</strong></td><td><strong>${{payment.totalAmount}}</strong></td></tr>
+      <tr><td colspan="3"><strong>TOTAL:</strong></td><td><strong>\${{payment.totalAmount}}</strong></td></tr>
     </tfoot>
   </table>
 </section>

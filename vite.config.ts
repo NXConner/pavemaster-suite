@@ -255,10 +255,9 @@ export default defineConfig(({ command, mode }) => {
       
       // Compression plugin
       compression({
-        algorithm: 'brotli',
+        algorithms: ['brotli'],
         exclude: [/\.(br)$/, /\.(gz)$/],
-        threshold: 1024,
-        minRatio: 0.8
+        threshold: 1024
       }),
       
       // HTML plugin for dynamic HTML generation
