@@ -73,6 +73,10 @@ import { visualDefectMappingService } from '@/services/visualDefectMappingServic
 import { aiDefectDetectionService } from '@/services/aiDefectDetectionService';
 import { optimizedAIModelService } from '@/services/optimizedAIModelService';
 
+// Advanced 3D Visualization Components
+import QuantumVisualization3D from './3D/QuantumVisualization3D';
+import SpatialMapping3D from './3D/SpatialMapping3D';
+
 interface Widget {
   id: string;
   type: string;
@@ -331,7 +335,9 @@ const WIDGET_TYPES = {
   // AR/VR & 3D
   ar_visualization: { icon: Camera, title: 'AR Visualization', category: 'visualization' },
   vr_training: { icon: Video, title: 'VR Training Center', category: 'visualization' },
-  scanning_3d: { icon: Scan, title: '3D Scanning Interface', category: 'visualization' }
+  scanning_3d: { icon: Scan, title: '3D Scanning Interface', category: 'visualization' },
+  quantum_3d_viz: { icon: Atom, title: 'Quantum 3D Visualization', category: 'visualization' },
+  spatial_mapping_3d: { icon: Globe, title: 'Spatial Mapping 3D', category: 'visualization' }
 };
 
 const OverWatchTOSS: React.FC = () => {
@@ -833,156 +839,31 @@ const OverWatchTOSS: React.FC = () => {
 
   const loadDefaultLayout = useCallback(() => {
     const defaultWidgets: Widget[] = [
-      // Primary Tactical Overview
-      {
-        id: 'live_map_1',
-        type: 'live_map',
-        title: 'AI-Enhanced Tactical Overview',
-        position: { x: 0, y: 0 },
-        size: { width: 6, height: 4 },
-        config: { theme: 'tactical', showGeofences: true, aiEnhanced: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'surveillance'
-      },
-      // Quantum Computing Core
-      {
-        id: 'quantum_processor_1',
-        type: 'quantum_processor',
-        title: 'Quantum Processing Core',
-        position: { x: 6, y: 0 },
-        size: { width: 3, height: 2 },
-        config: { showQuantumState: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'quantum'
-      },
-      // AI Operations Center
-      {
-        id: 'performance_metrics_1',
-        type: 'performance_metrics',
-        title: 'AI Performance Intel',
-        position: { x: 9, y: 0 },
-        size: { width: 3, height: 2 },
-        config: { aiEnhanced: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'analytics'
-      },
-      // Personnel Tracking with AI
-      {
-        id: 'employee_tracker_1',
-        type: 'employee_tracker',
-        title: 'AI Personnel Intelligence',
-        position: { x: 6, y: 2 },
-        size: { width: 3, height: 2 },
-        config: { showBehaviorAnalysis: true, predictiveTracking: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'surveillance'
-      },
-      // Zero-Trust Security
-      {
-        id: 'security_monitor_1',
-        type: 'security_monitor',
-        title: 'Zero-Trust Security Command',
-        position: { x: 9, y: 2 },
-        size: { width: 3, height: 2 },
-        config: { zeroTrust: true, threatDetection: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'security'
-      },
-      // Advanced Analytics Engine
-      {
-        id: 'predictive_analytics_1',
-        type: 'predictive_analytics',
-        title: 'ML Predictive Engine',
-        position: { x: 0, y: 4 },
-        size: { width: 4, height: 2 },
-        config: { mlModels: true, realTimeAnalysis: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'analytics'
-      },
-      // Environmental Monitoring
-      {
-        id: 'environmental_monitor_1',
-        type: 'environmental_monitor',
-        title: 'Environmental AI',
-        position: { x: 4, y: 4 },
-        size: { width: 4, height: 2 },
-        config: { sustainabilityTracking: true, carbonIntelligence: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'environmental'
-      },
-      // IoT Device Management
-      {
-        id: 'device_health_1',
-        type: 'device_health',
-        title: 'IoT Device Intelligence',
-        position: { x: 8, y: 4 },
-        size: { width: 4, height: 2 },
-        config: { iotIntegration: true, edgeComputing: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'resources'
-      },
-      // Anomaly Detection
-      {
-        id: 'anomaly_detection_1',
-        type: 'anomaly_detection',
-        title: 'AI Anomaly Detection',
-        position: { x: 0, y: 6 },
-        size: { width: 3, height: 2 },
-        config: { realTimeDetection: true, mlModels: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'analytics'
-      },
-      // Biometric Access Control
-      {
-        id: 'access_control_1',
-        type: 'access_control',
-        title: 'Biometric Access Control',
-        position: { x: 3, y: 6 },
-        size: { width: 3, height: 2 },
-        config: { biometricAuth: true, zeroTrust: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'security'
-      },
-      // Blockchain Audit Trail
-      {
-        id: 'audit_log_1',
-        type: 'audit_log',
-        title: 'Blockchain Audit Intelligence',
-        position: { x: 6, y: 6 },
-        size: { width: 3, height: 2 },
-        config: { blockchainEnabled: true, immutableAudit: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'security'
-      },
-      // Intelligent Automation
-      {
-        id: 'workflow_automation_1',
-        type: 'workflow_automation',
-        title: 'Intelligent Automation Hub',
-        position: { x: 9, y: 6 },
-        size: { width: 3, height: 2 },
-        config: { aiDriven: true, quantumOptimized: true },
-        isMinimized: false,
-        isFullscreen: false,
-        category: 'operations'
-      }
+      // Core monitoring (top row)
+      { id: '1', type: 'live_map', position: { x: 0, y: 0 }, size: { width: 320, height: 240 } },
+      { id: '2', type: 'quantum_processor', position: { x: 340, y: 0 }, size: { width: 280, height: 240 } },
+      { id: '3', type: 'performance_metrics', position: { x: 640, y: 0 }, size: { width: 280, height: 240 } },
+      
+      // 3D Visualizations (second row)
+      { id: '4', type: 'quantum_3d_viz', position: { x: 0, y: 260 }, size: { width: 400, height: 300 } },
+      { id: '5', type: 'spatial_mapping_3d', position: { x: 420, y: 260 }, size: { width: 400, height: 300 } },
+      { id: '6', type: 'environmental_monitor', position: { x: 840, y: 260 }, size: { width: 280, height: 240 } },
+      
+      // Advanced analytics (third row)
+      { id: '7', type: 'predictive_analytics', position: { x: 0, y: 580 }, size: { width: 280, height: 200 } },
+      { id: '8', type: 'device_health', position: { x: 300, y: 580 }, size: { width: 280, height: 200 } },
+      { id: '9', type: 'anomaly_detection', position: { x: 600, y: 580 }, size: { width: 280, height: 200 } },
+      
+      // Security and automation (fourth row)
+      { id: '10', type: 'access_control', position: { x: 0, y: 800 }, size: { width: 260, height: 180 } },
+      { id: '11', type: 'audit_log', position: { x: 280, y: 800 }, size: { width: 260, height: 180 } },
+      { id: '12', type: 'workflow_automation', position: { x: 560, y: 800 }, size: { width: 280, height: 180 } }
     ];
 
-    setCurrentLayout(prev => ({
-      ...prev,
+    setCurrentLayout({
+      name: 'Enhanced 3D Tactical Operations',
       widgets: defaultWidgets
-    }));
+    });
   }, []);
 
   const addWidget = (type: string) => {
@@ -1231,7 +1112,7 @@ const OverWatchTOSS: React.FC = () => {
                   <div className="text-muted-foreground">Latency</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-bold text-purple-500">AI</div>
+                  <div className="font-bold text-purple-500">3D</div>
                   <div className="text-muted-foreground">Enhanced</div>
                 </div>
               </div>
@@ -2209,6 +2090,112 @@ const OverWatchTOSS: React.FC = () => {
                 </motion.div>
               )}
             </div>
+          </motion.div>
+        );
+
+      case 'quantum_3d_viz':
+        return (
+          <motion.div 
+            className="h-full"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <QuantumVisualization3D
+              quantumData={{
+                qubits: data.quantumMetrics.qubits || 50,
+                coherenceTime: data.quantumMetrics.coherenceTime || 500,
+                fidelity: data.quantumMetrics.processingPower / 1000 || 0.95,
+                entanglement: Math.random() * 0.8 + 0.2,
+                gateErrors: Math.random() * 0.001
+              }}
+              width={widget.size.width - 16}
+              height={widget.size.height - 60}
+            />
+          </motion.div>
+        );
+
+      case 'spatial_mapping_3d':
+        return (
+          <motion.div 
+            className="h-full"
+            variants={widgetVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <SpatialMapping3D
+              assets={[
+                {
+                  id: 'v1',
+                  type: 'vehicle',
+                  position: [2, 0, 3],
+                  status: 'active',
+                  name: 'Vehicle Alpha'
+                },
+                {
+                  id: 'p1',
+                  type: 'personnel',
+                  position: [-1, 0, 1],
+                  status: 'active',
+                  name: 'Team Lead'
+                },
+                {
+                  id: 'p2',
+                  type: 'personnel',
+                  position: [1, 0, -2],
+                  status: 'maintenance',
+                  name: 'Tech Officer'
+                },
+                {
+                  id: 'e1',
+                  type: 'equipment',
+                  position: [-3, 0, 2],
+                  status: 'alert',
+                  name: 'Scanner Unit'
+                },
+                {
+                  id: 's1',
+                  type: 'sensor',
+                  position: [0, 0, 4],
+                  status: 'active',
+                  name: 'Perimeter Sensor'
+                },
+                {
+                  id: 's2',
+                  type: 'sensor',
+                  position: [-2, 0, -3],
+                  status: 'inactive',
+                  name: 'Backup Sensor'
+                }
+              ]}
+              facilities={[
+                {
+                  id: 'main_building',
+                  type: 'building',
+                  position: [0, 1.5, 0],
+                  size: [4, 3, 6],
+                  name: 'Command Center'
+                },
+                {
+                  id: 'security_zone',
+                  type: 'zone',
+                  position: [3, 0.1, -4],
+                  size: [3, 0.2, 3],
+                  name: 'Security Zone'
+                },
+                {
+                  id: 'checkpoint',
+                  type: 'checkpoint',
+                  position: [-4, 0.5, 1],
+                  size: [1, 1, 1],
+                  name: 'Checkpoint Alpha'
+                }
+              ]}
+              width={widget.size.width - 16}
+              height={widget.size.height - 60}
+              showGrid={true}
+              showShadows={true}
+            />
           </motion.div>
         );
 
