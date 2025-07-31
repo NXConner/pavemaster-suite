@@ -22,7 +22,11 @@ export default defineConfig(({ command, mode }) => {
         '@components': path.resolve(__dirname, './src/components'),
         '@services': path.resolve(__dirname, './src/services'),
         '@utils': path.resolve(__dirname, './src/utils'),
-        '@assets': path.resolve(__dirname, './src/assets')
+        '@assets': path.resolve(__dirname, './src/assets'),
+        '@pages': path.resolve(__dirname, './src/pages'),
+        '@hooks': path.resolve(__dirname, './src/hooks'),
+        '@types': path.resolve(__dirname, './src/types'),
+        '@stores': path.resolve(__dirname, './src/stores')
       },
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
     },
@@ -43,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     
-    // Build configuration
+    // Build configuration - PHASE 9 OPTIMIZATION
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
@@ -54,82 +58,232 @@ export default defineConfig(({ command, mode }) => {
       target: ['es2015', 'safari11'],
       cssTarget: 'chrome61',
       
-      // Advanced chunk and code splitting for optimal performance
+      // PHASE 9: Advanced chunk and code splitting for optimal performance
       rollupOptions: {
         output: {
+          // Optimized chunk strategy for <500KB chunks
           manualChunks: (id) => {
-            // Vendor chunks
+            // Core vendor chunks (most critical)
             if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('react-dom')) {
-                return 'react-vendor';
+              // React ecosystem - keep small and critical
+              if (id.includes('react/') || id.includes('react-dom/')) {
+                return 'react-core';
               }
-              if (id.includes('@capacitor')) {
-                return 'capacitor-vendor';
+              if (id.includes('react-router') || id.includes('@tanstack/react-query')) {
+                return 'react-routing';
               }
-              if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-                return 'ui-vendor';
+              
+              // UI Library chunks - split by frequency
+              if (id.includes('@radix-ui')) {
+                return 'radix-ui';
               }
+              if (id.includes('lucide-react')) {
+                return 'icons';
+              }
+              if (id.includes('tailwind') || id.includes('class-variance-authority')) {
+                return 'ui-utils';
+              }
+              
+              // Data visualization - separate heavy charts
               if (id.includes('recharts') || id.includes('chart')) {
-                return 'charts-vendor';
+                return 'charts';
               }
+              
+              // Capacitor mobile features
+              if (id.includes('@capacitor')) {
+                return 'capacitor';
+              }
+              
+              // Backend services
               if (id.includes('@supabase')) {
-                return 'supabase-vendor';
+                return 'supabase';
               }
-              if (id.includes('react-router') || id.includes('@tanstack')) {
-                return 'routing-state-vendor';
+              
+              // Form handling
+              if (id.includes('react-hook-form') || id.includes('@hookform')) {
+                return 'forms';
               }
+              
+              // Date utilities
+              if (id.includes('date-fns')) {
+                return 'date-utils';
+              }
+              
+              // Other utilities
+              if (id.includes('zod') || id.includes('zustand')) {
+                return 'utils';
+              }
+              
+              // Large libraries get their own chunks
+              if (id.includes('react-beautiful-dnd')) {
+                return 'dnd';
+              }
+              if (id.includes('swagger')) {
+                return 'swagger';
+              }
+              
+              // Default vendor chunk for remaining dependencies
               return 'vendor';
             }
             
-            // Feature-based chunks
-            if (id.includes('src/lib/integrationHub')) {
-              return 'integration-hub';
+            // PHASE 9: Feature-based chunks optimized for lazy loading
+            
+            // Core pages (most accessed)
+            if (id.includes('src/pages/Index') || id.includes('src/pages/Auth')) {
+              return 'core-pages';
             }
-            if (id.includes('src/lib/partnerEcosystem')) {
-              return 'partner-ecosystem';
+            
+            // Management pages group
+            if (id.includes('src/pages/TeamManagement') || 
+                id.includes('src/pages/EquipmentManagement') ||
+                id.includes('src/pages/FinancialManagement')) {
+              return 'management-pages';
             }
-            if (id.includes('src/components/QuantumOperationsCenter')) {
-              return 'quantum-operations';
+            
+            // Project-related pages
+            if (id.includes('src/pages/Projects') || 
+                id.includes('src/pages/ParkingLotDesigner') ||
+                id.includes('src/pages/PhotoReports')) {
+              return 'project-pages';
             }
-            if (id.includes('src/components/GlobalExpansion')) {
-              return 'global-expansion';
+            
+            // Analytics and reporting
+            if (id.includes('src/pages/Analytics') ||
+                id.includes('src/components/AdvancedAnalytics') ||
+                id.includes('src/components/PredictiveAnalytics')) {
+              return 'analytics';
             }
-            if (id.includes('src/services/ai') || id.includes('src/services/ml')) {
-              return 'ai-services';
+            
+            // AI and ML features
+            if (id.includes('src/pages/AIHub') ||
+                id.includes('src/components/AIOperationsCenter') ||
+                id.includes('src/services/ai') || 
+                id.includes('src/services/ml')) {
+              return 'ai-features';
             }
-            if (id.includes('src/services/contract')) {
-              return 'contract-services';
+            
+            // Mobile and PWA features
+            if (id.includes('src/pages/Mobile') ||
+                id.includes('src/components/MobileCompanion')) {
+              return 'mobile-features';
             }
+            
+            // Advanced operations
+            if (id.includes('src/components/QuantumOperationsCenter') ||
+                id.includes('src/components/UltimateEnhancedMissionControl') ||
+                id.includes('src/components/MissionControlCenter')) {
+              return 'operations-center';
+            }
+            
+            // IoT and monitoring
+            if (id.includes('src/components/IoTDashboard') ||
+                id.includes('src/components/PerformanceMonitor')) {
+              return 'iot-monitoring';
+            }
+            
+            // Enterprise features
+            if (id.includes('src/components/EnterpriseIntegrations') ||
+                id.includes('src/lib/integrationHub') ||
+                id.includes('src/lib/partnerEcosystem')) {
+              return 'enterprise';
+            }
+            
+            // Global and expansion features
+            if (id.includes('src/components/GlobalExpansion') ||
+                id.includes('src/pages/VeteranResources') ||
+                id.includes('src/pages/CompanyResources')) {
+              return 'expansion';
+            }
+            
+            // Geospatial features
             if (id.includes('src/geospatial')) {
               return 'geospatial';
             }
+            
+            // Command center features
             if (id.includes('src/command_center')) {
               return 'command-center';
             }
+            
+            // Shared components (loaded frequently)
+            if (id.includes('src/components/ui/') ||
+                id.includes('src/components/Loading') ||
+                id.includes('src/components/ErrorBoundary')) {
+              return 'ui-components';
+            }
+            
+            // Services and utilities
+            if (id.includes('src/services/') && !id.includes('ai') && !id.includes('ml')) {
+              return 'services';
+            }
+            if (id.includes('src/utils/') || id.includes('src/lib/')) {
+              return 'utilities';
+            }
+            
+            // Store management
+            if (id.includes('src/stores/') || id.includes('src/contexts/')) {
+              return 'state-management';
+            }
+          },
+          
+          // PHASE 9: Optimized asset handling
+          assetFileNames: (assetInfo) => {
+            const info = assetInfo.name.split('.');
+            const ext = info[info.length - 1];
+            
+            // Optimize asset organization for caching
+            if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+              return `images/[name]-[hash][extname]`;
+            }
+            if (/woff2?|eot|ttf|otf/i.test(ext)) {
+              return `fonts/[name]-[hash][extname]`;
+            }
+            return `assets/[name]-[hash][extname]`;
+          },
+          
+          // PHASE 9: Optimized chunk file naming
+          chunkFileNames: (chunkInfo) => {
+            return `js/[name]-[hash].js`;
+          },
+          entryFileNames: 'js/[name]-[hash].js'
+        }
+      },
+      
+      // PHASE 9: Enhanced Terser configuration
+      terserOptions: {
+        compress: {
+          drop_console: mode === 'production',
+          drop_debugger: mode === 'production',
+          pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
+          passes: 2
+        },
+        mangle: {
+          properties: {
+            regex: /^_/
           }
         }
       },
       
-      // Terser configuration for production
-      terserOptions: {
-        compress: {
-          drop_console: mode === 'production',
-          drop_debugger: mode === 'production'
-        }
-      },
-      
-      // Performance optimizations
-      chunkSizeWarningLimit: 1000,
+      // PHASE 9: Performance optimizations
+      chunkSizeWarningLimit: 500, // Reduced from 1000 to enforce <500KB chunks
       cssCodeSplit: true,
-      cssMinify: true
+      cssMinify: true,
+      reportCompressedSize: false, // Faster builds
     },
     
-    // Plugins configuration
+    // PHASE 9: Enhanced Plugins configuration
     plugins: [
       // React plugin with SWC for faster compilation
-      react(),
+      react({
+        // PHASE 9: Enhanced React optimization
+        babel: {
+          plugins: [
+            ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }]
+          ]
+        }
+      }),
       
-      // Progressive Web App support
+      // PHASE 9: Enhanced Progressive Web App support
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
@@ -163,8 +317,9 @@ export default defineConfig(({ command, mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
-          maximumFileSizeToCacheInBytes: 3000000,
+          // PHASE 9: Simplified caching strategy that works
+          globPatterns: ['**/*.{js,css,html,svg,png,ico,txt,woff2}'],
+          maximumFileSizeToCacheInBytes: 5000000,
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -172,20 +327,19 @@ export default defineConfig(({ command, mode }) => {
               options: {
                 cacheName: 'google-fonts-cache',
                 expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                  maxEntries: 30,
+                  maxAgeSeconds: 60 * 60 * 24 * 365
                 }
               }
             },
             {
-              urlPattern: /^https:\/\/api\.pavementperformancesuite\.com\/.*/i,
-              handler: 'NetworkFirst',
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+              handler: 'CacheFirst',
               options: {
-                cacheName: 'api-cache',
-                networkTimeoutSeconds: 10,
+                cacheName: 'images-cache',
                 expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 60 // 1 hour
+                  maxEntries: 200,
+                  maxAgeSeconds: 60 * 60 * 24 * 30
                 }
               }
             }
@@ -218,11 +372,20 @@ export default defineConfig(({ command, mode }) => {
         ]
       }),
       
-      // Compression plugin
+      // PHASE 9: Enhanced compression
       compression({
         algorithm: 'brotli',
         exclude: [/\.(br)$/, /\.(gz)$/],
-        threshold: 1024,
+        threshold: 512, // Compress smaller files too
+        minRatio: 0.7, // More aggressive compression
+        deleteOriginFile: false
+      }),
+      
+      // PHASE 9: Gzip compression as fallback
+      compression({
+        algorithm: 'gzip',
+        exclude: [/\.(br)$/, /\.(gz)$/],
+        threshold: 512,
         minRatio: 0.8
       }),
       
@@ -237,13 +400,14 @@ export default defineConfig(({ command, mode }) => {
         }
       }),
       
-      // Bundle visualization (only in production)
+      // PHASE 9: Enhanced bundle visualization
       mode === 'production' && visualizer({
         filename: './stats.html',
-        title: 'PaveMaster Suite - Bundle Analysis',
+        title: 'PaveMaster Suite - Phase 9 Bundle Analysis',
         open: false,
         gzipSize: true,
-        brotliSize: true
+        brotliSize: true,
+        template: 'treemap' // Better visualization
       })
     ].filter(Boolean),
     
@@ -254,7 +418,22 @@ export default defineConfig(({ command, mode }) => {
           additionalData: `@import "@/styles/variables.scss";`
         }
       },
-      devSourcemap: true
+      devSourcemap: true,
+      // PHASE 9: Enhanced CSS optimization
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove();
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     
     // Test configuration
@@ -268,19 +447,33 @@ export default defineConfig(({ command, mode }) => {
       }
     },
 
-    // Optimize dependencies for mobile
+    // PHASE 9: Enhanced dependencies optimization for mobile
     optimizeDeps: {
       include: [
         'react',
         'react-dom',
+        'react/jsx-runtime',
         '@capacitor/core',
         '@capacitor/camera',
         '@capacitor/geolocation',
         '@capacitor/device',
         '@capacitor/network',
-        '@capacitor/preferences'
+        '@capacitor/preferences',
+        '@radix-ui/react-slot',
+        'lucide-react'
       ],
-      exclude: ['@capacitor/ios', '@capacitor/android']
+      exclude: ['@capacitor/ios', '@capacitor/android'],
+      // PHASE 9: Enhanced pre-bundling
+      esbuildOptions: {
+        target: 'es2015'
+      }
+    },
+    
+    // PHASE 9: Enhanced preview configuration
+    preview: {
+      port: 4173,
+      strictPort: true,
+      open: true
     }
   };
 });

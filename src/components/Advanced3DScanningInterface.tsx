@@ -7,12 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { 
   Camera, 
-  Scan3D, 
+  ScanLine, 
   Brain, 
   Map, 
   Play, 
   Pause, 
-  Stop, 
+  Square, 
   Eye, 
   MapPin, 
   Target, 
@@ -265,7 +265,7 @@ export function Advanced3DScanningInterface() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Scan3D className="h-5 w-5" />
+                            <ScanLine className="h-5 w-5" />
             AR Capabilities
           </CardTitle>
         </CardHeader>
@@ -365,8 +365,8 @@ export function Advanced3DScanningInterface() {
                   {scanningState.isProcessing ? 'Processing...' : 'Capture Photo'}
                 </Button>
                 <Button onClick={stopScanSession} variant="outline" className="flex-1">
-                  <Stop className="h-4 w-4 mr-2" />
-                  Stop Scan
+                  <Square className="h-4 w-4 mr-2" />
+                  Square Scan
                 </Button>
               </div>
             </div>
@@ -667,7 +667,7 @@ export function Advanced3DScanningInterface() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Scan3D className="h-6 w-6 text-primary" />
+            <ScanLine className="h-6 w-6 text-primary" />
             Advanced 3D Scanning & AI Detection
           </CardTitle>
           <CardDescription>
@@ -680,7 +680,7 @@ export function Advanced3DScanningInterface() {
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="scanner" className="flex items-center gap-2">
-            <Scan3D className="h-4 w-4" />
+            <ScanLine className="h-4 w-4" />
             3D Scanner
           </TabsTrigger>
           <TabsTrigger value="ai" className="flex items-center gap-2">

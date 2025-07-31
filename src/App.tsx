@@ -4,67 +4,121 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageLoading } from "@/components/Loading";
 import NotificationCenter from "@/components/NotificationCenter";
-import { Suspense, lazy } from "react";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+import { Suspense, useEffect } from "react";
 import NotFound from "./pages/NotFound";
 
-// Component imports for features that need direct loading
+// PHASE 9: Import optimized lazy routes
+import {
+  IndexPage,
+  AuthPage,
+  SettingsPage,
+  TeamManagementPage,
+  EquipmentManagementPage,
+  FinancialManagementPage,
+  SafetyManagementPage,
+  SchedulingSystemPage,
+  ProjectsPage,
+  ParkingLotDesignerPage,
+  PhotoReportsPage,
+  MeasurementsPage,
+  TrackingPage,
+  AnalyticsPage,
+  AIHubPage,
+  MobilePage,
+  VeteranResourcesPage,
+  FleetManagementPage,
+  CompanyResourcesPage,
+  OverWatchTOSS,
+  TaskPriorityManager,
+  AIOperationsCenter,
+  AdvancedAnalytics,
+  MissionControlCenter,
+  EnterpriseIntegrations,
+  MobileCompanion,
+  QuantumOperationsCenter,
+  UltimateEnhancedMissionControl,
+  PerformanceMonitor,
+  AdvancedDashboard,
+  PredictiveAnalytics,
+  IoTDashboard,
+  GlobalExpansion,
+  ApiDocumentation,
+  LazyRoute,
+  preloadCriticalRoutes,
+  useSmartPreloading
+} from "@/router/LazyRoutes";
+
+// Component imports for features that need direct loading (kept minimal)
 import CostCounter from "@/components/CostCounter";
 import EmployeeTracker from "@/components/EmployeeTracker";
 
-// Advanced components with lazy loading for performance
-const OverWatchTOSS = lazy(() => import("@/components/OverWatchTOSS"));
-const TaskPriorityManager = lazy(() => import("@/components/TaskPriorityManager"));
-const AIOperationsCenter = lazy(() => import("@/components/AIOperationsCenter"));
-const AdvancedAnalytics = lazy(() => import("@/components/AdvancedAnalytics"));
-const MissionControlCenter = lazy(() => import("@/components/MissionControlCenter"));
-const EnterpriseIntegrations = lazy(() => import("@/components/EnterpriseIntegrations"));
-const MobileCompanion = lazy(() => import("@/components/MobileCompanion"));
-const QuantumOperationsCenter = lazy(() => import("@/components/QuantumOperationsCenter"));
-const UltimateEnhancedMissionControl = lazy(() => import("@/components/UltimateEnhancedMissionControl"));
-
-// Lazy load non-critical pages for better performance
-const Settings = lazy(() => import("./pages/Settings"));
-const AIHub = lazy(() => import("./pages/AIHub"));
-const Analytics = lazy(() => import("./pages/Analytics"));
-const Mobile = lazy(() => import("./pages/Mobile"));
-const ApiDocumentation = lazy(() => import("@/components/ApiDocumentation"));
-const Tracking = lazy(() => import("./pages/Tracking"));
-const Measurements = lazy(() => import("./pages/Measurements"));
-const ParkingLotDesigner = lazy(() => import("./pages/ParkingLotDesigner"));
-const Projects = lazy(() => import("./pages/Projects"));
-const PhotoReports = lazy(() => import("./pages/PhotoReports"));
-const TeamManagement = lazy(() => import("./pages/TeamManagement"));
-const EquipmentManagement = lazy(() => import("./pages/EquipmentManagement"));
-const SchedulingSystem = lazy(() => import("./pages/SchedulingSystem"));
-const FinancialManagement = lazy(() => import("./pages/FinancialManagement"));
-const SafetyManagement = lazy(() => import("./pages/SafetyManagement"));
-const PerformanceMonitor = lazy(() => import("./components/PerformanceMonitor"));
-const AdvancedDashboard = lazy(() => import("./components/AdvancedDashboard"));
-const PredictiveAnalytics = lazy(() => import("./components/PredictiveAnalytics"));
-const IoTDashboard = lazy(() => import("./components/IoTDashboard"));
-const GlobalExpansion = lazy(() => import("./components/GlobalExpansion"));
-const VeteranResources = lazy(() => import("./pages/VeteranResources"));
-const FleetManagement = lazy(() => import("./pages/FleetManagement"));
-const CompanyResources = lazy(() => import("./pages/CompanyResources"));
-
+// PHASE 9: Enhanced QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 3,
       staleTime: 5 * 60 * 1000, // 5 minutes
       refetchOnWindowFocus: false,
+      // PHASE 9: Enhanced caching strategy
+      gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+      refetchOnReconnect: true,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+    mutations: {
+      retry: 1,
+      retryDelay: 1000,
     },
   },
 });
+
+// PHASE 9: Smart preloading component
+const SmartPreloader = () => {
+  const location = useLocation();
+  const smartPreload = useSmartPreloading();
+
+  useEffect(() => {
+    smartPreload(location.pathname);
+  }, [location.pathname, smartPreload]);
+
+  useEffect(() => {
+    // Preload critical routes on app startup
+    preloadCriticalRoutes();
+  }, []);
+
+  return null;
+};
+
+// PHASE 9: Enhanced loading fallbacks for different route types
+const getCriticalLoadingFallback = (title: string) => (
+  <PageLoading title={title} />
+);
+
+const getStandardLoadingFallback = (title: string) => (
+  <div className="flex items-center justify-center h-64">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    <span className="ml-3 text-sm text-gray-600">{title}</span>
+  </div>
+);
+
+const getAdvancedLoadingFallback = (title: string) => (
+  <div className="flex flex-col items-center justify-center h-64 space-y-4">
+    <div className="relative">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="animate-ping absolute top-0 left-0 h-12 w-12 rounded-full border border-blue-400 opacity-25"></div>
+    </div>
+    <div className="text-center">
+      <p className="text-sm font-medium text-gray-700">{title}</p>
+      <p className="text-xs text-gray-500 mt-1">Loading advanced features...</p>
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -74,10 +128,19 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <SmartPreloader />
             <SidebarProvider>
               <div className="min-h-screen flex w-full">
                 <Routes>
-                  <Route path="/auth" element={<Auth />} />
+                  <Route 
+                    path="/auth" 
+                    element={
+                      <LazyRoute 
+                        component={AuthPage} 
+                        fallback={getCriticalLoadingFallback("Loading authentication...")} 
+                      />
+                    } 
+                  />
                   <Route path="/*" element={
                     <ProtectedRoute>
                       <>
@@ -94,56 +157,318 @@ const App = () => (
                           <AppSidebar />
                           <main className="flex-1 overflow-auto">
                             <ErrorBoundary>
-                              <Suspense fallback={<PageLoading title="Loading page..." />}>
-                                <Routes>
-                                  <Route path="/" element={<Index />} />
-                                  <Route path="/settings" element={<Settings />} />
-                                  <Route path="/ai" element={<AIHub />} />
-                                  <Route path="/analytics" element={<Analytics />} />
-                                  <Route path="/mobile" element={<Mobile />} />
-                                  <Route path="/api-docs" element={<ApiDocumentation />} />
-                                  
-                                  {/* Advanced Feature Routes */}
-                                  <Route path="/cost-counter" element={<CostCounter />} />
-                                  <Route path="/employee-tracker" element={<EmployeeTracker />} />
-                                  <Route path="/overwatch" element={<OverWatchTOSS />} />
-                                  <Route path="/task-priorities" element={<TaskPriorityManager />} />
-                                  <Route path="/ai-operations" element={<AIOperationsCenter />} />
-                                  <Route path="/mission-control" element={<MissionControlCenter />} />
-                                  <Route path="/integrations" element={<EnterpriseIntegrations />} />
-                                  <Route path="/mobile-companion" element={<MobileCompanion />} />
-                                  <Route path="/quantum" element={<QuantumOperationsCenter />} />
-                                  <Route path="/ultimate-mission-control" element={<UltimateEnhancedMissionControl />} />
-                                  
-                                  {/* Feature pages */}
-                                  <Route path="/tracking" element={<Tracking />} />
-                                  <Route path="/measurements" element={<Measurements />} />
-                                  <Route path="/parking-designer" element={<ParkingLotDesigner />} />
-                                  <Route path="/projects" element={<Projects />} />
-                                  
-                                  {/* Management pages */}
-                                  <Route path="/photos" element={<PhotoReports />} />
-                                  <Route path="/team" element={<TeamManagement />} />
-                                  <Route path="/equipment" element={<EquipmentManagement />} />
-                                  <Route path="/schedule" element={<SchedulingSystem />} />
-                                  <Route path="/finance" element={<FinancialManagement />} />
-                                  <Route path="/safety" element={<SafetyManagement />} />
-                                  
-                                  {/* Advanced Features */}
-                                  <Route path="/performance" element={<PerformanceMonitor />} />
-                                  <Route path="/dashboard-advanced" element={<AdvancedDashboard />} />
-                                  <Route path="/predictive-analytics" element={<PredictiveAnalytics />} />
-                                  <Route path="/iot-monitoring" element={<IoTDashboard />} />
-                                  <Route path="/global-expansion" element={<GlobalExpansion />} />
-                                  
-                                  {/* Company Features */}
-                                  <Route path="/veterans" element={<VeteranResources />} />
-                                  <Route path="/fleet" element={<FleetManagement />} />
-                                  <Route path="/resources" element={<CompanyResources />} />
-                                  
-                                  <Route path="*" element={<NotFound />} />
-                                </Routes>
-                              </Suspense>
+                              <Routes>
+                                {/* PHASE 9: Core routes with critical loading */}
+                                <Route 
+                                  path="/" 
+                                  element={
+                                    <LazyRoute 
+                                      component={IndexPage} 
+                                      fallback={getCriticalLoadingFallback("Loading dashboard...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/settings" 
+                                  element={
+                                    <LazyRoute 
+                                      component={SettingsPage} 
+                                      fallback={getCriticalLoadingFallback("Loading settings...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: Management routes with standard loading */}
+                                <Route 
+                                  path="/team" 
+                                  element={
+                                    <LazyRoute 
+                                      component={TeamManagementPage} 
+                                      fallback={getStandardLoadingFallback("Loading team management...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/equipment" 
+                                  element={
+                                    <LazyRoute 
+                                      component={EquipmentManagementPage} 
+                                      fallback={getStandardLoadingFallback("Loading equipment management...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/finance" 
+                                  element={
+                                    <LazyRoute 
+                                      component={FinancialManagementPage} 
+                                      fallback={getStandardLoadingFallback("Loading financial management...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/safety" 
+                                  element={
+                                    <LazyRoute 
+                                      component={SafetyManagementPage} 
+                                      fallback={getStandardLoadingFallback("Loading safety management...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/schedule" 
+                                  element={
+                                    <LazyRoute 
+                                      component={SchedulingSystemPage} 
+                                      fallback={getStandardLoadingFallback("Loading scheduling system...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: Project routes with standard loading */}
+                                <Route 
+                                  path="/projects" 
+                                  element={
+                                    <LazyRoute 
+                                      component={ProjectsPage} 
+                                      fallback={getStandardLoadingFallback("Loading projects...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/parking-designer" 
+                                  element={
+                                    <LazyRoute 
+                                      component={ParkingLotDesignerPage} 
+                                      fallback={getStandardLoadingFallback("Loading parking lot designer...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/photos" 
+                                  element={
+                                    <LazyRoute 
+                                      component={PhotoReportsPage} 
+                                      fallback={getStandardLoadingFallback("Loading photo reports...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/measurements" 
+                                  element={
+                                    <LazyRoute 
+                                      component={MeasurementsPage} 
+                                      fallback={getStandardLoadingFallback("Loading measurements...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/tracking" 
+                                  element={
+                                    <LazyRoute 
+                                      component={TrackingPage} 
+                                      fallback={getStandardLoadingFallback("Loading tracking...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: Analytics and AI routes */}
+                                <Route 
+                                  path="/analytics" 
+                                  element={
+                                    <LazyRoute 
+                                      component={AnalyticsPage} 
+                                      fallback={getAdvancedLoadingFallback("Loading analytics...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/ai" 
+                                  element={
+                                    <LazyRoute 
+                                      component={AIHubPage} 
+                                      fallback={getAdvancedLoadingFallback("Loading AI hub...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: Mobile routes */}
+                                <Route 
+                                  path="/mobile" 
+                                  element={
+                                    <LazyRoute 
+                                      component={MobilePage} 
+                                      fallback={getStandardLoadingFallback("Loading mobile features...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: Advanced Feature Routes with enhanced loading */}
+                                <Route path="/cost-counter" element={<CostCounter />} />
+                                <Route path="/employee-tracker" element={<EmployeeTracker />} />
+                                
+                                <Route 
+                                  path="/overwatch" 
+                                  element={
+                                    <LazyRoute 
+                                      component={OverWatchTOSS} 
+                                      fallback={getAdvancedLoadingFallback("Loading OverWatch system...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/task-priorities" 
+                                  element={
+                                    <LazyRoute 
+                                      component={TaskPriorityManager} 
+                                      fallback={getAdvancedLoadingFallback("Loading task priority manager...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/ai-operations" 
+                                  element={
+                                    <LazyRoute 
+                                      component={AIOperationsCenter} 
+                                      fallback={getAdvancedLoadingFallback("Loading AI operations center...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/mission-control" 
+                                  element={
+                                    <LazyRoute 
+                                      component={MissionControlCenter} 
+                                      fallback={getAdvancedLoadingFallback("Loading mission control center...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/integrations" 
+                                  element={
+                                    <LazyRoute 
+                                      component={EnterpriseIntegrations} 
+                                      fallback={getAdvancedLoadingFallback("Loading enterprise integrations...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/mobile-companion" 
+                                  element={
+                                    <LazyRoute 
+                                      component={MobileCompanion} 
+                                      fallback={getAdvancedLoadingFallback("Loading mobile companion...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/quantum" 
+                                  element={
+                                    <LazyRoute 
+                                      component={QuantumOperationsCenter} 
+                                      fallback={getAdvancedLoadingFallback("Loading quantum operations center...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/ultimate-mission-control" 
+                                  element={
+                                    <LazyRoute 
+                                      component={UltimateEnhancedMissionControl} 
+                                      fallback={getAdvancedLoadingFallback("Loading ultimate mission control...")} 
+                                    />
+                                  } 
+                                />
+                                
+                                {/* PHASE 9: Advanced Analytics Features */}
+                                <Route 
+                                  path="/performance" 
+                                  element={
+                                    <LazyRoute 
+                                      component={PerformanceMonitor} 
+                                      fallback={getAdvancedLoadingFallback("Loading performance monitor...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/dashboard-advanced" 
+                                  element={
+                                    <LazyRoute 
+                                      component={AdvancedDashboard} 
+                                      fallback={getAdvancedLoadingFallback("Loading advanced dashboard...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/predictive-analytics" 
+                                  element={
+                                    <LazyRoute 
+                                      component={PredictiveAnalytics} 
+                                      fallback={getAdvancedLoadingFallback("Loading predictive analytics...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/iot-monitoring" 
+                                  element={
+                                    <LazyRoute 
+                                      component={IoTDashboard} 
+                                      fallback={getAdvancedLoadingFallback("Loading IoT monitoring...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/global-expansion" 
+                                  element={
+                                    <LazyRoute 
+                                      component={GlobalExpansion} 
+                                      fallback={getAdvancedLoadingFallback("Loading global expansion features...")} 
+                                    />
+                                  } 
+                                />
+                                
+                                {/* PHASE 9: Company Features */}
+                                <Route 
+                                  path="/veterans" 
+                                  element={
+                                    <LazyRoute 
+                                      component={VeteranResourcesPage} 
+                                      fallback={getStandardLoadingFallback("Loading veteran resources...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/fleet" 
+                                  element={
+                                    <LazyRoute 
+                                      component={FleetManagementPage} 
+                                      fallback={getStandardLoadingFallback("Loading fleet management...")} 
+                                    />
+                                  } 
+                                />
+                                <Route 
+                                  path="/resources" 
+                                  element={
+                                    <LazyRoute 
+                                      component={CompanyResourcesPage} 
+                                      fallback={getStandardLoadingFallback("Loading company resources...")} 
+                                    />
+                                  } 
+                                />
+
+                                {/* PHASE 9: API Documentation */}
+                                <Route 
+                                  path="/api-docs" 
+                                  element={
+                                    <LazyRoute 
+                                      component={ApiDocumentation} 
+                                      fallback={getStandardLoadingFallback("Loading API documentation...")} 
+                                    />
+                                  } 
+                                />
+                                
+                                <Route path="*" element={<NotFound />} />
+                              </Routes>
                             </ErrorBoundary>
                           </main>
                         </div>
