@@ -2200,6 +2200,600 @@ export class BlockchainIntegrityService {
   }
 }
 
-// PHASE 15: Export singleton instance
-export const blockchainIntegrityService = new BlockchainIntegrityService();
-export default blockchainIntegrityService;
+/**
+ * Advanced Smart Contract Integration Engine
+ * Implements comprehensive blockchain audit trails and automated contract execution
+ */
+export class SmartContractEngine {
+  private contractRegistry: Map<string, SmartContract>;
+  private auditChain: AuditBlockchain;
+  private executionEngine: ContractExecutionEngine;
+  private validationService: ContractValidationService;
+  
+  constructor() {
+    this.contractRegistry = new Map();
+    this.auditChain = new AuditBlockchain();
+    this.executionEngine = new ContractExecutionEngine();
+    this.validationService = new ContractValidationService();
+    this.initializeSmartContracts();
+  }
+
+  /**
+   * Deploy smart contract for automated pavement maintenance agreements
+   */
+  async deployMaintenanceContract(
+    contractSpec: MaintenanceContractSpec,
+    parties: ContractParty[],
+    terms: ContractTerms
+  ): Promise<DeployedContract> {
+    // Validate contract specification
+    const validation = await this.validationService.validateContract(contractSpec);
+    if (!validation.isValid) {
+      throw new Error(`Contract validation failed: ${validation.errors.join(', ')}`);
+    }
+
+    // Generate smart contract code
+    const contractCode = this.generateContractCode({
+      type: 'maintenance_agreement',
+      spec: contractSpec,
+      parties: parties,
+      terms: terms
+    });
+
+    // Deploy to blockchain
+    const deployment = await this.deployContract({
+      code: contractCode,
+      constructor: {
+        parties: parties.map(p => p.address),
+        maintenanceSchedule: terms.maintenanceSchedule,
+        paymentTerms: terms.paymentTerms,
+        qualityStandards: terms.qualityStandards
+      },
+      gasLimit: 3000000,
+      value: terms.escrowAmount
+    });
+
+    // Create audit trail for deployment
+    await this.auditChain.recordEvent({
+      type: 'CONTRACT_DEPLOYED',
+      contractAddress: deployment.address,
+      deployer: deployment.deployer,
+      timestamp: Date.now(),
+      metadata: {
+        contractType: 'maintenance_agreement',
+        parties: parties.map(p => p.name),
+        totalValue: terms.totalValue,
+        duration: terms.duration
+      }
+    });
+
+    const deployedContract = new DeployedContract({
+      address: deployment.address,
+      abi: deployment.abi,
+      spec: contractSpec,
+      parties: parties,
+      terms: terms,
+      status: 'active'
+    });
+
+    this.contractRegistry.set(deployment.address, deployedContract);
+
+    return deployedContract;
+  }
+
+  /**
+   * Automated performance monitoring and payment processing
+   */
+  async enableAutomatedExecution(
+    contractAddress: string,
+    monitoringConfig: ContractMonitoringConfig
+  ): Promise<AutomatedExecutionSession> {
+    const contract = this.contractRegistry.get(contractAddress);
+    if (!contract) {
+      throw new Error(`Contract ${contractAddress} not found`);
+    }
+
+    // Set up IoT data streams for automated monitoring
+    const dataStreams = await this.setupContractDataStreams(
+      monitoringConfig.dataSources
+    );
+
+    // Initialize oracle services for external data
+    const oracles = await this.initializeOracles({
+      weatherData: monitoringConfig.weatherOracle,
+      qualityMetrics: monitoringConfig.qualityOracle,
+      performanceMetrics: monitoringConfig.performanceOracle
+    });
+
+    // Create automated execution session
+    const session = new AutomatedExecutionSession({
+      contract: contract,
+      dataStreams: dataStreams,
+      oracles: oracles,
+      executionRules: monitoringConfig.executionRules,
+      escrowManager: new EscrowManager(contract.terms.escrowAmount)
+    });
+
+    // Start automated monitoring
+    session.startMonitoring();
+
+    return session;
+  }
+
+  /**
+   * Multi-signature approval system for high-value contracts
+   */
+  async createMultiSigContract(
+    contractSpec: MultiSigContractSpec,
+    signers: Signer[],
+    threshold: number
+  ): Promise<MultiSigContract> {
+    // Validate threshold requirements
+    if (threshold > signers.length || threshold < 1) {
+      throw new Error('Invalid threshold for multi-signature contract');
+    }
+
+    // Generate multi-sig contract with approval workflow
+    const contractCode = this.generateMultiSigCode({
+      signers: signers.map(s => s.address),
+      threshold: threshold,
+      businessLogic: contractSpec.businessLogic,
+      approvalWorkflow: contractSpec.approvalWorkflow
+    });
+
+    // Deploy multi-sig contract
+    const deployment = await this.deployContract({
+      code: contractCode,
+      constructor: {
+        signers: signers.map(s => s.address),
+        threshold: threshold,
+        contractSpec: contractSpec
+      }
+    });
+
+    // Create approval tracking system
+    const approvalTracker = new ApprovalTracker({
+      contractAddress: deployment.address,
+      requiredSigners: signers,
+      threshold: threshold,
+      timeoutPeriod: contractSpec.approvalTimeout
+    });
+
+    const multiSigContract = new MultiSigContract({
+      address: deployment.address,
+      signers: signers,
+      threshold: threshold,
+      spec: contractSpec,
+      approvalTracker: approvalTracker
+    });
+
+    this.contractRegistry.set(deployment.address, multiSigContract);
+
+    return multiSigContract;
+  }
+
+  /**
+   * Compliance automation with regulatory requirements
+   */
+  async implementComplianceAutomation(
+    contractAddress: string,
+    regulations: RegulatoryFramework[],
+    complianceConfig: ComplianceConfig
+  ): Promise<ComplianceEngine> {
+    const contract = this.contractRegistry.get(contractAddress);
+    if (!contract) {
+      throw new Error(`Contract ${contractAddress} not found`);
+    }
+
+    // Create compliance rule engine
+    const ruleEngine = new ComplianceRuleEngine({
+      regulations: regulations,
+      automationLevel: complianceConfig.automationLevel,
+      reportingFrequency: complianceConfig.reportingFrequency
+    });
+
+    // Set up automated compliance monitoring
+    const complianceMonitor = new ComplianceMonitor({
+      contract: contract,
+      ruleEngine: ruleEngine,
+      auditTrail: this.auditChain,
+      alertingSystem: new ComplianceAlertingSystem()
+    });
+
+    // Initialize regulatory reporting
+    const reportingService = new RegulatoryReportingService({
+      regulations: regulations,
+      reportingSchedule: complianceConfig.reportingSchedule,
+      submissionEndpoints: complianceConfig.submissionEndpoints
+    });
+
+    const complianceEngine = new ComplianceEngine({
+      monitor: complianceMonitor,
+      ruleEngine: ruleEngine,
+      reportingService: reportingService,
+      contract: contract
+    });
+
+    // Start compliance automation
+    complianceEngine.start();
+
+    return complianceEngine;
+  }
+
+  /**
+   * Decentralized dispute resolution system
+   */
+  async createDisputeResolutionContract(
+    originalContract: string,
+    disputeConfig: DisputeConfig
+  ): Promise<DisputeResolutionContract> {
+    // Create arbitration panel selection
+    const arbitrationPanel = await this.selectArbitrationPanel({
+      disputeType: disputeConfig.disputeType,
+      stakingRequirement: disputeConfig.arbitratorStaking,
+      expertiseRequired: disputeConfig.requiredExpertise
+    });
+
+    // Generate dispute resolution contract
+    const disputeContractCode = this.generateDisputeResolutionCode({
+      originalContract: originalContract,
+      arbitrationPanel: arbitrationPanel,
+      votingMechanism: disputeConfig.votingMechanism,
+      evidenceSubmission: disputeConfig.evidenceSubmission,
+      appealProcess: disputeConfig.appealProcess
+    });
+
+    // Deploy dispute resolution contract
+    const deployment = await this.deployContract({
+      code: disputeContractCode,
+      constructor: {
+        originalContract: originalContract,
+        arbitrators: arbitrationPanel.map(a => a.address),
+        stakingAmount: disputeConfig.arbitratorStaking,
+        votingPeriod: disputeConfig.votingPeriod
+      }
+    });
+
+    const disputeContract = new DisputeResolutionContract({
+      address: deployment.address,
+      originalContract: originalContract,
+      arbitrationPanel: arbitrationPanel,
+      config: disputeConfig,
+      status: 'pending_evidence'
+    });
+
+    return disputeContract;
+  }
+
+  /**
+   * Cross-chain interoperability for multi-network operations
+   */
+  async enableCrossChainOperations(
+    primaryContract: string,
+    targetChains: ChainConfig[],
+    bridgeConfig: CrossChainBridgeConfig
+  ): Promise<CrossChainBridge> {
+    // Initialize cross-chain bridge
+    const bridge = new CrossChainBridge({
+      primaryChain: bridgeConfig.primaryChain,
+      targetChains: targetChains,
+      bridgeContract: bridgeConfig.bridgeContract,
+      validatorSet: bridgeConfig.validators
+    });
+
+    // Deploy mirror contracts on target chains
+    const mirrorContracts = await Promise.all(
+      targetChains.map(async (chain) => {
+        return await this.deployMirrorContract({
+          originalContract: primaryContract,
+          targetChain: chain,
+          bridge: bridge
+        });
+      })
+    );
+
+    // Set up cross-chain message relay
+    const messageRelay = new CrossChainMessageRelay({
+      bridge: bridge,
+      mirrorContracts: mirrorContracts,
+      consensusThreshold: bridgeConfig.consensusThreshold
+    });
+
+    // Initialize state synchronization
+    const stateSynchronizer = new CrossChainStateSynchronizer({
+      primaryContract: primaryContract,
+      mirrorContracts: mirrorContracts,
+      synchronizationInterval: bridgeConfig.syncInterval
+    });
+
+    bridge.setMessageRelay(messageRelay);
+    bridge.setStateSynchronizer(stateSynchronizer);
+
+    return bridge;
+  }
+
+  // Private helper methods
+  private generateContractCode(config: ContractCodeConfig): string {
+    // Generate Solidity smart contract code based on configuration
+    const template = this.getContractTemplate(config.type);
+    return this.compileContract(template, config);
+  }
+
+  private async deployContract(deployment: ContractDeployment): Promise<DeploymentResult> {
+    // Deploy contract to blockchain network
+    const transaction = await this.executionEngine.deploy(deployment);
+    return await transaction.wait();
+  }
+
+  private async setupContractDataStreams(
+    dataSources: DataSource[]
+  ): Promise<ContractDataStream[]> {
+    const streams: ContractDataStream[] = [];
+    
+    for (const source of dataSources) {
+      const stream = new ContractDataStream({
+        source: source,
+        aggregationPeriod: source.aggregationPeriod,
+        validator: this.createDataValidator(source.type),
+        transformer: this.createDataTransformer(source.format)
+      });
+      
+      streams.push(stream);
+    }
+    
+    return streams;
+  }
+
+  private async initializeOracles(oracleConfig: OracleConfig): Promise<Oracle[]> {
+    const oracles: Oracle[] = [];
+    
+    // Weather data oracle
+    if (oracleConfig.weatherData) {
+      oracles.push(new WeatherOracle(oracleConfig.weatherData));
+    }
+    
+    // Quality metrics oracle
+    if (oracleConfig.qualityMetrics) {
+      oracles.push(new QualityOracle(oracleConfig.qualityMetrics));
+    }
+    
+    // Performance metrics oracle
+    if (oracleConfig.performanceMetrics) {
+      oracles.push(new PerformanceOracle(oracleConfig.performanceMetrics));
+    }
+    
+    return oracles;
+  }
+
+  private async selectArbitrationPanel(config: ArbitrationConfig): Promise<Arbitrator[]> {
+    // Implement arbitrator selection based on expertise, reputation, and staking
+    const candidates = await this.getArbitratorCandidates(config.requiredExpertise);
+    
+    return this.selectBestArbitrators(candidates, {
+      panelSize: config.panelSize || 3,
+      stakingRequirement: config.stakingRequirement,
+      reputationThreshold: config.reputationThreshold
+    });
+  }
+
+  private async initializeSmartContracts(): Promise<void> {
+    // Initialize the smart contract infrastructure
+    await this.executionEngine.initialize();
+    await this.auditChain.initialize();
+    await this.validationService.initialize();
+  }
+}
+
+// Enhanced interfaces for smart contracts
+interface MaintenanceContractSpec {
+  projectId: string;
+  scope: MaintenanceScope;
+  qualityStandards: QualityStandard[];
+  performanceMetrics: PerformanceMetric[];
+  milestones: Milestone[];
+  penaltyClause: PenaltyClause;
+}
+
+interface ContractParty {
+  name: string;
+  address: string;
+  role: 'client' | 'contractor' | 'supervisor' | 'guarantor';
+  credentials: Credential[];
+}
+
+interface ContractTerms {
+  duration: number; // days
+  totalValue: number; // wei
+  escrowAmount: number; // wei
+  paymentSchedule: PaymentSchedule;
+  maintenanceSchedule: MaintenanceSchedule;
+  qualityStandards: QualityStandard[];
+}
+
+interface DeployedContract {
+  address: string;
+  abi: ContractABI;
+  spec: MaintenanceContractSpec;
+  parties: ContractParty[];
+  terms: ContractTerms;
+  status: ContractStatus;
+}
+
+interface AutomatedExecutionSession {
+  contract: DeployedContract;
+  dataStreams: ContractDataStream[];
+  oracles: Oracle[];
+  executionRules: ExecutionRule[];
+  escrowManager: EscrowManager;
+  status: ExecutionStatus;
+}
+
+interface MultiSigContract {
+  address: string;
+  signers: Signer[];
+  threshold: number;
+  spec: MultiSigContractSpec;
+  approvalTracker: ApprovalTracker;
+}
+
+interface ComplianceEngine {
+  monitor: ComplianceMonitor;
+  ruleEngine: ComplianceRuleEngine;
+  reportingService: RegulatoryReportingService;
+  contract: DeployedContract;
+}
+
+interface DisputeResolutionContract {
+  address: string;
+  originalContract: string;
+  arbitrationPanel: Arbitrator[];
+  config: DisputeConfig;
+  status: DisputeStatus;
+}
+
+interface CrossChainBridge {
+  primaryChain: ChainConfig;
+  targetChains: ChainConfig[];
+  bridgeContract: string;
+  validatorSet: Validator[];
+  messageRelay: CrossChainMessageRelay;
+  stateSynchronizer: CrossChainStateSynchronizer;
+}
+
+// Advanced blockchain components
+class AuditBlockchain {
+  private blocks: AuditBlock[];
+  private merkleTree: MerkleTree;
+  
+  constructor() {
+    this.blocks = [];
+    this.merkleTree = new MerkleTree();
+  }
+
+  async recordEvent(event: AuditEvent): Promise<AuditRecord> {
+    // Create immutable audit record
+    const record = new AuditRecord({
+      event: event,
+      timestamp: Date.now(),
+      blockNumber: this.blocks.length,
+      previousHash: this.getLatestBlockHash(),
+      merkleRoot: await this.merkleTree.getRoot()
+    });
+
+    // Add to blockchain
+    const block = new AuditBlock({
+      records: [record],
+      timestamp: Date.now(),
+      previousHash: this.getLatestBlockHash()
+    });
+
+    this.blocks.push(block);
+    
+    return record;
+  }
+
+  async verifyIntegrity(): Promise<IntegrityVerification> {
+    // Verify blockchain integrity
+    for (let i = 1; i < this.blocks.length; i++) {
+      const currentBlock = this.blocks[i];
+      const previousBlock = this.blocks[i - 1];
+      
+      if (currentBlock.previousHash !== previousBlock.hash) {
+        return {
+          isValid: false,
+          error: `Block ${i} has invalid previous hash`,
+          corruptedBlock: i
+        };
+      }
+    }
+    
+    return {
+      isValid: true,
+      totalBlocks: this.blocks.length,
+      verificationTime: Date.now()
+    };
+  }
+
+  private getLatestBlockHash(): string {
+    if (this.blocks.length === 0) return '0';
+    return this.blocks[this.blocks.length - 1].hash;
+  }
+
+  async initialize(): Promise<void> {
+    // Initialize genesis block
+    const genesisBlock = new AuditBlock({
+      records: [],
+      timestamp: Date.now(),
+      previousHash: '0'
+    });
+    
+    this.blocks.push(genesisBlock);
+  }
+}
+
+class ContractExecutionEngine {
+  private web3: Web3Instance;
+  private gasTracker: GasTracker;
+  private transactionPool: TransactionPool;
+  
+  constructor() {
+    this.gasTracker = new GasTracker();
+    this.transactionPool = new TransactionPool();
+  }
+
+  async deploy(deployment: ContractDeployment): Promise<DeploymentTransaction> {
+    // Estimate gas for deployment
+    const gasEstimate = await this.estimateGas(deployment);
+    
+    // Create deployment transaction
+    const transaction = new DeploymentTransaction({
+      code: deployment.code,
+      constructor: deployment.constructor,
+      gasLimit: gasEstimate.gasLimit,
+      gasPrice: gasEstimate.gasPrice
+    });
+
+    // Submit to network
+    const result = await this.submitTransaction(transaction);
+    
+    return result;
+  }
+
+  async execute(
+    contractAddress: string,
+    method: string,
+    parameters: any[],
+    options: ExecutionOptions
+  ): Promise<ExecutionResult> {
+    // Create execution transaction
+    const transaction = new ExecutionTransaction({
+      to: contractAddress,
+      method: method,
+      parameters: parameters,
+      gasLimit: options.gasLimit,
+      value: options.value || 0
+    });
+
+    // Execute transaction
+    const result = await this.submitTransaction(transaction);
+    
+    return {
+      transactionHash: result.hash,
+      blockNumber: result.blockNumber,
+      gasUsed: result.gasUsed,
+      status: result.status,
+      events: result.events,
+      returnValue: result.returnValue
+    };
+  }
+
+  async initialize(): Promise<void> {
+    // Initialize Web3 connection and transaction infrastructure
+    this.web3 = new Web3Instance(process.env.BLOCKCHAIN_RPC_URL);
+    await this.gasTracker.initialize();
+    await this.transactionPool.initialize();
+  }
+}
+
+// Export enhanced smart contract engine
+export const smartContractEngine = new SmartContractEngine();
