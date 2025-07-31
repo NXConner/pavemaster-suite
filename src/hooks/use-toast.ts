@@ -58,10 +58,10 @@ const toastStore = {
 export function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   
-  useState(() => {
+  React.useEffect(() => {
     const unsubscribe = toastStore.subscribe(setToasts);
     return unsubscribe;
-  });
+  }, []);
   
   const toast = useCallback((options: ToastOptions) => {
     return toastStore.addToast(options);
@@ -77,3 +77,8 @@ export function useToast() {
     toasts
   };
 }
+
+// Direct toast function export for easier importing
+export const toast = (options: ToastOptions) => {
+  return toastStore.addToast(options);
+};
