@@ -8,7 +8,8 @@ import {
   Lock, Key, Bell, Calendar, Timer, Gauge, ThermometerSun, Battery,
   Wifi, Signal, Bluetooth, Cpu, HardDrive, MemoryStick, Power,
   Brain, Atom, CloudLightning, Layers, Search, Filter, Sparkles,
-  ShieldCheck, Fingerprint, Eye as EyeIcon, Scan, TrendingDown
+  ShieldCheck, Fingerprint, Eye as EyeIcon, Scan, TrendingDown,
+  Hand, GraduationCap, Volume2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -86,7 +87,7 @@ interface Widget {
   config: Record<string, unknown>;
   isMinimized: boolean;
   isFullscreen: boolean;
-  category: 'surveillance' | 'operations' | 'analytics' | 'communications' | 'security' | 'resources';
+  category: 'surveillance' | 'operations' | 'analytics' | 'communications' | 'security' | 'resources' | 'quantum' | 'environmental' | 'blockchain' | 'visualization' | 'webxr';
 }
 
 interface DashboardLayout {
@@ -337,7 +338,17 @@ const WIDGET_TYPES = {
   vr_training: { icon: Video, title: 'VR Training Center', category: 'visualization' },
   scanning_3d: { icon: Scan, title: '3D Scanning Interface', category: 'visualization' },
   quantum_3d_viz: { icon: Atom, title: 'Quantum 3D Visualization', category: 'visualization' },
-  spatial_mapping_3d: { icon: Globe, title: 'Spatial Mapping 3D', category: 'visualization' }
+  spatial_mapping_3d: { icon: Globe, title: 'Spatial Mapping 3D', category: 'visualization' },
+  
+  // WebXR Specific
+  webxr_manager: { icon: Eye, title: 'WebXR Session Manager', category: 'webxr' },
+  vr_command_center: { icon: Monitor, title: 'VR Command Center', category: 'webxr' },
+  ar_overlay_manager: { icon: Layers, title: 'AR Overlay Manager', category: 'webxr' },
+  hand_tracking_status: { icon: Hand, title: 'Hand Tracking Status', category: 'webxr' },
+  voice_command_center: { icon: Mic, title: 'Voice Command Center', category: 'webxr' },
+  immersive_training: { icon: GraduationCap, title: 'Immersive Training Hub', category: 'webxr' },
+  collaborative_xr: { icon: Users, title: 'Collaborative XR Space', category: 'webxr' },
+  spatial_audio_mixer: { icon: Volume2, title: 'Spatial Audio Mixer', category: 'webxr' }
 };
 
 const OverWatchTOSS: React.FC = () => {
@@ -857,7 +868,13 @@ const OverWatchTOSS: React.FC = () => {
       // Security and automation (fourth row)
       { id: '10', type: 'access_control', position: { x: 0, y: 800 }, size: { width: 260, height: 180 } },
       { id: '11', type: 'audit_log', position: { x: 280, y: 800 }, size: { width: 260, height: 180 } },
-      { id: '12', type: 'workflow_automation', position: { x: 560, y: 800 }, size: { width: 280, height: 180 } }
+      { id: '12', type: 'workflow_automation', position: { x: 560, y: 800 }, size: { width: 280, height: 180 } },
+      
+      // WebXR capabilities (fifth row)
+      { id: '13', type: 'webxr_manager', position: { x: 0, y: 1000 }, size: { width: 200, height: 160 } },
+      { id: '14', type: 'hand_tracking_status', position: { x: 220, y: 1000 }, size: { width: 200, height: 160 } },
+      { id: '15', type: 'voice_command_center', position: { x: 440, y: 1000 }, size: { width: 200, height: 160 } },
+      { id: '16', type: 'vr_command_center', position: { x: 660, y: 1000 }, size: { width: 200, height: 160 } }
     ];
 
     setCurrentLayout({
@@ -2197,6 +2214,221 @@ const OverWatchTOSS: React.FC = () => {
               showShadows={true}
             />
           </motion.div>
+        );
+
+      case 'webxr_manager':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded">
+                <div className="font-bold text-purple-400">WebXR</div>
+                <div className="text-muted-foreground">Status</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded">
+                <div className="font-bold text-green-400">Connected</div>
+                <div className="text-muted-foreground">Sessions</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Sessions:</span>
+                <Badge variant="outline" className="text-xs">1</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Requests:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'vr_command_center':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 rounded">
+                <div className="font-bold text-teal-400">VR</div>
+                <div className="text-muted-foreground">Command Center</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded">
+                <div className="font-bold text-purple-400">12</div>
+                <div className="text-muted-foreground">Commands</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Commands:</span>
+                <Badge variant="outline" className="text-xs">3</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Commands:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'ar_overlay_manager':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded">
+                <div className="font-bold text-cyan-400">AR</div>
+                <div className="text-muted-foreground">Overlay Manager</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded">
+                <div className="font-bold text-purple-400">12</div>
+                <div className="text-muted-foreground">Overlays</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Overlays:</span>
+                <Badge variant="outline" className="text-xs">3</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Overlays:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'hand_tracking_status':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded">
+                <div className="font-bold text-green-400">Hand Tracking</div>
+                <div className="text-muted-foreground">Status</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded">
+                <div className="font-bold text-teal-400">Active</div>
+                <div className="text-muted-foreground">Detected</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Tracking Accuracy:</span>
+                <span className="text-green-400">99.5%</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Frame Rate:</span>
+                <span className="text-blue-400">60 fps</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'voice_command_center':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded">
+                <div className="font-bold text-indigo-400">Voice</div>
+                <div className="text-muted-foreground">Command Center</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded">
+                <div className="font-bold text-green-400">89%</div>
+                <div className="text-muted-foreground">Accuracy</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Commands Today:</span>
+                <span className="text-blue-400">247</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Response Time:</span>
+                <span className="text-green-400">0.8s</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span>Voice Recognition:</span>
+                <div className="flex items-center space-x-1">
+                  <Mic className="h-3 w-3 text-green-400" />
+                  <span className="text-green-400">Listening</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'immersive_training':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded">
+                <div className="font-bold text-pink-400">Immersive</div>
+                <div className="text-muted-foreground">Training Hub</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded">
+                <div className="font-bold text-teal-400">12</div>
+                <div className="text-muted-foreground">Modules</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Modules:</span>
+                <Badge variant="outline" className="text-xs">3</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Modules:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'collaborative_xr':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 rounded">
+                <div className="font-bold text-teal-400">Collaborative</div>
+                <div className="text-muted-foreground">XR Space</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded">
+                <div className="font-bold text-purple-400">12</div>
+                <div className="text-muted-foreground">Participants</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Sessions:</span>
+                <Badge variant="outline" className="text-xs">1</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Sessions:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'spatial_audio_mixer':
+        return (
+          <div className="h-full space-y-2">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded">
+                <div className="font-bold text-green-400">Spatial</div>
+                <div className="text-muted-foreground">Audio Mixer</div>
+              </div>
+              <div className="text-center p-2 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded">
+                <div className="font-bold text-teal-400">12</div>
+                <div className="text-muted-foreground">Channels</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>Active Channels:</span>
+                <Badge variant="outline" className="text-xs">3</Badge>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span>Pending Channels:</span>
+                <Badge variant="outline" className="text-xs">0</Badge>
+              </div>
+            </div>
+          </div>
         );
 
       default:
