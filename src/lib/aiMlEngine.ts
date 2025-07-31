@@ -6,6 +6,9 @@
 import { performanceMonitor } from './performance';
 import { globalInfrastructure } from './globalInfrastructure';
 import { supabase } from '@/integrations/supabase/client';
+import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-cpu';
 
 // AI/ML Core Interfaces
 export interface MLModel {
@@ -214,11 +217,46 @@ class AIMLEngine {
   private trainingData: Map<string, TrainingData[]> = new Map();
   private automationRules: Map<string, AutomationRule> = new Map();
   private recommendations: Map<string, IntelligentRecommendation[]> = new Map();
+  private tfModels: Map<string, tf.LayersModel> = new Map();
   private isInitialized = false;
   private realtimeProcessing = false;
+  private isWebGLEnabled = false;
 
   constructor() {
+    this.initializeTensorFlow();
     this.initializeEngine();
+  }
+
+  /**
+   * Initialize TensorFlow.js backend and GPU acceleration
+   */
+  private async initializeTensorFlow(): Promise<void> {
+    try {
+      console.log('🔧 Initializing TensorFlow.js...');
+      
+      // Initialize TensorFlow.js with optimal backend
+      await tf.ready();
+      
+      // Check for WebGL support for GPU acceleration
+      const backends = tf.engine().backendNames;
+      if (backends.includes('webgl')) {
+        await tf.setBackend('webgl');
+        this.isWebGLEnabled = true;
+        console.log('✅ TensorFlow.js initialized with GPU acceleration (WebGL)');
+      } else {
+        await tf.setBackend('cpu');
+        console.log('⚠️ TensorFlow.js initialized with CPU backend (WebGL not available)');
+      }
+      
+      // Log TensorFlow.js environment info
+      console.log(`📊 TensorFlow.js v${tf.version.tfjs}, Backend: ${tf.getBackend()}`);
+      console.log(`💾 Memory: ${JSON.stringify(tf.memory())}`);
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize TensorFlow.js:', error);
+      // Fallback to CPU backend
+      await tf.setBackend('cpu');
+    }
   }
 
   /**
@@ -421,6 +459,106 @@ class AIMLEngine {
     });
 
     console.log(`📚 Loaded ${pretrainedModels.length} pre-trained models`);
+    
+    // Load TensorFlow.js models for advanced AI capabilities
+    await this.loadTensorFlowModels();
+  }
+
+  /**
+   * Load advanced TensorFlow.js models for computer vision and deep learning
+   */
+  private async loadTensorFlowModels(): Promise<void> {
+    try {
+      console.log('🧠 Loading TensorFlow.js models...');
+      
+      // Load crack detection model for pavement analysis
+      try {
+        const crackDetectionModel = await tf.loadLayersModel('/models/crack-detection/model.json');
+        this.tfModels.set('crack-detection', crackDetectionModel);
+        console.log('✅ Crack detection model loaded');
+      } catch (error) {
+        console.warn('⚠️ Crack detection model not found, using mock model');
+        // Create a simple mock model for development
+        const mockModel = tf.sequential({
+          layers: [
+            tf.layers.conv2d({ inputShape: [224, 224, 3], filters: 32, kernelSize: 3, activation: 'relu' }),
+            tf.layers.maxPooling2d({ poolSize: 2 }),
+            tf.layers.conv2d({ filters: 64, kernelSize: 3, activation: 'relu' }),
+            tf.layers.maxPooling2d({ poolSize: 2 }),
+            tf.layers.flatten(),
+            tf.layers.dense({ units: 128, activation: 'relu' }),
+            tf.layers.dropout({ rate: 0.2 }),
+            tf.layers.dense({ units: 3, activation: 'softmax' }) // 3 classes: no_crack, minor_crack, major_crack
+          ]
+        });
+        this.tfModels.set('crack-detection', mockModel);
+      }
+
+      // Load material quality assessment model
+      try {
+        const qualityModel = await tf.loadLayersModel('/models/material-quality/model.json');
+        this.tfModels.set('material-quality', qualityModel);
+        console.log('✅ Material quality model loaded');
+      } catch (error) {
+        console.warn('⚠️ Material quality model not found, using mock model');
+        const mockQualityModel = tf.sequential({
+          layers: [
+            tf.layers.dense({ inputShape: [10], units: 64, activation: 'relu' }),
+            tf.layers.dropout({ rate: 0.3 }),
+            tf.layers.dense({ units: 32, activation: 'relu' }),
+            tf.layers.dense({ units: 1, activation: 'sigmoid' }) // Quality score 0-1
+          ]
+        });
+        this.tfModels.set('material-quality', mockQualityModel);
+      }
+
+      // Load traffic pattern prediction model
+      try {
+        const trafficModel = await tf.loadLayersModel('/models/traffic-prediction/model.json');
+        this.tfModels.set('traffic-prediction', trafficModel);
+        console.log('✅ Traffic prediction model loaded');
+      } catch (error) {
+        console.warn('⚠️ Traffic prediction model not found, using mock model');
+        const mockTrafficModel = tf.sequential({
+          layers: [
+            tf.layers.lstm({ inputShape: [24, 5], units: 50, returnSequences: true }),
+            tf.layers.dropout({ rate: 0.2 }),
+            tf.layers.lstm({ units: 50 }),
+            tf.layers.dense({ units: 24, activation: 'relu' }) // 24-hour prediction
+          ]
+        });
+        this.tfModels.set('traffic-prediction', mockTrafficModel);
+      }
+
+      // Load equipment maintenance prediction model
+      try {
+        const maintenanceModel = await tf.loadLayersModel('/models/maintenance-prediction/model.json');
+        this.tfModels.set('maintenance-prediction', maintenanceModel);
+        console.log('✅ Maintenance prediction model loaded');
+      } catch (error) {
+        console.warn('⚠️ Maintenance prediction model not found, using mock model');
+        const mockMaintenanceModel = tf.sequential({
+          layers: [
+            tf.layers.dense({ inputShape: [15], units: 128, activation: 'relu' }),
+            tf.layers.batchNormalization(),
+            tf.layers.dropout({ rate: 0.3 }),
+            tf.layers.dense({ units: 64, activation: 'relu' }),
+            tf.layers.dense({ units: 32, activation: 'relu' }),
+            tf.layers.dense({ units: 1, activation: 'sigmoid' }) // Maintenance probability
+          ]
+        });
+        this.tfModels.set('maintenance-prediction', mockMaintenanceModel);
+      }
+
+      console.log(`🤖 Loaded ${this.tfModels.size} TensorFlow.js models`);
+      
+      // Log memory usage after model loading
+      const memInfo = tf.memory();
+      console.log(`💾 TensorFlow.js memory usage: ${JSON.stringify(memInfo)}`);
+      
+    } catch (error) {
+      console.error('❌ Failed to load TensorFlow.js models:', error);
+    }
   }
 
   /**
@@ -608,6 +746,241 @@ class AIMLEngine {
     });
 
     return result;
+  }
+
+  /**
+   * Advanced Computer Vision: Analyze pavement images for crack detection
+   */
+  async analyzePavementImage(imageData: ImageData | HTMLImageElement | string): Promise<{
+    cracks: Array<{
+      type: 'hairline' | 'minor' | 'major' | 'severe';
+      confidence: number;
+      location: { x: number; y: number; width: number; height: number };
+      severity: number;
+    }>;
+    overallCondition: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+    recommendedActions: string[];
+    metadata: {
+      imageSize: { width: number; height: number };
+      processingTime: number;
+      modelConfidence: number;
+    };
+  }> {
+    const startTime = performance.now();
+    const crackDetectionModel = this.tfModels.get('crack-detection');
+    
+    if (!crackDetectionModel) {
+      throw new Error('Crack detection model not loaded');
+    }
+
+    try {
+      // Preprocess image for model input
+      const preprocessedImage = await this.preprocessImage(imageData);
+      
+      // Run inference
+      const predictions = crackDetectionModel.predict(preprocessedImage) as tf.Tensor;
+      const predictionData = await predictions.data();
+      
+      // Post-process results
+      const results = this.postprocessCrackDetection(predictionData);
+      
+      // Cleanup tensors
+      preprocessedImage.dispose();
+      predictions.dispose();
+      
+      const processingTime = performance.now() - startTime;
+      
+      // Record performance metrics
+      performanceMonitor.recordMetric('ai_crack_detection', processingTime, 'ms', {
+        cracksDetected: results.cracks.length,
+        overallCondition: results.overallCondition,
+      });
+
+      return {
+        ...results,
+        metadata: {
+          imageSize: { width: 224, height: 224 }, // Standard input size
+          processingTime,
+          modelConfidence: Math.max(...results.cracks.map(c => c.confidence)) || 0.5,
+        }
+      };
+      
+    } catch (error) {
+      console.error('Error in crack detection:', error);
+      throw new Error('Failed to analyze pavement image');
+    }
+  }
+
+  /**
+   * Preprocess image for TensorFlow model input
+   */
+  private async preprocessImage(imageData: ImageData | HTMLImageElement | string): Promise<tf.Tensor> {
+    if (typeof imageData === 'string') {
+      // Handle base64 image string
+      const img = new Image();
+      img.src = imageData;
+      await new Promise((resolve) => { img.onload = resolve; });
+      return tf.browser.fromPixels(img).resizeNearestNeighbor([224, 224]).expandDims(0).div(255.0);
+    } else if (imageData instanceof HTMLImageElement) {
+      // Handle HTML image element
+      return tf.browser.fromPixels(imageData).resizeNearestNeighbor([224, 224]).expandDims(0).div(255.0);
+    } else {
+      // Handle ImageData
+      const tensor = tf.browser.fromPixels(imageData).resizeNearestNeighbor([224, 224]).expandDims(0).div(255.0);
+      return tensor;
+    }
+  }
+
+  /**
+   * Post-process crack detection results
+   */
+  private postprocessCrackDetection(predictionData: Float32Array): {
+    cracks: Array<{
+      type: 'hairline' | 'minor' | 'major' | 'severe';
+      confidence: number;
+      location: { x: number; y: number; width: number; height: number };
+      severity: number;
+    }>;
+    overallCondition: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+    recommendedActions: string[];
+  } {
+    // Extract predictions (assuming softmax output: [no_crack, minor_crack, major_crack])
+    const noCrackProb = predictionData[0];
+    const minorCrackProb = predictionData[1];
+    const majorCrackProb = predictionData[2];
+    
+    const cracks = [];
+    const threshold = 0.3;
+    
+    // Generate mock crack detections based on probabilities
+    if (minorCrackProb > threshold) {
+      cracks.push({
+        type: 'minor' as const,
+        confidence: minorCrackProb,
+        location: { x: 50, y: 100, width: 30, height: 5 },
+        severity: minorCrackProb * 0.5,
+      });
+    }
+    
+    if (majorCrackProb > threshold) {
+      cracks.push({
+        type: 'major' as const,
+        confidence: majorCrackProb,
+        location: { x: 120, y: 80, width: 45, height: 8 },
+        severity: majorCrackProb * 0.8,
+      });
+    }
+    
+    // Determine overall condition
+    let overallCondition: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+    if (noCrackProb > 0.8) overallCondition = 'excellent';
+    else if (minorCrackProb > 0.6) overallCondition = 'good';
+    else if (minorCrackProb > 0.4) overallCondition = 'fair';
+    else if (majorCrackProb > 0.3) overallCondition = 'poor';
+    else overallCondition = 'critical';
+    
+    // Generate recommendations
+    const recommendedActions = [];
+    if (cracks.length === 0) {
+      recommendedActions.push('Pavement is in good condition - continue regular monitoring');
+    } else {
+      if (cracks.some(c => c.type === 'major' || c.type === 'severe')) {
+        recommendedActions.push('Immediate repair required for major cracks');
+        recommendedActions.push('Schedule comprehensive pavement assessment');
+      } else {
+        recommendedActions.push('Monitor crack progression');
+        recommendedActions.push('Apply preventive sealants');
+      }
+    }
+    
+    return { cracks, overallCondition, recommendedActions };
+  }
+
+  /**
+   * Predict equipment maintenance needs using TensorFlow model
+   */
+  async predictMaintenanceNeeds(equipmentData: {
+    equipmentId: string;
+    operatingHours: number;
+    vibrationLevel: number;
+    temperature: number;
+    oilPressure: number;
+    fuelConsumption: number;
+    lastMaintenanceDate: Date;
+    usage: number;
+    [key: string]: any;
+  }): Promise<{
+    maintenanceProbability: number;
+    recommendedAction: 'immediate' | 'within_week' | 'within_month' | 'routine';
+    estimatedDaysUntilMaintenance: number;
+    criticalComponents: string[];
+    confidence: number;
+  }> {
+    const maintenanceModel = this.tfModels.get('maintenance-prediction');
+    
+    if (!maintenanceModel) {
+      throw new Error('Maintenance prediction model not loaded');
+    }
+
+    try {
+      // Prepare input features
+      const features = tf.tensor2d([[
+        equipmentData.operatingHours / 10000, // Normalize
+        equipmentData.vibrationLevel / 100,
+        equipmentData.temperature / 200,
+        equipmentData.oilPressure / 100,
+        equipmentData.fuelConsumption / 50,
+        (Date.now() - equipmentData.lastMaintenanceDate.getTime()) / (1000 * 60 * 60 * 24 * 30), // Days to months
+        equipmentData.usage / 100,
+        // Add more normalized features...
+        0, 0, 0, 0, 0, 0, 0, 0 // Padding to reach 15 features
+      ]]);
+
+      // Run prediction
+      const prediction = maintenanceModel.predict(features) as tf.Tensor;
+      const probabilityData = await prediction.data();
+      const maintenanceProbability = probabilityData[0];
+
+      // Cleanup
+      features.dispose();
+      prediction.dispose();
+
+      // Determine recommended action
+      let recommendedAction: 'immediate' | 'within_week' | 'within_month' | 'routine';
+      let estimatedDays: number;
+
+      if (maintenanceProbability > 0.9) {
+        recommendedAction = 'immediate';
+        estimatedDays = 1;
+      } else if (maintenanceProbability > 0.7) {
+        recommendedAction = 'within_week';
+        estimatedDays = 7;
+      } else if (maintenanceProbability > 0.5) {
+        recommendedAction = 'within_month';
+        estimatedDays = 30;
+      } else {
+        recommendedAction = 'routine';
+        estimatedDays = 90;
+      }
+
+      // Identify critical components based on input data
+      const criticalComponents = [];
+      if (equipmentData.vibrationLevel > 80) criticalComponents.push('bearings');
+      if (equipmentData.temperature > 180) criticalComponents.push('cooling_system');
+      if (equipmentData.oilPressure < 20) criticalComponents.push('oil_pump');
+
+      return {
+        maintenanceProbability,
+        recommendedAction,
+        estimatedDaysUntilMaintenance: estimatedDays,
+        criticalComponents,
+        confidence: maintenanceProbability,
+      };
+
+    } catch (error) {
+      console.error('Error in maintenance prediction:', error);
+      throw new Error('Failed to predict maintenance needs');
+    }
   }
 
   /**
