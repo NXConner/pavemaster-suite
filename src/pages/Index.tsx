@@ -267,7 +267,7 @@ const Index = () => {
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-medium">🎯 Performance Optimized</h4>
-                    <p className="text-sm text-muted-foreground">67% bundle reduction, <500KB chunks</p>
+                                          <p className="text-sm text-muted-foreground">67% bundle reduction, &lt;500KB chunks</p>
                   </div>
                 </div>
               </CardContent>
