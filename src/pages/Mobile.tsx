@@ -4,6 +4,7 @@ import { EnhancedMobileFieldInterface } from '@/components/EnhancedMobileFieldIn
 import { TouchOptimizedMobileInterface } from '@/components/TouchOptimizedMobileInterface';
 import { AdvancedOfflineManager } from '@/components/AdvancedOfflineManager';
 import { OfflineManager } from '@/components/OfflineManager';
+import { Advanced3DScanningInterface } from '@/components/Advanced3DScanningInterface';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -111,8 +112,12 @@ export default function MobilePage() {
           </Card>
         </div>
 
-        <Tabs defaultValue="touch-optimized" className="space-y-6">
+        <Tabs defaultValue="3d-scanning" className="space-y-6">
           <TabsList className="grid w-full grid-cols-7">
+            <TabsTrigger value="3d-scanning" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              3D Scanning
+            </TabsTrigger>
             <TabsTrigger value="touch-optimized" className="flex items-center gap-2">
               <Smartphone className="h-4 w-4" />
               Touch UI
@@ -126,7 +131,7 @@ export default function MobilePage() {
               Field Interface
             </TabsTrigger>
             <TabsTrigger value="advanced-offline" className="flex items-center gap-2">
-              <Database className="h-4 w-4" />
+              <Download className="h-4 w-4" />
               Advanced Offline
             </TabsTrigger>
             <TabsTrigger value="offline" className="flex items-center gap-2">
@@ -138,6 +143,26 @@ export default function MobilePage() {
               App Deployment
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="3d-scanning" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  Advanced 3D Scanning & AI Detection
+                </CardTitle>
+                <CardDescription>
+                  Professional-grade pavement scanning with ARCore/ARKit integration, 
+                  AI-powered defect detection using YOLOvX models, and real-time visual mapping. 
+                  Features include photogrammetry-based 3D reconstruction, automated defect classification,
+                  and comprehensive timeline tracking for proactive maintenance.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Advanced3DScanningInterface />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="touch-optimized" className="space-y-6">
             <Card>
