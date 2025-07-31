@@ -9,12 +9,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-import Form, { 
-  FormField, 
-  FormSubmitButton 
-} from '@/components/ui/Form';
-import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
+  import { 
+    Form,
+    FormField, 
+    FormSubmitButton 
+  } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 import { 
   ProjectCreationSchema, 
