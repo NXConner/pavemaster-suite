@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, BookOpen, Bell, TrendingUp, Shield, BarChart3, Wrench, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { Bot, BookOpen, Bell, TrendingUp, Shield, BarChart3, Wrench, AlertTriangle, CheckCircle, XCircle, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import AIAssistantChat from '@/components/ai-assistant/AIAssistantChat';
 import AIPermissionManager from '@/components/ai-assistant/AIPermissionManager';
+import KnowledgeBaseManager from '@/components/ai-assistant/KnowledgeBaseManager';
 import { useAIAssistant } from '@/features/ai-services/hooks/useAIAssistant';
 
 export default function AIAssistantPage() {
@@ -14,6 +15,7 @@ export default function AIAssistantPage() {
     permissions, 
     actionLogs, 
     notifications, 
+    knowledgeDocuments,
     hasPermission,
     isLoading 
   } = useAIAssistant();
@@ -145,7 +147,7 @@ export default function AIAssistantPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Permissions Enabled</span>
@@ -168,6 +170,13 @@ export default function AIAssistantPage() {
                 {getRecentSuccessRate().toFixed(0)}%
               </div>
               <div className="text-sm text-muted-foreground">Success Rate</div>
+            </div>
+
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">
+                {knowledgeDocuments.length}
+              </div>
+              <div className="text-sm text-muted-foreground">Knowledge Docs</div>
             </div>
 
             <div className="text-center">
@@ -209,7 +218,7 @@ export default function AIAssistantPage() {
         {/* AI Assistant Interface */}
         <div className="lg:col-span-3">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="chat" className="flex items-center gap-2">
                 <Bot className="w-4 h-4" />
                 AI Assistant
@@ -217,6 +226,10 @@ export default function AIAssistantPage() {
               <TabsTrigger value="permissions" className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 Permissions & Control
+              </TabsTrigger>
+              <TabsTrigger value="knowledge" className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                Knowledge Base
               </TabsTrigger>
             </TabsList>
 
@@ -226,6 +239,10 @@ export default function AIAssistantPage() {
 
             <TabsContent value="permissions" className="mt-6">
               <AIPermissionManager />
+            </TabsContent>
+
+            <TabsContent value="knowledge" className="mt-6">
+              <KnowledgeBaseManager />
             </TabsContent>
           </Tabs>
         </div>
@@ -302,6 +319,43 @@ export default function AIAssistantPage() {
             </CardContent>
           </Card>
 
+          {/* Knowledge Base Stats */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5" />
+                Knowledge Base
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Total Documents</span>
+                <Badge variant="outline">{knowledgeDocuments.length}</Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Active Documents</span>
+                <Badge variant="outline">
+                  {knowledgeDocuments.filter(doc => doc.is_active).length}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Document Types</span>
+                <Badge variant="outline">
+                  {new Set(knowledgeDocuments.map(doc => doc.document_type)).size}
+                </Badge>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => setActiveTab('knowledge')}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Manage Knowledge
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Quick Actions */}
           <Card>
             <CardHeader>
@@ -325,6 +379,16 @@ export default function AIAssistantPage() {
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Manage Permissions
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => setActiveTab('knowledge')}
+                disabled={!hasPermission('upload_documents')}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Documents
               </Button>
               
               <Button 
