@@ -36,7 +36,8 @@ import {
   Bell,
 } from 'lucide-react';
 
-import mobileService, { 
+import mobileService from '@/services/mobileService';
+import type { 
   MobileCapabilities, 
   LocationData, 
   PhotoData 

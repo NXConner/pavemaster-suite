@@ -7,7 +7,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
-import advancedOfflineManager, { 
+import advancedOfflineManager from '@/services/advancedOfflineManager';
+import type { 
   OfflineEntity, 
   SyncConflict, 
   SyncStats,
