@@ -54,17 +54,61 @@ export default defineConfig(({ command, mode }) => {
       target: ['es2015', 'safari11'],
       cssTarget: 'chrome61',
       
-      // Chunk and code splitting
-              rollupOptions: {
-          output: {
-            manualChunks: {
-              vendor: ['react', 'react-dom'],
-              mobile: ['@capacitor/core', '@capacitor/camera', '@capacitor/geolocation'],
-              charts: ['recharts'],
-              utils: ['date-fns', 'clsx', 'zod']
+      // Advanced chunk and code splitting for optimal performance
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            // Vendor chunks
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom')) {
+                return 'react-vendor';
+              }
+              if (id.includes('@capacitor')) {
+                return 'capacitor-vendor';
+              }
+              if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+                return 'ui-vendor';
+              }
+              if (id.includes('recharts') || id.includes('chart')) {
+                return 'charts-vendor';
+              }
+              if (id.includes('@supabase')) {
+                return 'supabase-vendor';
+              }
+              if (id.includes('react-router') || id.includes('@tanstack')) {
+                return 'routing-state-vendor';
+              }
+              return 'vendor';
+            }
+            
+            // Feature-based chunks
+            if (id.includes('src/lib/integrationHub')) {
+              return 'integration-hub';
+            }
+            if (id.includes('src/lib/partnerEcosystem')) {
+              return 'partner-ecosystem';
+            }
+            if (id.includes('src/components/QuantumOperationsCenter')) {
+              return 'quantum-operations';
+            }
+            if (id.includes('src/components/GlobalExpansion')) {
+              return 'global-expansion';
+            }
+            if (id.includes('src/services/ai') || id.includes('src/services/ml')) {
+              return 'ai-services';
+            }
+            if (id.includes('src/services/contract')) {
+              return 'contract-services';
+            }
+            if (id.includes('src/geospatial')) {
+              return 'geospatial';
+            }
+            if (id.includes('src/command_center')) {
+              return 'command-center';
             }
           }
-        },
+        }
+      },
       
       // Terser configuration for production
       terserOptions: {
