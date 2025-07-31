@@ -28,7 +28,7 @@ import {
   Scan,
   Upload,
   Download,
-  Refresh,
+  RefreshCw,
   Settings,
   Info
 } from 'lucide-react';

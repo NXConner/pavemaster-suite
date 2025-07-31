@@ -77,3 +77,8 @@ export function useToast() {
     toasts
   };
 }
+
+// Export toast function directly for compatibility
+export const toast = (options: ToastOptions) => {
+  return toastStore.addToast(options);
+};

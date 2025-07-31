@@ -1814,7 +1814,7 @@ export class EnvironmentalMonitoringService {
         },
         
         environmental_performance: {
-          carbon: await this.analyzecarbonPerformance(profile),
+          carbon: await this.analyzeCarbonPerformance(profile),
           water: await this.analyzeWaterPerformance(profile),
           waste: await this.analyzeWastePerformance(profile),
           energy: await this.analyzeEnergyPerformance(profile),
@@ -2320,7 +2320,7 @@ export class EnvironmentalMonitoringService {
     ).length;
   }
 
-  private async analyzeCarbon­Performance(profile: EnvironmentalProfile): Promise<any> {
+  private async analyzeCarbonPerformance(profile: EnvironmentalProfile): Promise<any> {
     return {
       current_emissions: profile.currentMetrics.carbonFootprint.totalEmissions,
       baseline_emissions: profile.baseline.carbonFootprint.totalEmissions,

@@ -1,6 +1,6 @@
 // PHASE 12: Multi-Tenant Architecture Service
 // Enterprise-grade multi-tenancy with organization isolation and scalable resource management
-import { supabase } from './supabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface Tenant {
   id: string;

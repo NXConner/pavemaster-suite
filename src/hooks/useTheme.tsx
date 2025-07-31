@@ -84,8 +84,6 @@ const defaultTheme: Theme = {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [currentTheme, setCurrentTheme] = useState<Theme>(defaultTheme);
-  const [currentWallpaper, setCurrentWallpaper] = useState<Wallpaper | null>(null);
   const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
   const [themes, setThemes] = useState<Theme[]>([]);
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);
