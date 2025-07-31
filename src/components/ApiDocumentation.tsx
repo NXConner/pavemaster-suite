@@ -1,16 +1,84 @@
 import React, { useState } from 'react';
-import SwaggerUI from 'swagger-ui-react';
-import 'swagger-ui-react/swagger-ui.css';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Code, Download, ExternalLink, Copy, Check } from 'lucide-react';
-import { swaggerSpec, apiExamples } from '@/lib/apiDocumentation';
+import { Code, Download, ExternalLink, Copy, Check, FileText, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+// Simple API documentation data without external dependencies
+const apiDocumentation = {
+  title: "PaveMaster Suite API",
+  version: "1.0.0",
+  description: "Comprehensive API for pavement management operations",
+  baseUrl: "https://api.pavementperformancesuite.com",
+  endpoints: [
+    {
+      path: "/api/projects",
+      method: "GET",
+      description: "Get all projects",
+      parameters: [
+        { name: "page", type: "number", description: "Page number" },
+        { name: "limit", type: "number", description: "Items per page" }
+      ],
+      response: {
+        "data": [
+          {
+            "id": "string",
+            "name": "string",
+            "status": "active | completed | pending",
+            "created_at": "ISO 8601 date"
+          }
+        ],
+        "pagination": {
+          "page": "number",
+          "total": "number"
+        }
+      }
+    },
+    {
+      path: "/api/projects",
+      method: "POST",
+      description: "Create a new project",
+      body: {
+        "name": "string (required)",
+        "description": "string",
+        "client_id": "string (required)",
+        "estimated_cost": "number"
+      },
+      response: {
+        "id": "string",
+        "name": "string",
+        "status": "pending",
+        "created_at": "ISO 8601 date"
+      }
+    },
+    {
+      path: "/api/equipment",
+      method: "GET",
+      description: "Get equipment list",
+      parameters: [
+        { name: "status", type: "string", description: "Filter by status" },
+        { name: "type", type: "string", description: "Filter by equipment type" }
+      ],
+      response: {
+        "data": [
+          {
+            "id": "string",
+            "name": "string",
+            "type": "string",
+            "status": "available | in_use | maintenance",
+            "location": "object"
+          }
+        ]
+      }
+    }
+  ]
+};
 
 export default function ApiDocumentation() {
   const [copiedExample, setCopiedExample] = useState<string | null>(null);
+  const [selectedEndpoint, setSelectedEndpoint] = useState(0);
   const { toast } = useToast();
 
   const copyToClipboard = async (text: string, label: string) => {
@@ -32,7 +100,7 @@ export default function ApiDocumentation() {
   };
 
   const downloadSpec = () => {
-    const blob = new Blob([JSON.stringify(swaggerSpec, null, 2)], {
+    const blob = new Blob([JSON.stringify(apiDocumentation, null, 2)], {
       type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
@@ -50,48 +118,28 @@ export default function ApiDocumentation() {
     });
   };
 
-  const ApiExample = ({ title, example, type }: {
-    title: string;
-    example: any;
-    type: 'request' | 'response';
-  }) => (
-    <Card className="mb-4">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium">{title}</CardTitle>
-          <div className="flex gap-2">
-            <Badge variant={type === 'request' ? 'default' : 'secondary'}>
-              {type === 'request' ? 'Request' : 'Response'}
-            </Badge>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => copyToClipboard(JSON.stringify(example, null, 2), `${title} ${type}`)}
-            >
-              {copiedExample === `${title} ${type}` ? (
-                <Check className="h-4 w-4 text-green-500" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
-          <code>{JSON.stringify(example, null, 2)}</code>
-        </pre>
-      </CardContent>
-    </Card>
-  );
+  const generateCurlExample = (endpoint: any) => {
+    const baseUrl = apiDocumentation.baseUrl;
+    if (endpoint.method === 'GET') {
+      return `curl -X GET "${baseUrl}${endpoint.path}" \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json"`;
+    } else if (endpoint.method === 'POST') {
+      return `curl -X POST "${baseUrl}${endpoint.path}" \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '${JSON.stringify(endpoint.body, null, 2)}'`;
+    }
+    return '';
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">API Documentation</h1>
-          <p className="text-muted-foreground">
-            Comprehensive API documentation for the Pavement Performance Suite
+          <h1 className="text-3xl font-bold">API Documentation</h1>
+          <p className="text-muted-foreground mt-2">
+            {apiDocumentation.description}
           </p>
         </div>
         <div className="flex gap-2">
@@ -99,198 +147,179 @@ export default function ApiDocumentation() {
             <Download className="h-4 w-4 mr-2" />
             Download Spec
           </Button>
-          <Button asChild>
-            <a
-              href="https://editor.swagger.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Swagger Editor
+          <Button variant="outline" asChild>
+            <a href={apiDocumentation.baseUrl} target="_blank" rel="noopener noreferrer">
+              <Globe className="h-4 w-4 mr-2" />
+              API Base URL
             </a>
           </Button>
         </div>
       </div>
 
-      <Tabs defaultValue="interactive" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="interactive">Interactive API</TabsTrigger>
-          <TabsTrigger value="examples">Code Examples</TabsTrigger>
-          <TabsTrigger value="specification">Raw Specification</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="interactive" className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Code className="h-5 w-5" />
-                Interactive API Explorer
+                <FileText className="h-5 w-5" />
+                API Endpoints
               </CardTitle>
-              <CardDescription>
-                Test API endpoints directly from this interface. Requires valid authentication.
-              </CardDescription>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="border rounded-lg overflow-hidden">
-                <SwaggerUI
-                  spec={swaggerSpec}
-                  deepLinking={true}
-                  displayRequestDuration={true}
-                  tryItOutEnabled={true}
-                />
+            <CardContent>
+              <div className="space-y-2">
+                {apiDocumentation.endpoints.map((endpoint, index) => (
+                  <Button
+                    key={index}
+                    variant={selectedEndpoint === index ? "default" : "outline"}
+                    className="w-full justify-start"
+                    onClick={() => setSelectedEndpoint(index)}
+                  >
+                    <Badge 
+                      variant={endpoint.method === 'GET' ? 'secondary' : 'default'}
+                      className="mr-2"
+                    >
+                      {endpoint.method}
+                    </Badge>
+                    {endpoint.path}
+                  </Button>
+                ))}
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
 
-        <TabsContent value="examples" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>API Examples & Testing</CardTitle>
-              <CardDescription>
-                Ready-to-use examples for all API endpoints with sample requests and responses
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <div className="lg:col-span-2">
+          <Tabs defaultValue="details" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="example">Example</TabsTrigger>
+              <TabsTrigger value="response">Response</TabsTrigger>
+            </TabsList>
 
-              {/* AI Assistant Examples */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Badge variant="outline">POST</Badge>
-                  AI Assistant
-                </h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample
-                    title="AI Assistant Request"
-                    example={apiExamples.aiAssistant.request}
-                    type="request"
-                  />
-                  <ApiExample
-                    title="AI Assistant Response"
-                    example={apiExamples.aiAssistant.response}
-                    type="response"
-                  />
-                </div>
-              </div>
-
-              {/* Voice to Text Examples */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Badge variant="outline">POST</Badge>
-                  Voice to Text
-                </h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample
-                    title="Voice to Text Request"
-                    example={apiExamples.voiceToText.request}
-                    type="request"
-                  />
-                  <ApiExample
-                    title="Voice to Text Response"
-                    example={apiExamples.voiceToText.response}
-                    type="response"
-                  />
-                </div>
-              </div>
-
-              {/* Text to Speech Examples */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Badge variant="outline">POST</Badge>
-                  Text to Speech
-                </h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <ApiExample
-                    title="Text to Speech Request"
-                    example={apiExamples.textToSpeech.request}
-                    type="request"
-                  />
-                  <ApiExample
-                    title="Text to Speech Response"
-                    example={apiExamples.textToSpeech.response}
-                    type="response"
-                  />
-                </div>
-              </div>
-
-              {/* cURL Examples */}
+            <TabsContent value="details">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">cURL Examples</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Badge variant={apiDocumentation.endpoints[selectedEndpoint].method === 'GET' ? 'secondary' : 'default'}>
+                      {apiDocumentation.endpoints[selectedEndpoint].method}
+                    </Badge>
+                    {apiDocumentation.endpoints[selectedEndpoint].path}
+                  </CardTitle>
+                  <CardDescription>
+                    {apiDocumentation.endpoints[selectedEndpoint].description}
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-medium mb-2">AI Assistant</h4>
-                    <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
-                      <code>{`curl -X POST "https://your-project.supabase.co/functions/v1/ai-assistant" \\
-  -H "Authorization: Bearer YOUR_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "message": "What is the optimal temperature for asphalt paving?",
-    "context": "pavement"
-  }'`}</code>
-                    </pre>
-                  </div>
+                <CardContent>
+                  {apiDocumentation.endpoints[selectedEndpoint].parameters && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">Parameters</h4>
+                      <div className="border rounded-lg overflow-hidden">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b bg-muted/50">
+                              <th className="text-left p-3">Name</th>
+                              <th className="text-left p-3">Type</th>
+                              <th className="text-left p-3">Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {apiDocumentation.endpoints[selectedEndpoint].parameters?.map((param, index) => (
+                              <tr key={index} className="border-b">
+                                <td className="p-3 font-mono text-sm">{param.name}</td>
+                                <td className="p-3">
+                                  <Badge variant="outline">{param.type}</Badge>
+                                </td>
+                                <td className="p-3">{param.description}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
 
-                  <div>
-                    <h4 className="font-medium mb-2">Voice to Text</h4>
-                    <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
-                      <code>{`curl -X POST "https://your-project.supabase.co/functions/v1/voice-to-text" \\
-  -H "Authorization: Bearer YOUR_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "audio": "BASE64_ENCODED_AUDIO_DATA"
-  }'`}</code>
-                    </pre>
-                  </div>
+                  {apiDocumentation.endpoints[selectedEndpoint].body && (
+                    <div className="space-y-4 mt-6">
+                      <h4 className="font-semibold">Request Body</h4>
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <pre className="text-sm overflow-x-auto">
+                          <code>{JSON.stringify(apiDocumentation.endpoints[selectedEndpoint].body, null, 2)}</code>
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-                  <div>
-                    <h4 className="font-medium mb-2">Text to Speech</h4>
-                    <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
-                      <code>{`curl -X POST "https://your-project.supabase.co/functions/v1/text-to-speech" \\
-  -H "Authorization: Bearer YOUR_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "text": "Asphalt temperature is optimal for paving operations.",
-    "voice": "alloy"
-  }'`}</code>
+            <TabsContent value="example">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    cURL Example
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(generateCurlExample(apiDocumentation.endpoints[selectedEndpoint]), 'cURL example')}
+                    >
+                      {copiedExample === 'cURL example' ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-black text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                    <pre>{generateCurlExample(apiDocumentation.endpoints[selectedEndpoint])}</pre>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="response">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Response Format</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <pre className="text-sm overflow-x-auto">
+                      <code>{JSON.stringify(apiDocumentation.endpoints[selectedEndpoint].response, null, 2)}</code>
                     </pre>
                   </div>
                 </CardContent>
               </Card>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
 
-        <TabsContent value="specification" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>OpenAPI 3.0 Specification</CardTitle>
-              <CardDescription>
-                Raw JSON specification file for import into API development tools
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-end mb-4">
-                <Button
-                  variant="outline"
-                  onClick={() => copyToClipboard(JSON.stringify(swaggerSpec, null, 2), 'API Specification')}
-                >
-                  {copiedExample === 'API Specification' ? (
-                    <Check className="h-4 w-4 mr-2 text-green-500" />
-                  ) : (
-                    <Copy className="h-4 w-4 mr-2" />
-                  )}
-                  Copy Specification
-                </Button>
+      <Card>
+        <CardHeader>
+          <CardTitle>Authentication</CardTitle>
+          <CardDescription>
+            All API requests require authentication using a Bearer token
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Authentication Header</h4>
+              <div className="bg-muted/50 p-3 rounded-lg">
+                <code>Authorization: Bearer YOUR_API_KEY</code>
               </div>
-              <pre className="bg-muted p-4 rounded-md text-xs overflow-auto max-h-96">
-                <code>{JSON.stringify(swaggerSpec, null, 2)}</code>
-              </pre>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">Getting an API Key</h4>
+              <p className="text-sm text-muted-foreground">
+                Contact your system administrator or visit the settings page to generate an API key.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

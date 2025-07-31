@@ -8,10 +8,18 @@ import { vi } from 'vitest';
 import { performanceMonitor } from '@/lib/performance';
 
 // Mock global objects for testing environment
-global.crypto = {
-  randomUUID: () => Math.random().toString(36).substring(2, 15),
-  // Add other crypto methods as needed
-} as any;
+Object.defineProperty(global, 'crypto', {
+  value: {
+    randomUUID: () => Math.random().toString(36).substring(2, 15),
+    getRandomValues: (arr: any) => {
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = Math.floor(Math.random() * 256);
+      }
+      return arr;
+    },
+  },
+  writable: true,
+});
 
 // Mock performance API
 global.performance = {

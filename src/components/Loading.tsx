@@ -1,11 +1,10 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LoadingProps {
-  variant?: 'spinner' | 'skeleton' | 'pulse' | 'dots';
+  variant?: 'spinner' | 'dots' | 'pulse';
   size?: 'sm' | 'md' | 'lg';
   text?: string;
   className?: string;
@@ -15,16 +14,6 @@ interface LoadingProps {
 interface PageLoadingProps {
   title?: string;
   description?: string;
-}
-
-interface SkeletonTableProps {
-  rows?: number;
-  columns?: number;
-}
-
-interface SkeletonCardProps {
-  count?: number;
-  hasImage?: boolean;
 }
 
 export function Loading({ 
@@ -91,13 +80,11 @@ export function Loading({
           </div>
         );
 
-      case 'skeleton':
       default:
         return (
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
-            <Skeleton className="h-4 w-[220px]" />
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className={cn('animate-spin text-primary', sizeClasses[size])} />
+            {text && <p className="text-sm text-muted-foreground">{text}</p>}
           </div>
         );
     }
@@ -145,115 +132,7 @@ export function PageLoading({ title = 'Loading...', description }: PageLoadingPr
   );
 }
 
-export function SkeletonTable({ rows = 5, columns = 4 }: SkeletonTableProps) {
-  return (
-    <div className="space-y-3">
-      {/* Header */}
-      <div className="flex space-x-4">
-        {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
-        ))}
-      </div>
-      
-      {/* Rows */}
-      {Array.from({ length: rows }).map((_, rowIndex) => (
-        <div key={rowIndex} className="flex space-x-4">
-          {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton 
-              key={colIndex} 
-              className={cn(
-                "h-4 flex-1",
-                colIndex === 0 && "h-6" // First column slightly taller for emphasis
-              )} 
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function SkeletonCard({ count = 3, hasImage = true }: SkeletonCardProps) {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {Array.from({ length: count }).map((_, index) => (
-        <Card key={index}>
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              {hasImage && (
-                <Skeleton className="h-48 w-full rounded-md" />
-              )}
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-              <div className="space-y-2">
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-5/6" />
-                <Skeleton className="h-3 w-4/5" />
-              </div>
-              <div className="flex space-x-2">
-                <Skeleton className="h-8 w-20" />
-                <Skeleton className="h-8 w-16" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-export function SkeletonForm() {
-  return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-      </div>
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-20 w-full" />
-      </div>
-      <div className="flex justify-end space-x-2">
-        <Skeleton className="h-10 w-20" />
-        <Skeleton className="h-10 w-16" />
-      </div>
-    </div>
-  );
-}
-
-export function SkeletonStats() {
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <Card key={index}>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <Skeleton className="h-10 w-10 rounded-full" />
-              <div className="space-y-2 flex-1">
-                <Skeleton className="h-8 w-16" />
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-// Loading state for specific use cases
+// Convenience exports
 export function LoadingSpinner({ size = 'md' }: Pick<LoadingProps, 'size'>) {
   return <Loading variant="spinner" size={size} />;
 }

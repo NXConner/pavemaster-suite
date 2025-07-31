@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import { useDeviceInfo, useOrientation, useViewportHeight, useSafeArea } from '@/hooks/use-mobile';
-import mobileService, { MobileCapabilities, LocationData, PhotoData } from '@/services/mobileService';
+import mobileService from '@/services/mobileService';
+import type { MobileCapabilities, LocationData, PhotoData } from '@/services/mobileService';
 import {
   Smartphone,
   Wifi,
