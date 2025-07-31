@@ -33,10 +33,10 @@ export function useUserPresence(roomId: string = 'main-workspace') {
         const users = Object.values(newState).flat();
         setOnlineUsers(users);
       })
-      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+      .on('presence', { event: 'join' }, ({ key, newPresences }: any) => {
         console.log('User joined:', key, newPresences);
       })
-      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+      .on('presence', { event: 'leave' }, ({ key, leftPresences }: any) => {
         console.log('User left:', key, leftPresences);
       })
       .subscribe(async (status) => {

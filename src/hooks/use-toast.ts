@@ -1,5 +1,4 @@
-import * as React from "react"
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 interface ToastOptions {
   title?: string;
@@ -58,10 +57,10 @@ const toastStore = {
 export function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   
-  useState(() => {
+  useEffect(() => {
     const unsubscribe = toastStore.subscribe(setToasts);
     return unsubscribe;
-  });
+  }, []);
   
   const toast = useCallback((options: ToastOptions) => {
     return toastStore.addToast(options);

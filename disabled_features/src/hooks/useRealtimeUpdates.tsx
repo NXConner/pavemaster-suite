@@ -29,7 +29,7 @@ export function useRealtimeUpdates() {
           schema: 'public',
           table: 'projects',
         },
-        (payload) => {
+        (payload: any) => {
           console.log('Projects change received:', payload);
           const update: RealtimeUpdate = {
             id: crypto.randomUUID(),
@@ -49,7 +49,7 @@ export function useRealtimeUpdates() {
           schema: 'public',
           table: 'gps_locations',
         },
-        (payload) => {
+        (payload: any) => {
           console.log('GPS location change received:', payload);
           const update: RealtimeUpdate = {
             id: crypto.randomUUID(),
@@ -69,7 +69,7 @@ export function useRealtimeUpdates() {
           schema: 'public',
           table: 'devices',
         },
-        (payload) => {
+        (payload: any) => {
           console.log('Device change received:', payload);
           const update: RealtimeUpdate = {
             id: crypto.randomUUID(),
