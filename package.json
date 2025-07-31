@@ -27,7 +27,12 @@
     "test:e2e:ui": "playwright test --ui",
     "test:a11y": "axe-playwright",
     "test:performance": "echo 'Performance testing disabled - lighthouse-ci removed for security'",
-    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e"
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:enhanced": "vitest --config vitest.config.enhanced.ts",
+    "analyze:bundle": "tsx scripts/analyze-bundle.ts",
+    "analyze:security": "npm audit && npm run analyze:bundle",
+    "optimize:deps": "npm-check-updates -u && npm install",
+    "performance:monitor": "npm run build && npm run analyze:bundle"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",

@@ -1,456 +1,443 @@
 /**
- * Comprehensive Test Setup - 95%+ Coverage Target
- * Sets up testing infrastructure for unit, integration, E2E, and performance tests
+ * Test Setup Configuration
+ * Comprehensive testing utilities including security testing, performance monitoring, and mocks
  */
 
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
-import { performanceMonitor } from '@/lib/performance';
+import { cleanup } from '@testing-library/react';
+import { afterEach, beforeAll, afterAll, vi } from 'vitest';
 
-// Mock global objects for testing environment
-Object.defineProperty(global, 'crypto', {
-  value: {
-    randomUUID: () => Math.random().toString(36).substring(2, 15),
-    getRandomValues: (arr: any) => {
-      for (let i = 0; i < arr.length; i++) {
-        arr[i] = Math.floor(Math.random() * 256);
-      }
-      return arr;
-    },
-  },
-  writable: true,
+// Security testing utilities
+import { securityManager } from '@/security/SecurityManager';
+import { performanceMonitor } from '@/services/AdvancedPerformanceMonitor';
+
+// Global test configuration
+declare global {
+  interface Window {
+    __TEST_ENV__: boolean;
+    __SECURITY_TEST_MODE__: boolean;
+    ResizeObserver: any;
+    IntersectionObserver: any;
+    requestIdleCallback: any;
+    cancelIdleCallback: any;
+  }
+}
+
+/**
+ * Setup global test environment
+ */
+beforeAll(() => {
+  // Mark test environment
+  window.__TEST_ENV__ = true;
+  window.__SECURITY_TEST_MODE__ = true;
+  
+  // Mock Web APIs not available in test environment
+  setupWebApiMocks();
+  
+  // Setup security testing
+  setupSecurityTesting();
+  
+  // Setup performance monitoring for tests
+  setupTestPerformanceMonitoring();
+  
+  // Mock external services
+  setupExternalServiceMocks();
+  
+  console.log('🧪 Test environment initialized');
 });
 
-// Mock performance API
-global.performance = {
-  now: () => Date.now(),
-  mark: vi.fn(),
-  measure: vi.fn(),
-  getEntriesByName: vi.fn(() => []),
-  getEntriesByType: vi.fn(() => []),
-  clearMarks: vi.fn(),
-  clearMeasures: vi.fn(),
-} as any;
-
-// Mock IntersectionObserver
-global.IntersectionObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-// Mock ResizeObserver
-global.ResizeObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-// Mock Canvas for image processing tests
-const mockCanvas = {
-  getContext: vi.fn(() => ({
-    drawImage: vi.fn(),
-    getImageData: vi.fn(() => ({
-      data: new Uint8ClampedArray(4),
-      width: 100,
-      height: 100,
-    })),
-    putImageData: vi.fn(),
-  })),
-  width: 100,
-  height: 100,
-};
-
-global.HTMLCanvasElement = vi.fn(() => mockCanvas) as any;
-global.CanvasRenderingContext2D = vi.fn();
-
-// Mock URL for file handling
-global.URL = {
-  createObjectURL: vi.fn(() => 'blob:mock-url'),
-  revokeObjectURL: vi.fn(),
-} as any;
-
-// Mock File API
-global.File = vi.fn((data, name, options) => ({
-  name,
-  size: data.length,
-  type: options?.type || 'application/octet-stream',
-  lastModified: Date.now(),
-  data,
-})) as any;
-
-// Mock FileReader
-global.FileReader = vi.fn(() => ({
-  readAsDataURL: vi.fn(),
-  readAsText: vi.fn(),
-  readAsArrayBuffer: vi.fn(),
-  result: null,
-  error: null,
-  onload: null,
-  onerror: null,
-  onabort: null,
-  onloadstart: null,
-  onloadend: null,
-  onprogress: null,
-  abort: vi.fn(),
-  DONE: 2,
-  EMPTY: 0,
-  LOADING: 1,
-  readyState: 0,
-})) as any;
-
-// Mock fetch for API testing
-global.fetch = vi.fn(() =>
-  Promise.resolve({
-    ok: true,
-    status: 200,
-    statusText: 'OK',
-    json: () => Promise.resolve({}),
-    text: () => Promise.resolve(''),
-    blob: () => Promise.resolve(new Blob()),
-    arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-    clone: vi.fn(),
-    headers: new Map(),
-  })
-) as any;
-
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
-};
-global.localStorage = localStorageMock;
-
-// Mock sessionStorage
-global.sessionStorage = localStorageMock;
-
-// Mock Capacitor plugins for mobile testing
-vi.mock('@capacitor/camera', () => ({
-  Camera: {
-    getPhoto: vi.fn(() => Promise.resolve({
-      webPath: 'blob:mock-photo',
-      format: 'jpeg',
-      saved: false,
-    })),
-    requestPermissions: vi.fn(() => Promise.resolve({ camera: 'granted' })),
-  },
-  CameraResultType: {
-    Uri: 'uri',
-    Base64: 'base64',
-    DataUrl: 'dataUrl',
-  },
-  CameraSource: {
-    Camera: 'camera',
-    Photos: 'photos',
-  },
-}));
-
-vi.mock('@capacitor/geolocation', () => ({
-  Geolocation: {
-    getCurrentPosition: vi.fn(() => Promise.resolve({
-      coords: {
-        latitude: 40.7128,
-        longitude: -74.0060,
-        accuracy: 10,
-        altitude: null,
-        altitudeAccuracy: null,
-        heading: null,
-        speed: null,
-      },
-      timestamp: Date.now(),
-    })),
-    watchPosition: vi.fn(() => Promise.resolve('mock-watch-id')),
-    clearWatch: vi.fn(() => Promise.resolve()),
-    requestPermissions: vi.fn(() => Promise.resolve({ location: 'granted' })),
-  },
-}));
-
-vi.mock('@capacitor/device', () => ({
-  Device: {
-    getInfo: vi.fn(() => Promise.resolve({
-      platform: 'web',
-      model: 'MockDevice',
-      operatingSystem: 'web',
-      osVersion: '1.0.0',
-      manufacturer: 'Mock',
-      isVirtual: false,
-      memUsed: 100,
-      diskFree: 1000,
-      diskTotal: 2000,
-      realDiskFree: 1000,
-      realDiskTotal: 2000,
-      webViewVersion: '1.0.0',
-    })),
-    getId: vi.fn(() => Promise.resolve({ uuid: 'mock-device-id' })),
-    getBatteryInfo: vi.fn(() => Promise.resolve({
-      batteryLevel: 0.8,
-      isCharging: false,
-    })),
-    getLanguageCode: vi.fn(() => Promise.resolve({ value: 'en' })),
-  },
-}));
-
-vi.mock('@capacitor/network', () => ({
-  Network: {
-    getStatus: vi.fn(() => Promise.resolve({
-      connected: true,
-      connectionType: 'wifi',
-    })),
-    addListener: vi.fn(() => Promise.resolve()),
-    removeAllListeners: vi.fn(() => Promise.resolve()),
-  },
-}));
-
-vi.mock('@capacitor/preferences', () => ({
-  Preferences: {
-    set: vi.fn(() => Promise.resolve()),
-    get: vi.fn(() => Promise.resolve({ value: null })),
-    remove: vi.fn(() => Promise.resolve()),
-    clear: vi.fn(() => Promise.resolve()),
-    keys: vi.fn(() => Promise.resolve({ keys: [] })),
-  },
-}));
-
-vi.mock('@capacitor/push-notifications', () => ({
-  PushNotifications: {
-    requestPermissions: vi.fn(() => Promise.resolve({ receive: 'granted' })),
-    register: vi.fn(() => Promise.resolve()),
-    addListener: vi.fn(() => Promise.resolve()),
-    removeAllListeners: vi.fn(() => Promise.resolve()),
-    getDeliveredNotifications: vi.fn(() => Promise.resolve({ notifications: [] })),
-  },
-}));
-
-vi.mock('@capacitor/haptics', () => ({
-  Haptics: {
-    impact: vi.fn(() => Promise.resolve()),
-    vibrate: vi.fn(() => Promise.resolve()),
-    selectionStart: vi.fn(() => Promise.resolve()),
-    selectionChanged: vi.fn(() => Promise.resolve()),
-    selectionEnd: vi.fn(() => Promise.resolve()),
-  },
-  ImpactStyle: {
-    Heavy: 'HEAVY',
-    Medium: 'MEDIUM',
-    Light: 'LIGHT',
-  },
-}));
-
-vi.mock('@capacitor/motion', () => ({
-  Motion: {
-    addListener: vi.fn(() => Promise.resolve('mock-listener-id')),
-    removeAllListeners: vi.fn(() => Promise.resolve()),
-  },
-}));
-
-vi.mock('@capacitor/status-bar', () => ({
-  StatusBar: {
-    setStyle: vi.fn(() => Promise.resolve()),
-    setBackgroundColor: vi.fn(() => Promise.resolve()),
-    getInfo: vi.fn(() => Promise.resolve({
-      visible: true,
-      style: 'DEFAULT',
-      color: '#ffffff',
-      overlays: false,
-    })),
-    show: vi.fn(() => Promise.resolve()),
-    hide: vi.fn(() => Promise.resolve()),
-  },
-  Style: {
-    Dark: 'DARK',
-    Light: 'LIGHT',
-    Default: 'DEFAULT',
-  },
-}));
-
-vi.mock('@capacitor/splash-screen', () => ({
-  SplashScreen: {
-    show: vi.fn(() => Promise.resolve()),
-    hide: vi.fn(() => Promise.resolve()),
-  },
-}));
-
-// Mock Supabase client
-vi.mock('@/integrations/supabase/client', () => ({
-  supabase: {
-    auth: {
-      getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-      signInWithPassword: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-      signUp: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-      signOut: vi.fn(() => Promise.resolve({ error: null })),
-      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
-    },
-    from: vi.fn(() => ({
-      select: vi.fn().mockReturnThis(),
-      insert: vi.fn().mockReturnThis(),
-      update: vi.fn().mockReturnThis(),
-      delete: vi.fn().mockReturnThis(),
-      order: vi.fn().mockReturnThis(),
-      filter: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      gte: vi.fn().mockReturnThis(),
-      lte: vi.fn().mockReturnThis(),
-      like: vi.fn().mockReturnThis(),
-      in: vi.fn().mockReturnThis(),
-      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
-      then: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    })),
-    channel: vi.fn(() => ({
-      on: vi.fn().mockReturnThis(),
-      subscribe: vi.fn(() => Promise.resolve('SUBSCRIBED')),
-      send: vi.fn(() => Promise.resolve('ok')),
-      unsubscribe: vi.fn(() => Promise.resolve('ok')),
-    })),
-    removeChannel: vi.fn(() => Promise.resolve('ok')),
-    realtime: {
-      onOpen: vi.fn(),
-      onClose: vi.fn(),
-      onError: vi.fn(),
-    },
-    storage: {
-      from: vi.fn(() => ({
-        upload: vi.fn(() => Promise.resolve({ data: null, error: null })),
-        download: vi.fn(() => Promise.resolve({ data: null, error: null })),
-        list: vi.fn(() => Promise.resolve({ data: [], error: null })),
-        remove: vi.fn(() => Promise.resolve({ data: null, error: null })),
-        getPublicUrl: vi.fn(() => ({ data: { publicUrl: 'mock-url' } })),
-      })),
-    },
-  },
-}));
-
-// Mock TensorFlow.js for AI testing
-vi.mock('@tensorflow/tfjs', () => ({
-  loadLayersModel: vi.fn(() => Promise.resolve({
-    predict: vi.fn(() => ({
-      dataSync: vi.fn(() => [0.95, 0.03, 0.02]),
-      dispose: vi.fn(),
-    })),
-    dispose: vi.fn(),
-  })),
-  tensor: vi.fn(() => ({
-    dataSync: vi.fn(() => [1, 2, 3, 4]),
-    dispose: vi.fn(),
-  })),
-  dispose: vi.fn(),
-  ready: vi.fn(() => Promise.resolve()),
-}));
-
-// Mock React Window for virtual scrolling tests
-vi.mock('react-window', () => ({
-  FixedSizeList: vi.fn(({ children, itemCount, itemSize }) => {
-    // Mock virtual list rendering first few items
-    const items = [];
-    const visibleCount = Math.min(itemCount, 10);
-    
-    for (let i = 0; i < visibleCount; i++) {
-      items.push(
-        children({
-          index: i,
-          style: { height: itemSize, top: i * itemSize },
-        })
-      );
-    }
-    
-    return items;
-  }),
-}));
-
-// Mock Recharts for chart testing
-vi.mock('recharts', () => ({
-  LineChart: vi.fn(({ children }) => children),
-  Line: vi.fn(() => null),
-  XAxis: vi.fn(() => null),
-  YAxis: vi.fn(() => null),
-  CartesianGrid: vi.fn(() => null),
-  Tooltip: vi.fn(() => null),
-  Legend: vi.fn(() => null),
-  ResponsiveContainer: vi.fn(({ children }) => children),
-  BarChart: vi.fn(({ children }) => children),
-  Bar: vi.fn(() => null),
-  PieChart: vi.fn(({ children }) => children),
-  Pie: vi.fn(() => null),
-  Cell: vi.fn(() => null),
-}));
-
-// Test utilities
-export const createMockFile = (name: string, size: number = 1024, type: string = 'image/jpeg'): File => {
-  const content = new Array(size).fill('a').join('');
-  return new File([content], name, { type });
-};
-
-export const createMockGeolocation = () => ({
-  coords: {
-    latitude: 40.7128 + (Math.random() - 0.5) * 0.01,
-    longitude: -74.0060 + (Math.random() - 0.5) * 0.01,
-    accuracy: Math.random() * 10 + 5,
-    altitude: null,
-    altitudeAccuracy: null,
-    heading: Math.random() * 360,
-    speed: Math.random() * 10,
-  },
-  timestamp: Date.now(),
-});
-
-export const createMockSensorData = () => ({
-  accelerometer: {
-    x: (Math.random() - 0.5) * 20,
-    y: (Math.random() - 0.5) * 20,
-    z: 9.8 + (Math.random() - 0.5) * 2,
-  },
-  gyroscope: {
-    x: (Math.random() - 0.5) * 10,
-    y: (Math.random() - 0.5) * 10,
-    z: (Math.random() - 0.5) * 10,
-  },
-  magnetometer: {
-    x: (Math.random() - 0.5) * 100,
-    y: (Math.random() - 0.5) * 100,
-    z: (Math.random() - 0.5) * 100,
-  },
-  timestamp: Date.now(),
-  accuracy: 1.0,
-});
-
-export const waitForAsync = (ms: number = 0): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
-export const mockPerformanceEntry = (name: string, duration: number = 100) => ({
-  name,
-  entryType: 'measure',
-  startTime: performance.now(),
-  duration,
-});
-
-// Initialize performance monitoring for tests
-performanceMonitor.recordMetric('test_setup_complete', performance.now(), 'ms');
-
-console.log('🧪 Comprehensive test setup completed with 95%+ coverage target');
-
-// Setup cleanup after each test
+/**
+ * Cleanup after each test
+ */
 afterEach(() => {
+  cleanup();
   vi.clearAllMocks();
   vi.clearAllTimers();
 });
 
-// Global test configuration
-export const testConfig = {
-  timeout: 10000, // 10 second timeout for async tests
-  retries: 2, // Retry flaky tests twice
-  coverage: {
-    target: 95, // 95% coverage target
-    statements: 95,
-    branches: 95,
-    functions: 95,
-    lines: 95,
+/**
+ * Cleanup after all tests
+ */
+afterAll(() => {
+  performanceMonitor.stopMonitoring();
+  console.log('🧪 Test environment cleaned up');
+});
+
+/**
+ * Mock Web APIs not available in test environment
+ */
+function setupWebApiMocks(): void {
+  // Mock ResizeObserver
+  window.ResizeObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+
+  // Mock IntersectionObserver
+  window.IntersectionObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+
+  // Mock requestIdleCallback
+  window.requestIdleCallback = vi.fn((callback) => {
+    return setTimeout(callback, 0);
+  });
+  
+  window.cancelIdleCallback = vi.fn((id) => {
+    clearTimeout(id);
+  });
+
+  // Mock PerformanceObserver
+  global.PerformanceObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+
+  // Mock performance.memory
+  Object.defineProperty(performance, 'memory', {
+    value: {
+      usedJSHeapSize: 10 * 1024 * 1024, // 10MB
+      totalJSHeapSize: 20 * 1024 * 1024, // 20MB
+      jsHeapSizeLimit: 100 * 1024 * 1024, // 100MB
+    },
+    configurable: true,
+  });
+
+  // Mock crypto.subtle for security tests
+  Object.defineProperty(global, 'crypto', {
+    value: {
+      getRandomValues: (arr: Uint8Array) => {
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = Math.floor(Math.random() * 256);
+        }
+        return arr;
+      },
+      subtle: {
+        importKey: vi.fn().mockResolvedValue({}),
+        encrypt: vi.fn().mockResolvedValue(new ArrayBuffer(16)),
+        decrypt: vi.fn().mockResolvedValue(new ArrayBuffer(16)),
+      }
+    },
+    configurable: true,
+  });
+
+  // Mock geolocation
+  Object.defineProperty(navigator, 'geolocation', {
+    value: {
+      getCurrentPosition: vi.fn().mockImplementation((success) => {
+        success({
+          coords: {
+            latitude: 40.7128,
+            longitude: -74.0060,
+            accuracy: 10,
+          },
+        });
+      }),
+      watchPosition: vi.fn(),
+      clearWatch: vi.fn(),
+    },
+    configurable: true,
+  });
+}
+
+/**
+ * Setup security testing utilities
+ */
+function setupSecurityTesting(): void {
+  // Mock security manager for testing
+  vi.spyOn(securityManager, 'sanitizeInput');
+  vi.spyOn(securityManager, 'validateFile');
+  vi.spyOn(securityManager, 'isRateLimited');
+  vi.spyOn(securityManager, 'auditSecurityEvent');
+
+  // Global security test helpers
+  globalThis.securityTestHelpers = {
+    /**
+     * Test XSS vulnerability
+     */
+    testXSSPrevention: (input: string): boolean => {
+      const sanitized = securityManager.sanitizeInput(input);
+      return !sanitized.includes('<script>') && !sanitized.includes('javascript:');
+    },
+
+    /**
+     * Test file upload security
+     */
+    testFileUploadSecurity: (file: Partial<File>): boolean => {
+      const testFile = new File(['test'], file.name || 'test.txt', {
+        type: file.type || 'text/plain',
+      });
+      Object.defineProperty(testFile, 'size', {
+        value: file.size || 1024,
+        configurable: true,
+      });
+      
+      const result = securityManager.validateFile(testFile);
+      return result.valid;
+    },
+
+    /**
+     * Test rate limiting
+     */
+    testRateLimit: (identifier: string, requests: number): boolean => {
+      for (let i = 0; i < requests; i++) {
+        if (securityManager.isRateLimited(identifier, 5, 60000)) {
+          return true;
+        }
+      }
+      return false;
+    },
+
+    /**
+     * Generate test CSP header
+     */
+    generateTestCSP: (): string => {
+      return securityManager.generateCSPHeader();
+    }
+  };
+}
+
+/**
+ * Setup performance monitoring for tests
+ */
+function setupTestPerformanceMonitoring(): void {
+  // Mock performance monitoring methods
+  vi.spyOn(performanceMonitor, 'measureComponentRender');
+  vi.spyOn(performanceMonitor, 'measureApiCall');
+  
+  // Global performance test helpers
+  globalThis.performanceTestHelpers = {
+    /**
+     * Measure test execution time
+     */
+    measureTestPerformance: async (testFn: () => Promise<void> | void): Promise<number> => {
+      const startTime = performance.now();
+      await testFn();
+      const endTime = performance.now();
+      return endTime - startTime;
+    },
+
+    /**
+     * Assert performance budget
+     */
+    assertPerformanceBudget: (actualTime: number, budgetMs: number): void => {
+      if (actualTime > budgetMs) {
+        throw new Error(`Performance budget exceeded: ${actualTime}ms > ${budgetMs}ms`);
+      }
+    },
+
+    /**
+     * Mock slow operation
+     */
+    mockSlowOperation: (delayMs: number): Promise<void> => {
+      return new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  };
+}
+
+/**
+ * Setup external service mocks
+ */
+function setupExternalServiceMocks(): void {
+  // Mock fetch for API calls
+  global.fetch = vi.fn();
+
+  // Mock Supabase client
+  vi.mock('@supabase/supabase-js', () => ({
+    createClient: vi.fn(() => ({
+      auth: {
+        signIn: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+        signOut: vi.fn().mockResolvedValue({ error: null }),
+        getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      },
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnThis(),
+        insert: vi.fn().mockReturnThis(),
+        update: vi.fn().mockReturnThis(),
+        delete: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    })),
+  }));
+
+  // Mock Capacitor plugins
+  vi.mock('@capacitor/core', () => ({
+    Capacitor: {
+      isNativePlatform: vi.fn().mockReturnValue(false),
+      getPlatform: vi.fn().mockReturnValue('web'),
+    },
+  }));
+
+  // Mock React Router
+  vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+      ...actual,
+      useNavigate: vi.fn(() => vi.fn()),
+      useLocation: vi.fn(() => ({ pathname: '/test' })),
+      useParams: vi.fn(() => ({})),
+    };
+  });
+}
+
+/**
+ * Custom render function with providers
+ */
+export function renderWithProviders(
+  ui: React.ReactElement,
+  options: {
+    initialEntries?: string[];
+    preloadedState?: any;
+  } = {}
+) {
+  const { render } = require('@testing-library/react');
+  const { BrowserRouter } = require('react-router-dom');
+  const { QueryClient, QueryClientProvider } = require('@tanstack/react-query');
+  
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          {children}
+        </BrowserRouter>
+      </QueryClientProvider>
+    );
+  }
+
+  return {
+    ...render(ui, { wrapper: Wrapper, ...options }),
+    queryClient,
+  };
+}
+
+/**
+ * Security test utilities
+ */
+export const securityTestUtils = {
+  /**
+   * Test for XSS vulnerabilities
+   */
+  testXSSInjection: (component: React.ReactElement, maliciousInput: string) => {
+    const { container } = renderWithProviders(component);
+    const hasScript = container.innerHTML.includes('<script>');
+    const hasJavaScript = container.innerHTML.includes('javascript:');
+    const hasOnEvent = /on\w+\s*=/.test(container.innerHTML);
+    
+    return !hasScript && !hasJavaScript && !hasOnEvent;
   },
-  performance: {
-    maxExecutionTime: 100, // Max 100ms for performance tests
-    memoryLeakThreshold: 10, // Max 10MB memory increase
+
+  /**
+   * Test CSP compliance
+   */
+  testCSPCompliance: (html: string): boolean => {
+    // Check for inline scripts without nonce
+    const inlineScripts = /<script(?![^>]*nonce)[^>]*>/.test(html);
+    // Check for inline styles without nonce
+    const inlineStyles = /<style(?![^>]*nonce)[^>]*>/.test(html);
+    // Check for javascript: URLs
+    const javascriptUrls = /javascript:/.test(html);
+    
+    return !inlineScripts && !inlineStyles && !javascriptUrls;
   },
 };
+
+/**
+ * Performance test utilities
+ */
+export const performanceTestUtils = {
+  /**
+   * Measure component render time
+   */
+  measureRenderTime: async (component: React.ReactElement): Promise<number> => {
+    const startTime = performance.now();
+    renderWithProviders(component);
+    const endTime = performance.now();
+    return endTime - startTime;
+  },
+
+  /**
+   * Test memory leaks
+   */
+  testMemoryLeak: async (componentFactory: () => React.ReactElement, iterations: number = 100): Promise<boolean> => {
+    const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+    
+    for (let i = 0; i < iterations; i++) {
+      const { unmount } = renderWithProviders(componentFactory());
+      unmount();
+    }
+    
+    // Force garbage collection if available
+    if ((global as any).gc) {
+      (global as any).gc();
+    }
+    
+    const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+    const memoryIncrease = finalMemory - initialMemory;
+    
+    // Memory increase should be less than 1MB for 100 iterations
+    return memoryIncrease < 1024 * 1024;
+  },
+};
+
+/**
+ * Accessibility test utilities
+ */
+export const a11yTestUtils = {
+  /**
+   * Test keyboard navigation
+   */
+  testKeyboardNavigation: async (container: HTMLElement): Promise<boolean> => {
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+    
+    // Test Tab navigation
+    await user.tab();
+    const activeElement = document.activeElement;
+    
+    return activeElement !== document.body;
+  },
+
+  /**
+   * Test ARIA attributes
+   */
+  testARIACompliance: (container: HTMLElement): boolean => {
+    const requiredARIA = container.querySelectorAll('[aria-required="true"]');
+    const labels = container.querySelectorAll('[aria-label], [aria-labelledby]');
+    const roles = container.querySelectorAll('[role]');
+    
+    return requiredARIA.length > 0 || labels.length > 0 || roles.length > 0;
+  },
+};
+
+// Export test utilities
+export {
+  securityManager,
+  performanceMonitor,
+};
+
+// Global type declarations for test helpers
+declare global {
+  var securityTestHelpers: {
+    testXSSPrevention: (input: string) => boolean;
+    testFileUploadSecurity: (file: Partial<File>) => boolean;
+    testRateLimit: (identifier: string, requests: number) => boolean;
+    generateTestCSP: () => string;
+  };
+  
+  var performanceTestHelpers: {
+    measureTestPerformance: (testFn: () => Promise<void> | void) => Promise<number>;
+    assertPerformanceBudget: (actualTime: number, budgetMs: number) => void;
+    mockSlowOperation: (delayMs: number) => Promise<void>;
+  };
+}
