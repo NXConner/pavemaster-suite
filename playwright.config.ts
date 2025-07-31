@@ -70,9 +70,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { 
-        ...devices['Desktop Chrome'],
-        // Enable developer tools in headed mode
-        devtools: !process.env.CI,
+        ...devices['Desktop Chrome']
       },
       dependencies: ['setup'],
     },
@@ -162,9 +160,7 @@ export default defineConfig({
       name: 'visual',
       testMatch: /.*\.visual\.spec\.ts/,
       use: {
-        ...devices['Desktop Chrome'],
-        // Disable animations for consistent screenshots
-        reducedMotion: 'reduce',
+        ...devices['Desktop Chrome']
       },
       dependencies: ['setup'],
     },
@@ -223,19 +219,10 @@ export default defineConfig({
     /* Timeout for expect assertions */
     timeout: 10000,
     
-    /* Threshold for visual comparisons */
-    threshold: 0.2,
-    
     /* Animation handling */
     toHaveScreenshot: {
-      animations: 'disabled',
-      threshold: 0.2,
-    },
-    
-    /* Maximum allowed pixel difference for visual comparisons */
-    toMatchSnapshot: {
-      threshold: 0.2,
-    },
+      animations: 'disabled'
+    }
   },
 
   /* Test metadata */
