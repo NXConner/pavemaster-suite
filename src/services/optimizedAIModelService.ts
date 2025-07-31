@@ -1,6 +1,47 @@
-import { Device } from '@capacitor/device';
-import { Network } from '@capacitor/network';
-import { Storage } from '@capacitor/storage';
+// Conditional Capacitor imports for web compatibility
+let Device: any, Network: any, Storage: any;
+
+try {
+  Device = require('@capacitor/device').Device;
+  Network = require('@capacitor/network').Network;
+  Storage = require('@capacitor/storage').Storage;
+} catch (error) {
+  // Fallback for web environment
+  Device = {
+    async getInfo() {
+      return {
+        platform: 'web',
+        model: 'Browser',
+        operatingSystem: 'web',
+        osVersion: '1.0',
+        manufacturer: 'Web',
+        isVirtual: false,
+        webViewVersion: '1.0'
+      };
+    }
+  };
+  
+  Network = {
+    async getStatus() {
+      return {
+        connected: navigator.onLine,
+        connectionType: 'wifi'
+      };
+    }
+  };
+  
+  Storage = {
+    async get(options: { key: string }) {
+      return { value: localStorage.getItem(options.key) };
+    },
+    async set(options: { key: string; value: string }) {
+      localStorage.setItem(options.key, options.value);
+    },
+    async remove(options: { key: string }) {
+      localStorage.removeItem(options.key);
+    }
+  };
+}
 
 export interface ModelQuantizationOptions {
   precision: 'int8' | 'int16' | 'float16' | 'float32';
