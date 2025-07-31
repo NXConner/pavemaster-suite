@@ -283,36 +283,70 @@ export default defineConfig(({ command, mode }) => {
         }
       }),
       
-      // PHASE 9: Enhanced Progressive Web App support
+      // PHASE 10: Enhanced Progressive Web App with mobile-first features
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
-          name: env.VITE_APP_NAME || 'PaveMaster Suite',
+          name: env.VITE_APP_NAME || 'PaveMaster Suite - AI Paving Operations',
           short_name: env.VITE_APP_SHORT_NAME || 'PaveMaster',
-          description: env.VITE_APP_DESCRIPTION || 'AI-assisted pavement analysis and performance tracking',
-          theme_color: '#ffffff',
+          description: env.VITE_APP_DESCRIPTION || 'AI-powered asphalt paving operations management suite with mobile field interface',
+          theme_color: '#1f2937',
           background_color: '#ffffff',
           display: 'standalone',
-          orientation: 'portrait',
+          orientation: 'portrait-primary',
           scope: '/',
           start_url: '/',
+          categories: ['business', 'productivity', 'utilities'],
+          lang: 'en-US',
           icons: [
             {
               src: 'pwa-192x192.png',
               sizes: '192x192',
-              type: 'image/png'
-            },
-            {
-              src: 'pwa-512x512.png',
-              sizes: '512x512',
-              type: 'image/png'
+              type: 'image/png',
+              purpose: 'any'
             },
             {
               src: 'pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
-              purpose: 'any maskable'
+              purpose: 'any'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable'
+            }
+          ],
+          shortcuts: [
+            {
+              name: 'Field Interface',
+              short_name: 'Field',
+              description: 'Quick access to mobile field operations',
+              url: '/mobile',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
+            },
+            {
+              name: 'Take Photo',
+              short_name: 'Camera',
+              description: 'Capture field photos with GPS location',
+              url: '/mobile?tab=camera',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
+            },
+            {
+              name: 'Projects',
+              short_name: 'Projects',
+              description: 'View and manage paving projects',
+              url: '/projects',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
+            },
+            {
+              name: 'Analytics',
+              short_name: 'Analytics',
+              description: 'View performance analytics and reports',
+              url: '/analytics',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
             }
           ]
         },

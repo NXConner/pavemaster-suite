@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 import { MobileFieldInterface } from '@/components/MobileFieldInterface';
-import { EnhancedMobileFieldInterface } from '@/components/EnhancedMobileFieldInterface';
+import EnhancedMobileFieldInterface from '@/components/EnhancedMobileFieldInterface';
 import { TouchOptimizedMobileInterface } from '@/components/TouchOptimizedMobileInterface';
 import { AdvancedOfflineManager } from '@/components/AdvancedOfflineManager';
 import { OfflineManager } from '@/components/OfflineManager';
