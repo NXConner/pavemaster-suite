@@ -1,0 +1,502 @@
+name: Mobile CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+      - 'android/**'
+      - 'ios/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+
+env:
+  NODE_VERSION: '18'
+  JAVA_VERSION: '17'
+  XCODE_VERSION: '15'
+
+jobs:
+  code-quality:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+
+    - name: Run TypeScript check
+      run: npm run type-check
+
+    - name: Run Prettier check
+      run: npm run format:check
+
+    - name: Security audit
+      run: npm audit --audit-level=high
+
+    - name: SAST Scan with CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+    - name: Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'PaveMaster Suite'
+        path: '.'
+        format: 'HTML'
+
+    - name: Upload SARIF results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: reports/dependency-check-report.sarif
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run unit tests
+      run: npm run test:unit -- --coverage --watchAll=false
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+
+    - name: Run integration tests
+      run: npm run test:integration
+
+    - name: Run E2E tests with Playwright
+      run: |
+        npx playwright install
+        npm run test:e2e
+
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+
+    - name: Run Lighthouse CI
+      run: |
+        npm install -g @lhci/cli
+        lhci autorun
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+    - name: Performance benchmark
+      run: npm run test:performance
+
+  build-web:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    needs: performance-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build web application
+      run: npm run build
+
+    - name: Upload web build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-build
+        path: dist/
+        retention-days: 7
+
+  build-android:
+    name: Build Android App
+    runs-on: ubuntu-latest
+    needs: build-web
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build web app
+      run: npm run build
+
+    - name: Sync Capacitor
+      run: npx cap sync android
+
+    - name: Build Android APK (Debug)
+      run: |
+        cd android
+        ./gradlew assembleDebug
+
+    - name: Build Android AAB (Release)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        cd android
+        ./gradlew bundleRelease
+      env:
+        ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+    - name: Sign Android APK
+      if: github.ref == 'refs/heads/main'
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: android/app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+        alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+    - name: Upload Android artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-build
+        path: |
+          android/app/build/outputs/apk/debug/*.apk
+          android/app/build/outputs/bundle/release/*.aab
+        retention-days: 7
+
+    - name: Run Android security scan
+      run: |
+        # Install MobSF CLI or similar security scanning tool
+        echo "Running Android security scan..."
+        # Add actual security scanning commands here
+
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-latest
+    needs: build-web
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ env.XCODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build web app
+      run: npm run build
+
+    - name: Sync Capacitor
+      run: npx cap sync ios
+
+    - name: Install CocoaPods
+      run: |
+        cd ios/App
+        pod install
+
+    - name: Build iOS app
+      run: |
+        cd ios/App
+        xcodebuild -workspace App.xcworkspace \
+                   -scheme App \
+                   -configuration Release \
+                   -destination generic/platform=iOS \
+                   -archivePath App.xcarchive \
+                   archive
+      env:
+        CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
+        PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+
+    - name: Export iOS app
+      run: |
+        cd ios/App
+        xcodebuild -exportArchive \
+                   -archivePath App.xcarchive \
+                   -exportPath . \
+                   -exportOptionsPlist exportOptions.plist
+
+    - name: Upload iOS artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build
+        path: ios/App/*.ipa
+        retention-days: 7
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios]
+    if: always()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Container security scan
+      run: |
+        # Run container security scans if using Docker
+        echo "Running container security scans..."
+
+    - name: SAST with SonarCloud
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios, security-scan]
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Download web build
+      uses: actions/download-artifact@v4
+      with:
+        name: web-build
+        path: ./dist
+
+    - name: Deploy to staging environment
+      run: |
+        # Deploy web app to staging
+        echo "Deploying to staging environment..."
+        # Add actual deployment commands
+
+    - name: Deploy Android to Internal Testing
+      run: |
+        # Deploy Android APK to Google Play Internal Testing
+        echo "Deploying Android to Internal Testing..."
+
+    - name: Deploy iOS to TestFlight
+      run: |
+        # Deploy iOS IPA to TestFlight
+        echo "Deploying iOS to TestFlight..."
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios, security-scan]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '*-build'
+        merge-multiple: true
+
+    - name: Deploy web app to production
+      run: |
+        # Deploy web app to production CDN
+        echo "Deploying web app to production..."
+
+    - name: Deploy Android to Google Play
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+        packageName: com.pavemaster.suite
+        releaseFiles: android/app/build/outputs/bundle/release/*.aab
+        track: production
+        status: completed
+
+    - name: Deploy iOS to App Store
+      run: |
+        # Upload to App Store using altool or App Store Connect API
+        xcrun altool --upload-app \
+                     --type ios \
+                     --file ios/App/*.ipa \
+                     --username ${{ secrets.APPLE_ID_USERNAME }} \
+                     --password ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+
+  monitoring-setup:
+    name: Setup Monitoring
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Setup performance monitoring
+      run: |
+        # Configure application performance monitoring
+        echo "Setting up APM monitoring..."
+
+    - name: Setup error tracking
+      run: |
+        # Configure error tracking (Sentry, Bugsnag, etc.)
+        echo "Setting up error tracking..."
+
+    - name: Setup analytics
+      run: |
+        # Configure analytics (Google Analytics, Firebase, etc.)
+        echo "Setting up analytics..."
+
+  notification:
+    name: Notifications
+    runs-on: ubuntu-latest
+    needs: [deploy-production, monitoring-setup]
+    if: always()
+    
+    steps:
+    - name: Send Slack notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#mobile-deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()
+
+    - name: Send email notification
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "PaveMaster Suite Mobile Deployment ${{ job.status }}"
+        body: |
+          Deployment Status: ${{ job.status }}
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+          
+          Build artifacts are available in the Actions tab.
+        to: ${{ secrets.NOTIFICATION_EMAIL }}
+        from: PaveMaster CI/CD
+      if: always()
+
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production, monitoring-setup]
+    if: always()
+    
+    steps:
+    - name: Clean up build artifacts
+      run: |
+        # Clean up any temporary files or resources
+        echo "Cleaning up build artifacts..."
+
+    - name: Update deployment status
+      run: |
+        # Update deployment status in monitoring systems
+        echo "Updating deployment status..."

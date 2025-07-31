@@ -30,7 +30,59 @@
       "permissions": ["camera", "photos"]
     },
     "Geolocation": {
-      "permissions": ["location"]
+      "permissions": ["location", "coarseLocation"],
+      "accuracy": "high"
+    },
+    "Device": {
+      "permissions": ["device-info"]
+    },
+    "Haptics": {
+      "impactStyle": "medium"
+    },
+    "Network": {
+      "permissions": ["network-state"]
+    },
+    "PushNotifications": {
+      "permissions": ["receive", "alert", "badge", "sound"],
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "Storage": {
+      "group": "com.pavemaster.storage"
+    },
+    "Motion": {
+      "permissions": ["device-motion", "accelerometer", "gyroscope"]
+    },
+    "Filesystem": {
+      "permissions": ["read", "write", "create", "delete"]
+    },
+    "Share": {
+      "permissions": ["photos", "camera"]
+    },
+    "Toast": {},
+    "AppState": {},
+    "Keyboard": {
+      "resize": "body",
+      "style": "dark",
+      "resizeOnFullScreen": true
+    },
+    "App": {
+      "permissions": ["background-modes"]
+    },
+    "LocalNotifications": {
+      "permissions": ["receive", "alert", "badge", "sound"],
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#488AFF",
+      "sound": "beep.wav"
     }
+  },
+  "ios": {
+    "scheme": "PaveMaster Suite",
+    "backgroundColor": "#ffffff"
+  },
+  "android": {
+    "backgroundColor": "#ffffff",
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
   }
 }
