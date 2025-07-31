@@ -9,7 +9,7 @@ export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 // Input Props Interface
 export interface InputProps 
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   variant?: InputVariant;
   size?: InputSize;
   fullWidth?: boolean;
