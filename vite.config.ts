@@ -29,7 +29,7 @@ export default defineConfig(({ command, mode }) => {
     
     // Server configuration
     server: {
-      port: parseInt(env.VITE_DEV_PORT) || 3000,
+      port: 8080,
       open: true,
       proxy: {
         '/api': {
