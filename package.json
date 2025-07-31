@@ -27,7 +27,14 @@
     "test:e2e:ui": "playwright test --ui",
     "test:a11y": "axe-playwright",
     "test:performance": "echo 'Performance testing disabled - lighthouse-ci removed for security'",
-    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e"
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "analyze": "vite build --mode=analyze",
+    "build:performance": "vite build && npm run analyze",
+    "performance:audit": "node scripts/performance/lighthouse-audit.js",
+    "performance:test": "npm run performance:audit http://localhost:8080",
+    "cache:clear": "rm -rf node_modules/.vite && rm -rf dist",
+    "build:production": "npm run cache:clear && vite build --mode=production",
+    "serve:production": "vite preview --port 8080"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
@@ -130,18 +137,24 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-window": "^1.8.8",
+    "@types/sharp": "^0.31.1",
     "@vitejs/plugin-legacy": "^7.1.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "audit-ci": "^7.1.0",
     "autoprefixer": "^10.4.20",
     "axe-playwright": "^2.0.0",
+    "chrome-launcher": "^1.2.0",
     "crypto-js": "^4.2.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "happy-dom": "^15.11.7",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
     "jsdom": "^26.1.0",
+    "lighthouse": "^12.8.0",
     "lovable-tagger": "^1.1.7",
     "msw": "^2.10.4",
     "postcss": "^8.4.47",
@@ -154,7 +167,9 @@
     "vite-bundle-analyzer": "^0.7.0",
     "vite-plugin-compression2": "^2.2.0",
     "vite-plugin-html": "^3.2.2",
+    "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-pwa": "^1.0.2",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "web-vitals": "^5.1.0"
   }
 }
