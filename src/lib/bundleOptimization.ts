@@ -214,9 +214,10 @@ class IntelligentBundleLoader {
 
   private preloadCriticalBundles(): void {
     const criticalBundles = [
-      { name: 'ui-components', import: () => import('@/components/ui/button') },
-      { name: 'navigation', import: () => import('@/components/ui/card') },
-      { name: 'dashboard-widgets', import: () => import('@/components/ui/badge') },
+      { name: 'ui-components', import: () => import('@/components/ui/sidebar') },
+      // UI components were removed in main branch merge - keeping only available components
+      // { name: 'navigation', import: () => import('@/components/ui/card') },
+      // { name: 'dashboard-widgets', import: () => import('@/components/ui/badge') },
     ];
 
     criticalBundles.forEach(({ name, import: importFunc }) => {
