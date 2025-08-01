@@ -16,7 +16,8 @@ import {
   Map,
   DollarSign,
   UserCheck,
-  Wrench
+  Wrench,
+  Image as ImageIcon
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -40,6 +41,8 @@ const toolsItems = [
   { title: "Mapping", url: "/mapping", icon: Map },
   { title: "Weather", url: "/weather", icon: Cloud },
   { title: "Documents", url: "/documents", icon: FileText },
+  { title: "Photo Reports", url: "/photo-reports", icon: ImageIcon },
+  { title: "Notifications", url: "/notifications", icon: Bot },
   { title: "CRM", url: "/crm", icon: Users },
   { title: "Accounting", url: "/accounting", icon: DollarSign },
   { title: "Analytics", url: "/analytics", icon: BarChart },

@@ -26,6 +26,8 @@ import CRM from './pages/CRM';
 import Mapping from './pages/Mapping';
 import Accounting from './pages/Accounting';
 import AIKnowledge from './pages/AIKnowledge';
+import PhotoReports from './pages/PhotoReports';
+import Notifications from './pages/Notifications';
 
 export default function App() {
   return (
@@ -139,6 +141,16 @@ export default function App() {
             <Route path="/knowledge" element={
               <ProtectedRoute>
                 <AIKnowledge />
+              </ProtectedRoute>
+            } />
+            <Route path="/photo-reports" element={
+              <ProtectedRoute>
+                <PhotoReports />
+              </ProtectedRoute>
+            } />
+            <Route path="/notifications" element={
+              <ProtectedRoute>
+                <Notifications />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
