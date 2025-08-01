@@ -43,6 +43,7 @@ const toolsItems = [
 
 const advancedItems = [
   { title: "AI Assistant", url: "/ai-assistant", icon: Bot },
+  { title: "AI Knowledge", url: "/knowledge", icon: Bot },
   { title: "OverWatch", url: "/overwatch", icon: Shield },
 ];
 
