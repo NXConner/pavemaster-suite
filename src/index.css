@@ -5,18 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Pavement Performance Suite Design System - Enterprise Construction Theme
-All colors MUST be HSL.
+/* ISAC-OS Military Command & Control Design System - Maximum Tactical Potential
+All colors MUST be HSL. Military-grade interface with maximum situational awareness.
 */
 
 @layer base {
   :root {
+    /* Base System Variables */
     --background: 220 13% 98%;
     --foreground: 220 15% 15%;
-
     --card: 0 0% 100%;
     --card-foreground: 220 15% 15%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 15%;
 
@@ -31,13 +30,10 @@ All colors MUST be HSL.
 
     --muted: 220 13% 95%;
     --muted-foreground: 220 10% 45%;
-
     --accent: 213 84% 92%;
     --accent-foreground: 213 84% 22%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 32 95% 55%;
@@ -48,6 +44,42 @@ All colors MUST be HSL.
     --warning: 45 93% 58%;
     --warning-foreground: 0 0% 100%;
     --info: 213 84% 22%;
+    --info-foreground: 0 0% 100%;
+
+    /* ISAC-OS Tactical Interface Variables */
+    --isac-primary: 210 100% 50%;
+    --isac-secondary: 197 100% 45%;
+    --isac-accent: 280 100% 70%;
+    --isac-background: 210 25% 5%;
+    --isac-foreground: 0 0% 95%;
+    --isac-card: 210 25% 8%;
+    --isac-border: 210 50% 20%;
+
+    /* DEFCON Tactical Variables */
+    --defcon-critical: 0 100% 50%;
+    --defcon-warning: 45 100% 50%;
+    --defcon-operational: 120 100% 50%;
+    --defcon-background: 0 5% 10%;
+    --defcon-foreground: 0 0% 90%;
+
+    /* OverWatch Command Variables */
+    --overwatch-primary: 30 100% 50%;
+    --overwatch-secondary: 220 100% 50%;
+    --overwatch-accent: 300 100% 70%;
+    --overwatch-background: 220 15% 8%;
+    --overwatch-foreground: 0 0% 92%;
+
+    /* Military Grid & Tactical Elements */
+    --grid-primary: 210 100% 50%;
+    --grid-secondary: 197 100% 45%;
+    --grid-opacity: 0.3;
+    --tactical-glow: 210 100% 50%;
+    --tactical-pulse: 280 100% 70%;
+
+    /* Wallpaper & Environment */
+    --wallpaper-image: url('/wallpapers/tactical-grid-4k.jpg');
+    --wallpaper-overlay: 210 25% 5% / 0.8;
+    --wallpaper-blend: multiply;
     --info-foreground: 0 0% 100%;
 
     /* Construction Industry Gradients */
