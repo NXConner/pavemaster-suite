@@ -1,443 +1,375 @@
-#!/usr/bin/env node
-
 /**
- * API Documentation Generation Script
- * Generates OpenAPI/Swagger documentation and exports it to various formats
+ * API Documentation Generator for PaveMaster Suite
+ * Generates OpenAPI/Swagger documentation from JSDoc comments and route definitions
  */
 
+const swaggerJSDoc = require('swagger-jsdoc');
 const fs = require('fs');
 const path = require('path');
 
-// Since we're using ES modules in the main app, we'll create a simple version here
+// Swagger definition
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'Pavement Performance Suite API',
+    title: 'PaveMaster Suite API',
     version: '1.0.0',
-    description: 'Comprehensive API for asphalt paving and sealing business operations',
+    description: 'Comprehensive API documentation for the PaveMaster Suite - AI-assisted pavement analysis and performance tracking system',
     contact: {
-      name: 'API Support',
-      email: 'support@pavementperformance.com',
+      name: 'PaveMaster Support',
+      email: 'support@pavemaster.com',
+      url: 'https://pavemaster.com/support'
     },
     license: {
       name: 'MIT',
-      url: 'https://opensource.org/licenses/MIT',
-    },
+      url: 'https://opensource.org/licenses/MIT'
+    }
   },
   servers: [
     {
-      url: 'https://your-project.supabase.co/functions/v1',
-      description: 'Production server',
+      url: 'http://localhost:8080',
+      description: 'Development server'
     },
     {
-      url: 'http://localhost:54321/functions/v1',
-      description: 'Development server',
+      url: 'https://api.pavemaster.com',
+      description: 'Production server'
     },
+    {
+      url: 'https://staging-api.pavemaster.com',
+      description: 'Staging server'
+    }
   ],
   components: {
     securitySchemes: {
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
-        bearerFormat: 'JWT',
+        bearerFormat: 'JWT'
       },
       apiKey: {
         type: 'apiKey',
         in: 'header',
-        name: 'apikey',
-      },
+        name: 'X-API-Key'
+      }
     },
+    schemas: {
+      Error: {
+        type: 'object',
+        properties: {
+          error: {
+            type: 'string',
+            description: 'Error message'
+          },
+          code: {
+            type: 'string',
+            description: 'Error code'
+          },
+          details: {
+            type: 'object',
+            description: 'Additional error details'
+          }
+        }
+      },
+      User: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            description: 'Unique user identifier'
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'User email address'
+          },
+          name: {
+            type: 'string',
+            description: 'User full name'
+          },
+          role: {
+            type: 'string',
+            enum: ['admin', 'manager', 'crew', 'driver'],
+            description: 'User role in the system'
+          },
+          created_at: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Account creation timestamp'
+          },
+          updated_at: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Last update timestamp'
+          }
+        }
+      },
+      Project: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            description: 'Unique project identifier'
+          },
+          name: {
+            type: 'string',
+            description: 'Project name'
+          },
+          description: {
+            type: 'string',
+            description: 'Project description'
+          },
+          status: {
+            type: 'string',
+            enum: ['planning', 'in-progress', 'completed', 'on-hold'],
+            description: 'Current project status'
+          },
+          client_name: {
+            type: 'string',
+            description: 'Client name'
+          },
+          start_date: {
+            type: 'string',
+            format: 'date',
+            description: 'Project start date'
+          },
+          end_date: {
+            type: 'string',
+            format: 'date',
+            description: 'Project end date'
+          },
+          budget: {
+            type: 'number',
+            format: 'decimal',
+            description: 'Project budget'
+          },
+          created_at: {
+            type: 'string',
+            format: 'date-time'
+          },
+          updated_at: {
+            type: 'string',
+            format: 'date-time'
+          }
+        }
+      },
+      Equipment: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            description: 'Unique equipment identifier'
+          },
+          name: {
+            type: 'string',
+            description: 'Equipment name'
+          },
+          type: {
+            type: 'string',
+            description: 'Equipment type'
+          },
+          model: {
+            type: 'string',
+            description: 'Equipment model'
+          },
+          status: {
+            type: 'string',
+            enum: ['available', 'in-use', 'maintenance', 'retired'],
+            description: 'Current equipment status'
+          },
+          purchase_date: {
+            type: 'string',
+            format: 'date',
+            description: 'Equipment purchase date'
+          },
+          last_maintenance: {
+            type: 'string',
+            format: 'date',
+            description: 'Last maintenance date'
+          },
+          next_maintenance: {
+            type: 'string',
+            format: 'date',
+            description: 'Next scheduled maintenance date'
+          }
+        }
+      },
+      Vehicle: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            description: 'Unique vehicle identifier'
+          },
+          make: {
+            type: 'string',
+            description: 'Vehicle make'
+          },
+          model: {
+            type: 'string',
+            description: 'Vehicle model'
+          },
+          year: {
+            type: 'integer',
+            description: 'Vehicle year'
+          },
+          license_plate: {
+            type: 'string',
+            description: 'Vehicle license plate'
+          },
+          vin: {
+            type: 'string',
+            description: 'Vehicle identification number'
+          },
+          status: {
+            type: 'string',
+            enum: ['available', 'in-use', 'maintenance', 'retired'],
+            description: 'Current vehicle status'
+          },
+          assigned_driver: {
+            type: 'string',
+            format: 'uuid',
+            description: 'Assigned driver user ID'
+          },
+          mileage: {
+            type: 'integer',
+            description: 'Current vehicle mileage'
+          },
+          fuel_level: {
+            type: 'number',
+            format: 'decimal',
+            description: 'Current fuel level percentage'
+          },
+          gps_location: {
+            type: 'object',
+            properties: {
+              latitude: {
+                type: 'number',
+                format: 'decimal'
+              },
+              longitude: {
+                type: 'number',
+                format: 'decimal'
+              },
+              timestamp: {
+                type: 'string',
+                format: 'date-time'
+              }
+            }
+          }
+        }
+      }
+    }
   },
-  paths: {
-    '/ai-assistant': {
-      post: {
-        tags: ['AI & ML'],
-        summary: 'AI Assistant Chat',
-        description: 'Send messages to the AI assistant for business insights and recommendations',
-        security: [{ bearerAuth: [] }, { apiKey: [] }],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string', description: 'User message' },
-                  context: { 
-                    type: 'string', 
-                    enum: ['general', 'pavement', 'project', 'safety', 'finance'],
-                    description: 'Context for the AI assistant'
-                  },
-                  conversation: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      properties: {
-                        role: { type: 'string', enum: ['user', 'assistant'] },
-                        content: { type: 'string' },
-                      },
-                    },
-                  },
-                },
-                required: ['message'],
-              },
-            },
-          },
-        },
-        responses: {
-          200: {
-            description: 'AI assistant response',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    response: { type: 'string' },
-                    context: { type: 'string' },
-                  },
-                },
-              },
-            },
-          },
-          400: {
-            description: 'Bad request',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    error: { type: 'string' },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/voice-to-text': {
-      post: {
-        tags: ['Voice & Audio'],
-        summary: 'Voice to Text Transcription',
-        description: 'Convert audio recordings to text using AI transcription',
-        security: [{ bearerAuth: [] }, { apiKey: [] }],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  audio: { type: 'string', format: 'base64' },
-                },
-                required: ['audio'],
-              },
-            },
-          },
-        },
-        responses: {
-          200: {
-            description: 'Transcription result',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    text: { type: 'string' },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/text-to-speech': {
-      post: {
-        tags: ['Voice & Audio'],
-        summary: 'Text to Speech Conversion',
-        description: 'Convert text to speech audio using AI voice synthesis',
-        security: [{ bearerAuth: [] }, { apiKey: [] }],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  text: { type: 'string' },
-                  voice: { 
-                    type: 'string', 
-                    enum: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
-                  },
-                },
-                required: ['text'],
-              },
-            },
-          },
-        },
-        responses: {
-          200: {
-            description: 'Speech synthesis result',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    audioContent: { type: 'string', format: 'base64' },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-// Create docs directory if it doesn't exist
-const docsDir = path.join(process.cwd(), 'docs');
-if (!fs.existsSync(docsDir)) {
-  fs.mkdirSync(docsDir, { recursive: true });
-}
-
-// Generate API documentation files
-try {
-  // Generate swagger.json
-  const swaggerPath = path.join(docsDir, 'swagger.json');
-  fs.writeFileSync(swaggerPath, JSON.stringify(swaggerDefinition, null, 2));
-  console.log('✅ Generated swagger.json');
-
-  // Generate API documentation markdown
-  const markdownContent = generateMarkdownDocs(swaggerDefinition);
-  const markdownPath = path.join(docsDir, 'API_DOCUMENTATION.md');
-  fs.writeFileSync(markdownPath, markdownContent);
-  console.log('✅ Generated API_DOCUMENTATION.md');
-
-  // Generate Postman collection
-  const postmanCollection = generatePostmanCollection(swaggerDefinition);
-  const postmanPath = path.join(docsDir, 'Pavement_Performance_Suite.postman_collection.json');
-  fs.writeFileSync(postmanPath, JSON.stringify(postmanCollection, null, 2));
-  console.log('✅ Generated Postman collection');
-
-  console.log('\n🎉 API documentation generated successfully!');
-  console.log(`📁 Files created in: ${docsDir}`);
-  console.log('   - swagger.json (OpenAPI specification)');
-  console.log('   - API_DOCUMENTATION.md (Human-readable docs)');
-  console.log('   - Pavement_Performance_Suite.postman_collection.json (Postman collection)');
-  
-} catch (error) {
-  console.error('❌ Error generating API documentation:', error);
-  process.exit(1);
-}
-
-function generateMarkdownDocs(spec) {
-  return `# Pavement Performance Suite API Documentation
-
-## Overview
-${spec.info.description}
-
-**Version:** ${spec.info.version}  
-**Base URL:** ${spec.servers[0].url}
-
-## Authentication
-This API uses Bearer token authentication. Include your JWT token in the Authorization header:
-\`\`\`
-Authorization: Bearer YOUR_JWT_TOKEN
-\`\`\`
-
-Alternatively, you can use the API key in the header:
-\`\`\`
-apikey: YOUR_API_KEY
-\`\`\`
-
-## Endpoints
-
-### AI Assistant
-**POST** \`/ai-assistant\`
-
-Send messages to the AI assistant for business insights and recommendations.
-
-**Request Body:**
-\`\`\`json
-{
-  "message": "What's the optimal temperature for asphalt paving?",
-  "context": "pavement",
-  "conversation": [
+  security: [
     {
-      "role": "user",
-      "content": "Previous message"
+      bearerAuth: []
     }
   ]
+};
+
+// Options for swagger-jsdoc
+const options = {
+  definition: swaggerDefinition,
+  apis: [
+    './src/api/**/*.js',
+    './src/api/**/*.ts',
+    './src/routes/**/*.js',
+    './src/routes/**/*.ts',
+    './docs/api-examples.js'
+  ]
+};
+
+// Initialize swagger-jsdoc
+const specs = swaggerJSDoc(options);
+
+// Generate API documentation
+function generateApiDocs() {
+  const outputDir = './docs/api';
+  
+  // Create output directory if it doesn't exist
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Write OpenAPI spec to JSON file
+  const jsonPath = path.join(outputDir, 'openapi.json');
+  fs.writeFileSync(jsonPath, JSON.stringify(specs, null, 2));
+  
+  // Write OpenAPI spec to YAML file
+  const yaml = require('js-yaml');
+  const yamlPath = path.join(outputDir, 'openapi.yaml');
+  fs.writeFileSync(yamlPath, yaml.dump(specs));
+
+  // Generate HTML documentation
+  const swaggerUiAssetPath = path.join(outputDir, 'index.html');
+  const htmlTemplate = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaveMaster Suite API Documentation</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
+  <style>
+    html {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
+  <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: './openapi.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+    };
+  </script>
+</body>
+</html>
+  `;
+  
+  fs.writeFileSync(swaggerUiAssetPath, htmlTemplate);
+
+  console.log('✅ API documentation generated successfully!');
+  console.log(`📁 Output directory: ${outputDir}`);
+  console.log(`📄 JSON spec: ${jsonPath}`);
+  console.log(`📄 YAML spec: ${yamlPath}`);
+  console.log(`🌐 HTML docs: ${swaggerUiAssetPath}`);
 }
-\`\`\`
 
-**Response:**
-\`\`\`json
-{
-  "response": "Based on current conditions, optimal temperature is 70-85°F",
-  "context": "pavement"
-}
-\`\`\`
-
-### Voice to Text
-**POST** \`/voice-to-text\`
-
-Convert audio recordings to text using AI transcription.
-
-**Request Body:**
-\`\`\`json
-{
-  "audio": "BASE64_ENCODED_AUDIO_DATA"
-}
-\`\`\`
-
-**Response:**
-\`\`\`json
-{
-  "text": "Transcribed text from audio"
-}
-\`\`\`
-
-### Text to Speech
-**POST** \`/text-to-speech\`
-
-Convert text to speech audio using AI voice synthesis.
-
-**Request Body:**
-\`\`\`json
-{
-  "text": "Text to convert to speech",
-  "voice": "alloy"
-}
-\`\`\`
-
-**Response:**
-\`\`\`json
-{
-  "audioContent": "BASE64_ENCODED_AUDIO_CONTENT"
-}
-\`\`\`
-
-## Error Handling
-All endpoints return errors in the following format:
-\`\`\`json
-{
-  "error": "Error message description"
-}
-\`\`\`
-
-## Rate Limiting
-API calls are subject to rate limiting based on your subscription plan. Include appropriate error handling for 429 (Too Many Requests) responses.
-
-## Support
-For API support, contact: ${spec.info.contact.email}
-`;
+// Run the generator
+if (require.main === module) {
+  try {
+    generateApiDocs();
+  } catch (error) {
+    console.error('❌ Error generating API documentation:', error.message);
+    process.exit(1);
+  }
 }
 
-function generatePostmanCollection(spec) {
-  return {
-    info: {
-      name: 'Pavement Performance Suite API',
-      description: spec.info.description,
-      version: spec.info.version,
-      schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
-    },
-    auth: {
-      type: 'bearer',
-      bearer: [
-        {
-          key: 'token',
-          value: '{{jwt_token}}',
-          type: 'string',
-        },
-      ],
-    },
-    variable: [
-      {
-        key: 'base_url',
-        value: spec.servers[0].url,
-        type: 'string',
-      },
-      {
-        key: 'jwt_token',
-        value: 'YOUR_JWT_TOKEN',
-        type: 'string',
-      },
-    ],
-    item: [
-      {
-        name: 'AI Assistant',
-        request: {
-          method: 'POST',
-          header: [
-            {
-              key: 'Content-Type',
-              value: 'application/json',
-            },
-          ],
-          url: {
-            raw: '{{base_url}}/ai-assistant',
-            host: ['{{base_url}}'],
-            path: ['ai-assistant'],
-          },
-          body: {
-            mode: 'raw',
-            raw: JSON.stringify({
-              message: "What's the optimal temperature for asphalt paving?",
-              context: 'pavement',
-            }, null, 2),
-          },
-        },
-      },
-      {
-        name: 'Voice to Text',
-        request: {
-          method: 'POST',
-          header: [
-            {
-              key: 'Content-Type',
-              value: 'application/json',
-            },
-          ],
-          url: {
-            raw: '{{base_url}}/voice-to-text',
-            host: ['{{base_url}}'],
-            path: ['voice-to-text'],
-          },
-          body: {
-            mode: 'raw',
-            raw: JSON.stringify({
-              audio: 'BASE64_ENCODED_AUDIO_DATA',
-            }, null, 2),
-          },
-        },
-      },
-      {
-        name: 'Text to Speech',
-        request: {
-          method: 'POST',
-          header: [
-            {
-              key: 'Content-Type',
-              value: 'application/json',
-            },
-          ],
-          url: {
-            raw: '{{base_url}}/text-to-speech',
-            host: ['{{base_url}}'],
-            path: ['text-to-speech'],
-          },
-          body: {
-            mode: 'raw',
-            raw: JSON.stringify({
-              text: 'Asphalt temperature is optimal for paving operations.',
-              voice: 'alloy',
-            }, null, 2),
-          },
-        },
-      },
-    ],
-  };
-}
+module.exports = { generateApiDocs, specs };
