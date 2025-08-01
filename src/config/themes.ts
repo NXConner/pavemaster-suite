@@ -27,6 +27,105 @@ export interface ISACTheme {
   };
 }
 
+export interface IndustryTheme {
+  id: string;
+  name: string;
+  icon: string;
+  industry: string;
+  description: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    foreground: string;
+    muted: string;
+    border: string;
+  };
+  fonts: {
+    heading: string;
+    body: string;
+  };
+}
+
+export interface WallpaperImage {
+  id: string;
+  name: string;
+  url: string;
+  thumbnail?: string;
+  description: string;
+  resolution: string;
+  tags: string[];
+}
+
+export interface WallpaperCollection {
+  id: string;
+  name: string;
+  description: string;
+  images: WallpaperImage[];
+}
+
+export const INDUSTRY_THEMES: IndustryTheme[] = [
+  {
+    id: 'isac-os',
+    name: 'ISAC-OS Tactical',
+    icon: '🎯',
+    industry: 'Defense',
+    description: 'Military-grade interface for tactical operations',
+    colors: {
+      primary: 'hsl(200, 100%, 50%)',
+      secondary: 'hsl(120, 100%, 40%)',
+      accent: 'hsl(60, 100%, 50%)',
+      background: 'hsl(220, 15%, 8%)',
+      foreground: 'hsl(0, 0%, 95%)',
+      muted: 'hsl(0, 0%, 65%)',
+      border: 'hsl(200, 50%, 25%)',
+    },
+    fonts: {
+      heading: '"Inter", sans-serif',
+      body: '"Inter", sans-serif',
+    },
+  },
+  {
+    id: 'construction',
+    name: 'Construction Pro',
+    icon: '🚧',
+    industry: 'Construction',
+    description: 'Professional theme for construction and paving operations',
+    colors: {
+      primary: 'hsl(40, 80%, 50%)',
+      secondary: 'hsl(20, 70%, 45%)',
+      accent: 'hsl(0, 80%, 60%)',
+      background: 'hsl(40, 15%, 95%)',
+      foreground: 'hsl(20, 20%, 15%)',
+      muted: 'hsl(20, 10%, 60%)',
+      border: 'hsl(40, 20%, 80%)',
+    },
+    fonts: {
+      heading: '"Roboto", sans-serif',
+      body: '"Open Sans", sans-serif',
+    },
+  },
+];
+
+export const WALLPAPER_COLLECTIONS: WallpaperCollection[] = [
+  {
+    id: 'tactical',
+    name: 'Tactical Operations',
+    description: 'Professional military-grade backgrounds',
+    images: [
+      {
+        id: 'tactical-1',
+        name: 'Grid Pattern',
+        url: '/wallpapers/tactical-grid-4k.jpg',
+        description: 'Clean grid pattern for tactical displays',
+        resolution: '4K',
+        tags: ['grid', 'minimal', 'tactical'],
+      },
+    ],
+  },
+];
+
 export const ISAC_OS_THEME: ISACTheme = {
   id: 'isac-os',
   name: 'ISAC-OS Tactical',

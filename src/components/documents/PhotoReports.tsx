@@ -85,7 +85,7 @@ export default function PhotoReports() {
       const newFiles = Array.from(files);
       setNewReport(prev => ({
         ...prev,
-        photos: [...prev.photos, ...newFiles]
+        photos: [...prev.photos, ...newFiles.filter(file => file instanceof File)]
       }));
       toast.success(`Added ${newFiles.length} photo(s)`);
     }

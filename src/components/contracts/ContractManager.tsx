@@ -158,7 +158,7 @@ export default function ContractManager() {
         ? { 
             ...contract, 
             status,
-            signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : (contract.signed_date || undefined)
+            signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : contract.signed_date
           }
         : contract
     ));

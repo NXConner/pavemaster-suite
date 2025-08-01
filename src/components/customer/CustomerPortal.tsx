@@ -105,7 +105,7 @@ export default function CustomerPortal() {
       ...newEstimate,
       status: 'pending',
       submitted_date: new Date().toISOString().split('T')[0],
-      quoted_amount: undefined,
+      quoted_amount: undefined as number | undefined,
     };
 
     setEstimateRequests(prev => [request, ...prev]);

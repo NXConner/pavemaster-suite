@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
-  Users, 
+  Users,
+  Bot,
   Truck, 
   Building, 
   Calculator,
@@ -9,7 +10,6 @@ import {
   BarChart,
   Settings,
   Home,
-  Bot,
   Shield,
   Cloud,
   FileText,
