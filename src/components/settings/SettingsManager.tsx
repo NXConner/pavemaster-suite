@@ -10,9 +10,10 @@ import {
   RefreshCw,
   Save
 } from 'lucide-react';
-import { ThemeSwitcher } from "../ui/theme-switcher";
+
 import { JargonSwitcher } from "../ui/jargon-switcher";
 import { SystemStatus } from "../system/SystemStatus";
+import { AdvancedThemeSwitcher } from "../themes/AdvancedThemeSwitcher";
 import { useJargon } from "../../contexts/JargonContext";
 
 export function SettingsManager() {
@@ -56,13 +57,14 @@ export function SettingsManager() {
         </div>
       </div>
 
-      <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="general">{getText('general')}</TabsTrigger>
-          <TabsTrigger value="security">{getText('security')}</TabsTrigger>
-          <TabsTrigger value="system">System Status</TabsTrigger>
-          <TabsTrigger value="themes">Themes</TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="general" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="general">{getText('general')}</TabsTrigger>
+            <TabsTrigger value="security">{getText('security')}</TabsTrigger>
+            <TabsTrigger value="system">System Status</TabsTrigger>
+            <TabsTrigger value="themes">Visual Themes</TabsTrigger>
+            <TabsTrigger value="terminology">Terminology</TabsTrigger>
+          </TabsList>
 
         <TabsContent value="general" className="space-y-6">
           <Card>
@@ -195,25 +197,23 @@ export function SettingsManager() {
           <SystemStatus />
         </TabsContent>
 
-        <TabsContent value="themes" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Visual Interface Configuration</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ThemeSwitcher />
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Terminology & Communication</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <JargonSwitcher />
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <TabsContent value="themes" className="space-y-6">
+            <AdvancedThemeSwitcher />
+          </TabsContent>
+
+          <TabsContent value="terminology" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Communication & Terminology</CardTitle>
+                <CardDescription>
+                  Configure how the application communicates with different user types
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <JargonSwitcher />
+              </CardContent>
+            </Card>
+          </TabsContent>
       </Tabs>
     </div>
   );
