@@ -1,0 +1,79 @@
+{
+  "name": "PaveMaster Suite",
+  "short_name": "PaveMaster",
+  "description": "Professional pavement performance management suite",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["business", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard Overview"
+    },
+    {
+      "src": "/screenshots/mobile-dashboard.png", 
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View main dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icons/dashboard-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects", 
+      "description": "Manage projects",
+      "url": "/projects",
+      "icons": [{ "src": "/icons/projects-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Mobile Tools",
+      "short_name": "Mobile",
+      "description": "Field operations",
+      "url": "/mobile",
+      "icons": [{ "src": "/icons/mobile-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icons/pwa-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "dir": "ltr"
+}

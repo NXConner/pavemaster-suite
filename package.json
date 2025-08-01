@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "build:mobile": "vite build --mode production && npx cap sync",
     "mobile:sync": "npx cap sync",
-    "mobile:build": "npm run build && npx cap sync",
+    "mobile:build": "vite build",
     "mobile:ios": "npm run mobile:build && npx cap open ios",
     "mobile:android": "npm run mobile:build && npx cap open android",
     "mobile:ios:dev": "npx cap run ios",
@@ -34,7 +34,12 @@
     "performance:test": "npm run performance:audit http://localhost:8080",
     "cache:clear": "rm -rf node_modules/.vite && rm -rf dist",
     "build:production": "npm run cache:clear && vite build --mode=production",
-    "serve:production": "vite preview --port 8080"
+    "serve:production": "vite preview --port 8080",
+    "mobile:dev": "vite --host 0.0.0.0 --port 8080",
+    "mobile:preview": "vite preview --host 0.0.0.0",
+    "pwa:dev": "vite --https",
+    "pwa:build": "vite build",
+    "lighthouse": "lighthouse http://localhost:8080 --output=html --output-path=./lighthouse-report.html"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
@@ -122,6 +127,10 @@
     "tailwindcss-animate": "^1.0.7",
     "traverse": "^0.6.9",
     "vaul": "^0.9.3",
+    "workbox-background-sync": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0",
     "zod": "^3.23.8",
     "zustand": "^5.0.6"
   },
@@ -138,6 +147,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/react-window": "^1.8.8",
     "@types/sharp": "^0.31.1",
+    "@vite-pwa/assets-generator": "^1.0.0",
     "@vitejs/plugin-legacy": "^7.1.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "audit-ci": "^7.1.0",
@@ -170,6 +180,7 @@
     "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-pwa": "^1.0.2",
     "vitest": "^3.2.4",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "workbox-window": "^7.3.0"
   }
 }
