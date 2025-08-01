@@ -14,7 +14,8 @@ import {
   Users,
   Archive
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { CardDescription } from "../ui/card";
 import { Switch } from "../ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
