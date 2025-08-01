@@ -562,7 +562,7 @@ ${report.recommendations.map(rec => rec).join('\n')}
 }
 
 // CLI execution
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const optimizer = new DependencyOptimizer();
   
   optimizer.optimize()

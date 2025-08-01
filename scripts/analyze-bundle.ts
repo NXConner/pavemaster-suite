@@ -463,7 +463,7 @@ ${analysis.recommendations.map(rec => `${rec}`).join('\n')}
 }
 
 // CLI execution
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const analyzer = new BundleAnalyzer();
   
   analyzer.analyze()

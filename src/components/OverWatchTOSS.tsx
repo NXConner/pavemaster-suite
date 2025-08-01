@@ -60,7 +60,7 @@ import { useSpring, animated } from 'react-spring';
 
 // Advanced Services Integration
 import { advancedAIService } from '@/services/advancedAIService';
-import { quantumComputingService } from '@/services/quantumComputingService';
+// import { quantumComputingService } from '@/services/quantumComputingService';
 import { performanceMonitoringService } from '@/services/performanceMonitoringService';
 import { zeroTrustSecurityService } from '@/services/zeroTrustSecurityService';
 import { iotEdgeComputingService } from '@/services/iotEdgeComputingService';
