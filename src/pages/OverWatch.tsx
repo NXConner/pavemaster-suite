@@ -3,7 +3,8 @@ import { DashboardLayout } from '../components/layout/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { Eye, Activity, Shield, Zap, AlertTriangle, CheckCircle, Users, Truck } from 'lucide-react';
+import { MapView } from '../components/tracking/MapView';
+import { Eye, Activity, Shield, Zap, AlertTriangle, CheckCircle, Users, Truck, MapPin } from 'lucide-react';
 
 interface SystemStatus {
   name: string;
@@ -178,6 +179,52 @@ export default function OverWatch() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Live Tracking Map */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Live Surveillance Map
+            </CardTitle>
+            <CardDescription>Real-time tracking and monitoring dashboard</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MapView 
+              devices={[
+                {
+                  id: '1',
+                  name: 'Alpha Unit',
+                  type: 'vehicle',
+                  latitude: 37.7749,
+                  longitude: -122.4194,
+                  status: 'online',
+                  lastUpdate: '30 sec ago',
+                  speed: 25,
+                  heading: 180
+                },
+                {
+                  id: '2',
+                  name: 'Crew Leader',
+                  type: 'employee',
+                  latitude: 37.7849,
+                  longitude: -122.4094,
+                  status: 'online',
+                  lastUpdate: '1 min ago'
+                },
+                {
+                  id: '3',
+                  name: 'Equipment-01',
+                  type: 'equipment',
+                  latitude: 37.7649,
+                  longitude: -122.4294,
+                  status: 'idle',
+                  lastUpdate: '5 min ago'
+                }
+              ]}
+            />
+          </CardContent>
+        </Card>
 
         {/* Command Center */}
         <Card>
