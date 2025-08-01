@@ -1,4 +1,5 @@
 import { AppSidebar } from "./app-sidebar";
+import { TacticalHUD } from "../tactical/TacticalHUD";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {children}
         </div>
       </main>
+      <TacticalHUD />
     </div>
   );
 }
