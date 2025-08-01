@@ -17,6 +17,10 @@ import Tracking from './pages/Tracking';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import Weather from './pages/Weather';
+import Materials from './pages/Materials';
+import Team from './pages/Team';
+import Safety from './pages/Safety';
+import Finance from './pages/Finance';
 
 export default function App() {
   return (
@@ -85,6 +89,26 @@ export default function App() {
             <Route path="/weather" element={
               <ProtectedRoute>
                 <Weather />
+              </ProtectedRoute>
+            } />
+            <Route path="/materials" element={
+              <ProtectedRoute>
+                <Materials />
+              </ProtectedRoute>
+            } />
+            <Route path="/team" element={
+              <ProtectedRoute>
+                <Team />
+              </ProtectedRoute>
+            } />
+            <Route path="/safety" element={
+              <ProtectedRoute>
+                <Safety />
+              </ProtectedRoute>
+            } />
+            <Route path="/finance" element={
+              <ProtectedRoute>
+                <Finance />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
