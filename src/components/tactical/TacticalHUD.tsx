@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Alert, AlertTriangle, Shield, Activity, Clock } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Shield, Activity, Clock } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -19,7 +19,7 @@ export function TacticalHUD() {
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'critical': return <AlertTriangle className="h-4 w-4" />;
-      case 'warning': return <Alert className="h-4 w-4" />;
+      case 'warning': return <AlertCircle className="h-4 w-4" />;
       default: return <Activity className="h-4 w-4" />;
     }
   };

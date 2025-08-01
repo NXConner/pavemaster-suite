@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { commandService, TacticalAlert, MissionStatus } from '../services/tactical/commandService';
+import { commandService, type TacticalAlert, type MissionStatus } from '../services/tactical/commandService';
 import { apiService } from '../services/api/apiService';
 
 export function useTacticalData() {

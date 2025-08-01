@@ -1,5 +1,3 @@
-import { supabase } from '../../integrations/supabase/client';
-
 export interface TacticalAlert {
   id: string;
   type: 'critical' | 'warning' | 'info';
@@ -20,118 +18,113 @@ export interface MissionStatus {
 }
 
 export class CommandService {
-  // Real-time alert system
-  async getActiveAlerts(): Promise<TacticalAlert[]> {
-    try {
-      const { data, error } = await supabase
-        .from('tactical_alerts')
-        .select('*')
-        .eq('acknowledged', false)
-        .order('timestamp', { ascending: false });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Failed to fetch alerts:', error);
-      return [];
+  private mockAlerts: TacticalAlert[] = [
+    {
+      id: '1',
+      type: 'critical',
+      message: 'Equipment failure detected on Truck Alpha',
+      source: 'equipment',
+      timestamp: new Date().toISOString(),
+      acknowledged: false
+    },
+    {
+      id: '2',
+      type: 'warning',
+      message: 'Weather conditions not optimal for operations',
+      source: 'system',
+      timestamp: new Date().toISOString(),
+      acknowledged: false
     }
+  ];
+
+  private mockMissions: MissionStatus[] = [
+    {
+      id: '1',
+      name: 'Parking Lot Sealcoating - Main Church',
+      status: 'active',
+      priority: 'high',
+      assignedPersonnel: ['crew-1', 'crew-2'],
+      location: { lat: 38.9072, lng: -77.0369 },
+      progress: 65
+    },
+    {
+      id: '2',
+      name: 'Line Striping - Community Center',
+      status: 'planning',
+      priority: 'medium',
+      assignedPersonnel: ['crew-3'],
+      location: { lat: 38.9072, lng: -77.0369 },
+      progress: 25
+    }
+  ];
+
+  // Mock alert system
+  async getActiveAlerts(): Promise<TacticalAlert[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(this.mockAlerts.filter(a => !a.acknowledged)), 100);
+    });
   }
 
   async acknowledgeAlert(alertId: string): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('tactical_alerts')
-        .update({ acknowledged: true })
-        .eq('id', alertId);
-      
-      return !error;
-    } catch (error) {
-      console.error('Failed to acknowledge alert:', error);
-      return false;
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const alert = this.mockAlerts.find(a => a.id === alertId);
+        if (alert) {
+          alert.acknowledged = true;
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }, 100);
+    });
   }
 
-  // Mission tracking
+  // Mock mission tracking
   async getMissionStatus(): Promise<MissionStatus[]> {
-    try {
-      const { data, error } = await supabase
-        .from('missions')
-        .select('*')
-        .order('priority', { ascending: false });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Failed to fetch mission status:', error);
-      return [];
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(this.mockMissions), 100);
+    });
   }
 
   async updateMissionProgress(missionId: string, progress: number): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('missions')
-        .update({ progress, updated_at: new Date().toISOString() })
-        .eq('id', missionId);
-      
-      return !error;
-    } catch (error) {
-      console.error('Failed to update mission progress:', error);
-      return false;
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const mission = this.mockMissions.find(m => m.id === missionId);
+        if (mission) {
+          mission.progress = progress;
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }, 100);
+    });
   }
 
-  // Personnel tracking
+  // Mock personnel tracking
   async getPersonnelStatus(): Promise<any[]> {
-    try {
-      const { data, error } = await supabase
-        .from('personnel_status')
-        .select('*')
-        .order('last_update', { ascending: false });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Failed to fetch personnel status:', error);
-      return [];
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([]), 100);
+    });
   }
 
-  // Equipment monitoring
+  // Mock equipment monitoring
   async getEquipmentStatus(): Promise<any[]> {
-    try {
-      const { data, error } = await supabase
-        .from('equipment_status')
-        .select('*')
-        .order('last_maintenance', { ascending: true });
-      
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Failed to fetch equipment status:', error);
-      return [];
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([]), 100);
+    });
   }
 
-  // Real-time subscriptions
-  subscribeToAlerts(callback: (alert: TacticalAlert) => void) {
-    return supabase
-      .channel('tactical_alerts')
-      .on('postgres_changes', 
-        { event: 'INSERT', schema: 'public', table: 'tactical_alerts' },
-        (payload) => callback(payload.new as TacticalAlert)
-      )
-      .subscribe();
+  // Mock subscriptions (return dummy subscription objects)
+  subscribeToAlerts(_callback: (alert: TacticalAlert) => void) {
+    return {
+      unsubscribe: () => console.log('Unsubscribed from alerts')
+    };
   }
 
-  subscribeToMissionUpdates(callback: (mission: MissionStatus) => void) {
-    return supabase
-      .channel('mission_updates')
-      .on('postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'missions' },
-        (payload) => callback(payload.new as MissionStatus)
-      )
-      .subscribe();
+  subscribeToMissionUpdates(_callback: (mission: MissionStatus) => void) {
+    return {
+      unsubscribe: () => console.log('Unsubscribed from missions')
+    };
   }
 }
 
