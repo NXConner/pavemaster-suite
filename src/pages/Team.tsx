@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Badge } from "../components/ui/badge";
 import { Avatar, AvatarFallback } from "../components/ui/avatar";
+import { EmployeeProfileForm } from "../components/employee/EmployeeProfileForm";
 import { Users, UserPlus, Calendar, Clock, Phone, Mail, MapPin, Award } from "lucide-react";
 
 interface TeamMember {
@@ -42,6 +43,7 @@ export default function Team() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
 
   const teamMembers: TeamMember[] = [
     {
@@ -178,6 +180,31 @@ export default function Team() {
       default: return 'Unknown';
     }
   };
+
+  if (selectedEmployee) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setSelectedEmployee(null)}
+            >
+              ← Back to Team
+            </Button>
+            <h1 className="text-2xl font-bold">Employee Profile</h1>
+          </div>
+          <EmployeeProfileForm 
+            employeeId={selectedEmployee} 
+            onSave={(data) => {
+              console.log('Employee data saved:', data);
+              setSelectedEmployee(null);
+            }}
+          />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -353,7 +380,13 @@ export default function Team() {
                         <div className="text-lg font-semibold">${member.hourlyRate}/hr</div>
                         <div className="text-sm text-muted-foreground">{member.yearsExperience} years exp.</div>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">Edit</Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setSelectedEmployee(member.id)}
+                          >
+                            Manage
+                          </Button>
                           <Button variant="outline" size="sm">Schedule</Button>
                         </div>
                       </div>

@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { DashboardLayout } from "../components/layout/dashboard-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { VehicleDetailsForm } from "../components/vehicle/VehicleDetailsForm";
 import { 
   Truck, 
   MapPin, 
@@ -10,7 +13,10 @@ import {
   Shield,
   Clock,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  Wrench,
+  FileText,
+  Plus
 } from "lucide-react";
 
 interface Vehicle {
@@ -84,21 +90,55 @@ const getStatusText = (status: string) => {
 };
 
 export default function Fleet() {
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('overview');
+
+  if (selectedVehicle) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setSelectedVehicle(null)}
+            >
+              ← Back to Fleet
+            </Button>
+            <h1 className="text-2xl font-bold">Vehicle Details</h1>
+          </div>
+          <VehicleDetailsForm 
+            vehicleId={selectedVehicle} 
+            onSave={(data) => {
+              console.log('Vehicle data saved:', data);
+              setSelectedVehicle(null);
+            }}
+          />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Fleet Operations</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Fleet Command Center</h1>
             <p className="text-muted-foreground">
-              Real-time fleet tracking and management
+              Comprehensive fleet management, tracking, and maintenance
             </p>
           </div>
-          <Button className="gap-2">
-            <MapPin className="h-4 w-4" />
-            Live Map
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Vehicle
+            </Button>
+            <Button className="gap-2">
+              <MapPin className="h-4 w-4" />
+              Live Map
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -148,8 +188,29 @@ export default function Fleet() {
           </Card>
         </div>
 
-        {/* Live Vehicle Tracking */}
-        <Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview" className="gap-2">
+              <Truck className="h-4 w-4" />
+              Live Tracking
+            </TabsTrigger>
+            <TabsTrigger value="maintenance" className="gap-2">
+              <Wrench className="h-4 w-4" />
+              Maintenance
+            </TabsTrigger>
+            <TabsTrigger value="inspections" className="gap-2">
+              <CheckCircle className="h-4 w-4" />
+              Inspections
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="gap-2">
+              <FileText className="h-4 w-4" />
+              Documents
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            {/* Live Vehicle Tracking */}
+            <Card>
           <CardHeader>
             <CardTitle>Live Vehicle Tracking</CardTitle>
             <CardDescription>Real-time positions and status updates</CardDescription>
@@ -250,25 +311,120 @@ export default function Fleet() {
                       )}
                     </div>
                     
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="gap-1">
-                        <MapPin className="h-3 w-3" />
-                        Track
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1">
-                        <Navigation className="h-3 w-3" />
-                        Navigate
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Contact
-                      </Button>
-                    </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="gap-1">
+                          <MapPin className="h-3 w-3" />
+                          Track
+                        </Button>
+                        <Button variant="outline" size="sm" className="gap-1">
+                          <Navigation className="h-3 w-3" />
+                          Navigate
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setSelectedVehicle(vehicle.id)}
+                        >
+                          Manage
+                        </Button>
+                      </div>
                   </div>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
+          </TabsContent>
+
+          <TabsContent value="maintenance" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Maintenance Schedule</CardTitle>
+                <CardDescription>Upcoming and overdue maintenance for all vehicles</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border rounded-lg border-red-200 bg-red-50">
+                    <div className="flex items-center gap-3">
+                      <AlertTriangle className="h-5 w-5 text-red-600" />
+                      <div>
+                        <div className="font-medium">Truck Alpha-1 - Oil Change</div>
+                        <div className="text-sm text-muted-foreground">Overdue by 500 miles</div>
+                      </div>
+                    </div>
+                    <Badge variant="destructive">Overdue</Badge>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 border rounded-lg border-yellow-200 bg-yellow-50">
+                    <div className="flex items-center gap-3">
+                      <Clock className="h-5 w-5 text-yellow-600" />
+                      <div>
+                        <div className="font-medium">Service Van Charlie-1 - Brake Inspection</div>
+                        <div className="text-sm text-muted-foreground">Due in 3 days</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="border-yellow-600 text-yellow-600">Due Soon</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="inspections" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Vehicle Inspections</CardTitle>
+                <CardDescription>Daily, weekly, and annual inspection records</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <div>
+                        <div className="font-medium">Daily Inspection - Truck Alpha-1</div>
+                        <div className="text-sm text-muted-foreground">Completed today at 7:00 AM</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="border-green-600 text-green-600">Passed</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="documents" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Fleet Documents</CardTitle>
+                <CardDescription>Registration, insurance, and certification documents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Card className="p-4">
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-8 w-8 text-blue-600" />
+                      <div>
+                        <h4 className="font-medium">Vehicle Registrations</h4>
+                        <p className="text-sm text-muted-foreground">All vehicle registration documents</p>
+                      </div>
+                    </div>
+                  </Card>
+                  
+                  <Card className="p-4">
+                    <div className="flex items-center gap-3">
+                      <Shield className="h-8 w-8 text-green-600" />
+                      <div>
+                        <h4 className="font-medium">Insurance Policies</h4>
+                        <p className="text-sm text-muted-foreground">Current insurance certificates</p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Fleet Summary */}
         <div className="grid gap-6 md:grid-cols-2">
