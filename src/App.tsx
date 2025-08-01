@@ -4,6 +4,9 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import Index from './pages/Index';
 import Auth from './pages/Auth';
 import Projects from './pages/Projects';
+import Equipment from './pages/Equipment';
+import Fleet from './pages/Fleet';
+import Employees from './pages/Employees';
 
 export default function App() {
   return (
@@ -20,6 +23,21 @@ export default function App() {
             <Route path="/projects" element={
               <ProtectedRoute>
                 <Projects />
+              </ProtectedRoute>
+            } />
+            <Route path="/equipment" element={
+              <ProtectedRoute>
+                <Equipment />
+              </ProtectedRoute>
+            } />
+            <Route path="/fleet" element={
+              <ProtectedRoute>
+                <Fleet />
+              </ProtectedRoute>
+            } />
+            <Route path="/employees" element={
+              <ProtectedRoute>
+                <Employees />
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />
