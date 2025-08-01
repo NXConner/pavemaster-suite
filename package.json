@@ -16,7 +16,6 @@
     "mobile:android:dev": "npx cap run android",
     "mobile:live-reload": "npx cap run ios --livereload --external",
     "mobile:live-reload:android": "npx cap run android --livereload --external",
-    "analyze-bundle": "npx vite-bundle-analyzer dist/stats.json",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "preview": "vite preview",
@@ -26,8 +25,14 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:a11y": "axe-playwright",
-    "test:performance": "echo 'Performance testing disabled - lighthouse-ci removed for security'",
-    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e"
+    "test:all": "npm run test:enhanced && npm run test:e2e",
+    "analyze:bundle": "tsx scripts/analyze-bundle.ts",
+    "analyze:security": "npm audit && npm run analyze:bundle",
+    "optimize:deps": "tsx scripts/optimize-dependencies.ts",
+    "optimize:all": "npm run optimize:deps && npm run analyze:bundle && npm run analyze:security",
+    "performance:monitor": "npm run build && npm run analyze:bundle",
+    "test:enhanced": "vitest --config vitest.config.enhanced.ts",
+    "quality:full": "npm run lint && npm run type-check && npm run test:enhanced && npm run optimize:all"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
@@ -91,7 +96,7 @@
     "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "@tensorflow/tfjs-converter": "^4.22.0",
-    "@tensorflow/tfjs-vis": "^1.5.1",
+    "@tensorflow/tfjs-vis": "^1.1.0",
     "@types/crypto-js": "^4.2.2",
     "@types/d3": "^7.4.3",
     "@types/react-beautiful-dnd": "^13.1.8",
@@ -159,6 +164,7 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "tailwindcss": "^3.4.11",
     "terser": "^5.43.1",
+    "tsx": "^4.20.3",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^7.0.6",
@@ -167,5 +173,19 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.0.2",
     "vitest": "^3.2.4"
+  },
+  "optimizationMetadata": {
+    "lastOptimized": "2025-08-01T01:42:50.319Z",
+    "optimizationScore": 0,
+    "recommendations": [
+      "📦 Bundle size is large - consider tree shaking and dependency alternatives",
+      "🔄 Many dependencies are outdated - schedule regular updates",
+      "⚡ Use dynamic imports for large, non-critical dependencies"
+    ],
+    "savings": {
+      "size": 404693844,
+      "vulnerabilities": 0,
+      "dependencies": 136
+    }
   }
 }

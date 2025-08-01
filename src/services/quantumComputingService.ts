@@ -2455,11 +2455,11 @@ export class QuantumPavementOptimizer {
     this.applyQuantumEvolution(quantumState, materialProperties);
     
     // Execute quantum simulation
-    const propagationResult = await this.simulateQuantumEvolution(
-      this.quantumCircuit,
-      timeSteps: 100,
-      precision: 1e-6
-    );
+          const propagationResult = await this.simulateQuantumEvolution(
+        this.quantumCircuit,
+        100,
+        1e-6
+      );
 
     return {
       propagationVector: propagationResult.vector,
@@ -2525,7 +2525,7 @@ export class QuantumPavementOptimizer {
     );
 
     // Train quantum support vector machine
-    const qsvm = new QuantumSVM(featureMap, kernelType: 'quantum');
+          const qsvm = new QuantumSVM(featureMap, { kernelType: 'quantum' });
     await qsvm.train(this.getHistoricalMixData());
 
     // Optimize mix design using variational quantum eigensolver
@@ -2568,10 +2568,10 @@ export class QuantumPavementOptimizer {
     );
 
     // Apply quantum amplitude estimation
-    const failureProbabilities = await this.estimateFailureProbabilities(
-      quantumModel,
-      precision: 0.001
-    );
+          const failureProbabilities = await this.estimateFailureProbabilities(
+        quantumModel,
+        0.001
+      );
 
     // Optimize maintenance schedule using quantum optimization
     const schedulingProblem = this.formulateSchedulingQUBO(
