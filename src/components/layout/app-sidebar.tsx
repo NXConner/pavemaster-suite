@@ -12,7 +12,8 @@ import {
   Bot,
   Shield,
   Cloud,
-  FileText
+  FileText,
+  Map
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -32,6 +33,7 @@ const toolsItems = [
   { title: "Estimates", url: "/estimates", icon: Calculator },
   { title: "Schedule", url: "/schedule", icon: Calendar },
   { title: "Tracking", url: "/tracking", icon: MapPin },
+  { title: "Mapping", url: "/mapping", icon: Map },
   { title: "Weather", url: "/weather", icon: Cloud },
   { title: "Documents", url: "/documents", icon: FileText },
   { title: "CRM", url: "/crm", icon: Users },

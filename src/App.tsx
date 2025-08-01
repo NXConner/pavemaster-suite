@@ -23,6 +23,7 @@ import Safety from './pages/Safety';
 import Finance from './pages/Finance';
 import Documents from './pages/Documents';
 import CRM from './pages/CRM';
+import Mapping from './pages/Mapping';
 
 export default function App() {
   return (
@@ -121,6 +122,11 @@ export default function App() {
             <Route path="/crm" element={
               <ProtectedRoute>
                 <CRM />
+              </ProtectedRoute>
+            } />
+            <Route path="/mapping" element={
+              <ProtectedRoute>
+                <Mapping />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
