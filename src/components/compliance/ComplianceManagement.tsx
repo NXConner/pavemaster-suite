@@ -91,6 +91,7 @@ export const ComplianceManagement = () => {
     thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
     
     return certifications.filter(cert => {
+      if (!cert.expiry_date) return false;
       const expiryDate = new Date(cert.expiry_date);
       return expiryDate <= thirtyDaysFromNow && cert.status === 'active';
     });
@@ -190,7 +191,7 @@ export const ComplianceManagement = () => {
                   <div>
                     <p className="font-medium">{cert.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Expires: {new Date(cert.expiry_date).toLocaleDateString()}
+                      Expires: {cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                   <Badge variant="outline" className="text-warning border-warning">
@@ -217,7 +218,7 @@ export const ComplianceManagement = () => {
                   <div>
                     <p className="font-medium">Violation #{violation.id.slice(0, 8)}</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date(violation.violation_date).toLocaleDateString()}
+                      {violation.violation_date ? new Date(violation.violation_date).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                   <Badge variant={violation.resolved ? 'secondary' : 'destructive'}>
@@ -304,7 +305,7 @@ export const ComplianceManagement = () => {
                     {violation.description || `Violation #${violation.id.slice(0, 8)}`}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(violation.violation_date).toLocaleDateString()} • 
+                    {violation.violation_date ? new Date(violation.violation_date).toLocaleDateString() : 'N/A'} • 
                     Points: {violation.points_deducted}
                   </p>
                 </div>
@@ -355,11 +356,11 @@ export const ComplianceManagement = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Issue Date:</span>
-                  <span>{new Date(cert.issue_date).toLocaleDateString()}</span>
+                  <span>{cert.issue_date ? new Date(cert.issue_date).toLocaleDateString() : 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Expiry Date:</span>
-                  <span>{new Date(cert.expiry_date).toLocaleDateString()}</span>
+                  <span>{cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString() : 'N/A'}</span>
                 </div>
               </div>
               

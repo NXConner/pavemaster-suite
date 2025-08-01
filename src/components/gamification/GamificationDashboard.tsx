@@ -8,10 +8,8 @@ import {
   Trophy, 
   Star, 
   Award, 
-  Target, 
   TrendingUp, 
   Users, 
-  Calendar,
   Gift,
   Medal,
   Crown
@@ -20,32 +18,32 @@ import { supabase } from '../../integrations/supabase/client';
 
 interface Achievement {
   id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  achieved_at: string;
+  user_id: string | null;
+  title: string | null;
+  description: string | null;
+  achieved_at: string | null;
 }
 
 interface Badge {
   id: string;
-  user_id: string;
-  name: string;
-  description: string;
-  awarded_at: string;
+  user_id: string | null;
+  name: string | null;
+  description: string | null;
+  awarded_at: string | null;
 }
 
 interface LeaderboardEntry {
   user_id: string;
-  points: number;
-  last_updated: string;
+  points: number | null;
+  last_updated: string | null;
 }
 
 interface Reward {
   id: string;
-  user_id: string;
-  description: string;
-  reward_type: string;
-  awarded_at: string;
+  user_id: string | null;
+  description: string | null;
+  reward_type: string | null;
+  awarded_at: string | null;
 }
 
 export const GamificationDashboard = () => {
@@ -81,9 +79,9 @@ export const GamificationDashboard = () => {
   };
 
   const OverviewDashboard = () => {
-    const totalPoints = leaderboard.reduce((sum, entry) => sum + entry.points, 0);
-    const averagePoints = totalPoints / leaderboard.length || 0;
-    const topPerformer = leaderboard.sort((a, b) => b.points - a.points)[0];
+    const totalPoints = leaderboard.reduce((sum, entry) => sum + (entry.points || 0), 0);
+    const validEntries = leaderboard.filter(entry => entry.points !== null);
+    const sortedLeaderboard = validEntries.sort((a, b) => (b.points || 0) - (a.points || 0));
 
     return (
       <div className="space-y-6">
@@ -138,7 +136,7 @@ export const GamificationDashboard = () => {
               Top Performers
             </h3>
             <div className="space-y-4">
-              {leaderboard.slice(0, 5).map((entry, index) => (
+              {sortedLeaderboard.slice(0, 5).map((entry, index) => (
                 <div key={entry.user_id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold ${
@@ -151,7 +149,7 @@ export const GamificationDashboard = () => {
                     </div>
                     <div>
                       <p className="font-medium">Employee {entry.user_id.slice(0, 8)}</p>
-                      <p className="text-sm text-muted-foreground">{entry.points} points</p>
+                      <p className="text-sm text-muted-foreground">{entry.points || 0} points</p>
                     </div>
                   </div>
                   {index < 3 && (
@@ -178,10 +176,10 @@ export const GamificationDashboard = () => {
                     <Star className="h-5 w-5 text-success" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">{achievement.title}</p>
-                    <p className="text-sm text-muted-foreground">{achievement.description}</p>
+                    <p className="font-medium">{achievement.title || 'Achievement'}</p>
+                    <p className="text-sm text-muted-foreground">{achievement.description || 'No description'}</p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(achievement.achieved_at).toLocaleDateString()}
+                      {achievement.achieved_at ? new Date(achievement.achieved_at).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                 </div>
@@ -235,11 +233,11 @@ export const GamificationDashboard = () => {
                 <Trophy className="h-8 w-8 text-success" />
               </div>
               <div>
-                <h4 className="font-semibold">{achievement.title}</h4>
-                <p className="text-sm text-muted-foreground">{achievement.description}</p>
+                <h4 className="font-semibold">{achievement.title || 'Achievement'}</h4>
+                <p className="text-sm text-muted-foreground">{achievement.description || 'No description'}</p>
               </div>
               <Badge variant="secondary">
-                {new Date(achievement.achieved_at).toLocaleDateString()}
+                {achievement.achieved_at ? new Date(achievement.achieved_at).toLocaleDateString() : 'N/A'}
               </Badge>
             </div>
           </Card>
@@ -263,8 +261,8 @@ export const GamificationDashboard = () => {
                 <Medal className="h-6 w-6 text-info" />
               </div>
               <div>
-                <h4 className="font-medium">{badge.name}</h4>
-                <p className="text-xs text-muted-foreground">{badge.description}</p>
+                <h4 className="font-medium">{badge.name || 'Badge'}</h4>
+                <p className="text-xs text-muted-foreground">{badge.description || 'No description'}</p>
               </div>
             </div>
           </Card>
@@ -289,13 +287,13 @@ export const GamificationDashboard = () => {
                   <Gift className="h-5 w-5 text-warning" />
                 </div>
                 <div>
-                  <p className="font-medium">{reward.description}</p>
+                  <p className="font-medium">{reward.description || 'Reward'}</p>
                   <p className="text-sm text-muted-foreground">
-                    {reward.reward_type} • {new Date(reward.awarded_at).toLocaleDateString()}
+                    {reward.reward_type || 'N/A'} • {reward.awarded_at ? new Date(reward.awarded_at).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
               </div>
-              <Badge variant="outline">{reward.reward_type}</Badge>
+              <Badge variant="outline">{reward.reward_type || 'N/A'}</Badge>
             </div>
           ))}
         </div>

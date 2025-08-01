@@ -5,14 +5,9 @@ import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { 
   ClipboardCheck, 
-  MapPin, 
-  Calendar, 
-  Users, 
-  AlertTriangle, 
   CheckCircle, 
   Clock,
   FileText,
-  Camera,
   Star
 } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
@@ -21,17 +16,17 @@ interface InspectionChecklist {
   id: string;
   name: string;
   template: any;
-  created_by: string;
-  created_at: string;
+  created_by: string | null;
+  created_at: string | null;
 }
 
 interface InspectionResult {
   id: string;
-  checklist_id: string;
-  job_id: string;
-  user_id: string;
+  checklist_id: string | null;
+  job_id: string | null;
+  user_id: string | null;
   answers: any;
-  completed_at: string;
+  completed_at: string | null;
 }
 
 export const InspectionManagement = () => {
@@ -63,7 +58,7 @@ export const InspectionManagement = () => {
   const InspectionDashboard = () => {
     const totalInspections = results.length;
     const completedToday = results.filter(r => 
-      new Date(r.completed_at).toDateString() === new Date().toDateString()
+      r.completed_at && new Date(r.completed_at).toDateString() === new Date().toDateString()
     ).length;
     const pendingInspections = checklists.length - results.length;
 
@@ -125,7 +120,7 @@ export const InspectionManagement = () => {
                   <div>
                     <p className="font-medium">Quality Control Inspection</p>
                     <p className="text-sm text-muted-foreground">
-                      Completed {new Date(result.completed_at).toLocaleDateString()}
+                      Completed {result.completed_at ? new Date(result.completed_at).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                 </div>
@@ -153,7 +148,7 @@ export const InspectionManagement = () => {
                 <div>
                   <h4 className="font-semibold">{checklist.name}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Created {new Date(checklist.created_at).toLocaleDateString()}
+                    Created {checklist.created_at ? new Date(checklist.created_at).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
                 <FileText className="h-5 w-5 text-muted-foreground" />
@@ -188,7 +183,7 @@ export const InspectionManagement = () => {
                 <div>
                   <p className="font-medium">Inspection #{result.id.slice(0, 8)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(result.completed_at).toLocaleDateString()}
+                    {result.completed_at ? new Date(result.completed_at).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
               </div>

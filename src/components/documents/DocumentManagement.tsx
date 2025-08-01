@@ -5,15 +5,12 @@ import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Input } from '../ui/input';
 import { 
-  FileText, 
   Upload, 
   Download, 
   Share, 
   Search, 
   FolderOpen, 
   Eye,
-  Edit,
-  Trash2,
   Lock,
   Users,
   Calendar,
@@ -24,26 +21,26 @@ import { supabase } from '../../integrations/supabase/client';
 interface Document {
   id: string;
   title: string;
-  description: string;
+  description: string | null;
   file_path: string;
   file_type: string;
   file_size: number;
   version: number;
-  owner_id: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
+  owner_id: string | null;
+  status: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 interface DocumentVersion {
   id: string;
-  document_id: string;
+  document_id: string | null;
   version: number;
   file_path: string;
   file_size: number;
-  changes_description: string;
-  created_by: string;
-  created_at: string;
+  changes_description: string | null;
+  created_by: string | null;
+  created_at: string | null;
 }
 
 export const DocumentManagement = () => {
@@ -149,7 +146,7 @@ export const DocumentManagement = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
-                  {new Date(doc.updated_at).toLocaleDateString()}
+                  {doc.updated_at ? new Date(doc.updated_at).toLocaleDateString() : 'N/A'}
                 </div>
                 <div className="flex gap-1">
                   <Button variant="ghost" size="sm">
@@ -191,7 +188,7 @@ export const DocumentManagement = () => {
                     {version.changes_description || 'No description provided'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(version.created_at).toLocaleDateString()} • {formatFileSize(version.file_size)}
+                    {version.created_at ? new Date(version.created_at).toLocaleDateString() : 'N/A'} • {formatFileSize(version.file_size)}
                   </p>
                 </div>
               </div>
