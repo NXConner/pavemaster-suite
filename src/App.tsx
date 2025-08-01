@@ -16,6 +16,7 @@ import Schedule from './pages/Schedule';
 import Tracking from './pages/Tracking';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import Weather from './pages/Weather';
 
 export default function App() {
   return (
@@ -79,6 +80,11 @@ export default function App() {
             <Route path="/analytics" element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            } />
+            <Route path="/weather" element={
+              <ProtectedRoute>
+                <Weather />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={

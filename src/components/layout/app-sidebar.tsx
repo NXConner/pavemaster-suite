@@ -10,7 +10,8 @@ import {
   Settings,
   Home,
   Bot,
-  Shield
+  Shield,
+  Cloud
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -27,6 +28,7 @@ const toolsItems = [
   { title: "Estimates", url: "/estimates", icon: Calculator },
   { title: "Schedule", url: "/schedule", icon: Calendar },
   { title: "Tracking", url: "/tracking", icon: MapPin },
+  { title: "Weather", url: "/weather", icon: Cloud },
   { title: "Analytics", url: "/analytics", icon: BarChart },
 ];
 
