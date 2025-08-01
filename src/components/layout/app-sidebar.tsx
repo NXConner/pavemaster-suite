@@ -13,7 +13,10 @@ import {
   Shield,
   Cloud,
   FileText,
-  Map
+  Map,
+  DollarSign,
+  UserCheck,
+  Wrench
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -22,11 +25,12 @@ const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Projects", url: "/projects", icon: Building },
   { title: "Team", url: "/team", icon: Users },
+  { title: "Employees", url: "/employees", icon: UserCheck },
   { title: "Equipment", url: "/equipment", icon: Truck },
   { title: "Fleet", url: "/fleet", icon: MapPin },
-  { title: "Materials", url: "/materials", icon: Calculator },
+  { title: "Materials", url: "/materials", icon: Wrench },
   { title: "Safety", url: "/safety", icon: Shield },
-  { title: "Finance", url: "/finance", icon: BarChart },
+  { title: "Finance", url: "/finance", icon: DollarSign },
 ];
 
 const toolsItems = [
@@ -37,7 +41,7 @@ const toolsItems = [
   { title: "Weather", url: "/weather", icon: Cloud },
   { title: "Documents", url: "/documents", icon: FileText },
   { title: "CRM", url: "/crm", icon: Users },
-  { title: "Accounting", url: "/accounting", icon: BarChart },
+  { title: "Accounting", url: "/accounting", icon: DollarSign },
   { title: "Analytics", url: "/analytics", icon: BarChart },
 ];
 
