@@ -134,7 +134,7 @@ export default function ContractManager() {
       id: Date.now().toString(),
       ...newContract,
       status: 'draft',
-      created_date: new Date().toISOString().split('T')[0],
+      created_date: new Date().toISOString().split('T')[0] as string,
       signed_date: undefined,
     };
 
@@ -158,7 +158,7 @@ export default function ContractManager() {
         ? { 
             ...contract, 
             status,
-            signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : contract.signed_date
+            signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : contract.signed_date || undefined
           }
         : contract
     ));

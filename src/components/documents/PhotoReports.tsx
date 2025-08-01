@@ -96,7 +96,7 @@ export default function PhotoReports() {
     if (files && files[0]) {
       setNewReport(prev => ({
         ...prev,
-        photos: [...prev.photos, files[0]]
+        photos: [...prev.photos, files[0] as File]
       }));
       toast.success('Photo captured!');
     }
