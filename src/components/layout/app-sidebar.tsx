@@ -11,7 +11,8 @@ import {
   Home,
   Bot,
   Shield,
-  Cloud
+  Cloud,
+  FileText
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -19,9 +20,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Projects", url: "/projects", icon: Building },
-  { title: "Employees", url: "/employees", icon: Users },
+  { title: "Team", url: "/team", icon: Users },
   { title: "Equipment", url: "/equipment", icon: Truck },
   { title: "Fleet", url: "/fleet", icon: MapPin },
+  { title: "Materials", url: "/materials", icon: Calculator },
+  { title: "Safety", url: "/safety", icon: Shield },
+  { title: "Finance", url: "/finance", icon: BarChart },
 ];
 
 const toolsItems = [
@@ -29,6 +33,8 @@ const toolsItems = [
   { title: "Schedule", url: "/schedule", icon: Calendar },
   { title: "Tracking", url: "/tracking", icon: MapPin },
   { title: "Weather", url: "/weather", icon: Cloud },
+  { title: "Documents", url: "/documents", icon: FileText },
+  { title: "CRM", url: "/crm", icon: Users },
   { title: "Analytics", url: "/analytics", icon: BarChart },
 ];
 

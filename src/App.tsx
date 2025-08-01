@@ -21,6 +21,8 @@ import Materials from './pages/Materials';
 import Team from './pages/Team';
 import Safety from './pages/Safety';
 import Finance from './pages/Finance';
+import Documents from './pages/Documents';
+import CRM from './pages/CRM';
 
 export default function App() {
   return (
@@ -109,6 +111,16 @@ export default function App() {
             <Route path="/finance" element={
               <ProtectedRoute>
                 <Finance />
+              </ProtectedRoute>
+            } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <Documents />
+              </ProtectedRoute>
+            } />
+            <Route path="/crm" element={
+              <ProtectedRoute>
+                <CRM />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
