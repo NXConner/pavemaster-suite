@@ -4,6 +4,7 @@ import { Card } from './card';
 import { Badge } from './badge';
 import { Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
 import { toast } from 'sonner';
+import { sanitizeString, logSecurityEvent, rateLimiter } from '../../lib/security';
 
 declare global {
   interface Window {
@@ -104,7 +105,28 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
   };
 
   const handleVoiceCommand = (command: string) => {
-    console.log('Voice command received:', command);
+    // Enhanced security for voice commands
+    const sanitizedCommand = sanitizeString(command);
+    console.log('Voice command received:', sanitizedCommand);
+    
+    // Rate limiting for voice commands
+    if (!rateLimiter.isAllowed('voice_command', 10, 60000)) {
+      speak('Too many voice commands. Please wait a moment.');
+      logSecurityEvent({
+        type: 'rate_limit',
+        severity: 'medium',
+        action: 'voice_command_rate_limited'
+      });
+      return;
+    }
+
+    // Log voice command for security monitoring
+    logSecurityEvent({
+      type: 'input_validation',
+      severity: 'low',
+      action: 'voice_command_processed',
+      metadata: { command: sanitizedCommand.substring(0, 50) }
+    });
     
     // Built-in navigation commands
     if (command.includes('go to') || command.includes('navigate to') || command.includes('open')) {
