@@ -71,7 +71,7 @@ export const employeeProfileSchema = z.object({
   zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').optional(),
 });
 
-// Vehicle details schema
+// Vehicle details schema - exported for form validation
 export const vehicleDetailsSchema = z.object({
   vin: z.string().max(17, 'VIN too long').optional().transform(val => val ? sanitizeString(val) : val),
   licensePlate: z.string().max(10, 'License plate too long').optional().transform(val => val ? sanitizeString(val) : val),
