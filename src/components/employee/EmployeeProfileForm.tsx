@@ -20,6 +20,7 @@ import {
   CheckCircle,
   Heart
 } from "lucide-react";
+import { sanitizeString, validateInput, employeeProfileSchema, rateLimiter, logSecurityEvent } from "../../lib/security";
 
 interface EmployeeProfileProps {
   employeeId: string;
@@ -97,7 +98,61 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
   });
 
   const handleSaveProfile = () => {
-    onSave?.({ employeeData, emergencyContact });
+    // Rate limiting check
+    if (!rateLimiter.isAllowed('save_profile', 5, 300000)) {
+      console.error('Rate limit exceeded for profile save');
+      logSecurityEvent({
+        type: 'rate_limit',
+        severity: 'medium',
+        action: 'profile_save_rate_limit_exceeded',
+        metadata: { action: 'save_profile' }
+      });
+      return;
+    }
+
+    // Validate and sanitize employee data
+    const validation = validateInput(employeeProfileSchema, employeeData);
+    if (!validation.success) {
+      console.error('Employee profile validation failed:', validation.errors);
+      logSecurityEvent({
+        type: 'input_validation',
+        severity: 'medium',
+        action: 'invalid_employee_profile_data',
+        metadata: { errors: validation.errors }
+      });
+      return;
+    }
+
+    // Sanitize input data
+    const sanitizedEmployeeData = {
+      ...employeeData,
+      firstName: sanitizeString(employeeData.firstName),
+      lastName: sanitizeString(employeeData.lastName),
+      email: sanitizeString(employeeData.email),
+      address: sanitizeString(employeeData.address),
+      city: sanitizeString(employeeData.city),
+      zipCode: sanitizeString(employeeData.zipCode),
+      phonePersonal: sanitizeString(employeeData.phonePersonal),
+      phoneWork: sanitizeString(employeeData.phoneWork)
+    };
+
+    const sanitizedEmergencyContact = {
+      ...emergencyContact,
+      contactName: sanitizeString(emergencyContact.contactName),
+      relationship: sanitizeString(emergencyContact.relationship),
+      email: sanitizeString(emergencyContact.email),
+      address: sanitizeString(emergencyContact.address),
+      city: sanitizeString(emergencyContact.city)
+    };
+
+    logSecurityEvent({
+      type: 'data_access',
+      severity: 'low',
+      action: 'employee_profile_saved',
+      metadata: { employeeId: employeeId }
+    });
+
+    onSave?.({ employeeData: sanitizedEmployeeData, emergencyContact: sanitizedEmergencyContact });
   };
 
   const handleUploadDocument = (documentType: string) => {
@@ -195,8 +250,9 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="firstName"
                     value={employeeData.firstName}
-                    onChange={(e) => setEmployeeData({...employeeData, firstName: e.target.value})}
+                    onChange={(e) => setEmployeeData({...employeeData, firstName: sanitizeString(e.target.value)})}
                     placeholder="Enter first name"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -205,8 +261,9 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="lastName"
                     value={employeeData.lastName}
-                    onChange={(e) => setEmployeeData({...employeeData, lastName: e.target.value})}
+                    onChange={(e) => setEmployeeData({...employeeData, lastName: sanitizeString(e.target.value)})}
                     placeholder="Enter last name"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -216,8 +273,9 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="email"
                     type="email"
                     value={employeeData.email}
-                    onChange={(e) => setEmployeeData({...employeeData, email: e.target.value})}
+                    onChange={(e) => setEmployeeData({...employeeData, email: sanitizeString(e.target.value)})}
                     placeholder="Enter email address"
+                    maxLength={100}
                     required
                   />
                 </div>

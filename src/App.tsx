@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './hooks/useAuth';
 import { JargonProvider } from './contexts/JargonContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { SecurityMiddleware } from './components/security/SecurityMiddleware';
 import Index from './pages/Index';
 import Auth from './pages/Auth';
 import Projects from './pages/Projects';
@@ -28,13 +29,58 @@ import Accounting from './pages/Accounting';
 import AIKnowledge from './pages/AIKnowledge';
 import PhotoReports from './pages/PhotoReports';
 import Notifications from './pages/Notifications';
+import './App.css';
 
 export default function App() {
+  // Set enhanced security headers via meta tags
+  if (typeof document !== 'undefined') {
+    const setMetaTag = (name: string, content: string) => {
+      let meta = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = name;
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    const setHttpEquivTag = (httpEquiv: string, content: string) => {
+      let meta = document.querySelector(`meta[http-equiv="${httpEquiv}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.httpEquiv = httpEquiv;
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    // Enhanced Content Security Policy
+    const cspPolicy = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https:",
+      "connect-src 'self' https:",
+      "font-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'"
+    ].join('; ');
+
+    // Set security headers
+    setHttpEquivTag('Content-Security-Policy', cspPolicy);
+    setMetaTag('X-Content-Type-Options', 'nosniff');
+    setMetaTag('X-Frame-Options', 'DENY');
+    setMetaTag('X-XSS-Protection', '1; mode=block');
+    setMetaTag('Referrer-Policy', 'strict-origin-when-cross-origin');
+    setMetaTag('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)');
+  }
+
   return (
     <AuthProvider>
       <JargonProvider>
-        <Router>
-          <div className="min-h-screen bg-background">
+        <SecurityMiddleware>
+          <Router>
+            <div className="min-h-screen bg-background">
             <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/landing" element={<Landing />} />
@@ -158,10 +204,11 @@ export default function App() {
                 <Settings />
               </ProtectedRoute>
             } />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-      </Router>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
+        </Router>
+      </SecurityMiddleware>
     </JargonProvider>
   </AuthProvider>
   );

@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   CheckCircle
 } from "lucide-react";
+import { sanitizeString, validateInput, vehicleDetailsSchema, rateLimiter, logSecurityEvent } from "../../lib/security";
 
 interface VehicleDetailsProps {
   vehicleId: string;
@@ -87,7 +88,50 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
   });
 
   const handleSaveDetails = () => {
-    onSave?.(vehicleDetails);
+    // Rate limiting check
+    if (!rateLimiter.isAllowed('save_vehicle_details', 5, 300000)) {
+      console.error('Rate limit exceeded for vehicle details save');
+      logSecurityEvent({
+        type: 'rate_limit',
+        severity: 'medium',
+        action: 'vehicle_details_save_rate_limit_exceeded',
+        metadata: { action: 'save_vehicle_details' }
+      });
+      return;
+    }
+
+    // Validate and sanitize vehicle data
+    const validation = validateInput(vehicleDetailsSchema, vehicleDetails);
+    if (!validation.success) {
+      console.error('Vehicle details validation failed:', validation.errors);
+      logSecurityEvent({
+        type: 'input_validation',
+        severity: 'medium',
+        action: 'invalid_vehicle_details_data',
+        metadata: { errors: validation.errors }
+      });
+      return;
+    }
+
+    // Sanitize input data
+    const sanitizedVehicleDetails = {
+      ...vehicleDetails,
+      vin: sanitizeString(vehicleDetails.vin),
+      licensePlate: sanitizeString(vehicleDetails.licensePlate),
+      registrationNumber: sanitizeString(vehicleDetails.registrationNumber),
+      insurancePolicyNumber: sanitizeString(vehicleDetails.insurancePolicyNumber),
+      insuranceCompany: sanitizeString(vehicleDetails.insuranceCompany),
+      engineType: sanitizeString(vehicleDetails.engineType)
+    };
+
+    logSecurityEvent({
+      type: 'data_access',
+      severity: 'low',
+      action: 'vehicle_details_saved',
+      metadata: { vehicleId: vehicleId }
+    });
+
+    onSave?.(sanitizedVehicleDetails);
   };
 
   const handleAddMaintenance = () => {
@@ -152,8 +196,9 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="vin"
                     value={vehicleDetails.vin}
-                    onChange={(e) => setVehicleDetails({...vehicleDetails, vin: e.target.value})}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, vin: sanitizeString(e.target.value)})}
                     placeholder="Enter VIN number"
+                    maxLength={17}
                   />
                 </div>
                 <div className="space-y-2">
@@ -161,8 +206,9 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="licensePlate"
                     value={vehicleDetails.licensePlate}
-                    onChange={(e) => setVehicleDetails({...vehicleDetails, licensePlate: e.target.value})}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, licensePlate: sanitizeString(e.target.value)})}
                     placeholder="Enter license plate"
+                    maxLength={10}
                   />
                 </div>
                 <div className="space-y-2">

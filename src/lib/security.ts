@@ -55,6 +55,32 @@ export const photoReportSchema = z.object({
   tags: z.array(z.string().max(50).transform(sanitizeString)).max(10),
 });
 
+// Email validation schema
+export const emailSchema = z.string().email('Invalid email address');
+
+// Employee profile schema
+export const employeeProfileSchema = z.object({
+  firstName: z.string().min(1, 'First name is required').max(50, 'First name too long').transform(sanitizeString),
+  lastName: z.string().min(1, 'Last name is required').max(50, 'Last name too long').transform(sanitizeString),
+  email: emailSchema.transform(sanitizeString),
+  phonePersonal: phoneSchema.optional(),
+  phoneWork: phoneSchema.optional(),
+  address: z.string().max(200, 'Address too long').optional().transform(val => val ? sanitizeString(val) : val),
+  city: z.string().max(100, 'City name too long').optional().transform(val => val ? sanitizeString(val) : val),
+  state: z.string().length(2, 'State must be 2 characters'),
+  zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').optional(),
+});
+
+// Vehicle details schema
+export const vehicleDetailsSchema = z.object({
+  vin: z.string().max(17, 'VIN too long').optional().transform(val => val ? sanitizeString(val) : val),
+  licensePlate: z.string().max(10, 'License plate too long').optional().transform(val => val ? sanitizeString(val) : val),
+  registrationNumber: z.string().max(50, 'Registration number too long').optional().transform(val => val ? sanitizeString(val) : val),
+  insurancePolicyNumber: z.string().max(50, 'Policy number too long').optional().transform(val => val ? sanitizeString(val) : val),
+  insuranceCompany: z.string().max(100, 'Insurance company name too long').optional().transform(val => val ? sanitizeString(val) : val),
+  engineType: z.string().max(100, 'Engine type too long').optional().transform(val => val ? sanitizeString(val) : val),
+});
+
 // Enhanced rate limiting
 class SecurityRateLimiter {
   private attempts: Map<string, { count: number; resetTime: number }> = new Map();
