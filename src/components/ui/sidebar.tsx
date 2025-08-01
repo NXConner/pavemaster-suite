@@ -1,6 +1,7 @@
 
 import { cn } from '../../lib/utils';
 import { Button } from './button';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
   FolderOpen, 
@@ -11,7 +12,9 @@ import {
   MapPin,
   FileText,
   Calendar,
-  Truck
+  Truck,
+  Bot,
+  Eye
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -26,6 +29,8 @@ const navigation = [
   { name: 'Equipment', href: '/equipment', icon: Wrench },
   { name: 'Fleet', href: '/fleet', icon: Truck },
   { name: 'Employees', href: '/employees', icon: Users },
+  { name: 'AI Assistant', href: '/ai-assistant', icon: Bot },
+  { name: 'OverWatch', href: '/overwatch', icon: Eye },
   { name: 'Estimates', href: '/estimates', icon: FileText },
   { name: 'Schedule', href: '/schedule', icon: Calendar },
   { name: 'GPS Tracking', href: '/tracking', icon: MapPin },
@@ -34,6 +39,8 @@ const navigation = [
 ];
 
 export function Sidebar({ className, isCollapsed = false }: SidebarProps) {
+  const location = useLocation();
+  
   return (
     <div className={cn(
       'flex h-full flex-col bg-sidebar border-r border-sidebar-border',
@@ -62,14 +69,15 @@ export function Sidebar({ className, isCollapsed = false }: SidebarProps) {
                 variant="ghost"
                 className={cn(
                   'w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                  location.pathname === item.href && 'bg-sidebar-accent text-sidebar-accent-foreground',
                   isCollapsed ? 'px-2' : 'px-3'
                 )}
                 asChild
               >
-                <a href={item.href}>
+                <Link to={item.href}>
                   <item.icon className={cn('h-5 w-5', !isCollapsed && 'mr-3')} />
                   {!isCollapsed && item.name}
-                </a>
+                </Link>
               </Button>
             </li>
           ))}
