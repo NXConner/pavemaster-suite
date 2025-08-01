@@ -37,6 +37,7 @@ const toolsItems = [
   { title: "Weather", url: "/weather", icon: Cloud },
   { title: "Documents", url: "/documents", icon: FileText },
   { title: "CRM", url: "/crm", icon: Users },
+  { title: "Accounting", url: "/accounting", icon: BarChart },
   { title: "Analytics", url: "/analytics", icon: BarChart },
 ];
 

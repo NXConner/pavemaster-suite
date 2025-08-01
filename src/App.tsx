@@ -24,6 +24,7 @@ import Finance from './pages/Finance';
 import Documents from './pages/Documents';
 import CRM from './pages/CRM';
 import Mapping from './pages/Mapping';
+import Accounting from './pages/Accounting';
 
 export default function App() {
   return (
@@ -127,6 +128,11 @@ export default function App() {
             <Route path="/mapping" element={
               <ProtectedRoute>
                 <Mapping />
+              </ProtectedRoute>
+            } />
+            <Route path="/accounting" element={
+              <ProtectedRoute>
+                <Accounting />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
