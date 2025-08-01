@@ -7,6 +7,7 @@ import Projects from './pages/Projects';
 import Equipment from './pages/Equipment';
 import Fleet from './pages/Fleet';
 import Employees from './pages/Employees';
+import Landing from './pages/Landing';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <div className="min-h-screen bg-background">
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/landing" element={<Landing />} />
             <Route path="/" element={
               <ProtectedRoute>
                 <Index />
