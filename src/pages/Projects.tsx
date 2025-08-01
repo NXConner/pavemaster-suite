@@ -1,97 +1,91 @@
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { DashboardCard } from '../components/ui/dashboard-card';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Badge } from "../components/ui/badge";
+import { Progress } from "../components/ui/progress";
 import { 
+  Building, 
   Plus, 
-  MapPin, 
-  Calendar, 
-  DollarSign, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
-  Wrench,
+  Search, 
+  Calendar,
   Users,
-  FileText
-} from 'lucide-react';
+  DollarSign,
+  Clock,
+  CheckCircle,
+  
+  MapPin
+} from "lucide-react";
 
-// Mock project data
-const projects = [
+interface Project {
+  id: string;
+  name: string;
+  client: string;
+  status: 'planning' | 'active' | 'completed' | 'on-hold';
+  progress: number;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  spent: number;
+  crew: string[];
+}
+
+const mockProjects: Project[] = [
   {
-    id: 1,
-    name: 'Main Street Resurfacing',
-    client: 'City of Richmond',
-    status: 'active',
-    progress: 65,
-    startDate: '2024-08-01',
-    endDate: '2024-08-15',
-    budget: 125000,
-    spent: 81250,
-    crew: 'Team Alpha',
-    location: 'Main St, Richmond VA',
-    type: 'Resurfacing'
-  },
-  {
-    id: 2,
-    name: 'Church Parking Lot Seal',
+    id: '1',
+    name: 'Church Parking Lot Reseal',
     client: 'First Baptist Church',
     status: 'completed',
     progress: 100,
-    startDate: '2024-07-28',
-    endDate: '2024-07-30',
-    budget: 15000,
-    spent: 14750,
-    crew: 'Team Beta',
-    location: '123 Church St, Richmond VA',
-    type: 'Sealcoating'
+    startDate: '2024-01-15',
+    endDate: '2024-01-17',
+    budget: 12500,
+    spent: 11800,
+    crew: ['John Mitchell', 'Sarah Chen']
   },
   {
-    id: 3,
-    name: 'Industrial Complex Paving',
-    client: 'Richmond Industries',
+    id: '2',
+    name: 'Shopping Center Asphalt Repair',
+    client: 'Metro Plaza',
+    status: 'active',
+    progress: 65,
+    startDate: '2024-01-20',
+    endDate: '2024-02-05',
+    budget: 35000,
+    spent: 22750,
+    crew: ['Mike Rodriguez', 'Tom Wilson', 'Lisa Davis']
+  },
+  {
+    id: '3',
+    name: 'Office Complex Sealcoating',
+    client: 'Corporate Center LLC',
     status: 'planning',
     progress: 0,
-    startDate: '2024-08-20',
-    endDate: '2024-09-10',
-    budget: 285000,
+    startDate: '2024-02-10',
+    endDate: '2024-02-15',
+    budget: 18500,
     spent: 0,
-    crew: 'Team Alpha',
-    location: 'Industrial Blvd, Richmond VA',
-    type: 'New Construction'
-  },
-  {
-    id: 4,
-    name: 'Shopping Center Repair',
-    client: 'Metro Shopping Plaza',
-    status: 'on-hold',
-    progress: 25,
-    startDate: '2024-08-05',
-    endDate: '2024-08-12',
-    budget: 45000,
-    spent: 11250,
-    crew: 'Team Beta',
-    location: 'Metro Plaza, Richmond VA',
-    type: 'Crack Repair'
+    crew: []
   }
 ];
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'active': return 'bg-primary text-primary-foreground';
-    case 'completed': return 'bg-success text-success-foreground';
-    case 'planning': return 'bg-info text-info-foreground';
-    case 'on-hold': return 'bg-warning text-warning-foreground';
-    default: return 'bg-muted text-muted-foreground';
+    case 'completed': return 'bg-green-500';
+    case 'active': return 'bg-blue-500';
+    case 'planning': return 'bg-yellow-500';
+    case 'on-hold': return 'bg-red-500';
+    default: return 'bg-gray-500';
   }
 };
 
-const getStatusIcon = (status: string) => {
+const getStatusText = (status: string) => {
   switch (status) {
-    case 'active': return <Clock className="h-3 w-3" />;
-    case 'completed': return <CheckCircle className="h-3 w-3" />;
-    case 'planning': return <FileText className="h-3 w-3" />;
-    case 'on-hold': return <AlertCircle className="h-3 w-3" />;
-    default: return <Clock className="h-3 w-3" />;
+    case 'completed': return 'Completed';
+    case 'active': return 'In Progress';
+    case 'planning': return 'Planning';
+    case 'on-hold': return 'On Hold';
+    default: return 'Unknown';
   }
 };
 
@@ -100,135 +94,181 @@ export default function Projects() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Project Command</h1>
             <p className="text-muted-foreground">
-              Manage your paving and sealing projects
+              Manage and monitor all active operations
             </p>
           </div>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
             New Project
           </Button>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <DashboardCard
-            title="Total Projects"
-            value="47"
-            description="All time projects"
-            icon={<FileText className="h-4 w-4" />}
-          />
-          <DashboardCard
-            title="Active Projects"
-            value="8"
-            description="Currently in progress"
-            trend={{ value: 12, isPositive: true, label: 'from last month' }}
-            icon={<Clock className="h-4 w-4" />}
-          />
-          <DashboardCard
-            title="Completed This Month"
-            value="12"
-            description="Successfully finished"
-            trend={{ value: 25, isPositive: true, label: 'vs last month' }}
-            icon={<CheckCircle className="h-4 w-4" />}
-          />
-          <DashboardCard
-            title="Total Revenue"
-            value="$1.2M"
-            description="Year to date"
-            trend={{ value: 18, isPositive: true, label: 'vs last year' }}
-            icon={<DollarSign className="h-4 w-4" />}
-          />
+        {/* Stats Cards */}
+        <div className="grid gap-4 md:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
+              <Building className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">8</div>
+              <p className="text-xs text-muted-foreground">+2 this month</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active</CardTitle>
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">3</div>
+              <p className="text-xs text-muted-foreground">In progress</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$156K</div>
+              <p className="text-xs text-muted-foreground">+15% from last month</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">94%</div>
+              <p className="text-xs text-muted-foreground">On-time delivery</p>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Projects List */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Current Projects</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {projects.map((project) => (
-              <Card key={project.id} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-lg">{project.name}</CardTitle>
+        {/* Search and Filter */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Project Operations</CardTitle>
+            <CardDescription>Monitor and manage all project activities</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search projects..."
+                  className="pl-10"
+                />
+              </div>
+              <Button variant="outline" className="gap-2">
+                <Calendar className="h-4 w-4" />
+                Filter
+              </Button>
+            </div>
+
+            {/* Project List */}
+            <div className="space-y-4">
+              {mockProjects.map((project) => (
+                <div key={project.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold">{project.name}</h3>
+                        <div className={`w-2 h-2 rounded-full ${getStatusColor(project.status)}`}></div>
+                        <Badge variant="outline">{getStatusText(project.status)}</Badge>
+                      </div>
                       <p className="text-sm text-muted-foreground">{project.client}</p>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs flex items-center gap-1 ${getStatusColor(project.status)}`}>
-                      {getStatusIcon(project.status)}
-                      {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Progress Bar */}
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Progress</span>
-                      <span>{project.progress}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all" 
-                        style={{ width: `${project.progress}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Project Details */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span className="truncate">{project.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>{new Date(project.startDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <span>{project.crew}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Wrench className="h-4 w-4 text-muted-foreground" />
-                      <span>{project.type}</span>
-                    </div>
-                  </div>
-
-                  {/* Budget */}
-                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                    <div>
-                      <p className="text-sm font-medium">Budget</p>
-                      <p className="text-xs text-muted-foreground">
-                        ${project.spent.toLocaleString()} / ${project.budget.toLocaleString()}
-                      </p>
-                    </div>
+                    
                     <div className="text-right">
-                      <p className="text-sm font-medium">
-                        {Math.round((project.spent / project.budget) * 100)}% used
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        ${(project.budget - project.spent).toLocaleString()} remaining
-                      </p>
+                      <div className="text-lg font-semibold">
+                        ${project.budget.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        ${project.spent.toLocaleString()} spent
+                      </div>
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      View Details
-                    </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
-                      Edit Project
-                    </Button>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <Calendar className="h-3 w-3" />
+                        Timeline
+                      </div>
+                      <div className="text-sm">
+                        {new Date(project.startDate).toLocaleDateString()} - {new Date(project.endDate).toLocaleDateString()}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <Users className="h-3 w-3" />
+                        Crew
+                      </div>
+                      <div className="text-sm">
+                        {project.crew.length > 0 ? `${project.crew.length} members` : 'Not assigned'}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <Clock className="h-3 w-3" />
+                        Progress
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Progress value={project.progress} className="flex-1 h-2" />
+                        <span className="text-sm font-medium">{project.progress}%</span>
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t">
+                    <div className="flex items-center gap-2">
+                      {project.status === 'active' && (
+                        <>
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span className="text-sm text-green-600">On Track</span>
+                        </>
+                      )}
+                      {project.status === 'planning' && (
+                        <>
+                          <Clock className="h-4 w-4 text-yellow-500" />
+                          <span className="text-sm text-yellow-600">Scheduled</span>
+                        </>
+                      )}
+                      {project.status === 'completed' && (
+                        <>
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span className="text-sm text-green-600">Completed</span>
+                        </>
+                      )}
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="gap-1">
+                        <MapPin className="h-3 w-3" />
+                        Location
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Users, 
   Truck, 
@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Button } from "../ui/button";
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
@@ -37,10 +36,6 @@ const advancedItems = [
 ];
 
 export function AppSidebar() {
-  const location = useLocation();
-  const currentPath = location.pathname;
-
-  const isActive = (path: string) => currentPath === path;
 
   return (
     <Card className="w-60 h-screen rounded-none border-r border-l-0 border-t-0 border-b-0">

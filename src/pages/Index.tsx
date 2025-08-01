@@ -2,7 +2,7 @@ import { DashboardLayout } from "../components/layout/dashboard-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { useJargon } from "../contexts/JargonContext";
+
 import { 
   Building, 
   Users, 
@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 export default function Index() {
-  const { getText } = useJargon();
 
   return (
     <DashboardLayout>
