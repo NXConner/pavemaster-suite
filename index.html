@@ -1,24 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="theme-isac-os">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OverWatch Operations System</title>
-    <meta name="description" content="Enterprise Operations Management System" />
-    <meta name="author" content="OverWatch Systems" />
-
-    <meta property="og:title" content="OverWatch Operations System" />
-    <meta property="og:description" content="Enterprise Operations Management System" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@overwatch_ops" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <!-- ISAC-OS Meta Configuration -->
+    <meta name="description" content="PaveMaster Suite - ISAC-OS Tactical Interface for Advanced Pavement Operations" />
+    <meta name="keywords" content="asphalt, paving, sealcoating, tactical, military, veterans, construction, ISAC-OS" />
+    <meta name="author" content="PaveMaster Suite - Tactical Operations Division" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    
+    <!-- Progressive Web App -->
+    <meta name="theme-color" content="#0066ff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PaveMaster ISAC-OS" />
+    
+    <!-- Tactical Favicon Set -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/wallpapers/tactical-grid-4k.jpg" as="image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- ISAC-OS System Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <title>PaveMaster Suite - ISAC-OS Tactical Interface</title>
+    
+    <!-- Critical CSS Variables for ISAC-OS -->
+    <style>
+      :root {
+        /* ISAC-OS Core System Variables */
+        --font-tactical: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono-tactical: 'JetBrains Mono', 'Consolas', monospace;
+        --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        
+        /* Tactical Color Scheme */
+        --isac-primary: 210 100% 60%;
+        --isac-background: 210 25% 3%;
+        --isac-foreground: 0 0% 98%;
+        
+        /* Performance Optimization */
+        --smooth-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --tactical-glow: 0 0 20px hsl(var(--isac-primary) / 0.3);
+      }
+      
+      /* Critical Loading State */
+      body {
+        font-family: var(--font-ui);
+        background: hsl(var(--isac-background));
+        color: hsl(var(--isac-foreground));
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: var(--smooth-transition);
+      }
+      
+      /* Loading Animation */
+      .loading-tactical {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: hsl(var(--isac-background));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+      }
+      
+      .loading-tactical.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      /* Tactical Grid Pattern */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+          linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: -1;
+      }
+    </style>
   </head>
-
-  <body>
+  <body class="theme-isac-os">
+    <!-- ISAC-OS Tactical Loading Screen -->
+    <div id="tactical-loader" class="loading-tactical">
+      <div style="text-align: center; color: hsl(var(--isac-primary));">
+        <div style="font-family: var(--font-mono-tactical); font-size: 14px; margin-bottom: 20px;">
+          ISAC-OS INITIALIZING...
+        </div>
+        <div style="width: 200px; height: 2px; background: rgba(0, 102, 255, 0.2); border-radius: 1px; overflow: hidden;">
+          <div style="width: 100%; height: 100%; background: linear-gradient(90deg, transparent, hsl(var(--isac-primary)), transparent); animation: tactical-scan 2s infinite;"></div>
+        </div>
+        <div style="font-family: var(--font-mono-tactical); font-size: 10px; margin-top: 10px; opacity: 0.7;">
+          TACTICAL SYSTEMS ONLINE
+        </div>
+      </div>
+    </div>
+    
+    <!-- Application Root -->
     <div id="root"></div>
+    
+    <!-- Critical Scripts -->
+    <script>
+      // ISAC-OS System Boot Sequence
+      console.log('🛡️ ISAC-OS Boot Sequence Initiated');
+      console.log('📡 Tactical Grid: ONLINE');
+      console.log('🔒 Security Protocols: ACTIVE');
+      console.log('🎯 Performance Monitoring: ENABLED');
+      
+      // Remove loading screen when app loads
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loader = document.getElementById('tactical-loader');
+          if (loader) {
+            loader.classList.add('fade-out');
+            setTimeout(() => loader.remove(), 500);
+          }
+          console.log('⚡ ISAC-OS Interface: READY');
+        }, 1000);
+      });
+      
+      // Tactical scan animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes tactical-scan {
+          0% { transform: translateX(-200px); }
+          100% { transform: translateX(200px); }
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+    
+    <!-- Vite Module Script -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

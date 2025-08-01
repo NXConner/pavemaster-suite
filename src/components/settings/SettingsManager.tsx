@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Switch } from '../ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from '../ui/badge';
 import { 
   Settings, 
@@ -13,10 +9,21 @@ import {
   Save,
   RefreshCw,
   Download,
-  Upload
+  Upload,
+  Monitor,
+  Users,
+  Archive
 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
+import { Switch } from "../ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Button } from "../ui/button";
+import { ThemeSwitcher } from "../ui/theme-switcher";
+import { JargonSwitcher } from "../ui/jargon-switcher";
+import { useJargon } from "../../contexts/JargonContext";
 
 export function SettingsManager() {
+  const { getText } = useJargon();
   const [settings, setSettings] = useState({
     // General Settings
     autoSave: true,
@@ -78,13 +85,39 @@ export function SettingsManager() {
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="tracking">Tracking</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="mobile">Mobile</TabsTrigger>
-          <TabsTrigger value="system">System</TabsTrigger>
-          <TabsTrigger value="backup">Backup</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-8">
+          <TabsTrigger value="general" className="flex items-center gap-2">
+            <Settings className="h-4 w-4" />
+            {getText('settings')}
+          </TabsTrigger>
+          <TabsTrigger value="tracking" className="flex items-center gap-2">
+            <Map className="h-4 w-4" />
+            Tracking
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Security
+          </TabsTrigger>
+          <TabsTrigger value="mobile" className="flex items-center gap-2">
+            <Smartphone className="h-4 w-4" />
+            Mobile
+          </TabsTrigger>
+          <TabsTrigger value="system" className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            System Info
+          </TabsTrigger>
+          <TabsTrigger value="themes" className="flex items-center gap-2">
+            <Monitor className="h-4 w-4" />
+            Themes
+          </TabsTrigger>
+          <TabsTrigger value="jargon" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Terminology
+          </TabsTrigger>
+          <TabsTrigger value="backup" className="flex items-center gap-2">
+            <Archive className="h-4 w-4" />
+            Backup
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-6">
@@ -397,6 +430,30 @@ export function SettingsManager() {
                   <div className="text-sm text-muted-foreground">{systemInfo.lastBackup}</div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Themes Tab */}
+        <TabsContent value="themes" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Visual Interface Configuration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ThemeSwitcher />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Jargon/Terminology Tab */}
+        <TabsContent value="jargon" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Terminology & Communication</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <JargonSwitcher />
             </CardContent>
           </Card>
         </TabsContent>

@@ -10,19 +10,19 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
 */
 
 @layer base {
-  :root {
-    /* Base System Variables */
-    --background: 220 13% 98%;
-    --foreground: 220 15% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
+:root {
+    /* ISAC-OS Core System Variables */
+    --background: 210 25% 5%;
+    --foreground: 0 0% 95%;
+    --card: 210 25% 8%;
+    --card-foreground: 0 0% 95%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 15%;
 
-    /* Construction Orange Primary */
-    --primary: 32 95% 55%;
+    /* ISAC-OS Tactical Blue Primary */
+    --primary: 210 100% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 32 95% 65%;
+    --primary-glow: 210 100% 70%;
 
     /* Professional Blue Secondary */
     --secondary: 213 84% 22%;
@@ -34,9 +34,9 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --accent-foreground: 213 84% 22%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 32 95% 55%;
+    --border: 210 50% 20%;
+    --input: 210 25% 10%;
+    --ring: 210 100% 60%;
 
     /* Enterprise Success/Warning/Info Colors */
     --success: 142 76% 36%;

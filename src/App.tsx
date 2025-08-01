@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './hooks/useAuth';
+import { JargonProvider } from './contexts/JargonContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Index from './pages/Index';
 import Auth from './pages/Auth';
@@ -19,9 +20,10 @@ import Settings from './pages/Settings';
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-background">
-          <Routes>
+      <JargonProvider>
+        <Router>
+          <div className="min-h-screen bg-background">
+            <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/" element={
@@ -88,6 +90,7 @@ export default function App() {
           </Routes>
         </div>
       </Router>
-    </AuthProvider>
+    </JargonProvider>
+  </AuthProvider>
   );
 }
