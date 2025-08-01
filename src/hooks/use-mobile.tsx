@@ -150,7 +150,10 @@ export function useViewportSize() {
 
   React.useEffect(() => {
     const updateViewport = () => {
-      setViewport(device.getViewportSize());
+      setViewport({
+        width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
+        height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+      });
     };
 
     updateViewport();
@@ -174,17 +177,27 @@ export function useBrowserCapabilities() {
   });
 
   React.useEffect(() => {
-    setCapabilities({
-      supportsWebP: browser.supportsWebP(),
-      supportsWebGL: browser.supportsWebGL(),
-      supportsServiceWorker: browser.supportsServiceWorker(),
-      supportsNotifications: browser.supportsNotifications(),
-      supportsGeolocation: browser.supportsGeolocation(),
-      isOnline: browser.isOnline()
-    });
+    const checkCapabilities = () => {
+      const canvas = document.createElement('canvas');
+      const webglContext = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      
+      return {
+        supportsWebP: (() => {
+          const canvas = document.createElement('canvas');
+          return canvas.toDataURL('image/webp').indexOf('webp') !== -1;
+        })(),
+        supportsWebGL: !!webglContext,
+        supportsServiceWorker: 'serviceWorker' in navigator,
+        supportsNotifications: 'Notification' in window,
+        supportsGeolocation: 'geolocation' in navigator,
+        isOnline: navigator.onLine
+      };
+    };
+
+    setCapabilities(checkCapabilities());
 
     const updateOnlineStatus = () => {
-      setCapabilities(prev => ({ ...prev, isOnline: browser.isOnline() }));
+      setCapabilities(prev => ({ ...prev, isOnline: navigator.onLine }));
     };
 
     window.addEventListener('online', updateOnlineStatus);
@@ -279,7 +292,8 @@ export function useOrientation() {
         });
       } else {
         // Fallback based on viewport dimensions
-        const { width, height } = device.getViewportSize();
+        const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        const height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         setOrientation({
           angle: width > height ? 90 : 0,
           type: width > height ? 'landscape-primary' : 'portrait-primary',

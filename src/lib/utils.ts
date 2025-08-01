@@ -1,249 +1,248 @@
-// ============================================================================
-// ENHANCED UTILITY FUNCTIONS - PaveMaster Suite
-// ============================================================================
-
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { format, isValid, parseISO, formatDistanceToNow } from "date-fns";
+import { format, isValid, parseISO, formatDistanceToNow, startOfDay, endOfDay, addDays, subDays, type Locale } from "date-fns";
 
-// Enhanced className utility with conditional merging
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 // ============================================================================
-// JARGON AND LOCALIZATION UTILITIES
+// ENHANCED JARGON TRANSLATION SYSTEM
 // ============================================================================
 
-// Jargon translation maps
-const JARGON_TERMS: Record<string, { civilian: string; military: string }> = {
-  // Navigation and Movement
-  'location': { civilian: 'Location', military: 'Position' },
-  'destination': { civilian: 'Destination', military: 'Objective' },
-  'route': { civilian: 'Route', military: 'Vector' },
-  'navigation': { civilian: 'Navigation', military: 'Nav' },
-  'position': { civilian: 'Position', military: 'GPS Coordinates' },
-  'coordinates': { civilian: 'Coordinates', military: 'Grid Reference' },
-  'waypoint': { civilian: 'Stop', military: 'Waypoint' },
-  'checkpoint': { civilian: 'Checkpoint', military: 'Control Point' },
-  
-  // Operations and Management
-  'project': { civilian: 'Project', military: 'Mission' },
-  'task': { civilian: 'Task', military: 'Objective' },
-  'assignment': { civilian: 'Assignment', military: 'Mission Brief' },
-  'deadline': { civilian: 'Deadline', military: 'Mission Timeline' },
-  'priority': { civilian: 'Priority', military: 'Priority Level' },
-  'status': { civilian: 'Status', military: 'SITREP' },
-  'update': { civilian: 'Update', military: 'Intel Update' },
-  'report': { civilian: 'Report', military: 'After Action Report' },
-  'briefing': { civilian: 'Meeting', military: 'Mission Brief' },
-  'debrief': { civilian: 'Review', military: 'Debrief' },
-  
-  // Personnel and Teams
-  'team': { civilian: 'Team', military: 'Unit' },
-  'crew': { civilian: 'Crew', military: 'Squad' },
-  'supervisor': { civilian: 'Supervisor', military: 'Squad Leader' },
-  'manager': { civilian: 'Manager', military: 'Commander' },
-  'worker': { civilian: 'Worker', military: 'Operative' },
-  'employee': { civilian: 'Employee', military: 'Personnel' },
-  'operator': { civilian: 'Operator', military: 'Field Operative' },
-  'technician': { civilian: 'Technician', military: 'Specialist' },
-  
-  // Equipment and Resources
-  'equipment': { civilian: 'Equipment', military: 'Hardware' },
-  'vehicle': { civilian: 'Vehicle', military: 'Transport' },
-  'truck': { civilian: 'Truck', military: 'Heavy Transport' },
-  'machine': { civilian: 'Machine', military: 'Equipment Unit' },
-  'tool': { civilian: 'Tool', military: 'Equipment' },
-  'supplies': { civilian: 'Supplies', military: 'Resources' },
-  'inventory': { civilian: 'Inventory', military: 'Asset Registry' },
-  'maintenance': { civilian: 'Maintenance', military: 'Service Protocol' },
-  
-  // Communication and Status
-  'message': { civilian: 'Message', military: 'Communication' },
-  'notification': { civilian: 'Notification', military: 'Alert' },
-  'alert': { civilian: 'Alert', military: 'Warning Status' },
-  'warning': { civilian: 'Warning', military: 'Caution Advisory' },
-  'emergency': { civilian: 'Emergency', military: 'Critical Alert' },
-  'critical': { civilian: 'Critical', military: 'Priority Alpha' },
-  'urgent': { civilian: 'Urgent', military: 'Immediate Action' },
-  'normal': { civilian: 'Normal', military: 'Standard Operations' },
-  
-  // Safety and Security
-  'safety': { civilian: 'Safety', military: 'Security Protocol' },
-  'security': { civilian: 'Security', military: 'Force Protection' },
-  'incident': { civilian: 'Incident', military: 'Event Report' },
-  'violation': { civilian: 'Violation', military: 'Breach' },
-  'compliance': { civilian: 'Compliance', military: 'Regulation Adherence' },
-  'inspection': { civilian: 'Inspection', military: 'Assessment' },
-  'audit': { civilian: 'Audit', military: 'Evaluation' },
-  
-  // Time and Scheduling
-  'schedule': { civilian: 'Schedule', military: 'Timeline' },
-  'timeline': { civilian: 'Timeline', military: 'Operational Schedule' },
-  'shift': { civilian: 'Shift', military: 'Watch' },
-  'break': { civilian: 'Break', military: 'Stand Down' },
-  'overtime': { civilian: 'Overtime', military: 'Extended Operations' },
-  'availability': { civilian: 'Availability', military: 'Operational Status' },
-  
-  // Performance and Metrics
-  'performance': { civilian: 'Performance', military: 'Operational Efficiency' },
-  'productivity': { civilian: 'Productivity', military: 'Mission Effectiveness' },
-  'efficiency': { civilian: 'Efficiency', military: 'Operational Readiness' },
-  'quality': { civilian: 'Quality', military: 'Mission Standards' },
-  'accuracy': { civilian: 'Accuracy', military: 'Precision Level' },
-  'completion': { civilian: 'Completion', military: 'Mission Accomplished' },
-  
-  // Technology and Systems
+// Enhanced jargon terms database - comprehensive tactical/civilian terminology
+const JARGON_TERMS: Record<string, { civilian: string; military: string; acronym?: string; definition?: string }> = {
+  // Core application terms
+  'dashboard': { civilian: 'Dashboard', military: 'Command Center', acronym: 'CC' },
+  'overview': { civilian: 'Overview', military: 'Situational Awareness', acronym: 'SA' },
+  'status': { civilian: 'Status', military: 'SITREP', definition: 'Situation Report' },
+  'report': { civilian: 'Report', military: 'Intel Brief' },
+  'alert': { civilian: 'Alert', military: 'Advisory', acronym: 'ADV' },
+  'notification': { civilian: 'Notification', military: 'Message Traffic' },
+  'update': { civilian: 'Update', military: 'Status Change' },
   'system': { civilian: 'System', military: 'Platform' },
-  'software': { civilian: 'Software', military: 'System Software' },
-  'hardware': { civilian: 'Hardware', military: 'Equipment Platform' },
-  'network': { civilian: 'Network', military: 'Communication Grid' },
-  'connection': { civilian: 'Connection', military: 'Link Status' },
-  'signal': { civilian: 'Signal', military: 'Transmission' },
-  'data': { civilian: 'Data', military: 'Intelligence' },
-  'backup': { civilian: 'Backup', military: 'Redundancy' },
-  
-  // Financial and Business
-  'cost': { civilian: 'Cost', military: 'Resource Expenditure' },
-  'budget': { civilian: 'Budget', military: 'Resource Allocation' },
-  'expense': { civilian: 'Expense', military: 'Operational Cost' },
-  'profit': { civilian: 'Profit', military: 'Resource Efficiency' },
-  'revenue': { civilian: 'Revenue', military: 'Resource Generation' },
-  'invoice': { civilian: 'Invoice', military: 'Resource Request' },
-  'payment': { civilian: 'Payment', military: 'Resource Transfer' },
-  
-  // Weather and Environment
-  'weather': { civilian: 'Weather', military: 'Environmental Conditions' },
-  'temperature': { civilian: 'Temperature', military: 'Thermal Reading' },
-  'conditions': { civilian: 'Conditions', military: 'Field Conditions' },
-  'forecast': { civilian: 'Forecast', military: 'Weather Intel' },
-  'visibility': { civilian: 'Visibility', military: 'Visual Range' },
-  'wind': { civilian: 'Wind', military: 'Wind Vector' },
-  
-  // General Interface Terms
-  'dashboard': { civilian: 'Dashboard', military: 'Command Center' },
-  'overview': { civilian: 'Overview', military: 'Situation Overview' },
-  'summary': { civilian: 'Summary', military: 'Intel Summary' },
-  'details': { civilian: 'Details', military: 'Technical Data' },
-  'settings': { civilian: 'Settings', military: 'Configuration' },
-  'preferences': { civilian: 'Preferences', military: 'User Config' },
-  'profile': { civilian: 'Profile', military: 'Personnel File' },
-  'account': { civilian: 'Account', military: 'User Credentials' },
-  'login': { civilian: 'Login', military: 'Authentication' },
-  'logout': { civilian: 'Logout', military: 'Sign Off' },
-  'search': { civilian: 'Search', military: 'Query' },
-  'filter': { civilian: 'Filter', military: 'Sort Parameters' },
-  'export': { civilian: 'Export', military: 'Data Extract' },
-  'import': { civilian: 'Import', military: 'Data Ingestion' },
-  'save': { civilian: 'Save', military: 'Store Data' },
-  'cancel': { civilian: 'Cancel', military: 'Abort' },
-  'confirm': { civilian: 'Confirm', military: 'Acknowledge' },
-  'submit': { civilian: 'Submit', military: 'Transmit' },
-  'edit': { civilian: 'Edit', military: 'Modify' },
-  'delete': { civilian: 'Delete', military: 'Terminate' },
-  'create': { civilian: 'Create', military: 'Initialize' },
-  'add': { civilian: 'Add', military: 'Deploy' },
-  'remove': { civilian: 'Remove', military: 'Extract' },
-  'view': { civilian: 'View', military: 'Display' },
-  'show': { civilian: 'Show', military: 'Reveal' },
-  'hide': { civilian: 'Hide', military: 'Conceal' },
-  'enable': { civilian: 'Enable', military: 'Activate' },
-  'disable': { civilian: 'Disable', military: 'Deactivate' },
-  'start': { civilian: 'Start', military: 'Initiate' },
-  'stop': { civilian: 'Stop', military: 'Cease' },
-  'pause': { civilian: 'Pause', military: 'Hold' },
-  'resume': { civilian: 'Resume', military: 'Continue' },
-  'refresh': { civilian: 'Refresh', military: 'Update Status' },
-  'reload': { civilian: 'Reload', military: 'Reinitialize' },
-  'reset': { civilian: 'Reset', military: 'Restore Default' },
-  'clear': { civilian: 'Clear', military: 'Purge' },
-  'close': { civilian: 'Close', military: 'Terminate Session' },
-  'open': { civilian: 'Open', military: 'Access' },
-  'load': { civilian: 'Load', military: 'Deploy' },
-  'unload': { civilian: 'Unload', military: 'Withdraw' },
-  'upload': { civilian: 'Upload', military: 'Transmit Data' },
-  'download': { civilian: 'Download', military: 'Retrieve Data' },
-  'sync': { civilian: 'Sync', military: 'Synchronize' },
-  'backup': { civilian: 'Backup', military: 'Archive' },
-  'restore': { civilian: 'Restore', military: 'Recover' },
-  'update': { civilian: 'Update', military: 'Modify Status' },
-  'upgrade': { civilian: 'Upgrade', military: 'Enhance System' },
-  'install': { civilian: 'Install', military: 'Deploy System' },
-  'uninstall': { civilian: 'Uninstall', military: 'Remove System' },
-  'configure': { civilian: 'Configure', military: 'Set Parameters' },
-  'optimize': { civilian: 'Optimize', military: 'Enhance Performance' },
-  'analyze': { civilian: 'Analyze', military: 'Assess Data' },
-  'monitor': { civilian: 'Monitor', military: 'Surveillance' },
-  'track': { civilian: 'Track', military: 'Trace' },
-  'control': { civilian: 'Control', military: 'Command' },
-  'manage': { civilian: 'Manage', military: 'Coordinate' },
-  'operate': { civilian: 'Operate', military: 'Execute' },
-  'execute': { civilian: 'Execute', military: 'Implement' },
-  'deploy': { civilian: 'Deploy', military: 'Field' },
-  'activate': { civilian: 'Activate', military: 'Go Live' },
-  'deactivate': { civilian: 'Deactivate', military: 'Stand Down' },
+  'network': { civilian: 'Network', military: 'Grid' },
+  'connection': { civilian: 'Connection', military: 'Link' },
+  'settings': { civilian: 'Settings', military: 'Configuration', acronym: 'CONFIG' },
+  'preferences': { civilian: 'Preferences', military: 'Parameters' },
+  'profile': { civilian: 'Profile', military: 'User Data' },
+  'account': { civilian: 'Account', military: 'User Profile' },
+  'login': { civilian: 'Login', military: 'Authentication', acronym: 'AUTH' },
+  'logout': { civilian: 'Logout', military: 'Secure Exit' },
+  'user': { civilian: 'User', military: 'Operator', acronym: 'OP' },
+  'admin': { civilian: 'Admin', military: 'Command Authority', acronym: 'CA' },
+  'manager': { civilian: 'Manager', military: 'Operations Chief', acronym: 'OPS' },
+  'employee': { civilian: 'Employee', military: 'Personnel', acronym: 'PERS' },
+  'team': { civilian: 'Team', military: 'Squad' },
+  'crew': { civilian: 'Crew', military: 'Detail' },
+  'project': { civilian: 'Project', military: 'Mission', acronym: 'MSN' },
+  'task': { civilian: 'Task', military: 'Objective', acronym: 'OBJ' },
+  'assignment': { civilian: 'Assignment', military: 'Orders' },
+  'schedule': { civilian: 'Schedule', military: 'Timeline', acronym: 'TL' },
+  'calendar': { civilian: 'Calendar', military: 'Operational Schedule' },
+  'deadline': { civilian: 'Deadline', military: 'Time Hack' },
+  'priority': { civilian: 'Priority', military: 'Precedence' },
+  'urgent': { civilian: 'Urgent', military: 'Flash' },
+  'important': { civilian: 'Important', military: 'Priority' },
+  'critical': { civilian: 'Critical', military: 'Mission Critical' },
+  'emergency': { civilian: 'Emergency', military: 'EMERGENCY', acronym: 'EMERG' },
+  'safety': { civilian: 'Safety', military: 'Force Protection', acronym: 'FP' },
+  'security': { civilian: 'Security', military: 'OpSec', definition: 'Operational Security' },
+  'access': { civilian: 'Access', military: 'Clearance' },
+  'permission': { civilian: 'Permission', military: 'Authorization', acronym: 'AUTH' },
+  'location': { civilian: 'Location', military: 'Position', acronym: 'POS' },
+  'address': { civilian: 'Address', military: 'Coordinates', acronym: 'COORD' },
+  'coordinates': { civilian: 'Coordinates', military: 'Grid Reference' },
+  'map': { civilian: 'Map', military: 'Chart' },
+  'route': { civilian: 'Route', military: 'Path' },
+  'distance': { civilian: 'Distance', military: 'Range' },
+  'direction': { civilian: 'Direction', military: 'Bearing', acronym: 'BRG' },
+  'equipment': { civilian: 'Equipment', military: 'Assets', acronym: 'EQPT' },
+  'vehicle': { civilian: 'Vehicle', military: 'Transport', acronym: 'TRANS' },
+  'truck': { civilian: 'Truck', military: 'Heavy Transport' },
+  'tool': { civilian: 'Tool', military: 'Equipment Item' },
+  'machine': { civilian: 'Machine', military: 'Equipment' },
+  'device': { civilian: 'Device', military: 'Unit' },
+  'maintenance': { civilian: 'Maintenance', military: 'Service', acronym: 'MAINT' },
+  'repair': { civilian: 'Repair', military: 'Fix' },
+  'inspection': { civilian: 'Inspection', military: 'Check', acronym: 'INSP' },
+  'inventory': { civilian: 'Inventory', military: 'Assets List' },
+  'supplies': { civilian: 'Supplies', military: 'Materiel', acronym: 'MAT' },
+  'materials': { civilian: 'Materials', military: 'Resources' },
+  'cost': { civilian: 'Cost', military: 'Expenditure', acronym: 'EXPEND' },
+  'budget': { civilian: 'Budget', military: 'Allocation' },
+  'expense': { civilian: 'Expense', military: 'Cost' },
+  'invoice': { civilian: 'Invoice', military: 'Bill' },
+  'payment': { civilian: 'Payment', military: 'Transaction' },
+  'estimate': { civilian: 'Estimate', military: 'Assessment' },
+  'quote': { civilian: 'Quote', military: 'Bid' },
+  'contract': { civilian: 'Contract', military: 'Agreement' },
+  'client': { civilian: 'Client', military: 'Customer' },
+  'customer': { civilian: 'Customer', military: 'Client' },
+  'vendor': { civilian: 'Vendor', military: 'Supplier' },
+  'supplier': { civilian: 'Supplier', military: 'Provider' },
+  'contact': { civilian: 'Contact', military: 'Point of Contact', acronym: 'POC' },
+  'phone': { civilian: 'Phone', military: 'Communications', acronym: 'COMMS' },
+  'email': { civilian: 'Email', military: 'Electronic Message' },
+  'message': { civilian: 'Message', military: 'Traffic' },
+  'communication': { civilian: 'Communication', military: 'Comms' },
+  'data': { civilian: 'Data', military: 'Information', acronym: 'INFO' },
+  'information': { civilian: 'Information', military: 'Intel', definition: 'Intelligence' },
+  'record': { civilian: 'Record', military: 'Log Entry' },
+  'document': { civilian: 'Document', military: 'File' },
+  'file': { civilian: 'File', military: 'Document' },
+  'folder': { civilian: 'Folder', military: 'Directory' },
+  'archive': { civilian: 'Archive', military: 'Storage' },
+  'backup': { civilian: 'Backup', military: 'Archive Copy' },
+  'storage': { civilian: 'Storage', military: 'Repository' },
+  'database': { civilian: 'Database', military: 'Data Store', acronym: 'DB' },
+  'server': { civilian: 'Server', military: 'Host System' },
+  'cloud': { civilian: 'Cloud', military: 'Remote Storage' },
   'online': { civilian: 'Online', military: 'Operational' },
   'offline': { civilian: 'Offline', military: 'Non-Operational' },
-  'available': { civilian: 'Available', military: 'Ready' },
-  'unavailable': { civilian: 'Unavailable', military: 'Not Ready' },
-  'active': { civilian: 'Active', military: 'Live' },
-  'inactive': { civilian: 'Inactive', military: 'Standby' },
-  'pending': { civilian: 'Pending', military: 'Awaiting Orders' },
-  'complete': { civilian: 'Complete', military: 'Mission Complete' },
-  'incomplete': { civilian: 'Incomplete', military: 'Mission Ongoing' },
-  'success': { civilian: 'Success', military: 'Mission Success' },
-  'failure': { civilian: 'Failure', military: 'Mission Failed' },
-  'error': { civilian: 'Error', military: 'System Fault' },
-  'warning': { civilian: 'Warning', military: 'Advisory' },
-  'info': { civilian: 'Info', military: 'Intel' },
-  'help': { civilian: 'Help', military: 'Support' },
-  'support': { civilian: 'Support', military: 'Assistance' },
-  'contact': { civilian: 'Contact', military: 'Communications' },
-  'feedback': { civilian: 'Feedback', military: 'After Action' },
-  'version': { civilian: 'Version', military: 'Build Number' },
-  'license': { civilian: 'License', military: 'Authorization' },
-  'terms': { civilian: 'Terms', military: 'Regulations' },
-  'privacy': { civilian: 'Privacy', military: 'Security Clearance' },
-  'cookies': { civilian: 'Cookies', military: 'Session Tokens' },
-  'cache': { civilian: 'Cache', military: 'Temporary Storage' },
-  'storage': { civilian: 'Storage', military: 'Data Repository' },
-  'memory': { civilian: 'Memory', military: 'Data Buffer' },
-  'cpu': { civilian: 'CPU', military: 'Processing Unit' },
-  'gpu': { civilian: 'GPU', military: 'Graphics Processor' },
-  'ram': { civilian: 'RAM', military: 'System Memory' },
-  'disk': { civilian: 'Disk', military: 'Storage Device' },
-  'bandwidth': { civilian: 'Bandwidth', military: 'Data Throughput' },
-  'latency': { civilian: 'Latency', military: 'Response Time' },
-  'ping': { civilian: 'Ping', military: 'Echo Test' },
-  'timeout': { civilian: 'Timeout', military: 'Session Expired' },
-  'retry': { civilian: 'Retry', military: 'Retry Attempt' },
-  'abort': { civilian: 'Abort', military: 'Mission Abort' },
-  'cancel': { civilian: 'Cancel', military: 'Stand Down' },
-  'override': { civilian: 'Override', military: 'Command Override' },
-  'bypass': { civilian: 'Bypass', military: 'Route Around' },
-  'redirect': { civilian: 'Redirect', military: 'Reroute' },
-  'forward': { civilian: 'Forward', military: 'Relay' },
-  'backward': { civilian: 'Backward', military: 'Retreat' },
-  'next': { civilian: 'Next', military: 'Advance' },
-  'previous': { civilian: 'Previous', military: 'Fallback' },
-  'first': { civilian: 'First', military: 'Primary' },
-  'last': { civilian: 'Last', military: 'Final' },
-  'home': { civilian: 'Home', military: 'Base' },
-  'exit': { civilian: 'Exit', military: 'Egress' },
-  'enter': { civilian: 'Enter', military: 'Ingress' },
-  'access': { civilian: 'Access', military: 'Entry Point' },
-  'permission': { civilian: 'Permission', military: 'Clearance' },
-  'authorization': { civilian: 'Authorization', military: 'Authentication' },
-  'credentials': { civilian: 'Credentials', military: 'Access Codes' },
-  'token': { civilian: 'Token', military: 'Security Key' },
-  'key': { civilian: 'Key', military: 'Cipher Key' },
-  'password': { civilian: 'Password', military: 'Access Code' },
-  'username': { civilian: 'Username', military: 'User ID' },
-  'session': { civilian: 'Session', military: 'Active Session' },
-  'connection': { civilian: 'Connection', military: 'Link Established' },
-  'disconnection': { civilian: 'Disconnection', military: 'Link Terminated' },
-  'reconnection': { civilian: 'Reconnection', military: 'Link Restored' }
+  'download': { civilian: 'Download', military: 'Retrieve' },
+  'upload': { civilian: 'Upload', military: 'Transmit' },
+  'sync': { civilian: 'Sync', military: 'Synchronize', acronym: 'SYNC' },
+  'search': { civilian: 'Search', military: 'Query' },
+  'filter': { civilian: 'Filter', military: 'Sort' },
+  'sort': { civilian: 'Sort', military: 'Arrange' },
+  'view': { civilian: 'View', military: 'Display' },
+  'display': { civilian: 'Display', military: 'Show' },
+  'show': { civilian: 'Show', military: 'Display' },
+  'hide': { civilian: 'Hide', military: 'Conceal' },
+  'open': { civilian: 'Open', military: 'Access' },
+  'close': { civilian: 'Close', military: 'Secure' },
+  'save': { civilian: 'Save', military: 'Store' },
+  'delete': { civilian: 'Delete', military: 'Remove' },
+  'edit': { civilian: 'Edit', military: 'Modify' },
+  'modify': { civilian: 'Modify', military: 'Adjust' },
+  'change': { civilian: 'Change', military: 'Alter' },
+  'create': { civilian: 'Create', military: 'Generate' },
+  'add': { civilian: 'Add', military: 'Insert' },
+  'remove': { civilian: 'Remove', military: 'Extract' },
+  'copy': { civilian: 'Copy', military: 'Duplicate' },
+  'paste': { civilian: 'Paste', military: 'Insert' },
+  'cut': { civilian: 'Cut', military: 'Extract' },
+  'undo': { civilian: 'Undo', military: 'Reverse' },
+  'redo': { civilian: 'Redo', military: 'Repeat' },
+  'print': { civilian: 'Print', military: 'Hard Copy' },
+  'export': { civilian: 'Export', military: 'Extract Data' },
+  'import': { civilian: 'Import', military: 'Load Data' },
+  'load': { civilian: 'Load', military: 'Initialize' },
+  'refresh': { civilian: 'Refresh', military: 'Update' },
+  'reload': { civilian: 'Reload', military: 'Restart' },
+  'restart': { civilian: 'Restart', military: 'Reboot' },
+  'shutdown': { civilian: 'Shutdown', military: 'Power Down' },
+  'startup': { civilian: 'Startup', military: 'Initialize' },
+  'install': { civilian: 'Install', military: 'Deploy' },
+  'uninstall': { civilian: 'Uninstall', military: 'Remove' },
+  'configure': { civilian: 'Configure', military: 'Setup' },
+  'setup': { civilian: 'Setup', military: 'Configure' },
+  'test': { civilian: 'Test', military: 'Verify' },
+  'verify': { civilian: 'Verify', military: 'Confirm' },
+  'validate': { civilian: 'Validate', military: 'Check' },
+  'check': { civilian: 'Check', military: 'Inspect' },
+  'monitor': { civilian: 'Monitor', military: 'Observe' },
+  'track': { civilian: 'Track', military: 'Follow' },
+  'log': { civilian: 'Log', military: 'Record' },
+  'history': { civilian: 'History', military: 'Log' },
+  'activity': { civilian: 'Activity', military: 'Operations' },
+  'operation': { civilian: 'Operation', military: 'Mission' },
+  'process': { civilian: 'Process', military: 'Procedure' },
+  'procedure': { civilian: 'Procedure', military: 'Protocol' },
+  'protocol': { civilian: 'Protocol', military: 'Standard' },
+  'standard': { civilian: 'Standard', military: 'Specification' },
+  'specification': { civilian: 'Specification', military: 'Requirements' },
+  'requirement': { civilian: 'Requirement', military: 'Mandate' },
+  'rule': { civilian: 'Rule', military: 'Regulation' },
+  'policy': { civilian: 'Policy', military: 'Directive' },
+  'guideline': { civilian: 'Guideline', military: 'Guidance' },
+  'instruction': { civilian: 'Instruction', military: 'Orders' },
+  'manual': { civilian: 'Manual', military: 'Field Manual', acronym: 'FM' },
+  'guide': { civilian: 'Guide', military: 'Manual' },
+  'help': { civilian: 'Help', military: 'Assistance' },
+  'support': { civilian: 'Support', military: 'Backup' },
+  'assistance': { civilian: 'Assistance', military: 'Aid' },
+  'service': { civilian: 'Service', military: 'Support' },
+  'training': { civilian: 'Training', military: 'Instruction' },
+  'education': { civilian: 'Education', military: 'Training' },
+  'learning': { civilian: 'Learning', military: 'Study' },
+  'skill': { civilian: 'Skill', military: 'Capability' },
+  'capability': { civilian: 'Capability', military: 'Asset' },
+  'feature': { civilian: 'Feature', military: 'Function' },
+  'function': { civilian: 'Function', military: 'Operation' },
+  'mode': { civilian: 'Mode', military: 'Configuration' },
+  'option': { civilian: 'Option', military: 'Choice' },
+  'choice': { civilian: 'Choice', military: 'Selection' },
+  'selection': { civilian: 'Selection', military: 'Pick' },
+  'pick': { civilian: 'Pick', military: 'Choose' },
+  'choose': { civilian: 'Choose', military: 'Select' },
+  'select': { civilian: 'Select', military: 'Pick' },
+  'submit': { civilian: 'Submit', military: 'Send' },
+  'send': { civilian: 'Send', military: 'Transmit' },
+  'receive': { civilian: 'Receive', military: 'Accept' },
+  'accept': { civilian: 'Accept', military: 'Acknowledge' },
+  'reject': { civilian: 'Reject', military: 'Deny' },
+  'deny': { civilian: 'Deny', military: 'Refuse' },
+  'approve': { civilian: 'Approve', military: 'Authorize' },
+  'authorize': { civilian: 'Authorize', military: 'Grant' },
+  'grant': { civilian: 'Grant', military: 'Allow' },
+  'allow': { civilian: 'Allow', military: 'Permit' },
+  'permit': { civilian: 'Permit', military: 'Enable' },
+  'enable': { civilian: 'Enable', military: 'Activate' },
+  'disable': { civilian: 'Disable', military: 'Deactivate' },
+  'activate': { civilian: 'Activate', military: 'Enable' },
+  'deactivate': { civilian: 'Deactivate', military: 'Disable' },
+  'start': { civilian: 'Start', military: 'Begin' },
+  'begin': { civilian: 'Begin', military: 'Commence' },
+  'commence': { civilian: 'Commence', military: 'Start' },
+  'stop': { civilian: 'Stop', military: 'Halt' },
+  'halt': { civilian: 'Halt', military: 'Stop' },
+  'pause': { civilian: 'Pause', military: 'Hold' },
+  'resume': { civilian: 'Resume', military: 'Continue' },
+  'continue': { civilian: 'Continue', military: 'Proceed' },
+  'proceed': { civilian: 'Proceed', military: 'Advance' },
+  'advance': { civilian: 'Advance', military: 'Move Forward' },
+  'retreat': { civilian: 'Retreat', military: 'Fall Back' },
+  'cancel': { civilian: 'Cancel', military: 'Abort' },
+  'abort': { civilian: 'Abort', military: 'Terminate' },
+  'terminate': { civilian: 'Terminate', military: 'End' },
+  'end': { civilian: 'End', military: 'Complete' },
+  'complete': { civilian: 'Complete', military: 'Finish' },
+  'finish': { civilian: 'Finish', military: 'Done' },
+  'done': { civilian: 'Done', military: 'Complete' },
+  'success': { civilian: 'Success', military: 'Successful' },
+  'failure': { civilian: 'Failure', military: 'Failed' },
+  'error': { civilian: 'Error', military: 'Fault' },
+  'warning': { civilian: 'Warning', military: 'Caution' },
+  'caution': { civilian: 'Caution', military: 'Advisory' },
+  'notice': { civilian: 'Notice', military: 'Advisory' },
+  'info': { civilian: 'Info', military: 'Information' },
+  'tip': { civilian: 'Tip', military: 'Guidance' },
+  'note': { civilian: 'Note', military: 'Remark' },
+  'comment': { civilian: 'Comment', military: 'Note' },
+  'feedback': { civilian: 'Feedback', military: 'Response' },
+  'response': { civilian: 'Response', military: 'Reply' },
+  'reply': { civilian: 'Reply', military: 'Answer' },
+  'answer': { civilian: 'Answer', military: 'Response' },
+  'question': { civilian: 'Question', military: 'Query' },
+  'query': { civilian: 'Query', military: 'Request' },
+  'request': { civilian: 'Request', military: 'Requisition' },
+  'order': { civilian: 'Order', military: 'Command' },
+  'command': { civilian: 'Command', military: 'Order' },
+  'control': { civilian: 'Control', military: 'Command' },
+  'manage': { civilian: 'Manage', military: 'Control' },
+  'organize': { civilian: 'Organize', military: 'Arrange' },
+  'arrange': { civilian: 'Arrange', military: 'Order' },
+  'plan': { civilian: 'Plan', military: 'Strategy' },
+  'strategy': { civilian: 'Strategy', military: 'Plan' },
+  'goal': { civilian: 'Goal', military: 'Objective' },
+  'objective': { civilian: 'Objective', military: 'Target' },
+  'target': { civilian: 'Target', military: 'Objective' },
+  'mission': { civilian: 'Mission', military: 'Operation' },
+  'vision': { civilian: 'Vision', military: 'Mission' },
+  'value': { civilian: 'Value', military: 'Principle' },
+  'principle': { civilian: 'Principle', military: 'Standard' }
 };
 
 // Jargon translation function
@@ -275,7 +274,8 @@ export function translateJargon(
       if (text === text.toUpperCase()) {
         return translation.military.toUpperCase();
       }
-      if (text[0] === text[0].toUpperCase()) {
+      const firstChar = text.charAt(0);
+      if (firstChar && firstChar === firstChar.toUpperCase()) {
         return translation.military.charAt(0).toUpperCase() + translation.military.slice(1);
       }
       return translation.military;
@@ -290,450 +290,144 @@ export function withJargon(text: string, mode: 'civilian' | 'military' | 'hybrid
   return translateJargon(text, mode);
 }
 
-// ============================================================================
-// DATE AND TIME UTILITIES
-// ============================================================================
-
-// Enhanced date formatting with multiple options
-export function formatDate(
-  date: Date | string | number,
-  formatString: string = 'PPP',
-  options?: {
-    locale?: Locale;
-    weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    firstWeekContainsDate?: number;
-    useAdditionalWeekYearTokens?: boolean;
-    useAdditionalDayOfYearTokens?: boolean;
-  }
-): string {
-  try {
-    const dateObj = typeof date === 'string' ? parseISO(date) : new Date(date);
-    if (!isValid(dateObj)) {
-      return 'Invalid Date';
-    }
-    return format(dateObj, formatString, options);
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'Invalid Date';
-  }
+// Get jargon term details
+export function getJargonDetails(key: string) {
+  return JARGON_TERMS[key.toLowerCase()];
 }
 
-// Relative time formatting
-export function formatRelativeTime(
-  date: Date | string | number,
-  baseDate?: Date,
+// ============================================================================
+// ENHANCED DATE & TIME UTILITIES
+// ============================================================================
+
+// Date formatting with locale support
+export function formatDateWithLocale(date: Date | string, pattern: string = 'PPP', options?: {
+  locale?: Locale;
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  firstWeekContainsDate?: 1 | 4;
+  useAdditionalWeekYearTokens?: boolean;
+  useAdditionalDayOfYearTokens?: boolean;
+}): string {
+  const dateObj = typeof date === 'string' ? parseISO(date) : date;
+  if (!isValid(dateObj)) return 'Invalid Date';
+  
+  return format(dateObj, pattern, options);
+}
+
+// Enhanced relative date formatter
+export function createRelativeDateFormatter(
   options?: {
     locale?: Locale;
     addSuffix?: boolean;
     includeSeconds?: boolean;
   }
-): string {
-  try {
-    const dateObj = typeof date === 'string' ? parseISO(date) : new Date(date);
-    if (!isValid(dateObj)) {
-      return 'Invalid Date';
-    }
-    return formatDistanceToNow(dateObj, {
-      addSuffix: true,
-      includeSeconds: false,
-      ...options
-    });
-  } catch (error) {
-    console.error('Error formatting relative time:', error);
-    return 'Invalid Date';
-  }
-}
-
-// Time zone utilities
-export function convertToTimeZone(
-  date: Date | string,
-  timeZone: string = 'America/New_York'
-): Date {
-  try {
+) {
+  return (date: Date | string): string => {
     const dateObj = typeof date === 'string' ? parseISO(date) : date;
-    return new Date(dateObj.toLocaleString('en-US', { timeZone }));
-  } catch (error) {
-    console.error('Error converting timezone:', error);
-    return new Date();
-  }
-}
-
-// Business hours checker
-export function isBusinessHours(
-  date: Date = new Date(),
-  businessHours: { start: number; end: number; days: number[] } = {
-    start: 8, // 8 AM
-    end: 17, // 5 PM
-    days: [1, 2, 3, 4, 5] // Monday to Friday
-  }
-): boolean {
-  const hour = date.getHours();
-  const day = date.getDay();
-  
-  return businessHours.days.includes(day) && 
-         hour >= businessHours.start && 
-         hour < businessHours.end;
-}
-
-// ============================================================================
-// NUMBER AND CURRENCY UTILITIES
-// ============================================================================
-
-// Enhanced number formatting
-export function formatNumber(
-  value: number,
-  options: Intl.NumberFormatOptions & {
-    locale?: string;
-    compact?: boolean;
-    precision?: number;
-  } = {}
-): string {
-  const {
-    locale = 'en-US',
-    compact = false,
-    precision,
-    ...formatOptions
-  } = options;
-
-  try {
-    let formatOpts = { ...formatOptions };
+    if (!isValid(dateObj)) return 'Invalid date';
     
-    if (compact) {
-      formatOpts.notation = 'compact';
-      formatOpts.compactDisplay = 'short';
-    }
-    
-    if (precision !== undefined) {
-      formatOpts.minimumFractionDigits = precision;
-      formatOpts.maximumFractionDigits = precision;
-    }
-    
-    return new Intl.NumberFormat(locale, formatOpts).format(value);
-  } catch (error) {
-    console.error('Error formatting number:', error);
-    return value.toString();
+    return formatDistanceToNow(dateObj, options);
+  };
+}
+
+// Date range utilities
+export function getDateRange(type: 'today' | 'yesterday' | 'thisWeek' | 'lastWeek' | 'thisMonth' | 'lastMonth' | 'thisYear' | 'lastYear'): { start: Date; end: Date } {
+  const now = new Date();
+  const today = startOfDay(now);
+  
+  switch (type) {
+    case 'today':
+      return { start: today, end: endOfDay(now) };
+    case 'yesterday':
+      const yesterday = subDays(today, 1);
+      return { start: yesterday, end: endOfDay(yesterday) };
+    case 'thisWeek':
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+      return { start: startOfWeek, end: endOfDay(addDays(startOfWeek, 6)) };
+    case 'lastWeek':
+      const lastWeekStart = new Date(today);
+      lastWeekStart.setDate(today.getDate() - today.getDay() - 7);
+      return { start: lastWeekStart, end: endOfDay(addDays(lastWeekStart, 6)) };
+    case 'thisMonth':
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      return { start: startOfMonth, end: endOfDay(endOfMonth) };
+    case 'lastMonth':
+      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+      return { start: lastMonthStart, end: endOfDay(lastMonthEnd) };
+    case 'thisYear':
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const endOfYear = new Date(now.getFullYear(), 11, 31);
+      return { start: startOfYear, end: endOfDay(endOfYear) };
+    case 'lastYear':
+      const lastYearStart = new Date(now.getFullYear() - 1, 0, 1);
+      const lastYearEnd = new Date(now.getFullYear() - 1, 11, 31);
+      return { start: lastYearStart, end: endOfDay(lastYearEnd) };
+    default:
+      return { start: today, end: endOfDay(now) };
   }
-}
-
-// Currency formatting
-export function formatCurrency(
-  amount: number,
-  currency: string = 'USD',
-  locale: string = 'en-US',
-  options: Intl.NumberFormatOptions = {}
-): string {
-  try {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency,
-      ...options
-    }).format(amount);
-  } catch (error) {
-    console.error('Error formatting currency:', error);
-    return `${currency} ${amount.toFixed(2)}`;
-  }
-}
-
-// Percentage formatting
-export function formatPercentage(
-  value: number,
-  decimals: number = 1,
-  locale: string = 'en-US'
-): string {
-  try {
-    return new Intl.NumberFormat(locale, {
-      style: 'percent',
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    }).format(value / 100);
-  } catch (error) {
-    console.error('Error formatting percentage:', error);
-    return `${value.toFixed(decimals)}%`;
-  }
-}
-
-// File size formatting
-export function formatFileSize(
-  bytes: number,
-  decimals: number = 2,
-  binary: boolean = false
-): string {
-  if (bytes === 0) return '0 Bytes';
-  
-  const k = binary ? 1024 : 1000;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = binary 
-    ? ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB']
-    : ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-// ============================================================================
-// STRING UTILITIES
-// ============================================================================
-
-// Enhanced string manipulation
-export function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-
-export function titleCase(str: string): string {
-  return str.replace(/\w\S*/g, (txt) =>
-    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  );
-}
-
-export function camelCase(str: string): string {
-  return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toLowerCase() : word.toUpperCase()
-    )
-    .replace(/\s+/g, '');
-}
-
-export function kebabCase(str: string): string {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/[\s_]+/g, '-')
-    .toLowerCase();
-}
-
-export function snakeCase(str: string): string {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1_$2')
-    .replace(/[\s-]+/g, '_')
-    .toLowerCase();
-}
-
-// Text truncation with smart word breaking
-export function truncate(
-  text: string,
-  length: number = 100,
-  options: {
-    ending?: string;
-    wordBreak?: boolean;
-    preserveWords?: boolean;
-  } = {}
-): string {
-  const { ending = '...', wordBreak = false, preserveWords = true } = options;
-  
-  if (text.length <= length) return text;
-  
-  let truncated = text.substr(0, length - ending.length);
-  
-  if (preserveWords && !wordBreak) {
-    const lastSpace = truncated.lastIndexOf(' ');
-    if (lastSpace > 0) {
-      truncated = truncated.substr(0, lastSpace);
-    }
-  }
-  
-  return truncated + ending;
-}
-
-// Slug generation
-export function slugify(
-  text: string,
-  options: {
-    replacement?: string;
-    lower?: boolean;
-    strict?: boolean;
-    trim?: boolean;
-  } = {}
-): string {
-  const {
-    replacement = '-',
-    lower = true,
-    strict = false,
-    trim = true
-  } = options;
-  
-  let slug = text;
-  
-  if (lower) slug = slug.toLowerCase();
-  
-  // Replace spaces and special characters
-  slug = slug.replace(/[\s\W-]+/g, replacement);
-  
-  if (strict) {
-    slug = slug.replace(/[^a-zA-Z0-9\-_]/g, '');
-  }
-  
-  if (trim) {
-    slug = slug.replace(new RegExp(`^\\${replacement}+|\\${replacement}+$`, 'g'), '');
-  }
-  
-  return slug;
 }
 
 // ============================================================================
 // VALIDATION UTILITIES
 // ============================================================================
 
-// Email validation
-export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-// Phone number validation
-export function isValidPhone(phone: string, country: string = 'US'): boolean {
-  const phoneRegexes: Record<string, RegExp> = {
-    US: /^(\+1)?[\s.-]?(\([0-9]{3}\)|[0-9]{3})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}$/,
-    CA: /^(\+1)?[\s.-]?(\([0-9]{3}\)|[0-9]{3})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}$/,
-    UK: /^(\+44)?[\s.-]?([0-9]{4,5}|[0-9]{10,11})$/,
-    // Add more country patterns as needed
-  };
-  
-  const regex = phoneRegexes[country] || phoneRegexes.US;
-  return regex.test(phone);
-}
-
-// URL validation
-export function isValidURL(url: string): boolean {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
+// Enhanced validation patterns
+const validationPatterns = {
+  email: {
+    regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    message: 'Please enter a valid email address'
+  },
+  phone: {
+    regex: /^[\+]?[1-9][\d]{0,15}$/,
+    message: 'Please enter a valid phone number'
+  },
+  url: {
+    regex: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+    message: 'Please enter a valid URL'
+  },
+  ipAddress: {
+    regex: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+    message: 'Please enter a valid IP address'
+  },
+  macAddress: {
+    regex: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
+    message: 'Please enter a valid MAC address'
+  },
+  creditCard: {
+    regex: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$/,
+    message: 'Please enter a valid credit card number'
+  },
+  zipCode: {
+    regex: /^\d{5}(-\d{4})?$/,
+    message: 'Please enter a valid ZIP code'
+  },
+  strongPassword: {
+    regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    message: 'Password must be at least 8 characters with uppercase, lowercase, number, and special character'
   }
+} as const;
+
+// Validation function
+export function validateInput(value: string, type: keyof typeof validationPatterns): boolean {
+  const pattern = validationPatterns[type];
+  if (!pattern) return false;
+  
+  const regex = pattern.regex;
+  return regex?.test(value) ?? false;
 }
 
-// Password strength checker
-export function checkPasswordStrength(password: string): {
-  score: number;
-  feedback: string[];
-  isStrong: boolean;
-} {
-  const feedback: string[] = [];
-  let score = 0;
-  
-  // Length check
-  if (password.length >= 8) score += 1;
-  else feedback.push('Password should be at least 8 characters long');
-  
-  if (password.length >= 12) score += 1;
-  
-  // Character variety checks
-  if (/[a-z]/.test(password)) score += 1;
-  else feedback.push('Include lowercase letters');
-  
-  if (/[A-Z]/.test(password)) score += 1;
-  else feedback.push('Include uppercase letters');
-  
-  if (/[0-9]/.test(password)) score += 1;
-  else feedback.push('Include numbers');
-  
-  if (/[^a-zA-Z0-9]/.test(password)) score += 1;
-  else feedback.push('Include special characters');
-  
-  // Pattern checks
-  if (!/(.)\1{2,}/.test(password)) score += 1;
-  else feedback.push('Avoid repeating characters');
-  
-  if (!/^(?:password|123456|qwerty|abc123|admin|user)$/i.test(password)) score += 1;
-  else feedback.push('Avoid common passwords');
-  
-  return {
-    score,
-    feedback,
-    isStrong: score >= 6
-  };
+// Get validation message
+export function getValidationMessage(type: keyof typeof validationPatterns): string {
+  return validationPatterns[type]?.message ?? 'Invalid input';
 }
 
 // ============================================================================
-// ARRAY AND OBJECT UTILITIES
+// PERFORMANCE UTILITIES
 // ============================================================================
 
-// Deep merge objects
-export function deepMerge<T extends Record<string, any>>(
-  target: T,
-  ...sources: Partial<T>[]
-): T {
-  if (!sources.length) return target;
-  const source = sources.shift();
-  
-  if (isObject(target) && isObject(source)) {
-    for (const key in source) {
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        deepMerge(target[key], source[key]);
-      } else {
-        Object.assign(target, { [key]: source[key] });
-      }
-    }
-  }
-  
-  return deepMerge(target, ...sources);
-}
-
-// Check if value is object
-function isObject(item: any): item is Record<string, any> {
-  return item && typeof item === 'object' && !Array.isArray(item);
-}
-
-// Deep clone
-export function deepClone<T>(obj: T): T {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (obj instanceof Date) return new Date(obj.getTime()) as unknown as T;
-  if (obj instanceof Array) return obj.map(item => deepClone(item)) as unknown as T;
-  if (typeof obj === 'object') {
-    const cloned = {} as T;
-    Object.keys(obj).forEach(key => {
-      (cloned as any)[key] = deepClone((obj as any)[key]);
-    });
-    return cloned;
-  }
-  return obj;
-}
-
-// Array utilities
-export function unique<T>(array: T[]): T[] {
-  return [...new Set(array)];
-}
-
-export function groupBy<T, K extends keyof T>(
-  array: T[],
-  key: K
-): Record<string, T[]> {
-  return array.reduce((groups, item) => {
-    const groupKey = String(item[key]);
-    if (!groups[groupKey]) {
-      groups[groupKey] = [];
-    }
-    groups[groupKey].push(item);
-    return groups;
-  }, {} as Record<string, T[]>);
-}
-
-export function sortBy<T>(
-  array: T[],
-  key: keyof T,
-  direction: 'asc' | 'desc' = 'asc'
-): T[] {
-  return [...array].sort((a, b) => {
-    const aVal = a[key];
-    const bVal = b[key];
-    
-    if (aVal < bVal) return direction === 'asc' ? -1 : 1;
-    if (aVal > bVal) return direction === 'asc' ? 1 : -1;
-    return 0;
-  });
-}
-
-// ============================================================================
-// ASYNC UTILITIES
-// ============================================================================
-
-// Sleep function
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Debounce function
+// Debounce function with immediate option
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number,
@@ -741,16 +435,17 @@ export function debounce<T extends (...args: any[]) => any>(
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null;
   
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      timeout = null;
-      if (!immediate) func(...args);
-    };
-    
+  return (...args: Parameters<T>) => {
     const callNow = immediate && !timeout;
     
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    
+    timeout = setTimeout(() => {
+      timeout = null;
+      if (!immediate) func(...args);
+    }, wait);
     
     if (callNow) func(...args);
   };
@@ -761,9 +456,9 @@ export function throttle<T extends (...args: any[]) => any>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
-  let inThrottle: boolean = false;
+  let inThrottle = false;
   
-  return function throttledFunction(...args: Parameters<T>) {
+  return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
@@ -772,333 +467,126 @@ export function throttle<T extends (...args: any[]) => any>(
   };
 }
 
-// Retry with exponential backoff
-export async function retry<T>(
-  fn: () => Promise<T>,
-  options: {
-    retries?: number;
-    delay?: number;
-    backoff?: number;
-    maxDelay?: number;
-  } = {}
-): Promise<T> {
-  const {
-    retries = 3,
-    delay = 1000,
-    backoff = 2,
-    maxDelay = 10000
-  } = options;
-  
-  let attempt = 0;
-  
-  while (attempt <= retries) {
-    try {
-      return await fn();
-    } catch (error) {
-      if (attempt === retries) {
-        throw error;
-      }
-      
-      const delayTime = Math.min(delay * Math.pow(backoff, attempt), maxDelay);
-      await sleep(delayTime);
-      attempt++;
-    }
-  }
-  
-  throw new Error('Retry attempts exhausted');
-}
-
-// ============================================================================
-// STORAGE UTILITIES
-// ============================================================================
-
-// Enhanced localStorage with error handling and expiration
-export const storage = {
-  set: (key: string, value: any, expires?: Date): void => {
-    try {
-      const item = {
-        value,
-        expires: expires?.getTime() || null,
-        timestamp: Date.now()
-      };
-      localStorage.setItem(key, JSON.stringify(item));
-    } catch (error) {
-      console.error('Error setting localStorage:', error);
-    }
-  },
-  
-  get: <T = any>(key: string): T | null => {
-    try {
-      const itemStr = localStorage.getItem(key);
-      if (!itemStr) return null;
-      
-      const item = JSON.parse(itemStr);
-      
-      // Check expiration
-      if (item.expires && Date.now() > item.expires) {
-        localStorage.removeItem(key);
-        return null;
-      }
-      
-      return item.value;
-    } catch (error) {
-      console.error('Error getting localStorage:', error);
-      return null;
-    }
-  },
-  
-  remove: (key: string): void => {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.error('Error removing localStorage:', error);
-    }
-  },
-  
-  clear: (): void => {
-    try {
-      localStorage.clear();
-    } catch (error) {
-      console.error('Error clearing localStorage:', error);
-    }
-  },
-  
-  exists: (key: string): boolean => {
-    return localStorage.getItem(key) !== null;
-  }
-};
-
-// ============================================================================
-// URL AND NAVIGATION UTILITIES
-// ============================================================================
-
-// URL parameter utilities
-export function getUrlParams(url?: string): URLSearchParams {
-  const targetUrl = url || window.location.search;
-  return new URLSearchParams(targetUrl);
-}
-
-export function setUrlParams(params: Record<string, string>): void {
-  const url = new URL(window.location.href);
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.set(key, value);
-  });
-  window.history.replaceState({}, '', url.toString());
-}
-
-export function removeUrlParams(keys: string[]): void {
-  const url = new URL(window.location.href);
-  keys.forEach(key => url.searchParams.delete(key));
-  window.history.replaceState({}, '', url.toString());
-}
-
-// ============================================================================
-// DEVICE AND BROWSER UTILITIES
-// ============================================================================
-
-// Device detection
-export const device = {
-  isMobile: (): boolean => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-  },
-  
-  isTablet: (): boolean => {
-    return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(
-      navigator.userAgent
-    );
-  },
-  
-  isDesktop: (): boolean => {
-    return !device.isMobile() && !device.isTablet();
-  },
-  
-  isIOS: (): boolean => {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent);
-  },
-  
-  isAndroid: (): boolean => {
-    return /Android/.test(navigator.userAgent);
-  },
-  
-  getViewportSize: (): { width: number; height: number } => {
-    return {
-      width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
-      height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-    };
-  }
-};
-
-// Browser capabilities
-export const browser = {
-  supportsWebP: (): boolean => {
-    const canvas = document.createElement('canvas');
-    return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-  },
-  
-  supportsWebGL: (): boolean => {
-    try {
-      const canvas = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && canvas.getContext('webgl'));
-    } catch {
-      return false;
-    }
-  },
-  
-  supportsServiceWorker: (): boolean => {
-    return 'serviceWorker' in navigator;
-  },
-  
-  supportsNotifications: (): boolean => {
-    return 'Notification' in window;
-  },
-  
-  supportsGeolocation: (): boolean => {
-    return 'geolocation' in navigator;
-  },
-  
-  isOnline: (): boolean => {
-    return navigator.onLine;
-  }
-};
-
-// ============================================================================
-// PERFORMANCE UTILITIES
-// ============================================================================
-
-// Performance measurement
-export function measurePerformance<T>(
-  fn: () => T | Promise<T>,
-  label?: string
-): T | Promise<T> {
-  const start = performance.now();
-  const result = fn();
-  
-  if (result instanceof Promise) {
-    return result.finally(() => {
-      const end = performance.now();
-      console.log(`${label || 'Function'} took ${end - start} milliseconds`);
-    });
-  }
-  
-  const end = performance.now();
-  console.log(`${label || 'Function'} took ${end - start} milliseconds`);
-  return result;
-}
-
-// Memory usage (if available)
-export function getMemoryUsage(): {
-  used: number;
-  total: number;
-  percentage: number;
-} | null {
-  if ('memory' in performance) {
-    const memory = (performance as any).memory;
-    return {
-      used: memory.usedJSHeapSize,
-      total: memory.totalJSHeapSize,
-      percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100
-    };
-  }
-  return null;
-}
-
-// ============================================================================
-// ERROR HANDLING UTILITIES
-// ============================================================================
-
-// Error boundary helper
-export function withErrorBoundary<T extends (...args: any[]) => any>(
-  fn: T,
-  errorHandler?: (error: Error, ...args: Parameters<T>) => void
+// Memoization with TTL
+export function memoizeWithTTL<T extends (...args: any[]) => any>(
+  func: T,
+  ttl: number = 5000
 ): T {
-  return ((...args: Parameters<T>) => {
-    try {
-      return fn(...args);
-    } catch (error) {
-      const err = error instanceof Error ? error : new Error(String(error));
-      if (errorHandler) {
-        errorHandler(err, ...args);
-      } else {
-        console.error('Function error:', err);
-      }
-      throw err;
+  const cache = new Map<string, { value: ReturnType<T>; timestamp: number }>();
+  
+  return ((...args: Parameters<T>): ReturnType<T> => {
+    const key = JSON.stringify(args);
+    const now = Date.now();
+    const cached = cache.get(key);
+    
+    if (cached && (now - cached.timestamp) < ttl) {
+      return cached.value;
     }
+    
+    const result = func(...args);
+    cache.set(key, { value: result, timestamp: now });
+    
+    return result;
   }) as T;
 }
 
-// Safe JSON parse
-export function safeJsonParse<T = any>(
-  str: string,
-  defaultValue: T
-): T {
+// Deep object access with path
+export function getNestedValue<T>(obj: any, path: string, defaultValue?: T): T | undefined {
+  if (!obj || typeof path !== 'string') return defaultValue;
+  
   try {
-    return JSON.parse(str);
+    const objPath = path.split('.');
+    return objPath.reduce((current, key) => {
+      return current && typeof current === 'object' ? (current as any)[key] : undefined;
+    }, obj as any) ?? defaultValue;
   } catch {
     return defaultValue;
   }
 }
 
+// Deep object setting with path
+export function setNestedValue(obj: any, path: string, value: any): void {
+  if (!obj || typeof path !== 'string') return;
+  
+  const keys = path.split('.');
+  const lastKey = keys.pop();
+  
+  if (!lastKey) return;
+  
+  const target = keys.reduce((current, key) => {
+    if (!current[key] || typeof current[key] !== 'object') {
+      current[key] = {};
+    }
+    return current[key];
+  }, obj);
+  
+  target[lastKey] = value;
+}
+
 // ============================================================================
-// ACCESSIBILITY UTILITIES
+// MATH & CALCULATION UTILITIES
 // ============================================================================
 
-// Focus management
-export function trapFocus(element: HTMLElement): () => void {
-  const focusableElements = element.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  );
+// Enhanced number formatting
+export function formatNumber(
+  value: number,
+  options: {
+    decimals?: number;
+    currency?: string;
+    percentage?: boolean;
+    compact?: boolean;
+    locale?: string;
+  } = {}
+): string {
+  const {
+    decimals = 2,
+    currency,
+    percentage = false,
+    compact = false,
+    locale = 'en-US'
+  } = options;
   
-  const firstElement = focusableElements[0] as HTMLElement;
-  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-  
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Tab') {
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    }
+  if (percentage) {
+    return new Intl.NumberFormat(locale, {
+      style: 'percent',
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    }).format(value / 100);
   }
   
-  element.addEventListener('keydown', handleKeyDown);
+  if (currency) {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+      notation: compact ? 'compact' : 'standard'
+    }).format(value);
+  }
   
-  // Return cleanup function
-  return () => {
-    element.removeEventListener('keydown', handleKeyDown);
-  };
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+    notation: compact ? 'compact' : 'standard'
+  }).format(value);
 }
 
-// Announce to screen readers
-export function announceToScreenReader(message: string): void {
-  const announcement = document.createElement('div');
-  announcement.setAttribute('aria-live', 'polite');
-  announcement.setAttribute('aria-atomic', 'true');
-  announcement.style.position = 'absolute';
-  announcement.style.left = '-10000px';
-  announcement.style.width = '1px';
-  announcement.style.height = '1px';
-  announcement.style.overflow = 'hidden';
-  
-  document.body.appendChild(announcement);
-  announcement.textContent = message;
-  
-  setTimeout(() => {
-    document.body.removeChild(announcement);
-  }, 1000);
+// Calculate percentage
+export function calculatePercentage(value: number, total: number): number {
+  if (total === 0) return 0;
+  return (value / total) * 100;
 }
 
-// ============================================================================
-// MATHEMATICAL UTILITIES
-// ============================================================================
+// Calculate percentage change
+export function calculatePercentageChange(oldValue: number, newValue: number): number {
+  if (oldValue === 0) return newValue > 0 ? 100 : 0;
+  return ((newValue - oldValue) / oldValue) * 100;
+}
+
+// Round to nearest increment
+export function roundToNearest(value: number, increment: number): number {
+  return Math.round(value / increment) * increment;
+}
 
 // Clamp value between min and max
 export function clamp(value: number, min: number, max: number): number {
@@ -1107,7 +595,7 @@ export function clamp(value: number, min: number, max: number): number {
 
 // Linear interpolation
 export function lerp(start: number, end: number, factor: number): number {
-  return start + (end - start) * clamp(factor, 0, 1);
+  return start + (end - start) * factor;
 }
 
 // Map value from one range to another
@@ -1118,24 +606,233 @@ export function mapRange(
   toMin: number,
   toMax: number
 ): number {
-  const normalized = (value - fromMin) / (fromMax - fromMin);
-  return lerp(toMin, toMax, normalized);
+  const factor = (value - fromMin) / (fromMax - fromMin);
+  return lerp(toMin, toMax, factor);
 }
 
-// Round to specific decimal places
-export function roundTo(value: number, decimals: number): number {
-  const factor = Math.pow(10, decimals);
-  return Math.round(value * factor) / factor;
+// ============================================================================
+// ARRAY UTILITIES
+// ============================================================================
+
+// Chunk array into smaller arrays
+export function chunk<T>(array: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
 }
 
-// Generate random number in range
-export function randomInRange(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
+// Remove duplicates from array
+export function unique<T>(array: T[]): T[] {
+  return [...new Set(array)];
 }
 
-// Generate random integer in range
-export function randomIntInRange(min: number, max: number): number {
-  return Math.floor(randomInRange(min, max + 1));
+// Remove duplicates by key
+export function uniqueBy<T>(array: T[], keyFn: (item: T) => any): T[] {
+  const seen = new Set();
+  return array.filter(item => {
+    const key = keyFn(item);
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+// Group array by key
+export function groupBy<T>(array: T[], keyFn: (item: T) => string): Record<string, T[]> {
+  return array.reduce((groups, item) => {
+    const key = keyFn(item);
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(item);
+    return groups;
+  }, {} as Record<string, T[]>);
+}
+
+// Sort array by multiple criteria
+export function sortBy<T>(array: T[], ...criteria: ((item: T) => any)[]): T[] {
+  return [...array].sort((a, b) => {
+    for (const criterion of criteria) {
+      const aVal = criterion(a);
+      const bVal = criterion(b);
+      
+      if (aVal < bVal) return -1;
+      if (aVal > bVal) return 1;
+    }
+    return 0;
+  });
+}
+
+// ============================================================================
+// STRING UTILITIES
+// ============================================================================
+
+// Capitalize first letter
+export function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// Convert to title case
+export function toTitleCase(str: string): string {
+  return str.replace(/\w\S*/g, capitalize);
+}
+
+// Convert to camelCase
+export function toCamelCase(str: string): string {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    })
+    .replace(/\s+/g, '');
+}
+
+// Convert to kebab-case
+export function toKebabCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+// Convert to snake_case
+export function toSnakeCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1_$2')
+    .replace(/[\s-]+/g, '_')
+    .toLowerCase();
+}
+
+// Truncate string with ellipsis
+export function truncate(str: string, length: number, suffix: string = '...'): string {
+  if (str.length <= length) return str;
+  return str.substring(0, length - suffix.length) + suffix;
+}
+
+// Extract initials from name
+export function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+}
+
+// Pluralize word based on count
+export function pluralize(word: string, count: number, suffix: string = 's'): string {
+  return count === 1 ? word : word + suffix;
+}
+
+// ============================================================================
+// URL & QUERY STRING UTILITIES
+// ============================================================================
+
+// Parse query string to object
+export function parseQueryString(query: string): Record<string, string> {
+  return Object.fromEntries(new URLSearchParams(query));
+}
+
+// Convert object to query string
+export function buildQueryString(params: Record<string, any>): string {
+  const searchParams = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      searchParams.append(key, String(value));
+    }
+  });
+  
+  return searchParams.toString();
+}
+
+// ============================================================================
+// STORAGE UTILITIES
+// ============================================================================
+
+// Safe localStorage with JSON support
+export const storage = {
+  get<T>(key: string, defaultValue?: T): T | null {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue ?? null;
+    } catch {
+      return defaultValue ?? null;
+    }
+  },
+  
+  set(key: string, value: any): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Handle storage quota exceeded
+    }
+  },
+  
+  remove(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Handle errors
+    }
+  },
+  
+  clear(): void {
+    try {
+      localStorage.clear();
+    } catch {
+      // Handle errors
+    }
+  }
+};
+
+// ============================================================================
+// EVENT UTILITIES
+// ============================================================================
+
+// Simple event emitter
+export class EventEmitter<T extends Record<string, any>> {
+  private events: Map<keyof T, Function[]> = new Map();
+  
+  on<K extends keyof T>(event: K, listener: (data: T[K]) => void): () => void {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
+    }
+    
+    const listeners = this.events.get(event)!;
+    listeners.push(listener);
+    
+    // Return unsubscribe function
+    return () => {
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }
+  
+  emit<K extends keyof T>(event: K, data: T[K]): void {
+    const listeners = this.events.get(event);
+    if (listeners) {
+      listeners.forEach(listener => listener(data));
+    }
+  }
+  
+  off<K extends keyof T>(event: K, listener?: Function): void {
+    if (!listener) {
+      this.events.delete(event);
+      return;
+    }
+    
+    const listeners = this.events.get(event);
+    if (listeners) {
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    }
+  }
 }
 
 // ============================================================================
@@ -1146,9 +843,9 @@ export function randomIntInRange(min: number, max: number): number {
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
+    r: parseInt(result[1] || '0', 16),
+    g: parseInt(result[2] || '0', 16),
+    b: parseInt(result[3] || '0', 16)
   } : null;
 }
 
@@ -1157,102 +854,268 @@ export function rgbToHex(r: number, g: number, b: number): string {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
+// Convert hex to HSL
+export function hexToHsl(hex: string): { h: number; s: number; l: number } | null {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return null;
+  
+  const { r, g, b } = rgb;
+  const rNorm = r / 255;
+  const gNorm = g / 255;
+  const bNorm = b / 255;
+  
+  const max = Math.max(rNorm, gNorm, bNorm);
+  const min = Math.min(rNorm, gNorm, bNorm);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    
+    switch (max) {
+      case rNorm: h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0); break;
+      case gNorm: h = (bNorm - rNorm) / d + 2; break;
+      case bNorm: h = (rNorm - gNorm) / d + 4; break;
+    }
+    h /= 6;
+  }
+  
+  return {
+    h: Math.round(h * 360),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100)
+  };
+}
+
 // Generate random color
-export function randomColor(): string {
+export function generateRandomColor(): string {
+  return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+}
+
+// Lighten/darken color
+export function adjustColorBrightness(hex: string, amount: number): string {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  
+  const adjust = (value: number) => Math.max(0, Math.min(255, value + amount));
+  
   return rgbToHex(
-    randomIntInRange(0, 255),
-    randomIntInRange(0, 255),
-    randomIntInRange(0, 255)
+    adjust(rgb.r),
+    adjust(rgb.g),
+    adjust(rgb.b)
   );
 }
 
 // ============================================================================
-// CONSTANTS AND EXPORTS
+// ASYNC UTILITIES
 // ============================================================================
 
-// Export all utilities
-export const utils = {
-  // Jargon utilities
+// Sleep/delay function
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Retry with exponential backoff
+export async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000,
+  maxDelay: number = 10000
+): Promise<T> {
+  let lastError: Error;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      const delay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);
+      await sleep(delay);
+    }
+  }
+  
+  throw lastError!;
+}
+
+// Timeout wrapper
+export function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  timeoutMessage: string = 'Operation timed out'
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+    })
+  ]);
+}
+
+// ============================================================================
+// FILE & DOWNLOAD UTILITIES
+// ============================================================================
+
+// Download data as file
+export function downloadAsFile(data: string, filename: string, mimeType: string = 'text/plain'): void {
+  const blob = new Blob([data], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  URL.revokeObjectURL(url);
+}
+
+// Convert file to base64
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// Format file size
+export function formatFileSize(bytes: number): string {
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return '0 B';
+  
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// ============================================================================
+// RESPONSIVE & DEVICE UTILITIES
+// ============================================================================
+
+// Check if device is mobile
+export function isMobileDevice(): boolean {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Check if device supports touch
+export function isTouchDevice(): boolean {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
+// Get viewport dimensions
+export function getViewportDimensions(): { width: number; height: number } {
+  return {
+    width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
+    height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+  };
+}
+
+// ============================================================================
+// ACCESSIBILITY UTILITIES
+// ============================================================================
+
+// Focus trap for modals
+export function createFocusTrap(element: HTMLElement): () => void {
+  const focusableElements = element.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  ) as NodeListOf<HTMLElement>;
+  
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+  
+  function handleTabKey(e: KeyboardEvent) {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement && lastElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement && firstElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  }
+  
+  element.addEventListener('keydown', handleTabKey);
+  
+  // Focus first element
+  firstElement?.focus();
+  
+  // Return cleanup function
+  return () => {
+    element.removeEventListener('keydown', handleTabKey);
+  };
+}
+
+// Generate unique ID for accessibility
+export function generateId(prefix: string = 'id'): string {
+  return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+export default {
+  cn,
   translateJargon,
   withJargon,
-  
-  // Date utilities
-  formatDate,
-  formatRelativeTime,
-  convertToTimeZone,
-  isBusinessHours,
-  
-  // Number utilities
-  formatNumber,
-  formatCurrency,
-  formatPercentage,
-  formatFileSize,
-  
-  // String utilities
-  capitalize,
-  titleCase,
-  camelCase,
-  kebabCase,
-  snakeCase,
-  truncate,
-  slugify,
-  
-  // Validation utilities
-  isValidEmail,
-  isValidPhone,
-  isValidURL,
-  checkPasswordStrength,
-  
-  // Array and object utilities
-  deepMerge,
-  deepClone,
-  unique,
-  groupBy,
-  sortBy,
-  
-  // Async utilities
-  sleep,
+  getJargonDetails,
+  formatDateWithLocale,
+  createRelativeDateFormatter,
+  getDateRange,
+  validateInput,
+  getValidationMessage,
   debounce,
   throttle,
-  retry,
-  
-  // Storage utilities
-  storage,
-  
-  // URL utilities
-  getUrlParams,
-  setUrlParams,
-  removeUrlParams,
-  
-  // Device utilities
-  device,
-  browser,
-  
-  // Performance utilities
-  measurePerformance,
-  getMemoryUsage,
-  
-  // Error handling
-  withErrorBoundary,
-  safeJsonParse,
-  
-  // Accessibility utilities
-  trapFocus,
-  announceToScreenReader,
-  
-  // Math utilities
+  memoizeWithTTL,
+  getNestedValue,
+  setNestedValue,
+  formatNumber,
+  calculatePercentage,
+  calculatePercentageChange,
+  roundToNearest,
   clamp,
   lerp,
   mapRange,
-  roundTo,
-  randomInRange,
-  randomIntInRange,
-  
-  // Color utilities
+  chunk,
+  unique,
+  uniqueBy,
+  groupBy,
+  sortBy,
+  capitalize,
+  toTitleCase,
+  toCamelCase,
+  toKebabCase,
+  toSnakeCase,
+  truncate,
+  getInitials,
+  pluralize,
+  parseQueryString,
+  buildQueryString,
+  storage,
+  EventEmitter,
   hexToRgb,
   rgbToHex,
-  randomColor
+  hexToHsl,
+  generateRandomColor,
+  adjustColorBrightness,
+  sleep,
+  retryWithBackoff,
+  withTimeout,
+  downloadAsFile,
+  fileToBase64,
+  formatFileSize,
+  isMobileDevice,
+  isTouchDevice,
+  getViewportDimensions,
+  createFocusTrap,
+  generateId
 };
-
-// Default export
-export default utils;
