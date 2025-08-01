@@ -31,8 +31,12 @@
     "test:enhanced": "vitest --config vitest.config.enhanced.ts",
     "analyze:bundle": "tsx scripts/analyze-bundle.ts",
     "analyze:security": "npm audit && npm run analyze:bundle",
-    "optimize:deps": "npm-check-updates -u && npm install",
-    "performance:monitor": "npm run build && npm run analyze:bundle"
+    "optimize:deps": "tsx scripts/optimize-dependencies.ts",
+    "optimize:all": "npm run optimize:deps && npm run analyze:bundle && npm run analyze:security",
+    "performance:monitor": "npm run build && npm run analyze:bundle",
+    "accessibility:audit": "echo 'Run accessibility audit in browser console: await auditAccessibility()'",
+    "pwa:status": "echo 'Check PWA status in browser console: getCacheMetrics()'",
+    "quality:full": "npm run lint && npm run type-check && npm run test:enhanced && npm run optimize:all"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
