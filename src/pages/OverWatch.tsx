@@ -13,14 +13,14 @@ interface SystemStatus {
 }
 
 export default function OverWatch() {
-  const [systems, setSystems] = useState<SystemStatus[]>([
+  const [systems] = useState<SystemStatus[]>([
     { name: 'Fleet Tracking', status: 'online', metrics: 98, icon: Truck },
     { name: 'Employee Monitor', status: 'online', metrics: 95, icon: Users },
     { name: 'Safety Systems', status: 'warning', metrics: 87, icon: Shield },
     { name: 'Operations', status: 'online', metrics: 92, icon: Activity },
   ]);
 
-  const [alerts, setAlerts] = useState([
+  const [alerts] = useState([
     { id: 1, type: 'warning', message: 'Vehicle #203 fuel level below 20%', time: '2 min ago' },
     { id: 2, type: 'info', message: 'Crew Alpha completed morning inspection', time: '15 min ago' },
     { id: 3, type: 'warning', message: 'Weather advisory: Rain expected at 3 PM', time: '1 hour ago' }
