@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, AlertTriangle, Shield, Activity, Clock } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Shield, Activity, Clock, Minimize2, Maximize2 } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -10,6 +10,7 @@ export function TacticalHUD() {
   const { getText } = useJargon();
   const { alerts, missions, metrics, acknowledgeAlert } = useTacticalData();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -54,14 +55,22 @@ export function TacticalHUD() {
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
               <span className="font-mono">{formatTime(currentTime)}</span>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-6 w-6 p-0"
+                onClick={() => setIsMinimized(!isMinimized)}
+              >
+                {isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
+              </Button>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Active Alerts */}
-      {alerts.length > 0 && (
-        <Card className="bg-background/95 backdrop-blur-sm border-destructive/20">
+      {!isMinimized && alerts.length > 0 && (
+        <Card className="bg-background/95 backdrop-blur-sm border-destructive/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -111,8 +120,8 @@ export function TacticalHUD() {
       )}
 
       {/* Mission Status */}
-      {missions.length > 0 && (
-        <Card className="bg-background/95 backdrop-blur-sm border-primary/20">
+      {!isMinimized && missions.length > 0 && (
+        <Card className="bg-background/95 backdrop-blur-sm border-primary/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -157,8 +166,8 @@ export function TacticalHUD() {
       )}
 
       {/* System Metrics */}
-      {metrics && (
-        <Card className="bg-background/95 backdrop-blur-sm border-primary/20">
+      {!isMinimized && metrics && (
+        <Card className="bg-background/95 backdrop-blur-sm border-primary/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
