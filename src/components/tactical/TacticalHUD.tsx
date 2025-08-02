@@ -64,10 +64,20 @@ export function TacticalHUD() {
         <Card className="bg-background/95 backdrop-blur-sm border-destructive/20">
           <CardContent className="p-3">
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-destructive" />
-                <span className="text-sm font-medium">{getText('alerts')}</span>
-                <Badge variant="destructive" className="text-xs">{alerts.length}</Badge>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-destructive" />
+                  <span className="text-sm font-medium">{getText('alerts')}</span>
+                  <Badge variant="destructive" className="text-xs">{alerts.length}</Badge>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => alerts.forEach(alert => acknowledgeAlert(alert.id))}
+                >
+                  Dismiss All
+                </Button>
               </div>
               {alerts.slice(0, 3).map((alert) => (
                 <div key={alert.id} className="flex items-start gap-2 text-xs">
