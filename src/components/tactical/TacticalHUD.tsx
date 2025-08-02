@@ -8,7 +8,7 @@ import { useJargon } from '../../contexts/JargonContext';
 
 export function TacticalHUD() {
   const { getText } = useJargon();
-  const { alerts, missions, metrics, acknowledgeAlert } = useTacticalData();
+  const { alerts, missions, metrics, acknowledgeAlert, updateMissionProgress } = useTacticalData();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -115,9 +115,19 @@ export function TacticalHUD() {
         <Card className="bg-background/95 backdrop-blur-sm border-primary/20">
           <CardContent className="p-3">
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">{getText('missions')}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">{getText('missions')}</span>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => missions.forEach(mission => updateMissionProgress(mission.id, 100))}
+                >
+                  Complete All
+                </Button>
               </div>
               {missions.slice(0, 2).map((mission) => (
                 <div key={mission.id} className="text-xs">
