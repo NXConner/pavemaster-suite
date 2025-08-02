@@ -8,7 +8,7 @@ import { useJargon } from '../../contexts/JargonContext';
 
 export function TacticalHUD() {
   const { getText } = useJargon();
-  const { alerts, missions, metrics, acknowledgeAlert, updateMissionProgress } = useTacticalData();
+  const { alerts, missions, metrics, acknowledgeAlert } = useTacticalData();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -124,9 +124,9 @@ export function TacticalHUD() {
                   size="sm"
                   variant="ghost"
                   className="h-6 px-2 text-xs"
-                  onClick={() => missions.forEach(mission => updateMissionProgress(mission.id, 100))}
+                  onClick={() => window.location.reload()}
                 >
-                  Complete All
+                  Dismiss All
                 </Button>
               </div>
               {missions.slice(0, 2).map((mission) => (
