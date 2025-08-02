@@ -150,6 +150,20 @@ export function TacticalHUD() {
       {metrics && (
         <Card className="bg-background/95 backdrop-blur-sm border-primary/20">
           <CardContent className="p-3">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" />
+                <span className="text-xs font-medium">{getText('commandCenter')}</span>
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-6 px-2 text-xs"
+                onClick={() => window.location.reload()}
+              >
+                Dismiss
+              </Button>
+            </div>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
                 <span className="text-muted-foreground">{getText('projects')}</span>
