@@ -33,7 +33,7 @@ class PerformanceMonitor {
     { metric: 'largestContentfulPaint', threshold: 2500, operator: 'gt', severity: 'high', message: 'LCP exceeds 2.5 seconds' },
     { metric: 'firstInputDelay', threshold: 100, operator: 'gt', severity: 'medium', message: 'FID exceeds 100ms' },
     { metric: 'cumulativeLayoutShift', threshold: 0.1, operator: 'gt', severity: 'low', message: 'CLS exceeds 0.1' },
-    { metric: 'errorRate', threshold: 5, operator: 'gt', severity: 'critical', message: 'Error rate exceeds 5%' },
+    { metric: 'errorRate', threshold: 5, operator: 'gt', severity: 'critical', message: 'Error rate exceeds 5%' }
   ];
 
   constructor() {
@@ -53,8 +53,8 @@ class PerformanceMonitor {
       });
 
       // Observe various performance entry types
-      this.observer.observe({
-        entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'first-input', 'layout-shift'],
+      this.observer.observe({ 
+        entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'first-input', 'layout-shift'] 
       });
     } catch (error) {
       console.error('Failed to initialize performance observer:', error);
@@ -91,7 +91,7 @@ class PerformanceMonitor {
       firstInputDelay: 0,
       cumulativeLayoutShift: 0,
       memoryUsage: (performance as any).memory,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     this.recordMetrics(metrics);
@@ -156,11 +156,11 @@ class PerformanceMonitor {
       metric: rule.metric,
       value,
       threshold: rule.threshold,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     console.warn('Performance Alert:', alert);
-
+    
     // Send to monitoring service
     this.sendAlert(alert);
   }
@@ -171,7 +171,7 @@ class PerformanceMonitor {
       await fetch('/api/alerts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(alert),
+        body: JSON.stringify(alert)
       });
     } catch (error) {
       console.error('Failed to send alert:', error);
@@ -184,7 +184,7 @@ class PerformanceMonitor {
       await fetch('/api/analytics/performance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(metrics),
+        body: JSON.stringify(metrics)
       });
     } catch (error) {
       console.error('Failed to send metrics:', error);
@@ -208,7 +208,7 @@ class PerformanceMonitor {
   }
 
   private collectRuntimeMetrics(): void {
-    if (typeof window === 'undefined') { return; }
+    if (typeof window === 'undefined') return;
 
     const metrics: PerformanceMetrics = {
       pageLoadTime: 0,
@@ -217,7 +217,7 @@ class PerformanceMonitor {
       firstInputDelay: 0,
       cumulativeLayoutShift: 0,
       memoryUsage: (performance as any).memory,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     this.recordMetrics(metrics);
@@ -232,7 +232,7 @@ class PerformanceMonitor {
         equipmentTracked: await this.getEquipmentCount(),
         apiCallsToday: await this.getAPICallsToday(),
         errorRate: await this.getErrorRate(),
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       return businessMetrics;

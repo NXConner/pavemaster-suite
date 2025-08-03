@@ -95,18 +95,18 @@ export default function Auth() {
                       type="email"
                       placeholder="operator@pavemaster.com"
                       value={email}
-                      onChange={(e) => { setEmail(e.target.value); }}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
-
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">Password</Label>
                     <Input
                       id="signin-password"
                       type="password"
                       value={password}
-                      onChange={(e) => { setPassword(e.target.value); }}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -133,18 +133,18 @@ export default function Auth() {
                       type="email"
                       placeholder="new.operator@pavemaster.com"
                       value={email}
-                      onChange={(e) => { setEmail(e.target.value); }}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
-
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
                     <Input
                       id="signup-password"
                       type="password"
                       value={password}
-                      onChange={(e) => { setPassword(e.target.value); }}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>

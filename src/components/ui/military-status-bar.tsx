@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, Activity, Satellite, Zap, Eye } from 'lucide-react';
-import { Card } from './card';
-import { Badge } from './badge';
-import { Progress } from './progress';
+import { useState, useEffect } from "react";
+import { Shield, AlertTriangle, Activity, Satellite, Zap, Eye } from "lucide-react";
+import { Card } from "./card";
+import { Badge } from "./badge";
+import { Progress } from "./progress";
 
 interface DefconLevel {
   level: number;
   status: string;
   color: string;
   description: string;
-  threat: 'MINIMAL' | 'LOW' | 'ELEVATED' | 'HIGH' | 'CRITICAL';
+  threat: "MINIMAL" | "LOW" | "ELEVATED" | "HIGH" | "CRITICAL";
 }
 
 const DEFCON_LEVELS: DefconLevel[] = [
-  { level: 5, status: 'EXERCISE', color: 'hsl(120, 100%, 50%)', description: 'Minimum threat level', threat: 'MINIMAL' },
-  { level: 4, status: 'NORMAL', color: 'hsl(60, 100%, 50%)', description: 'Normal readiness', threat: 'LOW' },
-  { level: 3, status: 'ELEVATED', color: 'hsl(45, 100%, 50%)', description: 'Increased watch', threat: 'ELEVATED' },
-  { level: 2, status: 'ALERT', color: 'hsl(30, 100%, 50%)', description: 'High readiness', threat: 'HIGH' },
-  { level: 1, status: 'EMERGENCY', color: 'hsl(0, 100%, 50%)', description: 'Maximum force ready', threat: 'CRITICAL' },
+  { level: 5, status: "EXERCISE", color: "hsl(120, 100%, 50%)", description: "Minimum threat level", threat: "MINIMAL" },
+  { level: 4, status: "NORMAL", color: "hsl(60, 100%, 50%)", description: "Normal readiness", threat: "LOW" },
+  { level: 3, status: "ELEVATED", color: "hsl(45, 100%, 50%)", description: "Increased watch", threat: "ELEVATED" },
+  { level: 2, status: "ALERT", color: "hsl(30, 100%, 50%)", description: "High readiness", threat: "HIGH" },
+  { level: 1, status: "EMERGENCY", color: "hsl(0, 100%, 50%)", description: "Maximum force ready", threat: "CRITICAL" }
 ];
 
 export function MilitaryStatusBar() {
@@ -31,33 +31,33 @@ export function MilitaryStatusBar() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-
+      
       // Simulate dynamic status changes
       if (Math.random() < 0.1) {
         setSystemHealth(prev => Math.max(85, Math.min(100, prev + (Math.random() - 0.5) * 2)));
       }
-
+      
       if (Math.random() < 0.05) {
         setActiveThreats(prev => Math.max(0, Math.min(5, prev + (Math.random() > 0.7 ? 1 : -1))));
       }
     }, 1000);
 
-    return () => { clearInterval(timer); };
+    return () => clearInterval(timer);
   }, []);
 
   const defconLevel = DEFCON_LEVELS.find(d => d.level === currentDefcon)!;
-  const threatLevel = activeThreats > 3 ? 'CRITICAL' : activeThreats > 1 ? 'HIGH' : activeThreats > 0 ? 'ELEVATED' : 'LOW';
+  const threatLevel = activeThreats > 3 ? "CRITICAL" : activeThreats > 1 ? "HIGH" : activeThreats > 0 ? "ELEVATED" : "LOW";
 
   return (
     <Card className="w-full border-2 border-primary/20 bg-card/50 backdrop-blur-md">
       <div className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center">
-
+          
           {/* DEFCON Status */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Shield
-                className="h-8 w-8 text-primary animate-pulse"
+              <Shield 
+                className="h-8 w-8 text-primary animate-pulse" 
                 style={{ color: defconLevel.color }}
               />
               <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary animate-ping" />
@@ -83,16 +83,16 @@ export function MilitaryStatusBar() {
 
           {/* Active Threats */}
           <div className="flex items-center gap-3">
-            <AlertTriangle
-              className={`h-6 w-6 ${activeThreats > 0 ? 'text-warning animate-pulse' : 'text-muted-foreground'}`}
+            <AlertTriangle 
+              className={`h-6 w-6 ${activeThreats > 0 ? 'text-warning animate-pulse' : 'text-muted-foreground'}`} 
             />
             <div>
               <div className="text-xs font-mono text-muted-foreground">THREATS</div>
               <div className="font-bold text-lg">
                 {activeThreats}
               </div>
-              <Badge
-                variant={threatLevel === 'CRITICAL' ? 'destructive' : threatLevel === 'HIGH' ? 'secondary' : 'outline'}
+              <Badge 
+                variant={threatLevel === "CRITICAL" ? "destructive" : threatLevel === "HIGH" ? "secondary" : "outline"}
                 className="text-xs px-1 py-0"
               >
                 {threatLevel}
@@ -128,11 +128,11 @@ export function MilitaryStatusBar() {
             <div>
               <div className="text-xs font-mono text-muted-foreground">LOCAL TIME</div>
               <div className="font-mono text-sm font-bold">
-                {currentTime.toLocaleTimeString('en-US', {
+                {currentTime.toLocaleTimeString('en-US', { 
                   hour12: false,
                   hour: '2-digit',
                   minute: '2-digit',
-                  second: '2-digit',
+                  second: '2-digit'
                 })}
               </div>
               <div className="text-xs text-success">● ACTIVE</div>

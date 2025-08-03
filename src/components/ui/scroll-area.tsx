@@ -14,7 +14,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
     >
       {children}
     </div>
-  ),
+  )
 );
 ScrollArea.displayName = 'ScrollArea';
 

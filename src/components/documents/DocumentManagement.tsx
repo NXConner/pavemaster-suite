@@ -4,17 +4,17 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Input } from '../ui/input';
-import {
-  Upload,
-  Download,
-  Share,
-  Search,
-  FolderOpen,
+import { 
+  Upload, 
+  Download, 
+  Share, 
+  Search, 
+  FolderOpen, 
   Eye,
   Lock,
   Users,
   Calendar,
-  FileIcon,
+  FileIcon
 } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
 
@@ -58,11 +58,11 @@ export const DocumentManagement = () => {
     try {
       const [documentsRes, versionsRes] = await Promise.all([
         supabase.from('documents').select('*'),
-        supabase.from('document_versions').select('*'),
+        supabase.from('document_versions').select('*')
       ]);
 
-      if (documentsRes.data) { setDocuments(documentsRes.data); }
-      if (versionsRes.data) { setVersions(versionsRes.data); }
+      if (documentsRes.data) setDocuments(documentsRes.data);
+      if (versionsRes.data) setVersions(versionsRes.data);
     } catch (error) {
       console.error('Error loading document data:', error);
     } finally {
@@ -71,12 +71,12 @@ export const DocumentManagement = () => {
   };
 
   const filteredDocuments = documents.filter(doc =>
-    doc.title.toLowerCase().includes(searchTerm.toLowerCase())
-    || doc.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+    doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    doc.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) { return '0 Bytes'; }
+    if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -84,10 +84,10 @@ export const DocumentManagement = () => {
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.includes('image')) { return '🖼️'; }
-    if (fileType.includes('pdf')) { return '📄'; }
-    if (fileType.includes('word')) { return '📝'; }
-    if (fileType.includes('excel')) { return '📊'; }
+    if (fileType.includes('image')) return '🖼️';
+    if (fileType.includes('pdf')) return '📄';
+    if (fileType.includes('word')) return '📝';
+    if (fileType.includes('excel')) return '📊';
     return '📄';
   };
 
@@ -101,7 +101,7 @@ export const DocumentManagement = () => {
             <Input
               placeholder="Search documents..."
               value={searchTerm}
-              onChange={(e) => { setSearchTerm(e.target.value); }}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 w-64"
             />
           </div>

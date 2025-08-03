@@ -4,13 +4,13 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import {
-  Palette,
-  Image,
+import { 
+  Palette, 
+  Image, 
   Monitor,
   Download,
   Eye,
-  Settings,
+  Settings
 } from 'lucide-react';
 import { INDUSTRY_THEMES, WALLPAPER_COLLECTIONS, type IndustryTheme, type WallpaperImage } from '../../config/themes';
 
@@ -21,7 +21,7 @@ export function AdvancedThemeSwitcher() {
 
   const applyTheme = (theme: IndustryTheme) => {
     const root = document.documentElement;
-
+    
     // Apply color variables
     root.style.setProperty('--primary', theme.colors.primary);
     root.style.setProperty('--secondary', theme.colors.secondary);
@@ -30,7 +30,7 @@ export function AdvancedThemeSwitcher() {
     root.style.setProperty('--foreground', theme.colors.foreground);
     root.style.setProperty('--muted', theme.colors.muted);
     root.style.setProperty('--border', theme.colors.border);
-
+    
     // Apply fonts if Google Fonts are loaded
     if (theme.fonts.heading) {
       root.style.setProperty('--font-heading', theme.fonts.heading);
@@ -38,9 +38,9 @@ export function AdvancedThemeSwitcher() {
     if (theme.fonts.body) {
       root.style.setProperty('--font-body', theme.fonts.body);
     }
-
+    
     setSelectedTheme(theme);
-
+    
     // Save to localStorage
     localStorage.setItem('selected-theme', JSON.stringify(theme));
   };
@@ -51,9 +51,9 @@ export function AdvancedThemeSwitcher() {
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundRepeat = 'no-repeat';
     document.body.style.backgroundAttachment = 'fixed';
-
+    
     setSelectedWallpaper(wallpaper);
-
+    
     // Save to localStorage
     localStorage.setItem('selected-wallpaper', JSON.stringify(wallpaper));
   };
@@ -93,12 +93,12 @@ export function AdvancedThemeSwitcher() {
             <TabsContent value="themes" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {INDUSTRY_THEMES.map((theme) => (
-                  <Card
-                    key={theme.id}
+                  <Card 
+                    key={theme.id} 
                     className={`cursor-pointer transition-all hover:shadow-lg ${
                       selectedTheme.id === theme.id ? 'ring-2 ring-primary' : ''
                     }`}
-                    onClick={() => { applyTheme(theme); }}
+                    onClick={() => applyTheme(theme)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3 mb-3">
@@ -110,27 +110,27 @@ export function AdvancedThemeSwitcher() {
                           </Badge>
                         </div>
                       </div>
-
+                      
                       <p className="text-sm text-muted-foreground mb-3">
                         {theme.description}
                       </p>
-
+                      
                       {/* Color Preview */}
                       <div className="flex gap-1">
-                        <div
+                        <div 
                           className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.primary }}
                         />
-                        <div
+                        <div 
                           className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.secondary }}
                         />
-                        <div
+                        <div 
                           className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.accent }}
                         />
                       </div>
-
+                      
                       <div className="mt-3">
                         <div className="text-xs text-muted-foreground">
                           Fonts: {theme.fonts.heading} / {theme.fonts.body}
@@ -157,17 +157,17 @@ export function AdvancedThemeSwitcher() {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {collection.images.map((wallpaper) => (
-                        <Card
-                          key={wallpaper.id}
+                        <Card 
+                          key={wallpaper.id} 
                           className={`cursor-pointer transition-all hover:shadow-lg ${
                             selectedWallpaper?.id === wallpaper.id ? 'ring-2 ring-primary' : ''
                           }`}
                         >
                           <CardContent className="p-3">
-                            <div
+                            <div 
                               className="w-full h-32 bg-cover bg-center rounded-lg mb-3"
-                              style={{
-                                backgroundImage: `url(${wallpaper.thumbnail || wallpaper.url})`,
+                              style={{ 
+                                backgroundImage: `url(${wallpaper.thumbnail || wallpaper.url})` 
                               }}
                             />
                             <h4 className="font-medium mb-1">{wallpaper.name}</h4>
@@ -214,7 +214,7 @@ export function AdvancedThemeSwitcher() {
                   </CardContent>
                 </Card>
               ))}
-
+              
               {selectedWallpaper && (
                 <Card>
                   <CardContent className="p-4">
@@ -248,12 +248,12 @@ export function AdvancedThemeSwitcher() {
                         See theme changes in real-time across the application
                       </p>
                     </div>
-                    <Button onClick={togglePreview} variant={previewMode ? 'default' : 'outline'}>
+                    <Button onClick={togglePreview} variant={previewMode ? "default" : "outline"}>
                       <Eye className="h-4 w-4 mr-2" />
                       {previewMode ? 'Exit Preview' : 'Enable Preview'}
                     </Button>
                   </div>
-
+                  
                   {previewMode && (
                     <div className="p-4 border rounded-lg bg-muted/50">
                       <h5 className="font-medium mb-2">Preview Active</h5>
@@ -262,7 +262,7 @@ export function AdvancedThemeSwitcher() {
                       </p>
                     </div>
                   )}
-
+                  
                   <div className="space-y-4">
                     <div>
                       <h5 className="font-medium mb-2">Current Configuration</h5>
@@ -279,7 +279,7 @@ export function AdvancedThemeSwitcher() {
                         )}
                       </div>
                     </div>
-
+                    
                     <div className="flex gap-2">
                       <Button variant="outline" className="flex-1">
                         <Settings className="h-4 w-4 mr-2" />

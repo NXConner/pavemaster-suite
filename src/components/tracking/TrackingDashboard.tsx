@@ -4,14 +4,14 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { MapView } from './MapView';
-import {
-  Truck,
-  Users,
-  Wrench,
-  Activity,
+import { 
+  Truck, 
+  Users, 
+  Wrench, 
+  Activity, 
   Clock,
   Filter,
-  Download,
+  Download
 } from 'lucide-react';
 
 interface TrackingDevice {
@@ -47,7 +47,7 @@ export function TrackingDashboard() {
         speed: 45,
         heading: 180,
         batteryLevel: 85,
-        assignedTo: 'John Doe',
+        assignedTo: 'John Doe'
       },
       {
         id: '2',
@@ -58,7 +58,7 @@ export function TrackingDashboard() {
         status: 'idle',
         lastUpdate: '5 min ago',
         batteryLevel: 62,
-        assignedTo: 'Mike Smith',
+        assignedTo: 'Mike Smith'
       },
       {
         id: '3',
@@ -68,7 +68,7 @@ export function TrackingDashboard() {
         longitude: -122.4294,
         status: 'online',
         lastUpdate: '1 min ago',
-        batteryLevel: 78,
+        batteryLevel: 78
       },
       {
         id: '4',
@@ -79,15 +79,15 @@ export function TrackingDashboard() {
         status: 'offline',
         lastUpdate: '45 min ago',
         batteryLevel: 12,
-        assignedTo: 'Sarah Johnson',
-      },
+        assignedTo: 'Sarah Johnson'
+      }
     ];
-
+    
     setDevices(mockDevices);
   }, []);
 
-  const filteredDevices = devices.filter(device =>
-    filter === 'all' || device.type === filter,
+  const filteredDevices = devices.filter(device => 
+    filter === 'all' || device.type === filter
   );
 
   const stats = {
@@ -97,7 +97,7 @@ export function TrackingDashboard() {
     idle: devices.filter(d => d.status === 'idle').length,
     vehicles: devices.filter(d => d.type === 'vehicle').length,
     employees: devices.filter(d => d.type === 'employee').length,
-    equipment: devices.filter(d => d.type === 'equipment').length,
+    equipment: devices.filter(d => d.type === 'equipment').length
   };
 
   const getStatusColor = (status: string) => {
@@ -131,7 +131,7 @@ export function TrackingDashboard() {
             <div className="text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export function TrackingDashboard() {
             <div className="text-2xl font-bold text-green-600">{stats.online}</div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -151,7 +151,7 @@ export function TrackingDashboard() {
             <div className="text-2xl font-bold text-yellow-600">{stats.idle}</div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -171,7 +171,7 @@ export function TrackingDashboard() {
             <div className="text-2xl font-bold">{stats.vehicles}</div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export function TrackingDashboard() {
             <div className="text-2xl font-bold">{stats.employees}</div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export function TrackingDashboard() {
             <TabsTrigger value="list">List View</TabsTrigger>
             <TabsTrigger value="playback">Playback</TabsTrigger>
           </TabsList>
-
+          
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
               <Filter className="h-4 w-4 mr-2" />
@@ -220,33 +220,33 @@ export function TrackingDashboard() {
 
         <TabsContent value="list" className="space-y-4">
           <div className="flex gap-2 mb-4">
-            <Button
-              variant={filter === 'all' ? 'default' : 'outline'}
+            <Button 
+              variant={filter === 'all' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => { setFilter('all'); }}
+              onClick={() => setFilter('all')}
             >
               All ({stats.total})
             </Button>
-            <Button
-              variant={filter === 'vehicle' ? 'default' : 'outline'}
+            <Button 
+              variant={filter === 'vehicle' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => { setFilter('vehicle'); }}
+              onClick={() => setFilter('vehicle')}
             >
               <Truck className="h-4 w-4 mr-2" />
               Vehicles ({stats.vehicles})
             </Button>
-            <Button
-              variant={filter === 'employee' ? 'default' : 'outline'}
+            <Button 
+              variant={filter === 'employee' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => { setFilter('employee'); }}
+              onClick={() => setFilter('employee')}
             >
               <Users className="h-4 w-4 mr-2" />
               Employees ({stats.employees})
             </Button>
-            <Button
-              variant={filter === 'equipment' ? 'default' : 'outline'}
+            <Button 
+              variant={filter === 'equipment' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => { setFilter('equipment'); }}
+              onClick={() => setFilter('equipment')}
             >
               <Wrench className="h-4 w-4 mr-2" />
               Equipment ({stats.equipment})
@@ -263,10 +263,10 @@ export function TrackingDashboard() {
             <CardContent>
               <div className="space-y-3">
                 {filteredDevices.map((device) => (
-                  <div
+                  <div 
                     key={device.id}
                     className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
-                    onClick={() => { setSelectedDevice(device); }}
+                    onClick={() => setSelectedDevice(device)}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${getStatusColor(device.status)}`}></div>
@@ -277,7 +277,7 @@ export function TrackingDashboard() {
                         </div>
                       </div>
                     </div>
-
+                    
                     <div className="flex items-center gap-3">
                       {device.batteryLevel && (
                         <div className="text-sm">
@@ -322,7 +322,7 @@ export function TrackingDashboard() {
                   </div>
                   <Button>Load Playback</Button>
                 </div>
-
+                
                 <div className="flex items-center justify-center h-48 bg-muted rounded-lg">
                   <div className="text-center text-muted-foreground">
                     <Clock className="h-8 w-8 mx-auto mb-2" />

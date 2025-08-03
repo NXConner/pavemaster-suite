@@ -83,7 +83,7 @@ interface DisciplinaryAction {
 export default function ComplianceManagement() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
-
+  
   // State for all compliance data
   const [, setRules] = useState<ComplianceRule[]>([]);
   const [violations, setViolations] = useState<EmployeeViolation[]>([]);
@@ -101,11 +101,11 @@ export default function ComplianceManagement() {
       // Load only available tables from Supabase
       const [rulesData, violationsData] = await Promise.all([
         supabase.from('compliance_rules').select('*'),
-        supabase.from('employee_violations').select('*'),
+        supabase.from('employee_violations').select('*')
       ]);
 
-      if (rulesData.error) { throw rulesData.error; }
-      if (violationsData.error) { throw violationsData.error; }
+      if (rulesData.error) throw rulesData.error;
+      if (violationsData.error) throw violationsData.error;
 
       // Transform data to match interfaces
       const transformedRules = rulesData.data?.map(rule => ({
@@ -113,7 +113,7 @@ export default function ComplianceManagement() {
         description: rule.description || '',
         point_deduction: rule.point_deduction || 0,
         auto_enforce: rule.auto_enforce || false,
-        severity: (rule.severity as 'minor' | 'major' | 'critical') || 'minor',
+        severity: (rule.severity as 'minor' | 'major' | 'critical') || 'minor'
       })) || [];
 
       const transformedViolations = violationsData.data?.map(violation => ({
@@ -122,12 +122,12 @@ export default function ComplianceManagement() {
         description: violation.description || '',
         violation_date: violation.violation_date || new Date().toISOString(),
         resolved: violation.resolved || false,
-        auto_generated: violation.auto_generated || false,
+        auto_generated: violation.auto_generated || false
       })) || [];
 
       setRules(transformedRules);
       setViolations(transformedViolations);
-
+      
       // Mock data for compliance scores and other features
       setComplianceScores([
         {
@@ -137,37 +137,37 @@ export default function ComplianceManagement() {
           grade: 'A',
           period_start: '2024-01-01',
           period_end: '2024-01-31',
-          employees: { first_name: 'John', last_name: 'Doe' },
-        },
+          employees: { first_name: 'John', last_name: 'Doe' }
+        }
       ]);
-
+      
       setCostRecords([
-        {
-          id: '1',
-          employee_id: 'emp1',
-          type: 'positive',
+        { 
+          id: '1', 
+          employee_id: 'emp1', 
+          type: 'positive', 
           category: 'quality',
-          amount: 500,
-          description: 'Quality bonus',
+          amount: 500, 
+          description: 'Quality bonus', 
           date_recorded: '2024-01-15',
-          employees: { first_name: 'John', last_name: 'Doe' },
-        },
+          employees: { first_name: 'John', last_name: 'Doe' }
+        }
       ]);
 
       setCostTracking([
-        {
-          id: '1',
-          employee_id: 'emp1',
+        { 
+          id: '1', 
+          employee_id: 'emp1', 
           period_type: 'monthly',
           period_start: '2024-01-01',
           period_end: '2024-01-31',
           operational_cost: 1000,
           project_cost: 2000,
-          positive_cost: 500,
-          negative_cost: 200,
+          positive_cost: 500, 
+          negative_cost: 200, 
           total_cost: 3300,
-          employees: { first_name: 'John', last_name: 'Doe' },
-        },
+          employees: { first_name: 'John', last_name: 'Doe' }
+        }
       ]);
 
       setDisciplinaryActions([]);
@@ -205,7 +205,7 @@ export default function ComplianceManagement() {
         .update({ resolved: true, resolved_at: new Date().toISOString() })
         .eq('id', violationId);
 
-      if (error) { throw error; }
+      if (error) throw error;
       toast.success('Violation resolved successfully');
       loadAllComplianceData();
     } catch (error) {
@@ -216,13 +216,13 @@ export default function ComplianceManagement() {
 
   // Calculate metrics
   const getOverallComplianceScore = () => {
-    if (complianceScores.length === 0) { return 0; }
+    if (complianceScores.length === 0) return 0;
     const total = complianceScores.reduce((sum, score) => sum + score.score, 0);
     return Math.round(total / complianceScores.length);
   };
 
   const getActiveViolations = () => violations.filter(v => !v.resolved);
-
+  
   const getTotalCostsByPeriod = (period: string) => {
     const periodData = costTracking.filter(ct => ct.period_type === period);
     return periodData.reduce((sum, ct) => sum + ct.total_cost, 0);
@@ -449,7 +449,7 @@ export default function ComplianceManagement() {
                           <p className="font-medium">
                             {violation.employees?.first_name} {violation.employees?.last_name}
                           </p>
-                          <Badge variant={violation.resolved ? 'default' : 'destructive'}>
+                          <Badge variant={violation.resolved ? "default" : "destructive"}>
                             {violation.resolved ? 'Resolved' : 'Active'}
                           </Badge>
                           {violation.auto_generated && (
@@ -531,7 +531,7 @@ export default function ComplianceManagement() {
                       <p className={`text-lg font-bold ${record.type === 'positive' ? 'text-green-600' : 'text-red-600'}`}>
                         {record.type === 'positive' ? '+' : '-'}${record.amount.toLocaleString()}
                       </p>
-                      <Badge variant={record.type === 'positive' ? 'default' : 'destructive'}>
+                      <Badge variant={record.type === 'positive' ? "default" : "destructive"}>
                         {record.type}
                       </Badge>
                     </div>
@@ -561,10 +561,10 @@ export default function ComplianceManagement() {
                             {action.employees?.first_name} {action.employees?.last_name}
                           </p>
                           <Badge variant={
-                            action.action_type === 'warning' ? 'outline'
-                              : action.action_type === 'written_warning' ? 'secondary'
-                                : action.action_type === 'suspension' ? 'destructive'
-                                  : 'default'
+                            action.action_type === 'warning' ? 'outline' :
+                            action.action_type === 'written_warning' ? 'secondary' :
+                            action.action_type === 'suspension' ? 'destructive' :
+                            'default'
                           }>
                             {action.action_type.replace('_', ' ')}
                           </Badge>
@@ -602,17 +602,17 @@ export default function ComplianceManagement() {
                   .sort((a, b) => b.score - a.score)
                   .map((score, index) => (
                     <div key={score.id} className={`flex items-center justify-between p-4 rounded-lg ${
-                      index === 0 ? 'bg-yellow-50 border-yellow-200'
-                        : index === 1 ? 'bg-gray-50 border-gray-200'
-                          : index === 2 ? 'bg-orange-50 border-orange-200'
-                            : 'border'
+                      index === 0 ? 'bg-yellow-50 border-yellow-200' :
+                      index === 1 ? 'bg-gray-50 border-gray-200' :
+                      index === 2 ? 'bg-orange-50 border-orange-200' :
+                      'border'
                     }`}>
                       <div className="flex items-center space-x-4">
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
-                          index === 0 ? 'bg-yellow-500'
-                            : index === 1 ? 'bg-gray-500'
-                              : index === 2 ? 'bg-orange-500'
-                                : 'bg-blue-500'
+                          index === 0 ? 'bg-yellow-500' :
+                          index === 1 ? 'bg-gray-500' :
+                          index === 2 ? 'bg-orange-500' :
+                          'bg-blue-500'
                         }`}>
                           #{index + 1}
                         </div>
@@ -626,9 +626,9 @@ export default function ComplianceManagement() {
                             </Badge>
                             {index < 3 && (
                               <Trophy className={`h-4 w-4 ${
-                                index === 0 ? 'text-yellow-500'
-                                  : index === 1 ? 'text-gray-500'
-                                    : 'text-orange-500'
+                                index === 0 ? 'text-yellow-500' :
+                                index === 1 ? 'text-gray-500' :
+                                'text-orange-500'
                               }`} />
                             )}
                           </div>

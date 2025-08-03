@@ -16,7 +16,7 @@ const performanceMonitor = {
       value,
       unit,
       timestamp: Date.now(),
-      metadata,
+      metadata
     });
     localStorage.setItem('tactical-metrics', JSON.stringify(metrics.slice(-100))); // Keep last 100
   },
@@ -26,7 +26,7 @@ const performanceMonitor = {
       metrics,
       systemHealth: 'OPERATIONAL',
       lastBoot: new Date().toISOString(),
-      userAgent: navigator.userAgent,
+      userAgent: navigator.userAgent
     };
   },
 };
@@ -48,17 +48,17 @@ function initializeAdvancedSystems() {
   console.log('📊 Performance Monitoring: ENABLED');
   console.log('🌍 Global Positioning: READY');
   console.log('🔧 System Diagnostics: OPERATIONAL');
-
+  
   // Initialize ISAC-OS theme
   const savedTheme = localStorage.getItem('theme') || 'isac-os';
   document.body.classList.add(`theme-${savedTheme}`);
-
+  
   // Initialize tactical wallpaper
   document.documentElement.style.setProperty(
-    '--wallpaper-image',
-    'url(\'/wallpapers/tactical-grid-4k.jpg\')',
+    '--wallpaper-image', 
+    `url('/wallpapers/tactical-grid-4k.jpg')`
   );
-
+  
   // Veteran system integration check
   const veteranMode = localStorage.getItem('jargonMode') === 'military';
   if (veteranMode) {
@@ -87,10 +87,10 @@ performanceMonitor.recordMetric('app_startup_time', appLoadTime, 'ms', {
 
 // Log tactical system deployment completion
 console.log(`⚡ ISAC-OS Tactical Suite deployed in ${appLoadTime.toFixed(2)}ms`);
-console.log('🎯 System Status: FULLY OPERATIONAL');
-console.log('🛡️ All systems: GREEN');
-console.log('📡 Network Status: CONNECTED');
-console.log('🔒 Security Level: MAXIMUM');
+console.log(`🎯 System Status: FULLY OPERATIONAL`);
+console.log(`🛡️ All systems: GREEN`);
+console.log(`📡 Network Status: CONNECTED`);
+console.log(`🔒 Security Level: MAXIMUM`);
 
 // Enable tactical development insights
 if (import.meta.env.DEV) {
@@ -104,11 +104,11 @@ if (import.meta.env.DEV) {
     buildDate: new Date().toISOString(),
     features: [
       'Advanced Jargon Switching',
-      'Military/Civilian Integration',
+      'Military/Civilian Integration', 
       'Veteran Resource System',
       'ISAC-OS Design System',
-      'Tactical Performance Monitoring',
-    ],
+      'Tactical Performance Monitoring'
+    ]
   };
   console.log('🚀 ISAC-OS Development Suite Ready');
 }

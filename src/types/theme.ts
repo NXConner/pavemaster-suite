@@ -9,9 +9,9 @@ export type Theme = 'light' | 'dark' | 'system';
 export type ThemeMode = 'light' | 'dark' | 'system' | 'isac' | 'defcon' | 'overwatch' | 'tactical';
 
 // Wallpaper configurations
-export type WallpaperType =
+export type WallpaperType = 
   | 'tactical-grid-4k'
-  | 'urban-blueprint'
+  | 'urban-blueprint' 
   | 'steel-structure'
   | 'construction-site'
   | 'forest-landscape'
@@ -280,13 +280,13 @@ export interface ButtonThemeConfig {
 }
 
 export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type ButtonVariant =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'destructive'
-  | 'outline'
-  | 'ghost'
+export type ButtonVariant = 
+  | 'default' 
+  | 'primary' 
+  | 'secondary' 
+  | 'destructive' 
+  | 'outline' 
+  | 'ghost' 
   | 'link'
   | 'tactical'
   | 'emergency';
@@ -555,7 +555,7 @@ export const DEFAULT_THEME_CONFIG: ThemeConfig = {
   militaryMode: false,
   glassEffects: false,
   borderRadius: 'medium',
-  fontSize: 'medium',
+  fontSize: 'medium'
 };
 
 export const ISAC_THEME_CONFIG: ISACThemeConfig = {
@@ -571,7 +571,7 @@ export const ISAC_THEME_CONFIG: ISACThemeConfig = {
   statusIndicators: true,
   tacticalOverlay: true,
   emergencyMode: false,
-  nightVision: false,
+  nightVision: false
 };
 
 export const DEFCON_THEME_CONFIG: DEFCONThemeConfig = {
@@ -585,7 +585,7 @@ export const DEFCON_THEME_CONFIG: DEFCONThemeConfig = {
   alertLevel: 5,
   threatDisplay: true,
   criticalAlerts: true,
-  autoEscalation: false,
+  autoEscalation: false
 };
 
 export const OVERWATCH_THEME_CONFIG: OverWatchThemeConfig = {
@@ -601,27 +601,27 @@ export const OVERWATCH_THEME_CONFIG: OverWatchThemeConfig = {
   tacticalMap: true,
   realTimeFeeds: true,
   threatTracking: true,
-  commandCenter: true,
+  commandCenter: true
 };
 
 // Theme constants
 export const THEME_MODES: readonly ThemeMode[] = [
-  'light', 'dark', 'system', 'isac', 'defcon', 'overwatch', 'tactical',
+  'light', 'dark', 'system', 'isac', 'defcon', 'overwatch', 'tactical'
 ] as const;
 
 export const WALLPAPER_TYPES: readonly WallpaperType[] = [
-  'tactical-grid-4k', 'urban-blueprint', 'steel-structure',
-  'construction-site', 'forest-landscape', 'ocean-view', 'none',
+  'tactical-grid-4k', 'urban-blueprint', 'steel-structure', 
+  'construction-site', 'forest-landscape', 'ocean-view', 'none'
 ] as const;
 
 export const DISPLAY_DENSITIES: readonly DisplayDensity[] = [
-  'compact', 'comfortable', 'spacious',
+  'compact', 'comfortable', 'spacious'
 ] as const;
 
 export const BORDER_RADII: readonly BorderRadius[] = [
-  'none', 'small', 'medium', 'large', 'full',
+  'none', 'small', 'medium', 'large', 'full'
 ] as const;
 
 export const FONT_SIZES: readonly FontSize[] = [
-  'small', 'medium', 'large', 'extra-large',
+  'small', 'medium', 'large', 'extra-large'
 ] as const;

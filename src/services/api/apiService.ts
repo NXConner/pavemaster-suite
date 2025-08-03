@@ -14,17 +14,17 @@ export class ApiService {
         .from('projects')
         .select('*')
         .order('created_at', { ascending: false });
-
+      
       return {
         data,
         error: error?.message || null,
-        status: error ? 'error' : 'success',
+        status: error ? 'error' : 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }
@@ -36,17 +36,17 @@ export class ApiService {
         .insert([project])
         .select()
         .single();
-
+      
       return {
         data,
         error: error?.message || null,
-        status: error ? 'error' : 'success',
+        status: error ? 'error' : 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }
@@ -58,17 +58,17 @@ export class ApiService {
         .from('equipment')
         .select('*')
         .order('name');
-
+      
       return {
         data,
         error: error?.message || null,
-        status: error ? 'error' : 'success',
+        status: error ? 'error' : 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }
@@ -81,17 +81,17 @@ export class ApiService {
         .eq('id', id)
         .select()
         .single();
-
+      
       return {
         data,
         error: error?.message || null,
-        status: error ? 'error' : 'success',
+        status: error ? 'error' : 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }
@@ -103,17 +103,17 @@ export class ApiService {
         .from('fleet_vehicles')
         .select('*')
         .order('vehicle_name');
-
+      
       return {
         data,
         error: error?.message || null,
-        status: error ? 'error' : 'success',
+        status: error ? 'error' : 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }
@@ -128,19 +128,19 @@ export class ApiService {
         completedProjects: 30,
         totalRevenue: 125000,
         equipmentUtilization: 85,
-        fuelEfficiency: 12.5,
+        fuelEfficiency: 12.5
       };
-
+      
       return {
         data: mockData,
         error: null,
-        status: 'success',
+        status: 'success'
       };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'error',
+        status: 'error'
       };
     }
   }

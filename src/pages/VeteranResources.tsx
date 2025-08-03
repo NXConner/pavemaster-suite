@@ -4,18 +4,18 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Label } from '../components/ui/label';
-import {
-  Shield,
-  Award,
-  ExternalLink,
-  Phone,
-  MapPin,
+import { 
+  Shield, 
+  Award, 
+  ExternalLink, 
+  Phone, 
+  MapPin, 
   DollarSign,
   Building,
   Users,
   Heart,
   Flag,
-  Medal,
+  Medal
 } from 'lucide-react';
 
 interface VeteranProfile {
@@ -37,118 +37,118 @@ interface VeteranProfile {
 }
 
 const mockVeteranProfile: VeteranProfile = {
-  id: 'vet-001',
-  employeeId: 'emp-001',
-  branch: 'Army',
-  rank: 'Sergeant',
-  serviceYears: '2015-2020',
+  id: "vet-001",
+  employeeId: "emp-001",
+  branch: "Army",
+  rank: "Sergeant",
+  serviceYears: "2015-2020",
   honorableDischarge: true,
   disabilityRating: 30,
-  specializations: ['Heavy Equipment Operation', 'Leadership', 'Logistics'],
-  securityClearance: 'Secret',
+  specializations: ["Heavy Equipment Operation", "Leadership", "Logistics"],
+  securityClearance: "Secret",
   veteranOwnedBusiness: true,
   contactInfo: {
-    vaId: 'VA123456789',
-    emergencyContact: '(555) 123-4567',
-    preferredVaCenter: 'Richmond VA Medical Center',
-  },
+    vaId: "VA123456789",
+    emergencyContact: "(555) 123-4567",
+    preferredVaCenter: "Richmond VA Medical Center"
+  }
 };
 
 const vaResources = [
   {
-    title: 'VA.gov',
-    description: 'Official VA website for benefits, healthcare, and services',
-    url: 'https://www.va.gov',
-    category: 'primary',
+    title: "VA.gov",
+    description: "Official VA website for benefits, healthcare, and services",
+    url: "https://www.va.gov",
+    category: "primary"
   },
   {
-    title: 'Virginia Department of Veterans Services',
-    description: 'State-specific veteran resources and benefits',
-    url: 'https://www.dvs.virginia.gov',
-    category: 'state',
+    title: "Virginia Department of Veterans Services",
+    description: "State-specific veteran resources and benefits",
+    url: "https://www.dvs.virginia.gov",
+    category: "state"
   },
   {
-    title: 'VA Healthcare',
-    description: 'Medical care and health benefits',
-    url: 'https://www.va.gov/health-care',
-    category: 'healthcare',
+    title: "VA Healthcare",
+    description: "Medical care and health benefits",
+    url: "https://www.va.gov/health-care",
+    category: "healthcare"
   },
   {
-    title: 'VA Disability Compensation',
-    description: 'Disability ratings and compensation',
-    url: 'https://www.va.gov/disability',
-    category: 'benefits',
+    title: "VA Disability Compensation",
+    description: "Disability ratings and compensation",
+    url: "https://www.va.gov/disability",
+    category: "benefits"
   },
   {
-    title: 'GI Bill Benefits',
-    description: 'Education and training benefits',
-    url: 'https://www.va.gov/education',
-    category: 'education',
+    title: "GI Bill Benefits",
+    description: "Education and training benefits",
+    url: "https://www.va.gov/education",
+    category: "education"
   },
   {
-    title: 'VA Home Loans',
-    description: 'Home loan guaranty program',
-    url: 'https://www.va.gov/housing-assistance',
-    category: 'housing',
-  },
+    title: "VA Home Loans",
+    description: "Home loan guaranty program",
+    url: "https://www.va.gov/housing-assistance",
+    category: "housing"
+  }
 ];
 
 const contractingOpportunities = [
   {
-    title: 'SBA VOSB Certification',
-    description: 'Veteran-Owned Small Business certification',
-    status: 'Available',
-    value: 'Set-aside contracts',
-    link: 'https://www.sba.gov/federal-contracting/contracting-assistance-programs/veteran-contracting-assistance-programs',
+    title: "SBA VOSB Certification",
+    description: "Veteran-Owned Small Business certification",
+    status: "Available",
+    value: "Set-aside contracts",
+    link: "https://www.sba.gov/federal-contracting/contracting-assistance-programs/veteran-contracting-assistance-programs"
   },
   {
-    title: 'SDVOSB Certification',
-    description: 'Service-Disabled Veteran-Owned Small Business',
-    status: 'Priority',
-    value: 'Enhanced preferences',
-    link: 'https://www.sba.gov/federal-contracting/contracting-assistance-programs/veteran-contracting-assistance-programs',
+    title: "SDVOSB Certification", 
+    description: "Service-Disabled Veteran-Owned Small Business",
+    status: "Priority",
+    value: "Enhanced preferences",
+    link: "https://www.sba.gov/federal-contracting/contracting-assistance-programs/veteran-contracting-assistance-programs"
   },
   {
-    title: 'GSA Schedules',
-    description: 'Government-wide procurement contracts',
-    status: 'Active',
-    value: '$75M+ annually',
-    link: 'https://www.gsa.gov/buying-selling/products-services/professional-services/professional-services-schedule-pss',
+    title: "GSA Schedules",
+    description: "Government-wide procurement contracts",
+    status: "Active",
+    value: "$75M+ annually",
+    link: "https://www.gsa.gov/buying-selling/products-services/professional-services/professional-services-schedule-pss"
   },
   {
-    title: 'SAM.gov Registration',
-    description: 'System for Award Management registration',
-    status: 'Required',
-    value: 'Federal contracting eligibility',
-    link: 'https://sam.gov',
-  },
+    title: "SAM.gov Registration",
+    description: "System for Award Management registration",
+    status: "Required",
+    value: "Federal contracting eligibility",
+    link: "https://sam.gov"
+  }
 ];
 
 const businessSupport = [
   {
-    title: 'SCORE Mentorship',
-    description: 'Free business mentoring for veteran entrepreneurs',
+    title: "SCORE Mentorship",
+    description: "Free business mentoring for veteran entrepreneurs",
     icon: Users,
-    link: 'https://www.score.org/veterans',
+    link: "https://www.score.org/veterans"
   },
   {
-    title: 'SBA Funding Programs',
-    description: 'Loans and funding specifically for veteran businesses',
+    title: "SBA Funding Programs",
+    description: "Loans and funding specifically for veteran businesses",
     icon: DollarSign,
-    link: 'https://www.sba.gov/funding-programs/loans/veteran-loans',
+    link: "https://www.sba.gov/funding-programs/loans/veteran-loans"
   },
   {
-    title: 'Veterans Business Outreach Centers',
-    description: 'Business development assistance and training',
+    title: "Veterans Business Outreach Centers",
+    description: "Business development assistance and training",
     icon: Building,
-    link: 'https://www.sba.gov/local-assistance/resource-partners/veterans-business-outreach-centers-vboc',
+    link: "https://www.sba.gov/local-assistance/resource-partners/veterans-business-outreach-centers-vboc"
   },
   {
-    title: 'StreetShares Foundation',
-    description: 'Veteran business funding and support',
+    title: "StreetShares Foundation",
+    description: "Veteran business funding and support",
     icon: Heart,
-    link: 'https://streetsharesfoundation.org',
-  },
+    link: "https://streetsharesfoundation.org"
+  }
 ];
 
 export default function VeteranResources() {
@@ -214,7 +214,7 @@ export default function VeteranResources() {
                     <p className="text-sm text-muted-foreground">{profile.disabilityRating}%</p>
                   </div>
                 </div>
-
+                
                 <div>
                   <Label className="text-sm font-medium">Specializations</Label>
                   <div className="flex flex-wrap gap-1 mt-1">
@@ -348,8 +348,8 @@ export default function VeteranResources() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{opportunity.title}</CardTitle>
-                    <Badge variant={opportunity.status === 'Available' ? 'default'
-                      : opportunity.status === 'Priority' ? 'destructive' : 'secondary'}>
+                    <Badge variant={opportunity.status === 'Available' ? 'default' : 
+                                 opportunity.status === 'Priority' ? 'destructive' : 'secondary'}>
                       {opportunity.status}
                     </Badge>
                   </div>

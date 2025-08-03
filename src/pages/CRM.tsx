@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import {
-  Users,
-  UserPlus,
-  Phone,
-  Mail,
-  Calendar,
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { 
+  Users, 
+  UserPlus, 
+  Phone, 
+  Mail, 
+  Calendar, 
   DollarSign,
   TrendingUp,
   Activity,
@@ -22,8 +22,8 @@ import {
   Tag,
   MessageSquare,
   FileText,
-  Search,
-} from 'lucide-react';
+  Search
+} from "lucide-react";
 
 interface Lead {
   id: string;
@@ -99,7 +99,7 @@ export default function CRM() {
       lastContact: '2024-01-15',
       nextFollowUp: '2024-01-22',
       notes: 'Large parking lot, approximately 50,000 sq ft. Interested in line striping as well.',
-      tags: ['church', 'sealcoating', 'large-project'],
+      tags: ['church', 'sealcoating', 'large-project']
     },
     {
       id: '2',
@@ -118,7 +118,7 @@ export default function CRM() {
       lastContact: '2024-01-16',
       nextFollowUp: '2024-01-20',
       notes: 'Multi-phase project. Phase 1: main lot, Phase 2: side areas.',
-      tags: ['commercial', 'resurfacing', 'multi-phase'],
+      tags: ['commercial', 'resurfacing', 'multi-phase']
     },
     {
       id: '3',
@@ -137,7 +137,7 @@ export default function CRM() {
       lastContact: '2024-01-14',
       nextFollowUp: '2024-01-24',
       notes: 'Budget approved, waiting for board meeting approval.',
-      tags: ['school', 'municipal', 'crack-repair'],
+      tags: ['school', 'municipal', 'crack-repair']
     },
     {
       id: '4',
@@ -156,8 +156,8 @@ export default function CRM() {
       lastContact: '2024-01-15',
       nextFollowUp: '2024-01-25',
       notes: 'Interested in annual maintenance contract.',
-      tags: ['office', 'line-striping', 'maintenance'],
-    },
+      tags: ['office', 'line-striping', 'maintenance']
+    }
   ];
 
   const customers: Customer[] = [
@@ -176,7 +176,7 @@ export default function CRM() {
       satisfaction: 4.8,
       referrals: 3,
       paymentTerms: 'Net 30',
-      notes: 'Long-term client, excellent payment history.',
+      notes: 'Long-term client, excellent payment history.'
     },
     {
       id: '2',
@@ -193,7 +193,7 @@ export default function CRM() {
       satisfaction: 4.5,
       referrals: 2,
       paymentTerms: 'Net 45',
-      notes: 'Large commercial client, multiple properties.',
+      notes: 'Large commercial client, multiple properties.'
     },
     {
       id: '3',
@@ -210,8 +210,8 @@ export default function CRM() {
       satisfaction: 4.2,
       referrals: 0,
       paymentTerms: 'Net 60',
-      notes: 'Municipal contract, strict compliance requirements.',
-    },
+      notes: 'Municipal contract, strict compliance requirements.'
+    }
   ];
 
   const interactions: Interaction[] = [
@@ -224,7 +224,7 @@ export default function CRM() {
       duration: 45,
       outcome: 'Positive response, requested formal proposal',
       nextAction: 'Send detailed proposal by Friday',
-      createdBy: 'Mike Johnson',
+      createdBy: 'Mike Johnson'
     },
     {
       id: '2',
@@ -235,7 +235,7 @@ export default function CRM() {
       duration: 120,
       outcome: 'Identified additional work needed',
       nextAction: 'Revise proposal with additional scope',
-      createdBy: 'Admin User',
+      createdBy: 'Admin User'
     },
     {
       id: '3',
@@ -245,17 +245,17 @@ export default function CRM() {
       date: '2024-01-14',
       outcome: 'Waiting for board approval',
       nextAction: 'Follow up after board meeting on 1/24',
-      createdBy: 'Lisa Martinez',
-    },
+      createdBy: 'Lisa Martinez'
+    }
   ];
 
   const filteredLeads = leads.filter(lead => {
-    const matchesSearch = lead.name.toLowerCase().includes(searchTerm.toLowerCase())
-                         || lead.company.toLowerCase().includes(searchTerm.toLowerCase())
-                         || lead.projectType.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         lead.projectType.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = selectedStatus === 'all' || lead.status === selectedStatus;
     const matchesPriority = selectedPriority === 'all' || lead.priority === selectedPriority;
-
+    
     return matchesSearch && matchesStatus && matchesPriority;
   });
 
@@ -393,7 +393,7 @@ export default function CRM() {
                         id="search"
                         placeholder="Search by name, company, or project..."
                         value={searchTerm}
-                        onChange={(e) => { setSearchTerm(e.target.value); }}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-8"
                       />
                     </div>
@@ -453,7 +453,7 @@ export default function CRM() {
                             {lead.priority.toUpperCase()} PRIORITY
                           </Badge>
                         </div>
-
+                        
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div className="flex items-center gap-2">
                             <Building className="h-4 w-4 text-muted-foreground" />
@@ -494,7 +494,7 @@ export default function CRM() {
                           </div>
                         </div>
                       </div>
-
+                      
                       <div className="flex gap-2 ml-4">
                         <Button variant="outline" size="sm" className="gap-1">
                           <Phone className="h-3 w-3" />
@@ -535,7 +535,7 @@ export default function CRM() {
                             {customer.type}
                           </Badge>
                         </div>
-
+                        
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-muted-foreground" />
@@ -557,7 +557,7 @@ export default function CRM() {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
                           <div><strong>Last Project:</strong> {customer.lastProject}</div>
-                          <div><strong>Satisfaction:</strong>
+                          <div><strong>Satisfaction:</strong> 
                             <div className="flex items-center gap-1 inline-block ml-1">
                               {Array.from({ length: 5 }).map((_, i) => (
                                 <Star key={i} className={`h-3 w-3 ${i < customer.satisfaction ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
@@ -571,7 +571,7 @@ export default function CRM() {
 
                         <div><strong>Notes:</strong> {customer.notes}</div>
                       </div>
-
+                      
                       <div className="flex gap-2 ml-4">
                         <Button variant="outline" size="sm" className="gap-1">
                           <Phone className="h-3 w-3" />

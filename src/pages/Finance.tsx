@@ -1,25 +1,25 @@
 import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Progress } from '../components/ui/progress';
-import {
-  DollarSign,
-  TrendingUp,
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Progress } from "../components/ui/progress";
+import { 
+  DollarSign, 
+  TrendingUp, 
   TrendingDown,
-  Calculator,
-  PieChart,
-  FileText,
+  Calculator, 
+  PieChart, 
+  FileText, 
   CreditCard,
   Receipt,
   Banknote,
-  Target,
-} from 'lucide-react';
+  Target
+} from "lucide-react";
 
 interface FinancialTransaction {
   id: string;
@@ -65,7 +65,7 @@ export default function Finance() {
       type: 'income',
       amount: 8500.00,
       project: 'CH-001',
-      status: 'completed',
+      status: 'completed'
     },
     {
       id: '2',
@@ -75,7 +75,7 @@ export default function Finance() {
       type: 'expense',
       amount: 2850.00,
       project: 'CH-001',
-      status: 'completed',
+      status: 'completed'
     },
     {
       id: '3',
@@ -85,7 +85,7 @@ export default function Finance() {
       type: 'expense',
       amount: 450.00,
       project: 'CH-001',
-      status: 'completed',
+      status: 'completed'
     },
     {
       id: '4',
@@ -94,7 +94,7 @@ export default function Finance() {
       category: 'Operations',
       type: 'expense',
       amount: 285.50,
-      status: 'completed',
+      status: 'completed'
     },
     {
       id: '5',
@@ -103,8 +103,8 @@ export default function Finance() {
       category: 'Administrative',
       type: 'expense',
       amount: 124.75,
-      status: 'completed',
-    },
+      status: 'completed'
+    }
   ];
 
   const budgetCategories: BudgetCategory[] = [
@@ -114,7 +114,7 @@ export default function Finance() {
       budgeted: 15000,
       spent: 8420,
       remaining: 6580,
-      percentage: 56,
+      percentage: 56
     },
     {
       id: '2',
@@ -122,7 +122,7 @@ export default function Finance() {
       budgeted: 20000,
       spent: 12750,
       remaining: 7250,
-      percentage: 64,
+      percentage: 64
     },
     {
       id: '3',
@@ -130,7 +130,7 @@ export default function Finance() {
       budgeted: 8000,
       spent: 3200,
       remaining: 4800,
-      percentage: 40,
+      percentage: 40
     },
     {
       id: '4',
@@ -138,7 +138,7 @@ export default function Finance() {
       budgeted: 5000,
       spent: 2100,
       remaining: 2900,
-      percentage: 42,
+      percentage: 42
     },
     {
       id: '5',
@@ -146,8 +146,8 @@ export default function Finance() {
       budgeted: 3000,
       spent: 1850,
       remaining: 1150,
-      percentage: 62,
-    },
+      percentage: 62
+    }
   ];
 
   const invoices: Invoice[] = [
@@ -158,7 +158,7 @@ export default function Finance() {
       amount: 12500.00,
       dueDate: '2024-02-15',
       status: 'sent',
-      dateSent: '2024-01-15',
+      dateSent: '2024-01-15'
     },
     {
       id: 'INV-2024-002',
@@ -168,7 +168,7 @@ export default function Finance() {
       dueDate: '2024-01-30',
       status: 'paid',
       dateSent: '2024-01-05',
-      datePaid: '2024-01-20',
+      datePaid: '2024-01-20'
     },
     {
       id: 'INV-2024-003',
@@ -177,7 +177,7 @@ export default function Finance() {
       amount: 2400.00,
       dueDate: '2024-01-20',
       status: 'overdue',
-      dateSent: '2023-12-20',
+      dateSent: '2023-12-20'
     },
     {
       id: 'INV-2024-004',
@@ -185,8 +185,8 @@ export default function Finance() {
       project: 'Crack Repair',
       amount: 3200.00,
       dueDate: '2024-02-10',
-      status: 'draft',
-    },
+      status: 'draft'
+    }
   ];
 
   const financialSummary = {
@@ -195,7 +195,7 @@ export default function Finance() {
     netProfit: 14400,
     profitMargin: 30.5,
     outstandingInvoices: 18100,
-    accountsReceivable: 15700,
+    accountsReceivable: 15700
   };
 
   const getTransactionTypeColor = (type: string) => {
@@ -213,8 +213,8 @@ export default function Finance() {
   };
 
   const getBudgetStatusColor = (percentage: number) => {
-    if (percentage >= 90) { return 'text-red-600'; }
-    if (percentage >= 70) { return 'text-yellow-600'; }
+    if (percentage >= 90) return 'text-red-600';
+    if (percentage >= 70) return 'text-yellow-600';
     return 'text-green-600';
   };
 

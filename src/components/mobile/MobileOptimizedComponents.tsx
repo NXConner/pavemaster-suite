@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import {
-  Wifi,
-  Battery,
-  MapPin,
+import { 
+  Wifi, 
+  Battery, 
+  MapPin, 
   Camera,
   Bell,
   Settings,
   User,
-  Menu,
+  Menu
 } from 'lucide-react';
 
 interface MobileCardProps {
@@ -21,7 +21,7 @@ interface MobileCardProps {
   color?: string;
 }
 
-export function MobileCard({ title, value, icon, trend, color = 'text-primary' }: MobileCardProps) {
+export function MobileCard({ title, value, icon, trend, color = "text-primary" }: MobileCardProps) {
   return (
     <Card className="touch-friendly hover:scale-105 transition-transform">
       <CardContent className="p-4">
@@ -60,10 +60,10 @@ export function MobileNavigation() {
       {/* Mobile Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b px-4 py-3 md:hidden">
         <div className="flex items-center justify-between">
-          <Button
-            variant="ghost"
+          <Button 
+            variant="ghost" 
             size="sm"
-            onClick={() => { setIsOpen(!isOpen); }}
+            onClick={() => setIsOpen(!isOpen)}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -84,7 +84,7 @@ export function MobileNavigation() {
           {navItems.map((item, index) => (
             <Button
               key={index}
-              variant={item.active ? 'default' : 'ghost'}
+              variant={item.active ? "default" : "ghost"}
               size="sm"
               className="flex-col h-12 text-xs gap-1"
             >
@@ -98,9 +98,9 @@ export function MobileNavigation() {
       {/* Slide-out Menu */}
       {isOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          <div
+          <div 
             className="absolute inset-0 bg-black/50"
-            onClick={() => { setIsOpen(false); }}
+            onClick={() => setIsOpen(false)}
           />
           <div className="absolute left-0 top-0 bottom-0 w-80 bg-background border-r p-4">
             <div className="space-y-4">
@@ -110,18 +110,18 @@ export function MobileNavigation() {
                 </div>
                 <span className="font-bold">ISAC-OS Mobile</span>
               </div>
-
+              
               {/* Menu Items */}
               <div className="space-y-2">
                 {[
-                  'Dashboard', 'Projects', 'Team', 'Equipment', 'Safety',
-                  'Finance', 'Weather', 'Analytics', 'Settings',
+                  'Dashboard', 'Projects', 'Team', 'Equipment', 'Safety', 
+                  'Finance', 'Weather', 'Analytics', 'Settings'
                 ].map((item, index) => (
                   <Button
                     key={index}
                     variant="ghost"
                     className="w-full justify-start"
-                    onClick={() => { setIsOpen(false); }}
+                    onClick={() => setIsOpen(false)}
                   >
                     {item}
                   </Button>
@@ -141,7 +141,7 @@ export function MobileStatusIndicators() {
     cellular: 85,
     battery: 78,
     gps: true,
-    sync: 'online',
+    sync: 'online'
   });
 
   return (
@@ -150,15 +150,15 @@ export function MobileStatusIndicators() {
         <Wifi className={`h-3 w-3 ${connectivity.wifi ? 'text-green-500' : 'text-red-500'}`} />
         <span className="text-muted-foreground">WiFi</span>
       </div>
-
+      
       <div className="flex items-center gap-1">
         <div className="flex gap-0.5">
           {[1,2,3,4,5].map((bar) => (
             <div
               key={bar}
               className={`w-0.5 h-2 rounded-sm ${
-                bar <= Math.ceil(connectivity.cellular / 20)
-                  ? 'bg-green-500'
+                bar <= Math.ceil(connectivity.cellular / 20) 
+                  ? 'bg-green-500' 
                   : 'bg-gray-300'
               }`}
             />
@@ -166,13 +166,13 @@ export function MobileStatusIndicators() {
         </div>
         <span className="text-muted-foreground">{connectivity.cellular}%</span>
       </div>
-
+      
       <div className="flex items-center gap-1">
         <Battery className="h-3 w-3" />
         <span className="text-muted-foreground">{connectivity.battery}%</span>
       </div>
-
-      <Badge
+      
+      <Badge 
         variant={connectivity.sync === 'online' ? 'default' : 'secondary'}
         className="text-xs h-4"
       >

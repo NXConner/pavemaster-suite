@@ -6,10 +6,10 @@ import { Badge } from '../ui/badge';
 import { Avatar } from '../ui/avatar';
 import { ScrollArea } from '../ui/scroll-area';
 import { VoiceCommander } from '../ui/voice-commander';
-import {
-  Bot,
-  User,
-  Send,
+import { 
+  Bot, 
+  User, 
+  Send, 
   Image as ImageIcon,
   FileText,
   Calculator,
@@ -17,7 +17,7 @@ import {
   Zap,
   Brain,
   Search,
-  Settings,
+  Settings
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -57,43 +57,43 @@ export default function AIAssistant() {
         name: 'Project Analysis',
         description: 'Analyze project photos for surface conditions and recommendations',
         icon: ImageIcon,
-        active: true,
+        active: true
       },
       {
         id: 'cost-estimation',
         name: 'Smart Estimation',
         description: 'Generate accurate cost estimates using AI and historical data',
         icon: Calculator,
-        active: true,
+        active: true
       },
       {
         id: 'route-optimization',
         name: 'Route Planning',
         description: 'Optimize crew routes and scheduling for maximum efficiency',
         icon: MapPin,
-        active: true,
+        active: true
       },
       {
         id: 'predictive-maintenance',
         name: 'Predictive Maintenance',
         description: 'Predict equipment failures and maintenance needs',
         icon: Zap,
-        active: false,
+        active: false
       },
       {
         id: 'quality-control',
         name: 'Quality Control',
         description: 'AI-powered quality assessment and recommendations',
         icon: Search,
-        active: true,
+        active: true
       },
       {
         id: 'document-analysis',
         name: 'Document Processing',
         description: 'Extract insights from contracts, reports, and documentation',
         icon: FileText,
-        active: true,
-      },
+        active: true
+      }
     ];
 
     setCapabilities(aiCapabilities);
@@ -109,9 +109,9 @@ export default function AIAssistant() {
           'Analyze this project photo',
           'Calculate material costs for 5000 sq ft',
           'Optimize my crew schedule',
-          'Predict maintenance needs',
-        ],
-      },
+          'Predict maintenance needs'
+        ]
+      }
     };
 
     setMessages([welcomeMessage]);
@@ -125,13 +125,13 @@ export default function AIAssistant() {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || isProcessing) { return; }
+    if (!inputValue.trim() || isProcessing) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
       content: inputValue,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -148,7 +148,7 @@ export default function AIAssistant() {
 
   const generateAIResponse = (userInput: string): Message => {
     const input = userInput.toLowerCase();
-
+    
     // Simple AI response logic - in a real app, this would use actual AI services
     let response = '';
     let tools: string[] = [];
@@ -187,8 +187,8 @@ export default function AIAssistant() {
       metadata: {
         tools,
         confidence: Math.random() * 0.2 + 0.8, // 80-100%
-        suggestions,
-      },
+        suggestions
+      }
     };
   };
 
@@ -202,7 +202,7 @@ export default function AIAssistant() {
   const handleVoiceCommand = (command: string) => {
     setInputValue(command);
     toast.success('Voice command received');
-
+    
     // Auto-send voice commands
     setTimeout(() => {
       handleSendMessage();
@@ -304,17 +304,17 @@ export default function AIAssistant() {
                         <Bot className="w-4 h-4 text-primary" />
                       </Avatar>
                     )}
-
+                    
                     <div className={`max-w-[80%] ${
                       message.type === 'user' ? 'order-first' : ''
                     }`}>
                       <div className={`rounded-lg p-4 ${
-                        message.type === 'user'
-                          ? 'bg-primary text-primary-foreground ml-auto'
+                        message.type === 'user' 
+                          ? 'bg-primary text-primary-foreground ml-auto' 
                           : 'bg-muted'
                       }`}>
                         <div className="whitespace-pre-wrap text-sm">{message.content}</div>
-
+                        
                         {message.metadata?.tools && message.metadata.tools.length > 0 && (
                           <div className="flex gap-1 mt-2">
                             {message.metadata.tools.map((tool) => (
@@ -325,7 +325,7 @@ export default function AIAssistant() {
                           </div>
                         )}
                       </div>
-
+                      
                       <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                         <span>{message.timestamp.toLocaleTimeString()}</span>
                         {message.metadata?.confidence && (
@@ -342,7 +342,7 @@ export default function AIAssistant() {
                               variant="outline"
                               size="sm"
                               className="text-xs"
-                              onClick={() => { handleSuggestionClick(suggestion); }}
+                              onClick={() => handleSuggestionClick(suggestion)}
                             >
                               {suggestion}
                             </Button>
@@ -383,13 +383,13 @@ export default function AIAssistant() {
                 <Input
                   ref={inputRef}
                   value={inputValue}
-                  onChange={(e) => { setInputValue(e.target.value); }}
+                  onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about your projects, costs, schedules, or operations..."
                   className="flex-1"
                   disabled={isProcessing}
                 />
-                <Button
+                <Button 
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isProcessing}
                   size="icon"

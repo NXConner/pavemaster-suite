@@ -8,7 +8,7 @@ import {
   Clock,
   CheckCircle,
   AlertTriangle,
-  Truck,
+  Truck
 } from 'lucide-react';
 
 interface StatsGridProps {
@@ -23,7 +23,7 @@ const stats = [
     description: 'Currently in progress',
     trend: { value: 12, isPositive: true, label: 'from last month' },
     icon: <FolderOpen className="h-4 w-4" />,
-    action: { label: 'View All', href: '/projects' },
+    action: { label: 'View All', href: '/projects' }
   },
   {
     title: 'Equipment Available',
@@ -31,7 +31,7 @@ const stats = [
     description: 'Ready for deployment',
     trend: { value: 5, isPositive: false, label: 'in maintenance' },
     icon: <Wrench className="h-4 w-4" />,
-    action: { label: 'Manage Equipment', href: '/equipment' },
+    action: { label: 'Manage Equipment', href: '/equipment' }
   },
   {
     title: 'Active Crew Members',
@@ -39,7 +39,7 @@ const stats = [
     description: 'On duty today',
     trend: undefined,
     icon: <Users className="h-4 w-4" />,
-    action: { label: 'View Crews', href: '/employees' },
+    action: { label: 'View Crews', href: '/employees' }
   },
   {
     title: 'Monthly Revenue',
@@ -47,7 +47,7 @@ const stats = [
     description: 'Current month earnings',
     trend: { value: 15, isPositive: true, label: 'vs last month' },
     icon: <DollarSign className="h-4 w-4" />,
-    action: { label: 'View Reports', href: '/analytics' },
+    action: { label: 'View Reports', href: '/analytics' }
   },
   {
     title: 'Pending Estimates',
@@ -55,7 +55,7 @@ const stats = [
     description: 'Awaiting client approval',
     trend: undefined,
     icon: <Clock className="h-4 w-4" />,
-    action: { label: 'Review Estimates', href: '/estimates' },
+    action: { label: 'Review Estimates', href: '/estimates' }
   },
   {
     title: 'Completed This Week',
@@ -63,7 +63,7 @@ const stats = [
     description: 'Projects finished',
     trend: { value: 20, isPositive: true, label: 'completion rate' },
     icon: <CheckCircle className="h-4 w-4" />,
-    action: { label: 'View Completed', href: '/projects?status=completed' },
+    action: { label: 'View Completed', href: '/projects?status=completed' }
   },
   {
     title: 'Fleet Status',
@@ -71,7 +71,7 @@ const stats = [
     description: 'Vehicles operational',
     trend: { value: 2, isPositive: false, label: 'in service' },
     icon: <Truck className="h-4 w-4" />,
-    action: { label: 'Fleet Dashboard', href: '/fleet' },
+    action: { label: 'Fleet Dashboard', href: '/fleet' }
   },
   {
     title: 'Safety Incidents',
@@ -79,15 +79,15 @@ const stats = [
     description: 'This month',
     trend: { value: 100, isPositive: true, label: 'safety record' },
     icon: <AlertTriangle className="h-4 w-4" />,
-    action: { label: 'Safety Reports', href: '/safety' },
-  },
+    action: { label: 'Safety Reports', href: '/safety' }
+  }
 ];
 
 export function StatsGrid({ className }: StatsGridProps) {
   return (
     <div className={cn(
       'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4',
-      className,
+      className
     )}>
       {stats.map((stat, index) => (
         <DashboardCard

@@ -157,7 +157,7 @@ export const ISAC_OS_THEME: ISACTheme = {
 export const applyISACTheme = () => {
   const root = document.documentElement;
   const theme = ISAC_OS_THEME;
-
+  
   // Apply CSS custom properties
   root.style.setProperty('--primary', theme.colors.primary);
   root.style.setProperty('--secondary', theme.colors.secondary);
@@ -171,18 +171,18 @@ export const applyISACTheme = () => {
   root.style.setProperty('--warning', theme.colors.warning);
   root.style.setProperty('--destructive', theme.colors.error);
   root.style.setProperty('--info', theme.colors.info);
-
+  
   // Apply font family
   root.style.setProperty('--font-sans', theme.fonts.primary);
   root.style.setProperty('--font-mono', theme.fonts.mono);
-
+  
   // Apply effects
   root.style.setProperty('--glow', theme.effects.glow);
   root.style.setProperty('--shadow', theme.effects.shadow);
   root.style.setProperty('--blur', theme.effects.blur);
-
+  
   // Add tactical class to body
   document.body.classList.add('isac-os-theme');
-
+  
   localStorage.setItem('theme', 'isac-os');
 };

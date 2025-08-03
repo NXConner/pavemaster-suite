@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { Calculator, Package, FileText, TrendingUp, AlertTriangle } from 'lucide-react';
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Calculator, Package, FileText, TrendingUp, AlertTriangle } from "lucide-react";
 
 interface Material {
   id: string;
@@ -51,7 +51,7 @@ export default function Materials() {
       supplier: 'Richmond Asphalt Supply',
       inStock: 25,
       minStock: 10,
-      description: 'Premium hot mix asphalt for parking lots and roadways',
+      description: 'Premium hot mix asphalt for parking lots and roadways'
     },
     {
       id: '2',
@@ -63,7 +63,7 @@ export default function Materials() {
       supplier: 'SealMaster',
       inStock: 150,
       minStock: 50,
-      description: 'Professional grade coal tar emulsion sealcoat',
+      description: 'Professional grade coal tar emulsion sealcoat'
     },
     {
       id: '3',
@@ -75,7 +75,7 @@ export default function Materials() {
       supplier: 'Sherwin Williams',
       inStock: 20,
       minStock: 8,
-      description: 'High-visibility traffic marking paint',
+      description: 'High-visibility traffic marking paint'
     },
     {
       id: '4',
@@ -87,7 +87,7 @@ export default function Materials() {
       supplier: 'Crafco',
       inStock: 35,
       minStock: 15,
-      description: 'Hot-applied rubberized crack filler',
+      description: 'Hot-applied rubberized crack filler'
     },
     {
       id: '5',
@@ -99,8 +99,8 @@ export default function Materials() {
       supplier: 'Blue Ridge Quarry',
       inStock: 45,
       minStock: 20,
-      description: 'Crushed stone aggregate for base preparation',
-    },
+      description: 'Crushed stone aggregate for base preparation'
+    }
   ];
 
   const calculateMaterialNeeds = () => {
@@ -108,7 +108,7 @@ export default function Materials() {
     const areaNum = parseFloat(area);
     const thicknessNum = parseFloat(thickness);
 
-    if (!selectedMat || !areaNum) { return; }
+    if (!selectedMat || !areaNum) return;
 
     let materialNeeded = 0;
     let laborRate = 0;
@@ -156,7 +156,7 @@ export default function Materials() {
       overhead,
       totalCost,
       profit,
-      finalPrice,
+      finalPrice
     });
   };
 
@@ -228,7 +228,7 @@ export default function Materials() {
                       type="number"
                       placeholder="Enter area in square feet"
                       value={area}
-                      onChange={(e) => { setArea(e.target.value); }}
+                      onChange={(e) => setArea(e.target.value)}
                     />
                   </div>
 

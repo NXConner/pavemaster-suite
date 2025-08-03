@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { Avatar } from '../components/ui/avatar';
-import { useJargon } from '../contexts/JargonContext';
-import { Plus, Search, UserPlus, Shield, Wrench, Truck } from 'lucide-react';
+import { useState } from "react";
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Badge } from "../components/ui/badge";
+import { Avatar } from "../components/ui/avatar";
+import { useJargon } from "../contexts/JargonContext";
+import { Plus, Search, UserPlus, Shield, Wrench, Truck } from "lucide-react";
 
 interface Employee {
   id: string;
@@ -28,7 +28,7 @@ const mockEmployees: Employee[] = [
     email: 'j.mitchell@pavemaster.com',
     phone: '(555) 123-4567',
     department: 'Operations',
-    hireDate: '2022-03-15',
+    hireDate: '2022-03-15'
   },
   {
     id: '2',
@@ -38,7 +38,7 @@ const mockEmployees: Employee[] = [
     email: 's.chen@pavemaster.com',
     phone: '(555) 234-5678',
     department: 'Operations',
-    hireDate: '2023-01-10',
+    hireDate: '2023-01-10'
   },
   {
     id: '3',
@@ -48,14 +48,14 @@ const mockEmployees: Employee[] = [
     email: 'm.rodriguez@pavemaster.com',
     phone: '(555) 345-6789',
     department: 'Safety',
-    hireDate: '2021-11-08',
-  },
+    hireDate: '2021-11-08'
+  }
 ];
 
 const getRoleIcon = (role: string) => {
-  if (role.includes('Chief') || role.includes('Supervisor')) { return Shield; }
-  if (role.includes('Operator') || role.includes('Mechanic')) { return Wrench; }
-  if (role.includes('Driver')) { return Truck; }
+  if (role.includes('Chief') || role.includes('Supervisor')) return Shield;
+  if (role.includes('Operator') || role.includes('Mechanic')) return Wrench;
+  if (role.includes('Driver')) return Truck;
   return Shield;
 };
 
@@ -71,11 +71,11 @@ const getStatusColor = (status: string) => {
 export default function Employees() {
   const [searchTerm, setSearchTerm] = useState('');
   const { getText } = useJargon();
-
+  
   const filteredEmployees = mockEmployees.filter(employee =>
-    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
-    || employee.role.toLowerCase().includes(searchTerm.toLowerCase())
-    || employee.department.toLowerCase().includes(searchTerm.toLowerCase()),
+    employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    employee.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    employee.department.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -107,7 +107,7 @@ export default function Employees() {
               <p className="text-xs text-muted-foreground">+2 from last month</p>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active</CardTitle>
@@ -155,7 +155,7 @@ export default function Employees() {
                 <Input
                   placeholder="Search employees..."
                   value={searchTerm}
-                  onChange={(e) => { setSearchTerm(e.target.value); }}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -177,7 +177,7 @@ export default function Employees() {
                           <RoleIcon className="h-5 w-5 text-primary" />
                         </div>
                       </Avatar>
-
+                      
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold">{employee.name}</h3>
@@ -195,7 +195,7 @@ export default function Employees() {
                           Hired: {new Date(employee.hireDate).toLocaleDateString()}
                         </p>
                       </div>
-
+                      
                       <Button variant="outline" size="sm">
                         View Details
                       </Button>

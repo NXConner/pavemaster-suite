@@ -5,12 +5,12 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import {
-  Camera,
-  Upload,
-  Image as ImageIcon,
-  MapPin,
-  Calendar,
+import { 
+  Camera, 
+  Upload, 
+  Image as ImageIcon, 
+  MapPin, 
+  Calendar, 
   Tag,
   ArrowLeftRight,
   Download,
@@ -18,7 +18,7 @@ import {
   Plus,
   Edit,
   Trash2,
-  Search,
+  Search
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -65,16 +65,16 @@ export default function PhotoReports() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
   const [activeTab, setActiveTab] = useState('reports');
-
+  
   // Form state for new reports
   const [newReport, setNewReport] = useState({
     title: '',
     description: '',
     location: '',
     tags: [] as string[],
-    photos: [] as File[],
+    photos: [] as File[]
   });
-
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +85,7 @@ export default function PhotoReports() {
       const newFiles = Array.from(files);
       setNewReport(prev => ({
         ...prev,
-        photos: [...prev.photos, ...newFiles.filter(file => file instanceof File)],
+        photos: [...prev.photos, ...newFiles.filter(file => file instanceof File)]
       }));
       toast.success(`Added ${newFiles.length} photo(s)`);
     }
@@ -96,7 +96,7 @@ export default function PhotoReports() {
     if (files && files[0]) {
       setNewReport(prev => ({
         ...prev,
-        photos: [...prev.photos, files[0] as File],
+        photos: [...prev.photos, files[0] as File]
       }));
       toast.success('Photo captured!');
     }
@@ -105,7 +105,7 @@ export default function PhotoReports() {
   const removePhoto = (index: number) => {
     setNewReport(prev => ({
       ...prev,
-      photos: prev.photos.filter((_, i) => i !== index),
+      photos: prev.photos.filter((_, i) => i !== index)
     }));
   };
 
@@ -114,7 +114,7 @@ export default function PhotoReports() {
     if (tag && !newReport.tags.includes(tag)) {
       setNewReport(prev => ({
         ...prev,
-        tags: [...prev.tags, tag],
+        tags: [...prev.tags, tag]
       }));
     }
   };
@@ -122,7 +122,7 @@ export default function PhotoReports() {
   const removeTag = (tag: string) => {
     setNewReport(prev => ({
       ...prev,
-      tags: prev.tags.filter(t => t !== tag),
+      tags: prev.tags.filter(t => t !== tag)
     }));
   };
 
@@ -141,7 +141,7 @@ export default function PhotoReports() {
         filename: file.name,
         size: file.size,
         uploadDate: new Date().toISOString(),
-        annotations: [],
+        annotations: []
       }));
 
       const report: PhotoReport = {
@@ -152,20 +152,20 @@ export default function PhotoReports() {
         date: new Date().toISOString(),
         tags: newReport.tags,
         photos: photoData,
-        annotations: [],
+        annotations: []
       };
 
       setReports(prev => [report, ...prev]);
-
+      
       // Reset form
       setNewReport({
         title: '',
         description: '',
         location: '',
         tags: [],
-        photos: [],
+        photos: []
       });
-
+      
       setIsCreating(false);
       toast.success('Photo report created successfully!');
     } catch (error) {
@@ -176,9 +176,9 @@ export default function PhotoReports() {
 
   // Filter reports
   const filteredReports = reports.filter(report => {
-    const matchesSearch = report.title.toLowerCase().includes(searchTerm.toLowerCase())
-                         || report.description.toLowerCase().includes(searchTerm.toLowerCase())
-                         || report.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = report.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         report.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         report.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTag = !selectedTag || report.tags.includes(selectedTag);
     return matchesSearch && matchesTag;
   });
@@ -195,7 +195,7 @@ export default function PhotoReports() {
             Visual project documentation with annotations and before/after comparisons
           </p>
         </div>
-        <Button onClick={() => { setIsCreating(true); }} className="gap-2">
+        <Button onClick={() => setIsCreating(true)} className="gap-2">
           <Plus className="h-4 w-4" />
           New Report
         </Button>
@@ -217,13 +217,13 @@ export default function PhotoReports() {
               <Input
                 placeholder="Search reports..."
                 value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); }}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
             <select
               value={selectedTag}
-              onChange={(e) => { setSelectedTag(e.target.value); }}
+              onChange={(e) => setSelectedTag(e.target.value)}
               className="px-3 py-2 border rounded-md bg-background"
             >
               <option value="">All Tags</option>
@@ -249,18 +249,18 @@ export default function PhotoReports() {
                   {/* Photo Preview */}
                   {report.photos[0] && (
                     <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                      <img
-                        src={report.photos[0].url}
+                      <img 
+                        src={report.photos[0].url} 
                         alt={report.title}
                         className="w-full h-full object-cover"
                       />
                     </div>
                   )}
-
+                  
                   <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                     {report.description}
                   </p>
-
+                  
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-3 w-3" />
@@ -271,7 +271,7 @@ export default function PhotoReports() {
                       {new Date(report.date).toLocaleDateString()}
                     </div>
                   </div>
-
+                  
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1 mt-3">
                     {report.tags.map(tag => (
@@ -280,7 +280,7 @@ export default function PhotoReports() {
                       </Badge>
                     ))}
                   </div>
-
+                  
                   <div className="flex gap-2 mt-4">
                     <Button size="sm" variant="outline" className="flex-1">
                       <Eye className="h-3 w-3 mr-1" />
@@ -305,7 +305,7 @@ export default function PhotoReports() {
               <p className="text-muted-foreground mb-4">
                 {searchTerm || selectedTag ? 'Try adjusting your filters' : 'Start by creating your first photo report'}
               </p>
-              <Button onClick={() => { setIsCreating(true); }}>
+              <Button onClick={() => setIsCreating(true)}>
                 Create Report
               </Button>
             </div>
@@ -323,8 +323,8 @@ export default function PhotoReports() {
                   <div key={report.id} className="flex items-center gap-4 p-3 border rounded-lg">
                     <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted">
                       {report.photos[0] && (
-                        <img
-                          src={report.photos[0].url}
+                        <img 
+                          src={report.photos[0].url} 
                           alt={report.title}
                           className="w-full h-full object-cover"
                         />
@@ -376,7 +376,7 @@ export default function PhotoReports() {
                 <p className="text-sm text-muted-foreground">Created this month</p>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardHeader>
                 <CardTitle>Total Photos</CardTitle>
@@ -388,7 +388,7 @@ export default function PhotoReports() {
                 <p className="text-sm text-muted-foreground">Across all reports</p>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardHeader>
                 <CardTitle>Most Used Tags</CardTitle>
@@ -423,30 +423,30 @@ export default function PhotoReports() {
                   <label className="text-sm font-medium">Title *</label>
                   <Input
                     value={newReport.title}
-                    onChange={(e) => { setNewReport(prev => ({ ...prev, title: e.target.value })); }}
+                    onChange={(e) => setNewReport(prev => ({ ...prev, title: e.target.value }))}
                     placeholder="Report title..."
                   />
                 </div>
-
+                
                 <div>
                   <label className="text-sm font-medium">Description</label>
                   <Textarea
                     value={newReport.description}
-                    onChange={(e) => { setNewReport(prev => ({ ...prev, description: e.target.value })); }}
+                    onChange={(e) => setNewReport(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Describe what this report covers..."
                     rows={3}
                   />
                 </div>
-
+                
                 <div>
                   <label className="text-sm font-medium">Location</label>
                   <Input
                     value={newReport.location}
-                    onChange={(e) => { setNewReport(prev => ({ ...prev, location: e.target.value })); }}
+                    onChange={(e) => setNewReport(prev => ({ ...prev, location: e.target.value }))}
                     placeholder="Project location..."
                   />
                 </div>
-
+                
                 {/* Photo Upload */}
                 <div>
                   <label className="text-sm font-medium">Photos *</label>
@@ -470,7 +470,7 @@ export default function PhotoReports() {
                       Take Photo
                     </Button>
                   </div>
-
+                  
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -487,7 +487,7 @@ export default function PhotoReports() {
                     onChange={handleCameraCapture}
                     className="hidden"
                   />
-
+                  
                   {/* Photo Preview */}
                   {newReport.photos.length > 0 && (
                     <div className="grid grid-cols-3 gap-2 mt-4">
@@ -502,7 +502,7 @@ export default function PhotoReports() {
                             size="sm"
                             variant="destructive"
                             className="absolute top-1 right-1 h-6 w-6 p-0"
-                            onClick={() => { removePhoto(index); }}
+                            onClick={() => removePhoto(index)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -511,7 +511,7 @@ export default function PhotoReports() {
                     </div>
                   )}
                 </div>
-
+                
                 {/* Tags */}
                 <div>
                   <label className="text-sm font-medium">Tags</label>
@@ -519,7 +519,7 @@ export default function PhotoReports() {
                     {newReport.tags.map(tag => (
                       <Badge key={tag} variant="secondary" className="gap-1">
                         {tag}
-                        <button onClick={() => { removeTag(tag); }}>×</button>
+                        <button onClick={() => removeTag(tag)}>×</button>
                       </Badge>
                     ))}
                   </div>
@@ -529,7 +529,7 @@ export default function PhotoReports() {
                         key={tag}
                         size="sm"
                         variant="outline"
-                        onClick={() => { addTag(tag); }}
+                        onClick={() => addTag(tag)}
                         disabled={newReport.tags.includes(tag)}
                       >
                         <Tag className="h-3 w-3 mr-1" />
@@ -539,12 +539,12 @@ export default function PhotoReports() {
                   </div>
                 </div>
               </div>
-
+              
               <div className="flex gap-3 pt-4">
                 <Button onClick={createReport} className="flex-1">
                   Create Report
                 </Button>
-                <Button variant="outline" onClick={() => { setIsCreating(false); }}>
+                <Button variant="outline" onClick={() => setIsCreating(false)}>
                   Cancel
                 </Button>
               </div>

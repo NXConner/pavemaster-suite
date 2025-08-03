@@ -4,15 +4,15 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Progress } from '../ui/progress';
-import {
-  Trophy,
-  Star,
-  Award,
-  TrendingUp,
-  Users,
+import { 
+  Trophy, 
+  Star, 
+  Award, 
+  TrendingUp, 
+  Users, 
   Gift,
   Medal,
-  Crown,
+  Crown
 } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
 
@@ -64,13 +64,13 @@ export const GamificationDashboard = () => {
         supabase.from('achievements').select('*'),
         supabase.from('badges').select('*'),
         supabase.from('leaderboard').select('*'),
-        supabase.from('rewards').select('*'),
+        supabase.from('rewards').select('*')
       ]);
 
-      if (achievementsRes.data) { setAchievements(achievementsRes.data); }
-      if (badgesRes.data) { setBadges(badgesRes.data); }
-      if (leaderboardRes.data) { setLeaderboard(leaderboardRes.data); }
-      if (rewardsRes.data) { setRewards(rewardsRes.data); }
+      if (achievementsRes.data) setAchievements(achievementsRes.data);
+      if (badgesRes.data) setBadges(badgesRes.data);
+      if (leaderboardRes.data) setLeaderboard(leaderboardRes.data);
+      if (rewardsRes.data) setRewards(rewardsRes.data);
     } catch (error) {
       console.error('Error loading gamification data:', error);
     } finally {
@@ -140,10 +140,10 @@ export const GamificationDashboard = () => {
                 <div key={entry.user_id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      index === 0 ? 'bg-warning text-warning-foreground'
-                        : index === 1 ? 'bg-muted text-muted-foreground'
-                          : index === 2 ? 'bg-warning/30 text-warning-foreground'
-                            : 'bg-muted text-muted-foreground'
+                      index === 0 ? 'bg-warning text-warning-foreground' :
+                      index === 1 ? 'bg-muted text-muted-foreground' :
+                      index === 2 ? 'bg-warning/30 text-warning-foreground' :
+                      'bg-muted text-muted-foreground'
                     }`}>
                       {index + 1}
                     </div>
@@ -154,9 +154,9 @@ export const GamificationDashboard = () => {
                   </div>
                   {index < 3 && (
                     <Trophy className={`h-5 w-5 ${
-                      index === 0 ? 'text-warning'
-                        : index === 1 ? 'text-muted-foreground'
-                          : 'text-warning/50'
+                      index === 0 ? 'text-warning' :
+                      index === 1 ? 'text-muted-foreground' :
+                      'text-warning/50'
                     }`} />
                   )}
                 </div>
@@ -200,13 +200,13 @@ export const GamificationDashboard = () => {
               <span className="text-sm text-muted-foreground">92%</span>
             </div>
             <Progress value={92} className="h-2" />
-
+            
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Safety Score</span>
               <span className="text-sm text-muted-foreground">88%</span>
             </div>
             <Progress value={88} className="h-2" />
-
+            
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Quality Rating</span>
               <span className="text-sm text-muted-foreground">95%</span>

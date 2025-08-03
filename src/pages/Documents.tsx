@@ -1,27 +1,27 @@
 import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Progress } from '../components/ui/progress';
-import {
-  FileText,
-  Upload,
-  Download,
-  Search,
-  Filter,
-  Folder,
-  Share,
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Progress } from "../components/ui/progress";
+import { 
+  FileText, 
+  Upload, 
+  Download, 
+  Search, 
+  Filter, 
+  Folder, 
+  Share, 
   Lock,
   Eye,
   Edit,
   Calendar,
-  Tag,
-} from 'lucide-react';
+  Tag
+} from "lucide-react";
 
 interface Document {
   id: string;
@@ -67,7 +67,7 @@ export default function Documents() {
       tags: ['license', 'virginia', 'contractor'],
       isShared: false,
       permissions: 'admin',
-      version: 1,
+      version: 1
     },
     {
       id: '2',
@@ -82,7 +82,7 @@ export default function Documents() {
       tags: ['safety', 'manual', 'training'],
       isShared: true,
       permissions: 'read',
-      version: 2,
+      version: 2
     },
     {
       id: '3',
@@ -97,7 +97,7 @@ export default function Documents() {
       tags: ['contract', 'church', 'project'],
       isShared: false,
       permissions: 'write',
-      version: 1,
+      version: 1
     },
     {
       id: '4',
@@ -112,7 +112,7 @@ export default function Documents() {
       tags: ['hr', 'handbook', 'policies'],
       isShared: true,
       permissions: 'read',
-      version: 3,
+      version: 3
     },
     {
       id: '5',
@@ -127,7 +127,7 @@ export default function Documents() {
       tags: ['equipment', 'maintenance', 'log'],
       isShared: true,
       permissions: 'write',
-      version: 1,
+      version: 1
     },
     {
       id: '6',
@@ -142,8 +142,8 @@ export default function Documents() {
       tags: ['insurance', 'certificate', 'liability'],
       isShared: false,
       permissions: 'admin',
-      version: 1,
-    },
+      version: 1
+    }
   ];
 
   const categories: DocumentCategory[] = [
@@ -152,51 +152,51 @@ export default function Documents() {
       name: 'Legal & Compliance',
       description: 'Licenses, permits, and regulatory documents',
       documentCount: 12,
-      color: 'bg-red-100 text-red-800',
+      color: 'bg-red-100 text-red-800'
     },
     {
       id: '2',
       name: 'Safety & Training',
       description: 'Safety manuals, training materials, and certifications',
       documentCount: 8,
-      color: 'bg-yellow-100 text-yellow-800',
+      color: 'bg-yellow-100 text-yellow-800'
     },
     {
       id: '3',
       name: 'Contracts',
       description: 'Client contracts, vendor agreements, and proposals',
       documentCount: 15,
-      color: 'bg-blue-100 text-blue-800',
+      color: 'bg-blue-100 text-blue-800'
     },
     {
       id: '4',
       name: 'HR & Policies',
       description: 'Employee documents, policies, and procedures',
       documentCount: 6,
-      color: 'bg-green-100 text-green-800',
+      color: 'bg-green-100 text-green-800'
     },
     {
       id: '5',
       name: 'Operations',
       description: 'Operational procedures, checklists, and logs',
       documentCount: 10,
-      color: 'bg-purple-100 text-purple-800',
+      color: 'bg-purple-100 text-purple-800'
     },
     {
       id: '6',
       name: 'Insurance',
       description: 'Insurance policies, certificates, and claims',
       documentCount: 4,
-      color: 'bg-orange-100 text-orange-800',
-    },
+      color: 'bg-orange-100 text-orange-800'
+    }
   ];
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase())
-                         || doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
     const matchesType = selectedType === 'all' || doc.type === selectedType;
-
+    
     return matchesSearch && matchesCategory && matchesType;
   });
 
@@ -313,7 +313,7 @@ export default function Documents() {
                         id="search"
                         placeholder="Search by name or tags..."
                         value={searchTerm}
-                        onChange={(e) => { setSearchTerm(e.target.value); }}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-8"
                       />
                     </div>
@@ -354,7 +354,7 @@ export default function Documents() {
                       <Filter className="h-4 w-4" />
                       Filter
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => { setViewMode(viewMode === 'list' ? 'grid' : 'list'); }}>
+                    <Button variant="outline" size="sm" onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>
                       {viewMode === 'list' ? 'Grid' : 'List'}
                     </Button>
                   </div>
@@ -470,7 +470,7 @@ export default function Documents() {
                 { name: 'Equipment Maintenance Log', type: 'Log', uses: 15 },
                 { name: 'Employee Onboarding Checklist', type: 'Checklist', uses: 6 },
                 { name: 'Client Proposal Template', type: 'Proposal', uses: 9 },
-                { name: 'Incident Report Form', type: 'Form', uses: 3 },
+                { name: 'Incident Report Form', type: 'Form', uses: 3 }
               ].map((template, index) => (
                 <Card key={index}>
                   <CardHeader>

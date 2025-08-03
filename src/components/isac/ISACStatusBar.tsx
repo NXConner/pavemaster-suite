@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
-import {
-  Shield,
-  Zap,
-  Signal,
+import { 
+  Shield, 
+  Zap, 
+  Signal, 
   Clock,
   MapPin,
   Thermometer,
-
+  Minimize2,
+  Maximize2
 } from 'lucide-react';
 
 export function ISACStatusBar() {
@@ -20,7 +21,7 @@ export function ISACStatusBar() {
     powerLevel: 94,
     temperature: 72,
     location: 'Richmond, VA',
-    uptime: '72:14:33',
+    uptime: '72:14:33'
   });
 
   useEffect(() => {
@@ -29,11 +30,11 @@ export function ISACStatusBar() {
       setSystemData(prev => ({
         ...prev,
         powerLevel: Math.max(80, Math.min(100, prev.powerLevel + (Math.random() - 0.5) * 2)),
-        temperature: Math.max(65, Math.min(85, prev.temperature + (Math.random() - 0.5) * 0.5)),
+        temperature: Math.max(65, Math.min(85, prev.temperature + (Math.random() - 0.5) * 0.5))
       }));
     }, 1000);
 
-    return () => { clearInterval(interval); };
+    return () => clearInterval(interval);
   }, []);
 
   if (isMinimized) {
@@ -62,19 +63,19 @@ export function ISACStatusBar() {
             <span className="text-orange-500 font-bold">ISAC-OS</span>
             <Badge className="bg-green-600 text-white text-xs">OPERATIONAL</Badge>
           </div>
-
+          
           <Separator orientation="vertical" className="h-4 bg-orange-500/30" />
-
+          
           <div className="flex items-center gap-2">
             <Signal className="h-3 w-3 text-green-400" />
             <span className="text-green-400">{systemData.networkStatus}</span>
           </div>
-
+          
           <div className="flex items-center gap-2">
             <Zap className="h-3 w-3 text-yellow-400" />
             <span className="text-yellow-400">{systemData.powerLevel}% PWR</span>
           </div>
-
+          
           <div className="flex items-center gap-2">
             <Thermometer className="h-3 w-3 text-blue-400" />
             <span className="text-blue-400">{Math.round(systemData.temperature)}°F</span>
@@ -87,9 +88,9 @@ export function ISACStatusBar() {
             <MapPin className="h-3 w-3 text-purple-400" />
             <span className="text-purple-400">{systemData.location}</span>
           </div>
-
+          
           <Separator orientation="vertical" className="h-4 bg-orange-500/30" />
-
+          
           <div className="flex items-center gap-2">
             <Clock className="h-3 w-3 text-cyan-400" />
             <span className="text-cyan-400">UPTIME: {systemData.uptime}</span>
@@ -99,15 +100,15 @@ export function ISACStatusBar() {
         {/* Right Section */}
         <div className="flex items-center gap-4">
           <div className="text-orange-400">
-            {currentTime.toLocaleTimeString()}
+            {currentTime.toLocaleTimeString()} 
           </div>
-
+          
           <Separator orientation="vertical" className="h-4 bg-orange-500/30" />
-
+          
           <div className="text-orange-300">
             {currentTime.toLocaleDateString()}
           </div>
-
+          
           <div className="ml-2 flex gap-1">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse animation-delay-200"></div>

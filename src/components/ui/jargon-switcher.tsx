@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Users, Shield, Layers, Info } from 'lucide-react';
-import { Button } from './button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
-import { Card, CardContent, CardHeader, CardTitle } from './card';
-import { Badge } from './badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';
-import { useJargon, type JargonMode } from '../../contexts/JargonContext';
+import { useState } from "react";
+import { Users, Shield, Layers, Info } from "lucide-react";
+import { Button } from "./button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
+import { Badge } from "./badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import { useJargon, type JargonMode } from "../../contexts/JargonContext";
 
 interface JargonConfig {
   id: JargonMode;
@@ -18,29 +18,29 @@ interface JargonConfig {
 
 const JARGON_CONFIGURATIONS: JargonConfig[] = [
   {
-    id: 'civilian',
-    name: 'Civilian Terminology',
-    description: 'Standard business and construction industry terms',
+    id: "civilian",
+    name: "Civilian Terminology",
+    description: "Standard business and construction industry terms",
     icon: Users,
-    badge: 'CIV',
-    examples: ['Projects', 'Employees', 'Equipment', 'Dashboard'],
+    badge: "CIV",
+    examples: ["Projects", "Employees", "Equipment", "Dashboard"]
   },
   {
-    id: 'military',
-    name: 'Military Terminology',
-    description: 'Military and tactical operational terminology',
+    id: "military",
+    name: "Military Terminology", 
+    description: "Military and tactical operational terminology",
     icon: Shield,
-    badge: 'MIL',
-    examples: ['Operations (OPS)', 'Personnel (PERS)', 'Assets (EQUIP)', 'Command Center (C2)'],
+    badge: "MIL",
+    examples: ["Operations (OPS)", "Personnel (PERS)", "Assets (EQUIP)", "Command Center (C2)"]
   },
   {
-    id: 'hybrid',
-    name: 'Hybrid Mode',
-    description: 'Combined civilian/military terminology with acronyms',
+    id: "hybrid",
+    name: "Hybrid Mode",
+    description: "Combined civilian/military terminology with acronyms",
     icon: Layers,
-    badge: 'HYB',
-    examples: ['Projects / Operations (OPS)', 'Employees / Personnel (PERS)'],
-  },
+    badge: "HYB",
+    examples: ["Projects / Operations (OPS)", "Employees / Personnel (PERS)"]
+  }
 ];
 
 export function JargonSwitcher() {
@@ -112,11 +112,11 @@ export function JargonSwitcher() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => { setShowExamples(!showExamples); }}
+              onClick={() => setShowExamples(!showExamples)}
               className="flex items-center gap-2"
             >
               <Info className="h-4 w-4" />
-              {showExamples ? 'Hide' : 'Show'}
+              {showExamples ? "Hide" : "Show"}
             </Button>
           </div>
 
@@ -165,7 +165,7 @@ export function JargonSwitcher() {
               <span className="text-sm font-medium">Veteran Integration</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              This terminology system is designed to accommodate both civilian contractors and military veterans,
+              This terminology system is designed to accommodate both civilian contractors and military veterans, 
               ensuring seamless communication across all team members regardless of background.
             </div>
           </div>
@@ -178,11 +178,11 @@ export function JargonSwitcher() {
             <div className="flex flex-wrap gap-1">
               {Object.entries({
                 'C2': 'Command & Control',
-                'OPS': 'Operations',
+                'OPS': 'Operations', 
                 'PERS': 'Personnel',
                 'EQUIP': 'Equipment',
                 'SURV': 'Surveillance',
-                'INTEL': 'Intelligence',
+                'INTEL': 'Intelligence'
               }).map(([acronym, definition]) => (
                 <Tooltip key={acronym}>
                   <TooltipTrigger asChild>

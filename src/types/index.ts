@@ -23,15 +23,15 @@ export interface User {
   twoFactorEnabled: boolean;
 }
 
-export type UserRole =
-  | 'super_admin'
-  | 'admin'
-  | 'manager'
-  | 'crew_leader'
-  | 'crew_member'
-  | 'driver'
-  | 'inspector'
-  | 'estimator'
+export type UserRole = 
+  | 'super_admin' 
+  | 'admin' 
+  | 'manager' 
+  | 'crew_leader' 
+  | 'crew_member' 
+  | 'driver' 
+  | 'inspector' 
+  | 'estimator' 
   | 'client';
 
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending';
@@ -44,13 +44,13 @@ export interface Permission {
   level: PermissionLevel;
 }
 
-export type PermissionCategory =
-  | 'projects'
-  | 'equipment'
-  | 'employees'
-  | 'financial'
-  | 'settings'
-  | 'reports'
+export type PermissionCategory = 
+  | 'projects' 
+  | 'equipment' 
+  | 'employees' 
+  | 'financial' 
+  | 'settings' 
+  | 'reports' 
   | 'system';
 
 export type PermissionLevel = 'read' | 'write' | 'delete' | 'admin';
@@ -108,35 +108,35 @@ export interface Project {
   lastModifiedBy: string;
 }
 
-export type ProjectType =
-  | 'asphalt_paving'
-  | 'sealcoating'
-  | 'line_striping'
-  | 'repair'
-  | 'maintenance'
-  | 'inspection'
+export type ProjectType = 
+  | 'asphalt_paving' 
+  | 'sealcoating' 
+  | 'line_striping' 
+  | 'repair' 
+  | 'maintenance' 
+  | 'inspection' 
   | 'consultation';
 
-export type ProjectStatus =
-  | 'draft'
-  | 'quoted'
-  | 'approved'
-  | 'scheduled'
-  | 'in_progress'
-  | 'on_hold'
-  | 'completed'
-  | 'cancelled'
+export type ProjectStatus = 
+  | 'draft' 
+  | 'quoted' 
+  | 'approved' 
+  | 'scheduled' 
+  | 'in_progress' 
+  | 'on_hold' 
+  | 'completed' 
+  | 'cancelled' 
   | 'warranty';
 
 export type ProjectPriority = 'low' | 'medium' | 'high' | 'urgent' | 'critical';
 
-export type ProjectPhase =
-  | 'planning'
-  | 'preparation'
-  | 'mobilization'
-  | 'execution'
-  | 'quality_control'
-  | 'cleanup'
+export type ProjectPhase = 
+  | 'planning' 
+  | 'preparation' 
+  | 'mobilization' 
+  | 'execution' 
+  | 'quality_control' 
+  | 'cleanup' 
   | 'closeout';
 
 // Equipment and Fleet Types
@@ -169,42 +169,42 @@ export interface Equipment {
   updatedAt: Date;
 }
 
-export type EquipmentType =
-  | 'paver'
-  | 'roller'
-  | 'truck'
-  | 'distributor'
-  | 'sweeper'
-  | 'crack_sealer'
-  | 'striping_machine'
-  | 'excavator'
-  | 'loader'
-  | 'milling_machine'
-  | 'compactor'
-  | 'trailer'
-  | 'generator'
+export type EquipmentType = 
+  | 'paver' 
+  | 'roller' 
+  | 'truck' 
+  | 'distributor' 
+  | 'sweeper' 
+  | 'crack_sealer' 
+  | 'striping_machine' 
+  | 'excavator' 
+  | 'loader' 
+  | 'milling_machine' 
+  | 'compactor' 
+  | 'trailer' 
+  | 'generator' 
   | 'tool';
 
-export type EquipmentCategory =
-  | 'heavy_machinery'
-  | 'vehicles'
-  | 'tools'
-  | 'safety_equipment'
+export type EquipmentCategory = 
+  | 'heavy_machinery' 
+  | 'vehicles' 
+  | 'tools' 
+  | 'safety_equipment' 
   | 'testing_equipment';
 
-export type EquipmentStatus =
-  | 'available'
-  | 'in_use'
-  | 'maintenance'
-  | 'repair'
-  | 'offline'
+export type EquipmentStatus = 
+  | 'available' 
+  | 'in_use' 
+  | 'maintenance' 
+  | 'repair' 
+  | 'offline' 
   | 'retired';
 
-export type EquipmentCondition =
-  | 'excellent'
-  | 'good'
-  | 'fair'
-  | 'poor'
+export type EquipmentCondition = 
+  | 'excellent' 
+  | 'good' 
+  | 'fair' 
+  | 'poor' 
   | 'critical';
 
 // Financial and Cost Types
@@ -267,12 +267,12 @@ export interface AIAnalysis {
   metadata: Record<string, any>;
 }
 
-export type AnalysisType =
-  | 'cost_prediction'
-  | 'quality_assessment'
-  | 'weather_impact'
-  | 'resource_optimization'
-  | 'risk_analysis'
+export type AnalysisType = 
+  | 'cost_prediction' 
+  | 'quality_assessment' 
+  | 'weather_impact' 
+  | 'resource_optimization' 
+  | 'risk_analysis' 
   | 'performance_prediction';
 
 export interface AIOutput {
@@ -301,13 +301,13 @@ export interface WeatherData {
   timestamp: Date;
 }
 
-export type WeatherCondition =
-  | 'clear'
-  | 'cloudy'
-  | 'rain'
-  | 'snow'
-  | 'fog'
-  | 'storm'
+export type WeatherCondition = 
+  | 'clear' 
+  | 'cloudy' 
+  | 'rain' 
+  | 'snow' 
+  | 'fog' 
+  | 'storm' 
   | 'extreme';
 
 export interface WeatherSuitability {
@@ -341,14 +341,14 @@ export interface IoTDevice {
   updatedAt: Date;
 }
 
-export type DeviceType =
-  | 'gps_tracker'
-  | 'temperature_sensor'
-  | 'pressure_sensor'
-  | 'fuel_monitor'
-  | 'camera'
-  | 'accelerometer'
-  | 'engine_monitor'
+export type DeviceType = 
+  | 'gps_tracker' 
+  | 'temperature_sensor' 
+  | 'pressure_sensor' 
+  | 'fuel_monitor' 
+  | 'camera' 
+  | 'accelerometer' 
+  | 'engine_monitor' 
   | 'environmental_sensor';
 
 export type DeviceStatus = 'online' | 'offline' | 'error' | 'maintenance';
@@ -373,12 +373,12 @@ export interface SafetyRecord {
   resolvedAt?: Date;
 }
 
-export type SafetyRecordType =
-  | 'incident'
-  | 'near_miss'
-  | 'inspection'
-  | 'training'
-  | 'audit'
+export type SafetyRecordType = 
+  | 'incident' 
+  | 'near_miss' 
+  | 'inspection' 
+  | 'training' 
+  | 'audit' 
   | 'violation';
 
 export type SafetySeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -402,12 +402,12 @@ export interface Notification {
   createdAt: Date;
 }
 
-export type NotificationType =
-  | 'alert'
-  | 'reminder'
-  | 'update'
-  | 'emergency'
-  | 'system'
+export type NotificationType = 
+  | 'alert' 
+  | 'reminder' 
+  | 'update' 
+  | 'emergency' 
+  | 'system' 
   | 'marketing';
 
 export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
@@ -426,13 +426,13 @@ export interface JargonTerm {
   category: JargonCategory;
 }
 
-export type JargonCategory =
-  | 'general'
-  | 'operations'
-  | 'equipment'
-  | 'navigation'
-  | 'communication'
-  | 'safety'
+export type JargonCategory = 
+  | 'general' 
+  | 'operations' 
+  | 'equipment' 
+  | 'navigation' 
+  | 'communication' 
+  | 'safety' 
   | 'status';
 
 // Theme and UI Types
@@ -476,14 +476,14 @@ export interface DashboardWidget {
   visible: boolean;
 }
 
-export type WidgetType =
-  | 'metrics'
-  | 'chart'
-  | 'map'
-  | 'table'
-  | 'alert'
-  | 'weather'
-  | 'equipment'
+export type WidgetType = 
+  | 'metrics' 
+  | 'chart' 
+  | 'map' 
+  | 'table' 
+  | 'alert' 
+  | 'weather' 
+  | 'equipment' 
   | 'project';
 
 // Data structures for common use cases
@@ -647,12 +647,12 @@ export interface BudgetAllocation {
   remaining: MonetaryAmount;
 }
 
-export type BudgetCategory =
-  | 'materials'
-  | 'labor'
-  | 'equipment'
-  | 'permits'
-  | 'overhead'
+export type BudgetCategory = 
+  | 'materials' 
+  | 'labor' 
+  | 'equipment' 
+  | 'permits' 
+  | 'overhead' 
   | 'contingency';
 
 export interface ProjectTeam {
@@ -677,12 +677,12 @@ export interface ExternalTeamMember {
   rate?: MonetaryAmount;
 }
 
-export type ProjectRole =
-  | 'project_manager'
-  | 'foreman'
-  | 'operator'
-  | 'laborer'
-  | 'inspector'
+export type ProjectRole = 
+  | 'project_manager' 
+  | 'foreman' 
+  | 'operator' 
+  | 'laborer' 
+  | 'inspector' 
   | 'supervisor';
 
 export interface EquipmentAssignment {
@@ -705,11 +705,11 @@ export interface MaterialRequirement {
   status: MaterialStatus;
 }
 
-export type MaterialStatus =
-  | 'ordered'
-  | 'confirmed'
-  | 'in_transit'
-  | 'delivered'
+export type MaterialStatus = 
+  | 'ordered' 
+  | 'confirmed' 
+  | 'in_transit' 
+  | 'delivered' 
   | 'installed';
 
 export interface SafetyInfo {
@@ -738,11 +738,11 @@ export interface Hazard {
   risk: 'low' | 'medium' | 'high' | 'critical';
 }
 
-export type HazardType =
-  | 'chemical'
-  | 'physical'
-  | 'biological'
-  | 'ergonomic'
+export type HazardType = 
+  | 'chemical' 
+  | 'physical' 
+  | 'biological' 
+  | 'ergonomic' 
   | 'environmental';
 
 export interface SafetyControl {
@@ -753,11 +753,11 @@ export interface SafetyControl {
   frequency: string;
 }
 
-export type ControlType =
-  | 'elimination'
-  | 'substitution'
-  | 'engineering'
-  | 'administrative'
+export type ControlType = 
+  | 'elimination' 
+  | 'substitution' 
+  | 'engineering' 
+  | 'administrative' 
   | 'ppe';
 
 export interface SafetyProcedure {
@@ -775,11 +775,11 @@ export interface SafetyRequirement {
   mandatory: boolean;
 }
 
-export type SafetyCategory =
-  | 'ppe'
-  | 'training'
-  | 'equipment'
-  | 'procedure'
+export type SafetyCategory = 
+  | 'ppe' 
+  | 'training' 
+  | 'equipment' 
+  | 'procedure' 
   | 'environmental';
 
 export interface SafetyTraining {
@@ -864,10 +864,10 @@ export interface QualityInspection {
   notes: string;
 }
 
-export type InspectionType =
-  | 'pre_construction'
-  | 'in_progress'
-  | 'final'
+export type InspectionType = 
+  | 'pre_construction' 
+  | 'in_progress' 
+  | 'final' 
   | 'warranty';
 
 export interface InspectionItem {
@@ -892,11 +892,11 @@ export interface QualityDefect {
   correctedAt?: Date;
 }
 
-export type DefectType =
-  | 'surface'
-  | 'structural'
-  | 'dimensional'
-  | 'material'
+export type DefectType = 
+  | 'surface' 
+  | 'structural' 
+  | 'dimensional' 
+  | 'material' 
   | 'workmanship';
 
 export type DefectSeverity = 'minor' | 'major' | 'critical';
@@ -939,19 +939,19 @@ export interface Permit {
   documents: string[];
 }
 
-export type PermitType =
-  | 'construction'
-  | 'traffic_control'
-  | 'environmental'
-  | 'business'
+export type PermitType = 
+  | 'construction' 
+  | 'traffic_control' 
+  | 'environmental' 
+  | 'business' 
   | 'special';
 
-export type PermitStatus =
-  | 'applied'
-  | 'under_review'
-  | 'approved'
-  | 'issued'
-  | 'expired'
+export type PermitStatus = 
+  | 'applied' 
+  | 'under_review' 
+  | 'approved' 
+  | 'issued' 
+  | 'expired' 
   | 'revoked';
 
 export interface ProjectDocument {
@@ -971,23 +971,23 @@ export interface ProjectDocument {
   updatedAt: Date;
 }
 
-export type DocumentType =
-  | 'drawing'
-  | 'specification'
-  | 'report'
-  | 'photo'
-  | 'video'
-  | 'permit'
-  | 'contract'
+export type DocumentType = 
+  | 'drawing' 
+  | 'specification' 
+  | 'report' 
+  | 'photo' 
+  | 'video' 
+  | 'permit' 
+  | 'contract' 
   | 'invoice';
 
-export type DocumentCategory =
-  | 'planning'
-  | 'execution'
-  | 'quality'
-  | 'safety'
-  | 'financial'
-  | 'legal'
+export type DocumentCategory = 
+  | 'planning' 
+  | 'execution' 
+  | 'quality' 
+  | 'safety' 
+  | 'financial' 
+  | 'legal' 
   | 'correspondence';
 
 export interface DocumentMetadata {
@@ -1094,10 +1094,10 @@ export interface MaintenanceSchedule {
   description: string;
 }
 
-export type MaintenanceType =
-  | 'preventive'
-  | 'corrective'
-  | 'predictive'
+export type MaintenanceType = 
+  | 'preventive' 
+  | 'corrective' 
+  | 'predictive' 
   | 'emergency';
 
 export interface MaintenanceRecord {
@@ -1220,10 +1220,10 @@ export interface DepreciationInfo {
   accumulated: MonetaryAmount;
 }
 
-export type DepreciationMethod =
-  | 'straight_line'
-  | 'declining_balance'
-  | 'sum_of_years'
+export type DepreciationMethod = 
+  | 'straight_line' 
+  | 'declining_balance' 
+  | 'sum_of_years' 
   | 'units_of_production';
 
 export interface OperatingCosts {
@@ -1261,12 +1261,12 @@ export interface InsuranceCoverage {
   description: string;
 }
 
-export type CoverageType =
-  | 'liability'
-  | 'collision'
-  | 'comprehensive'
-  | 'theft'
-  | 'fire'
+export type CoverageType = 
+  | 'liability' 
+  | 'collision' 
+  | 'comprehensive' 
+  | 'theft' 
+  | 'fire' 
   | 'vandalism';
 
 export interface InsuranceClaim {
@@ -1339,14 +1339,14 @@ export interface EquipmentAttachment {
   specifications: Record<string, any>;
 }
 
-export type AttachmentType =
-  | 'blade'
-  | 'bucket'
-  | 'hammer'
-  | 'auger'
-  | 'spreader'
-  | 'plow'
-  | 'brush'
+export type AttachmentType = 
+  | 'blade' 
+  | 'bucket' 
+  | 'hammer' 
+  | 'auger' 
+  | 'spreader' 
+  | 'plow' 
+  | 'brush' 
   | 'lifting';
 
 export type AttachmentStatus = 'attached' | 'detached' | 'maintenance' | 'retired';
@@ -1360,12 +1360,12 @@ export interface EquipmentDocument {
   expiresAt?: Date;
 }
 
-export type EquipmentDocumentType =
-  | 'manual'
-  | 'warranty'
-  | 'insurance'
-  | 'registration'
-  | 'inspection'
+export type EquipmentDocumentType = 
+  | 'manual' 
+  | 'warranty' 
+  | 'insurance' 
+  | 'registration' 
+  | 'inspection' 
   | 'permit';
 
 export interface EquipmentAlert {
@@ -1379,12 +1379,12 @@ export interface EquipmentAlert {
   data: Record<string, any>;
 }
 
-export type AlertType =
-  | 'maintenance'
-  | 'performance'
-  | 'safety'
-  | 'security'
-  | 'diagnostic'
+export type AlertType = 
+  | 'maintenance' 
+  | 'performance' 
+  | 'safety' 
+  | 'security' 
+  | 'diagnostic' 
   | 'location';
 
 export type AlertSeverity = 'info' | 'warning' | 'error' | 'critical';
@@ -1431,17 +1431,17 @@ export interface Filtering {
   value: any;
 }
 
-export type FilterOperator =
-  | 'eq'
-  | 'ne'
-  | 'gt'
-  | 'gte'
-  | 'lt'
-  | 'lte'
-  | 'in'
-  | 'nin'
-  | 'contains'
-  | 'startswith'
+export type FilterOperator = 
+  | 'eq' 
+  | 'ne' 
+  | 'gt' 
+  | 'gte' 
+  | 'lt' 
+  | 'lte' 
+  | 'in' 
+  | 'nin' 
+  | 'contains' 
+  | 'startswith' 
   | 'endswith';
 
 export interface Timing {
@@ -1463,28 +1463,28 @@ export interface SystemEvent {
   message: string;
 }
 
-export type EventType =
-  | 'user_action'
-  | 'system_action'
-  | 'error'
-  | 'performance'
-  | 'security'
+export type EventType = 
+  | 'user_action' 
+  | 'system_action' 
+  | 'error' 
+  | 'performance' 
+  | 'security' 
   | 'audit';
 
-export type EventCategory =
-  | 'authentication'
-  | 'authorization'
-  | 'data_access'
-  | 'data_modification'
-  | 'system_configuration'
-  | 'performance'
+export type EventCategory = 
+  | 'authentication' 
+  | 'authorization' 
+  | 'data_access' 
+  | 'data_modification' 
+  | 'system_configuration' 
+  | 'performance' 
   | 'error';
 
-export type EventSource =
-  | 'web_app'
-  | 'mobile_app'
-  | 'api'
-  | 'background_job'
+export type EventSource = 
+  | 'web_app' 
+  | 'mobile_app' 
+  | 'api' 
+  | 'background_job' 
   | 'external_system';
 
 export type EventLevel = 'debug' | 'info' | 'warning' | 'error' | 'critical';
@@ -1507,13 +1507,13 @@ export interface ChartDataset {
   type?: ChartType;
 }
 
-export type ChartType =
-  | 'line'
-  | 'bar'
-  | 'pie'
-  | 'doughnut'
-  | 'area'
-  | 'scatter'
+export type ChartType = 
+  | 'line' 
+  | 'bar' 
+  | 'pie' 
+  | 'doughnut' 
+  | 'area' 
+  | 'scatter' 
   | 'bubble';
 
 export interface ChartOptions {
@@ -1703,13 +1703,13 @@ export interface WeatherAlert {
   recommendations: string[];
 }
 
-export type WeatherAlertType =
-  | 'severe_weather'
-  | 'high_wind'
-  | 'extreme_temperature'
-  | 'heavy_rain'
-  | 'snow'
-  | 'fog'
+export type WeatherAlertType = 
+  | 'severe_weather' 
+  | 'high_wind' 
+  | 'extreme_temperature' 
+  | 'heavy_rain' 
+  | 'snow' 
+  | 'fog' 
   | 'air_quality';
 
 export interface BatteryInfo {
@@ -1747,15 +1747,15 @@ export interface Sensor {
   status: SensorStatus;
 }
 
-export type SensorType =
-  | 'temperature'
-  | 'pressure'
-  | 'humidity'
-  | 'accelerometer'
-  | 'gyroscope'
-  | 'gps'
-  | 'fuel'
-  | 'engine'
+export type SensorType = 
+  | 'temperature' 
+  | 'pressure' 
+  | 'humidity' 
+  | 'accelerometer' 
+  | 'gyroscope' 
+  | 'gps' 
+  | 'fuel' 
+  | 'engine' 
   | 'hydraulic';
 
 export interface SensorCalibration {
@@ -1873,12 +1873,12 @@ export interface DeviceAlert {
   actions: AlertAction[];
 }
 
-export type DeviceAlertType =
-  | 'sensor_failure'
-  | 'communication_loss'
-  | 'battery_low'
-  | 'threshold_exceeded'
-  | 'tamper_detected'
+export type DeviceAlertType = 
+  | 'sensor_failure' 
+  | 'communication_loss' 
+  | 'battery_low' 
+  | 'threshold_exceeded' 
+  | 'tamper_detected' 
   | 'maintenance_due';
 
 export interface AlertAction {
@@ -1889,11 +1889,11 @@ export interface AlertAction {
   result?: string;
 }
 
-export type AlertActionType =
-  | 'notification_sent'
-  | 'maintenance_scheduled'
-  | 'operator_contacted'
-  | 'system_shutdown'
+export type AlertActionType = 
+  | 'notification_sent' 
+  | 'maintenance_scheduled' 
+  | 'operator_contacted' 
+  | 'system_shutdown' 
   | 'backup_activated';
 
 export type ActionStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
@@ -1966,12 +1966,12 @@ export interface SafetyAction {
   priority: ActionPriority;
 }
 
-export type SafetyActionType =
-  | 'immediate'
-  | 'corrective'
-  | 'preventive'
-  | 'training'
-  | 'equipment'
+export type SafetyActionType = 
+  | 'immediate' 
+  | 'corrective' 
+  | 'preventive' 
+  | 'training' 
+  | 'equipment' 
   | 'procedure';
 
 export type ActionPriority = 'low' | 'medium' | 'high' | 'urgent';
@@ -1987,11 +1987,11 @@ export interface Investigation {
   status: InvestigationStatus;
 }
 
-export type InvestigationMethod =
-  | 'incident_analysis'
-  | 'root_cause_analysis'
-  | 'fault_tree_analysis'
-  | 'fishbone_diagram'
+export type InvestigationMethod = 
+  | 'incident_analysis' 
+  | 'root_cause_analysis' 
+  | 'fault_tree_analysis' 
+  | 'fishbone_diagram' 
   | '5_whys';
 
 export interface InvestigationFinding {
@@ -2001,11 +2001,11 @@ export interface InvestigationFinding {
   significance: FindingSignificance;
 }
 
-export type FindingCategory =
-  | 'human_factors'
-  | 'equipment_failure'
-  | 'environmental'
-  | 'procedural'
+export type FindingCategory = 
+  | 'human_factors' 
+  | 'equipment_failure' 
+  | 'environmental' 
+  | 'procedural' 
   | 'organizational';
 
 export interface Evidence {
@@ -2027,11 +2027,11 @@ export interface RootCause {
   preventability: Preventability;
 }
 
-export type RootCauseCategory =
-  | 'inadequate_training'
-  | 'equipment_failure'
-  | 'poor_procedures'
-  | 'inadequate_supervision'
+export type RootCauseCategory = 
+  | 'inadequate_training' 
+  | 'equipment_failure' 
+  | 'poor_procedures' 
+  | 'inadequate_supervision' 
   | 'environmental_factors';
 
 export type Preventability = 'preventable' | 'potentially_preventable' | 'not_preventable';
@@ -2146,12 +2146,12 @@ export interface SafetyDocument {
   distribution: DocumentDistribution[];
 }
 
-export type SafetyDocumentType =
-  | 'policy'
-  | 'procedure'
-  | 'checklist'
-  | 'form'
-  | 'training_material'
+export type SafetyDocumentType = 
+  | 'policy' 
+  | 'procedure' 
+  | 'checklist' 
+  | 'form' 
+  | 'training_material' 
   | 'report';
 
 export interface DocumentDistribution {
@@ -2163,12 +2163,12 @@ export interface DocumentDistribution {
 
 export type SafetyStatus = 'reported' | 'investigating' | 'action_required' | 'resolved' | 'closed';
 
-export type NotificationCategory =
-  | 'safety'
-  | 'maintenance'
-  | 'project'
-  | 'financial'
-  | 'system'
+export type NotificationCategory = 
+  | 'safety' 
+  | 'maintenance' 
+  | 'project' 
+  | 'financial' 
+  | 'system' 
   | 'emergency';
 
 export interface NotificationRecipient {
@@ -2190,12 +2190,12 @@ export interface AIModel {
   lastTrained: Date;
 }
 
-export type ModelCapability =
-  | 'classification'
-  | 'regression'
-  | 'clustering'
-  | 'prediction'
-  | 'optimization'
+export type ModelCapability = 
+  | 'classification' 
+  | 'regression' 
+  | 'clustering' 
+  | 'prediction' 
+  | 'optimization' 
   | 'anomaly_detection';
 
 export interface Insight {
@@ -2223,23 +2223,23 @@ export type VisualizationType = 'chart' | 'graph' | 'heatmap' | 'scatter' | 'dis
 
 // Global constants and enums
 export const USER_ROLES: readonly UserRole[] = [
-  'super_admin', 'admin', 'manager', 'crew_leader',
-  'crew_member', 'driver', 'inspector', 'estimator', 'client',
+  'super_admin', 'admin', 'manager', 'crew_leader', 
+  'crew_member', 'driver', 'inspector', 'estimator', 'client'
 ] as const;
 
 export const PROJECT_STATUSES: readonly ProjectStatus[] = [
-  'draft', 'quoted', 'approved', 'scheduled', 'in_progress',
-  'on_hold', 'completed', 'cancelled', 'warranty',
+  'draft', 'quoted', 'approved', 'scheduled', 'in_progress', 
+  'on_hold', 'completed', 'cancelled', 'warranty'
 ] as const;
 
 export const EQUIPMENT_TYPES: readonly EquipmentType[] = [
   'paver', 'roller', 'truck', 'distributor', 'sweeper', 'crack_sealer',
-  'striping_machine', 'excavator', 'loader', 'milling_machine',
-  'compactor', 'trailer', 'generator', 'tool',
+  'striping_machine', 'excavator', 'loader', 'milling_machine', 
+  'compactor', 'trailer', 'generator', 'tool'
 ] as const;
 
 export const JARGON_MODES: readonly JargonMode[] = ['civilian', 'military', 'hybrid'] as const;
 
 export const THEME_MODES: readonly ThemeMode[] = [
-  'light', 'dark', 'system', 'isac', 'defcon', 'overwatch',
+  'light', 'dark', 'system', 'isac', 'defcon', 'overwatch'
 ] as const;

@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { DashboardLayout } from '../components/layout/dashboard-layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { Avatar, AvatarFallback } from '../components/ui/avatar';
-import { EmployeeProfileForm } from '../components/employee/EmployeeProfileForm';
-import { Users, UserPlus, Calendar, Clock, Phone, Mail, MapPin, Award } from 'lucide-react';
+import { DashboardLayout } from "../components/layout/dashboard-layout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Badge } from "../components/ui/badge";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
+import { EmployeeProfileForm } from "../components/employee/EmployeeProfileForm";
+import { Users, UserPlus, Calendar, Clock, Phone, Mail, MapPin, Award } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -59,7 +59,7 @@ export default function Team() {
       certifications: ['VDOT Certified', 'OSHA 30'],
       hourlyRate: 28.50,
       yearsExperience: 12,
-      currentProject: 'Church Parking Lot - Phase 2',
+      currentProject: 'Church Parking Lot - Phase 2'
     },
     {
       id: '2',
@@ -74,7 +74,7 @@ export default function Team() {
       certifications: ['CDL Class A', 'Equipment Safety'],
       hourlyRate: 24.00,
       yearsExperience: 8,
-      currentProject: 'Shopping Center Reseal',
+      currentProject: 'Shopping Center Reseal'
     },
     {
       id: '3',
@@ -89,7 +89,7 @@ export default function Team() {
       certifications: ['OSHA 30', 'First Aid/CPR', 'Safety Manager'],
       hourlyRate: 26.00,
       yearsExperience: 10,
-      currentProject: 'Safety Training Program',
+      currentProject: 'Safety Training Program'
     },
     {
       id: '4',
@@ -103,7 +103,7 @@ export default function Team() {
       skills: ['Project Coordination', 'Customer Service', 'Documentation'],
       certifications: ['Administrative Professional'],
       hourlyRate: 18.00,
-      yearsExperience: 5,
+      yearsExperience: 5
     },
     {
       id: '5',
@@ -117,8 +117,8 @@ export default function Team() {
       skills: ['Manual Labor', 'Equipment Maintenance', 'Site Preparation'],
       certifications: ['OSHA 10'],
       hourlyRate: 16.50,
-      yearsExperience: 3,
-    },
+      yearsExperience: 3
+    }
   ];
 
   const recentShifts: Shift[] = [
@@ -130,7 +130,7 @@ export default function Team() {
       endTime: '16:00',
       project: 'Church Parking Lot',
       hoursWorked: 8,
-      overtime: 0,
+      overtime: 0
     },
     {
       id: '2',
@@ -140,7 +140,7 @@ export default function Team() {
       endTime: '17:30',
       project: 'Shopping Center',
       hoursWorked: 9.5,
-      overtime: 1.5,
+      overtime: 1.5
     },
     {
       id: '3',
@@ -150,16 +150,16 @@ export default function Team() {
       endTime: '16:30',
       project: 'Safety Inspection',
       hoursWorked: 8,
-      overtime: 0,
-    },
+      overtime: 0
+    }
   ];
 
   const filteredMembers = teamMembers.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase())
-                         || member.role.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         member.role.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = selectedDepartment === 'all' || member.department === selectedDepartment;
     const matchesStatus = selectedStatus === 'all' || member.status === selectedStatus;
-
+    
     return matchesSearch && matchesDepartment && matchesStatus;
   });
 
@@ -186,16 +186,16 @@ export default function Team() {
       <DashboardLayout>
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => { setSelectedEmployee(null); }}
+            <Button 
+              variant="outline" 
+              onClick={() => setSelectedEmployee(null)}
             >
               ← Back to Team
             </Button>
             <h1 className="text-2xl font-bold">Employee Profile</h1>
           </div>
-          <EmployeeProfileForm
-            employeeId={selectedEmployee}
+          <EmployeeProfileForm 
+            employeeId={selectedEmployee} 
             onSave={(data) => {
               console.log('Employee data saved:', data);
               setSelectedEmployee(null);
@@ -294,7 +294,7 @@ export default function Team() {
                       id="search"
                       placeholder="Search by name or role..."
                       value={searchTerm}
-                      onChange={(e) => { setSearchTerm(e.target.value); }}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -380,10 +380,10 @@ export default function Team() {
                         <div className="text-lg font-semibold">${member.hourlyRate}/hr</div>
                         <div className="text-sm text-muted-foreground">{member.yearsExperience} years exp.</div>
                         <div className="flex gap-2">
-                          <Button
-                            variant="outline"
+                          <Button 
+                            variant="outline" 
                             size="sm"
-                            onClick={() => { setSelectedEmployee(member.id); }}
+                            onClick={() => setSelectedEmployee(member.id)}
                           >
                             Manage
                           </Button>
@@ -391,7 +391,7 @@ export default function Team() {
                         </div>
                       </div>
                     </div>
-
+                    
                     {/* Skills and Certifications */}
                     <div className="mt-4 space-y-2">
                       <div>

@@ -1,24 +1,24 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Badge } from '../ui/badge';
-import { Textarea } from '../ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import {
-  Truck,
-  Wrench,
-  FileText,
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { 
+  Truck, 
+  Wrench, 
+  FileText, 
   Camera,
   Shield,
   Droplets,
   Gauge,
   AlertTriangle,
-  CheckCircle,
-} from 'lucide-react';
-import { sanitizeString, validateInput, vehicleDetailsSchema, rateLimiter, logSecurityEvent } from '../../lib/security';
+  CheckCircle
+} from "lucide-react";
+import { sanitizeString, validateInput, vehicleDetailsSchema, rateLimiter, logSecurityEvent } from "../../lib/security";
 
 interface VehicleDetailsProps {
   vehicleId: string;
@@ -36,7 +36,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
     insurancePolicyNumber: '',
     insuranceCompany: '',
     insuranceExpiry: '',
-
+    
     // Engine & Fluids
     engineType: '',
     oilType: '',
@@ -47,18 +47,18 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
     brakeFluidType: '',
     coolantType: '',
     coolantCapacityQuarts: '',
-
+    
     // Tires
     frontTireSize: '',
     rearTireSize: '',
     tirePressureFront: '',
     tirePressureRear: '',
-
+    
     // Service
     lastOilChangeDate: '',
     lastOilChangeMileage: '',
     nextOilChangeDueMileage: '',
-    oilChangeIntervalMiles: '3000',
+    oilChangeIntervalMiles: '3000'
   });
 
   const [maintenanceRecord, setMaintenanceRecord] = useState({
@@ -68,7 +68,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
     odometerReading: '',
     partsUsed: '',
     fluidsAdded: '',
-    notes: '',
+    notes: ''
   });
 
   const [inspectionData, setInspectionData] = useState({
@@ -84,7 +84,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
     firstAidKitCheck: false,
     issuesFound: '',
     recommendations: '',
-    passed: true,
+    passed: true
   });
 
   const handleSaveDetails = () => {
@@ -95,7 +95,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
         type: 'rate_limit',
         severity: 'medium',
         action: 'vehicle_details_save_rate_limit_exceeded',
-        metadata: { action: 'save_vehicle_details' },
+        metadata: { action: 'save_vehicle_details' }
       });
       return;
     }
@@ -108,7 +108,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
         type: 'input_validation',
         severity: 'medium',
         action: 'invalid_vehicle_details_data',
-        metadata: { errors: validation.errors },
+        metadata: { errors: validation.errors }
       });
       return;
     }
@@ -121,14 +121,14 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
       registrationNumber: sanitizeString(vehicleDetails.registrationNumber),
       insurancePolicyNumber: sanitizeString(vehicleDetails.insurancePolicyNumber),
       insuranceCompany: sanitizeString(vehicleDetails.insuranceCompany),
-      engineType: sanitizeString(vehicleDetails.engineType),
+      engineType: sanitizeString(vehicleDetails.engineType)
     };
 
     logSecurityEvent({
       type: 'data_access',
       severity: 'low',
       action: 'vehicle_details_saved',
-      metadata: { vehicleId: vehicleId },
+      metadata: { vehicleId: vehicleId }
     });
 
     onSave?.(sanitizedVehicleDetails);
@@ -196,7 +196,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="vin"
                     value={vehicleDetails.vin}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, vin: sanitizeString(e.target.value) }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, vin: sanitizeString(e.target.value)})}
                     placeholder="Enter VIN number"
                     maxLength={17}
                   />
@@ -206,7 +206,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="licensePlate"
                     value={vehicleDetails.licensePlate}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, licensePlate: sanitizeString(e.target.value) }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, licensePlate: sanitizeString(e.target.value)})}
                     placeholder="Enter license plate"
                     maxLength={10}
                   />
@@ -216,7 +216,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="registrationNumber"
                     value={vehicleDetails.registrationNumber}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, registrationNumber: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, registrationNumber: e.target.value})}
                     placeholder="Enter registration number"
                   />
                 </div>
@@ -226,7 +226,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="registrationExpiry"
                     type="date"
                     value={vehicleDetails.registrationExpiry}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, registrationExpiry: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, registrationExpiry: e.target.value})}
                   />
                 </div>
               </div>
@@ -245,7 +245,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="insuranceCompany"
                     value={vehicleDetails.insuranceCompany}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, insuranceCompany: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, insuranceCompany: e.target.value})}
                     placeholder="Enter insurance company"
                   />
                 </div>
@@ -254,7 +254,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="insurancePolicyNumber"
                     value={vehicleDetails.insurancePolicyNumber}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, insurancePolicyNumber: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, insurancePolicyNumber: e.target.value})}
                     placeholder="Enter policy number"
                   />
                 </div>
@@ -264,7 +264,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="insuranceExpiry"
                     type="date"
                     value={vehicleDetails.insuranceExpiry}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, insuranceExpiry: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, insuranceExpiry: e.target.value})}
                   />
                 </div>
               </div>
@@ -289,7 +289,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="engineType"
                     value={vehicleDetails.engineType}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, engineType: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, engineType: e.target.value})}
                     placeholder="e.g., 6.7L Cummins Diesel"
                   />
                 </div>
@@ -297,7 +297,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="oilType">Oil Type</Label>
                   <Select
                     value={vehicleDetails.oilType}
-                    onValueChange={(value) => { setVehicleDetails({ ...vehicleDetails, oilType: value }); }}
+                    onValueChange={(value) => setVehicleDetails({...vehicleDetails, oilType: value})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select oil type" />
@@ -318,7 +318,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     type="number"
                     step="0.1"
                     value={vehicleDetails.oilCapacityQuarts}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, oilCapacityQuarts: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, oilCapacityQuarts: e.target.value})}
                     placeholder="e.g., 12.0"
                   />
                 </div>
@@ -327,7 +327,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="oilFilterPartNumber"
                     value={vehicleDetails.oilFilterPartNumber}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, oilFilterPartNumber: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, oilFilterPartNumber: e.target.value})}
                     placeholder="e.g., PH8170"
                   />
                 </div>
@@ -346,7 +346,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="transmissionFluidType">Transmission Fluid Type</Label>
                   <Select
                     value={vehicleDetails.transmissionFluidType}
-                    onValueChange={(value) => { setVehicleDetails({ ...vehicleDetails, transmissionFluidType: value }); }}
+                    onValueChange={(value) => setVehicleDetails({...vehicleDetails, transmissionFluidType: value})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select transmission fluid" />
@@ -366,7 +366,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     type="number"
                     step="0.1"
                     value={vehicleDetails.transmissionCapacityQuarts}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, transmissionCapacityQuarts: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, transmissionCapacityQuarts: e.target.value})}
                     placeholder="e.g., 8.5"
                   />
                 </div>
@@ -374,7 +374,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="brakeFluidType">Brake Fluid Type</Label>
                   <Select
                     value={vehicleDetails.brakeFluidType}
-                    onValueChange={(value) => { setVehicleDetails({ ...vehicleDetails, brakeFluidType: value }); }}
+                    onValueChange={(value) => setVehicleDetails({...vehicleDetails, brakeFluidType: value})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select brake fluid" />
@@ -392,7 +392,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="coolantType"
                     value={vehicleDetails.coolantType}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, coolantType: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, coolantType: e.target.value})}
                     placeholder="e.g., Extended Life Coolant"
                   />
                 </div>
@@ -412,7 +412,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="frontTireSize"
                     value={vehicleDetails.frontTireSize}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, frontTireSize: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, frontTireSize: e.target.value})}
                     placeholder="e.g., 275/70R22.5"
                   />
                 </div>
@@ -421,7 +421,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="rearTireSize"
                     value={vehicleDetails.rearTireSize}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, rearTireSize: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, rearTireSize: e.target.value})}
                     placeholder="e.g., 11R22.5"
                   />
                 </div>
@@ -431,7 +431,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="tirePressureFront"
                     type="number"
                     value={vehicleDetails.tirePressureFront}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, tirePressureFront: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, tirePressureFront: e.target.value})}
                     placeholder="e.g., 110"
                   />
                 </div>
@@ -441,7 +441,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="tirePressureRear"
                     type="number"
                     value={vehicleDetails.tirePressureRear}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, tirePressureRear: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, tirePressureRear: e.target.value})}
                     placeholder="e.g., 105"
                   />
                 </div>
@@ -462,7 +462,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="lastOilChangeDate"
                     type="date"
                     value={vehicleDetails.lastOilChangeDate}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, lastOilChangeDate: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, lastOilChangeDate: e.target.value})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -471,7 +471,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="lastOilChangeMileage"
                     type="number"
                     value={vehicleDetails.lastOilChangeMileage}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, lastOilChangeMileage: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, lastOilChangeMileage: e.target.value})}
                     placeholder="e.g., 145820"
                   />
                 </div>
@@ -479,7 +479,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="oilChangeIntervalMiles">Oil Change Interval (Miles)</Label>
                   <Select
                     value={vehicleDetails.oilChangeIntervalMiles}
-                    onValueChange={(value) => { setVehicleDetails({ ...vehicleDetails, oilChangeIntervalMiles: value }); }}
+                    onValueChange={(value) => setVehicleDetails({...vehicleDetails, oilChangeIntervalMiles: value})}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -499,7 +499,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="nextOilChangeDueMileage"
                     type="number"
                     value={vehicleDetails.nextOilChangeDueMileage}
-                    onChange={(e) => { setVehicleDetails({ ...vehicleDetails, nextOilChangeDueMileage: e.target.value }); }}
+                    onChange={(e) => setVehicleDetails({...vehicleDetails, nextOilChangeDueMileage: e.target.value})}
                     placeholder="Auto-calculated"
                     disabled
                   />
@@ -526,7 +526,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="maintenanceType">Maintenance Type</Label>
                   <Select
                     value={maintenanceRecord.maintenanceType}
-                    onValueChange={(value) => { setMaintenanceRecord({ ...maintenanceRecord, maintenanceType: value }); }}
+                    onValueChange={(value) => setMaintenanceRecord({...maintenanceRecord, maintenanceType: value})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select maintenance type" />
@@ -549,7 +549,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     type="number"
                     step="0.01"
                     value={maintenanceRecord.cost}
-                    onChange={(e) => { setMaintenanceRecord({ ...maintenanceRecord, cost: e.target.value }); }}
+                    onChange={(e) => setMaintenanceRecord({...maintenanceRecord, cost: e.target.value})}
                     placeholder="Enter cost"
                   />
                 </div>
@@ -559,7 +559,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     id="odometerReading"
                     type="number"
                     value={maintenanceRecord.odometerReading}
-                    onChange={(e) => { setMaintenanceRecord({ ...maintenanceRecord, odometerReading: e.target.value }); }}
+                    onChange={(e) => setMaintenanceRecord({...maintenanceRecord, odometerReading: e.target.value})}
                     placeholder="Current mileage"
                   />
                 </div>
@@ -568,7 +568,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Input
                     id="partsUsed"
                     value={maintenanceRecord.partsUsed}
-                    onChange={(e) => { setMaintenanceRecord({ ...maintenanceRecord, partsUsed: e.target.value }); }}
+                    onChange={(e) => setMaintenanceRecord({...maintenanceRecord, partsUsed: e.target.value})}
                     placeholder="e.g., Oil filter, Air filter"
                   />
                 </div>
@@ -578,7 +578,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                 <Textarea
                   id="description"
                   value={maintenanceRecord.description}
-                  onChange={(e) => { setMaintenanceRecord({ ...maintenanceRecord, description: e.target.value }); }}
+                  onChange={(e) => setMaintenanceRecord({...maintenanceRecord, description: e.target.value})}
                   placeholder="Describe the maintenance work performed"
                   rows={3}
                 />
@@ -588,7 +588,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                 <Textarea
                   id="notes"
                   value={maintenanceRecord.notes}
-                  onChange={(e) => { setMaintenanceRecord({ ...maintenanceRecord, notes: e.target.value }); }}
+                  onChange={(e) => setMaintenanceRecord({...maintenanceRecord, notes: e.target.value})}
                   placeholder="Additional notes or observations"
                   rows={2}
                 />
@@ -614,7 +614,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="inspectionType">Inspection Type</Label>
                   <Select
                     value={inspectionData.inspectionType}
-                    onValueChange={(value) => { setInspectionData({ ...inspectionData, inspectionType: value }); }}
+                    onValueChange={(value) => setInspectionData({...inspectionData, inspectionType: value})}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -633,7 +633,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Label htmlFor="overallCondition">Overall Condition</Label>
                   <Select
                     value={inspectionData.overallCondition}
-                    onValueChange={(value) => { setInspectionData({ ...inspectionData, overallCondition: value }); }}
+                    onValueChange={(value) => setInspectionData({...inspectionData, overallCondition: value})}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -658,7 +658,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <input
                           type="checkbox"
                           checked={inspectionData.safetyEquipmentCheck}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, safetyEquipmentCheck: e.target.checked }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, safetyEquipmentCheck: e.target.checked})}
                         />
                         <span className="text-sm">Safety Equipment Present</span>
                       </label>
@@ -666,7 +666,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <input
                           type="checkbox"
                           checked={inspectionData.emergencyKitCheck}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, emergencyKitCheck: e.target.checked }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, emergencyKitCheck: e.target.checked})}
                         />
                         <span className="text-sm">Emergency Kit Complete</span>
                       </label>
@@ -674,7 +674,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <input
                           type="checkbox"
                           checked={inspectionData.fireExtinguisherCheck}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, fireExtinguisherCheck: e.target.checked }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, fireExtinguisherCheck: e.target.checked})}
                         />
                         <span className="text-sm">Fire Extinguisher Ready</span>
                       </label>
@@ -682,7 +682,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <input
                           type="checkbox"
                           checked={inspectionData.firstAidKitCheck}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, firstAidKitCheck: e.target.checked }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, firstAidKitCheck: e.target.checked})}
                         />
                         <span className="text-sm">First Aid Kit Stocked</span>
                       </label>
@@ -696,7 +696,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <Input
                           id="engineCondition"
                           value={inspectionData.engineCondition}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, engineCondition: e.target.value }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, engineCondition: e.target.value})}
                           placeholder="Engine condition notes"
                         />
                       </div>
@@ -705,7 +705,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <Input
                           id="brakeCondition"
                           value={inspectionData.brakeCondition}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, brakeCondition: e.target.value }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, brakeCondition: e.target.value})}
                           placeholder="Brake condition notes"
                         />
                       </div>
@@ -714,7 +714,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                         <Input
                           id="tireCondition"
                           value={inspectionData.tireCondition}
-                          onChange={(e) => { setInspectionData({ ...inspectionData, tireCondition: e.target.value }); }}
+                          onChange={(e) => setInspectionData({...inspectionData, tireCondition: e.target.value})}
                           placeholder="Tire condition notes"
                         />
                       </div>
@@ -727,7 +727,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Textarea
                     id="issuesFound"
                     value={inspectionData.issuesFound}
-                    onChange={(e) => { setInspectionData({ ...inspectionData, issuesFound: e.target.value }); }}
+                    onChange={(e) => setInspectionData({...inspectionData, issuesFound: e.target.value})}
                     placeholder="List any issues or concerns found during inspection"
                     rows={3}
                   />
@@ -738,7 +738,7 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   <Textarea
                     id="recommendations"
                     value={inspectionData.recommendations}
-                    onChange={(e) => { setInspectionData({ ...inspectionData, recommendations: e.target.value }); }}
+                    onChange={(e) => setInspectionData({...inspectionData, recommendations: e.target.value})}
                     placeholder="Recommended actions or follow-up needed"
                     rows={3}
                   />
@@ -749,14 +749,14 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                     type="checkbox"
                     id="passed"
                     checked={inspectionData.passed}
-                    onChange={(e) => { setInspectionData({ ...inspectionData, passed: e.target.checked }); }}
+                    onChange={(e) => setInspectionData({...inspectionData, passed: e.target.checked})}
                   />
                   <Label htmlFor="passed">Vehicle Passed Inspection</Label>
                 </div>
               </div>
 
-              <Button
-                onClick={handleSubmitInspection}
+              <Button 
+                onClick={handleSubmitInspection} 
                 className={`w-full ${inspectionData.passed ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`}
               >
                 {inspectionData.passed ? (

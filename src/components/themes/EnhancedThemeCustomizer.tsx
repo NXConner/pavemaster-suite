@@ -9,16 +9,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { Separator } from '../ui/separator';
-import {
-  Download,
-  Upload,
-  Save,
-  Eye,
+import { 
+  Download, 
+  Upload, 
+  Save, 
+  Eye, 
   Trash2,
   Paintbrush,
   RotateCcw,
   Check,
-  Sparkles,
+  Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -226,7 +226,7 @@ export function EnhancedThemeCustomizer() {
   // Apply theme to CSS variables
   const applyTheme = (theme: ThemeConfig) => {
     const root = document.documentElement;
-
+    
     // Apply colors
     Object.entries(theme.colors).forEach(([key, value]) => {
       root.style.setProperty(`--${key}`, value);
@@ -262,7 +262,7 @@ export function EnhancedThemeCustomizer() {
       const updated = { ...prev };
       const keys = path.split('.');
       let current: any = updated;
-
+      
       for (let i = 0; i < keys.length - 1; i++) {
         if (current && current[keys[i]!]) {
           current = current[keys[i]!];
@@ -272,7 +272,7 @@ export function EnhancedThemeCustomizer() {
       if (current && lastKey) {
         current[lastKey] = value;
       }
-
+      
       return updated;
     });
     setIsDirty(true);
@@ -304,18 +304,18 @@ export function EnhancedThemeCustomizer() {
 
   const hslToHex = (hsl: string): string => {
     const match = hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-    if (!match) { return '#000000'; }
+    if (!match) return '#000000';
 
-    const h = parseInt(match[1]!) / 360;
-    const s = parseInt(match[2]!) / 100;
-    const l = parseInt(match[3]!) / 100;
+    let h = parseInt(match[1]!) / 360;
+    let s = parseInt(match[2]!) / 100;
+    let l = parseInt(match[3]!) / 100;
 
     const hue2rgb = (p: number, q: number, t: number) => {
-      if (t < 0) { t += 1; }
-      if (t > 1) { t -= 1; }
-      if (t < 1 / 6) { return p + (q - p) * 6 * t; }
-      if (t < 1 / 2) { return q; }
-      if (t < 2 / 3) { return p + (q - p) * (2 / 3 - t) * 6; }
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
       return p;
     };
 
@@ -325,9 +325,9 @@ export function EnhancedThemeCustomizer() {
     } else {
       const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       const p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1 / 3);
+      r = hue2rgb(p, q, h + 1/3);
       g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1 / 3);
+      b = hue2rgb(p, q, h - 1/3);
     }
 
     const toHex = (c: number) => Math.round(c * 255).toString(16).padStart(2, '0');
@@ -345,7 +345,7 @@ export function EnhancedThemeCustomizer() {
     setCustomThemes(prev => [...prev, newTheme]);
     localStorage.setItem('custom-themes', JSON.stringify([...customThemes, newTheme]));
     setIsDirty(false);
-
+    
     toast('Theme saved successfully!');
   };
 
@@ -359,7 +359,7 @@ export function EnhancedThemeCustomizer() {
     link.download = `${currentTheme.name.replace(/\s+/g, '-').toLowerCase()}-theme.json`;
     link.click();
     URL.revokeObjectURL(url);
-
+    
     toast('Theme exported successfully!');
   };
 
@@ -390,7 +390,7 @@ export function EnhancedThemeCustomizer() {
         accent: `hsl(${(hue + 240) % 360}, 80%, 60%)`,
       },
     };
-
+    
     setCurrentTheme(randomTheme);
     setIsDirty(true);
     toast('Random theme generated!');
@@ -438,21 +438,21 @@ export function EnhancedThemeCustomizer() {
               Enhanced Theme Customizer
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Badge variant={isDirty ? 'destructive' : 'secondary'}>
-                {isDirty ? 'Unsaved Changes' : 'Saved'}
+              <Badge variant={isDirty ? "destructive" : "secondary"}>
+                {isDirty ? "Unsaved Changes" : "Saved"}
               </Badge>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => { setPreviewMode(!previewMode); }}
+                onClick={() => setPreviewMode(!previewMode)}
               >
                 <Eye className="h-4 w-4 mr-2" />
-                {previewMode ? 'Exit Preview' : 'Live Preview'}
+                {previewMode ? "Exit Preview" : "Live Preview"}
               </Button>
             </div>
           </div>
         </CardHeader>
-
+        
         <CardContent>
           <Tabs defaultValue="presets" className="w-full">
             <TabsList className="grid w-full grid-cols-5">
@@ -467,8 +467,8 @@ export function EnhancedThemeCustomizer() {
             <TabsContent value="presets" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {allThemes.map((theme) => (
-                  <Card
-                    key={theme.id}
+                  <Card 
+                    key={theme.id} 
                     className={`cursor-pointer transition-all hover:shadow-lg ${
                       currentTheme.id === theme.id ? 'ring-2 ring-primary' : ''
                     }`}
@@ -487,7 +487,7 @@ export function EnhancedThemeCustomizer() {
                           <Check className="h-5 w-5 text-primary" />
                         )}
                       </div>
-
+                      
                       <div className="flex gap-1 mb-3">
                         {Object.entries(theme.colors).slice(0, 5).map(([key, value]) => (
                           <div
@@ -539,7 +539,7 @@ export function EnhancedThemeCustomizer() {
                   <Sparkles className="h-4 w-4 mr-2" />
                   Generate Random
                 </Button>
-                <Button variant="outline" onClick={() => { setCurrentTheme(defaultThemes[0]!); }}>
+                <Button variant="outline" onClick={() => setCurrentTheme(defaultThemes[0]!)}>
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Reset to Default
                 </Button>
@@ -560,12 +560,12 @@ export function EnhancedThemeCustomizer() {
                       <Input
                         type="color"
                         value={hslToHex(value)}
-                        onChange={(e) => { updateThemeProperty(`colors.${key}`, hexToHsl(e.target.value)); }}
+                        onChange={(e) => updateThemeProperty(`colors.${key}`, hexToHsl(e.target.value))}
                         className="w-16 h-8 p-0 border-0"
                       />
                       <Input
                         value={value}
-                        onChange={(e) => { updateThemeProperty(`colors.${key}`, e.target.value); }}
+                        onChange={(e) => updateThemeProperty(`colors.${key}`, e.target.value)}
                         className="font-mono text-sm"
                         placeholder="hsl(...)"
                       />
@@ -583,7 +583,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Font Family</Label>
                     <Select
                       value={currentTheme.typography.fontFamily}
-                      onValueChange={(value) => { updateThemeProperty('typography.fontFamily', value); }}
+                      onValueChange={(value) => updateThemeProperty('typography.fontFamily', value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -603,7 +603,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Font Size</Label>
                     <Input
                       value={currentTheme.typography.fontSize}
-                      onChange={(e) => { updateThemeProperty('typography.fontSize', e.target.value); }}
+                      onChange={(e) => updateThemeProperty('typography.fontSize', e.target.value)}
                       placeholder="14px"
                     />
                   </div>
@@ -612,7 +612,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Font Weight</Label>
                     <Select
                       value={currentTheme.typography.fontWeight}
-                      onValueChange={(value) => { updateThemeProperty('typography.fontWeight', value); }}
+                      onValueChange={(value) => updateThemeProperty('typography.fontWeight', value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -658,7 +658,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Border Radius</Label>
                     <Input
                       value={currentTheme.layout.borderRadius}
-                      onChange={(e) => { updateThemeProperty('layout.borderRadius', e.target.value); }}
+                      onChange={(e) => updateThemeProperty('layout.borderRadius', e.target.value)}
                       placeholder="6px"
                     />
                   </div>
@@ -667,7 +667,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Spacing</Label>
                     <Input
                       value={currentTheme.layout.spacing}
-                      onChange={(e) => { updateThemeProperty('layout.spacing', e.target.value); }}
+                      onChange={(e) => updateThemeProperty('layout.spacing', e.target.value)}
                       placeholder="16px"
                     />
                   </div>
@@ -676,7 +676,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Density</Label>
                     <Select
                       value={currentTheme.layout.density}
-                      onValueChange={(value) => { updateThemeProperty('layout.density', value); }}
+                      onValueChange={(value) => updateThemeProperty('layout.density', value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -709,12 +709,12 @@ export function EnhancedThemeCustomizer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h4 className="font-semibold">Visual Effects</h4>
-
+                  
                   <div className="flex items-center justify-between">
                     <Label>Shadows</Label>
                     <Switch
                       checked={currentTheme.effects.shadows}
-                      onCheckedChange={(checked) => { updateThemeProperty('effects.shadows', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('effects.shadows', checked)}
                     />
                   </div>
 
@@ -722,7 +722,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Animations</Label>
                     <Switch
                       checked={currentTheme.effects.animations}
-                      onCheckedChange={(checked) => { updateThemeProperty('effects.animations', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('effects.animations', checked)}
                     />
                   </div>
 
@@ -730,7 +730,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Glass Effects</Label>
                     <Switch
                       checked={currentTheme.effects.glass}
-                      onCheckedChange={(checked) => { updateThemeProperty('effects.glass', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('effects.glass', checked)}
                     />
                   </div>
 
@@ -738,19 +738,19 @@ export function EnhancedThemeCustomizer() {
                     <Label>Gradients</Label>
                     <Switch
                       checked={currentTheme.effects.gradient}
-                      onCheckedChange={(checked) => { updateThemeProperty('effects.gradient', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('effects.gradient', checked)}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <h4 className="font-semibold">Accessibility</h4>
-
+                  
                   <div className="flex items-center justify-between">
                     <Label>High Contrast</Label>
                     <Switch
                       checked={currentTheme.accessibility.highContrast}
-                      onCheckedChange={(checked) => { updateThemeProperty('accessibility.highContrast', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('accessibility.highContrast', checked)}
                     />
                   </div>
 
@@ -758,7 +758,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Reduced Motion</Label>
                     <Switch
                       checked={currentTheme.accessibility.reducedMotion}
-                      onCheckedChange={(checked) => { updateThemeProperty('accessibility.reducedMotion', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('accessibility.reducedMotion', checked)}
                     />
                   </div>
 
@@ -766,7 +766,7 @@ export function EnhancedThemeCustomizer() {
                     <Label>Large Text</Label>
                     <Switch
                       checked={currentTheme.accessibility.largeText}
-                      onCheckedChange={(checked) => { updateThemeProperty('accessibility.largeText', checked); }}
+                      onCheckedChange={(checked) => updateThemeProperty('accessibility.largeText', checked)}
                     />
                   </div>
                 </div>
@@ -784,7 +784,7 @@ export function EnhancedThemeCustomizer() {
                 <Label>Import Theme JSON</Label>
                 <Textarea
                   value={importText}
-                  onChange={(e) => { setImportText(e.target.value); }}
+                  onChange={(e) => setImportText(e.target.value)}
                   placeholder="Paste theme JSON here..."
                   rows={3}
                   className="mt-2"
@@ -799,7 +799,7 @@ export function EnhancedThemeCustomizer() {
                   Import
                 </Button>
               </div>
-
+              
               <div className="flex flex-col gap-2">
                 <Label>Export & Save</Label>
                 <Button onClick={exportTheme} variant="outline">
@@ -810,7 +810,7 @@ export function EnhancedThemeCustomizer() {
                   <Save className="h-4 w-4 mr-2" />
                   Save Custom Theme
                 </Button>
-                <Button
+                <Button 
                   onClick={() => {
                     applyTheme(currentTheme);
                     setIsDirty(false);

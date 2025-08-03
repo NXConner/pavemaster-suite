@@ -42,12 +42,12 @@ export default function CustomerPortal() {
     property_address: '',
     contact_info: '',
     estimated_area: 0,
-    preferred_date: '',
+    preferred_date: ''
   });
   const [feedback, setFeedback] = useState({
     project_id: '',
     rating: 5,
-    comment: '',
+    comment: ''
   });
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function CustomerPortal() {
         estimated_completion: '2024-02-15',
         description: 'Complete resurfacing of church parking lot including crack repair and sealcoating',
         amount: 25000,
-        images: ['/api/placeholder/400/300'],
+        images: ['/api/placeholder/400/300']
       },
       {
         id: '2',
@@ -71,8 +71,8 @@ export default function CustomerPortal() {
         estimated_completion: '2024-01-20',
         description: 'Residential driveway crack filling and sealcoating',
         amount: 1200,
-        images: ['/api/placeholder/400/300', '/api/placeholder/400/300'],
-      },
+        images: ['/api/placeholder/400/300', '/api/placeholder/400/300']
+      }
     ];
 
     const sampleEstimates: EstimateRequest[] = [
@@ -86,8 +86,8 @@ export default function CustomerPortal() {
         preferred_date: '2024-03-01',
         status: 'quoted',
         submitted_date: '2024-01-15',
-        quoted_amount: 8500 as number,
-      },
+        quoted_amount: 8500 as number
+      }
     ];
 
     setActiveProjects(sampleProjects);
@@ -115,7 +115,7 @@ export default function CustomerPortal() {
       property_address: '',
       contact_info: '',
       estimated_area: 0,
-      preferred_date: '',
+      preferred_date: ''
     });
     toast.success('Estimate request submitted successfully');
   };
@@ -236,10 +236,10 @@ export default function CustomerPortal() {
             <CardContent className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Service Type</label>
-                <select
+                <select 
                   className="w-full mt-1 p-2 border rounded-md"
                   value={newEstimate.type}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, type: e.target.value as EstimateRequest['type'] })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, type: e.target.value as EstimateRequest['type'] }))}
                 >
                   <option value="paving">Asphalt Paving</option>
                   <option value="sealcoating">Sealcoating</option>
@@ -251,7 +251,7 @@ export default function CustomerPortal() {
                 <label className="text-sm font-medium">Property Address</label>
                 <Input
                   value={newEstimate.property_address}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, property_address: e.target.value })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, property_address: e.target.value }))}
                   placeholder="Enter the property address"
                 />
               </div>
@@ -260,7 +260,7 @@ export default function CustomerPortal() {
                 <label className="text-sm font-medium">Contact Information</label>
                 <Input
                   value={newEstimate.contact_info}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, contact_info: e.target.value })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, contact_info: e.target.value }))}
                   placeholder="Email and phone number"
                 />
               </div>
@@ -270,7 +270,7 @@ export default function CustomerPortal() {
                 <Input
                   type="number"
                   value={newEstimate.estimated_area}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, estimated_area: Number(e.target.value) })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, estimated_area: Number(e.target.value) }))}
                   placeholder="Approximate square footage"
                 />
               </div>
@@ -280,7 +280,7 @@ export default function CustomerPortal() {
                 <Input
                   type="date"
                   value={newEstimate.preferred_date}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, preferred_date: e.target.value })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, preferred_date: e.target.value }))}
                 />
               </div>
 
@@ -288,7 +288,7 @@ export default function CustomerPortal() {
                 <label className="text-sm font-medium">Project Description</label>
                 <Textarea
                   value={newEstimate.description}
-                  onChange={(e) => { setNewEstimate(prev => ({ ...prev, description: e.target.value })); }}
+                  onChange={(e) => setNewEstimate(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Describe your project in detail..."
                   rows={4}
                 />
@@ -365,10 +365,10 @@ export default function CustomerPortal() {
             <CardContent className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Select Project</label>
-                <select
+                <select 
                   className="w-full mt-1 p-2 border rounded-md"
                   value={feedback.project_id}
-                  onChange={(e) => { setFeedback(prev => ({ ...prev, project_id: e.target.value })); }}
+                  onChange={(e) => setFeedback(prev => ({ ...prev, project_id: e.target.value }))}
                 >
                   <option value="">Choose a project...</option>
                   {activeProjects.map(project => (
@@ -385,11 +385,11 @@ export default function CustomerPortal() {
                       key={star}
                       variant="ghost"
                       size="sm"
-                      onClick={() => { setFeedback(prev => ({ ...prev, rating: star })); }}
+                      onClick={() => setFeedback(prev => ({ ...prev, rating: star }))}
                       className="p-1"
                     >
-                      <Star
-                        className={`w-6 h-6 ${star <= feedback.rating ? 'fill-warning text-warning' : 'text-muted-foreground'}`}
+                      <Star 
+                        className={`w-6 h-6 ${star <= feedback.rating ? 'fill-warning text-warning' : 'text-muted-foreground'}`} 
                       />
                     </Button>
                   ))}
@@ -400,7 +400,7 @@ export default function CustomerPortal() {
                 <label className="text-sm font-medium">Comments</label>
                 <Textarea
                   value={feedback.comment}
-                  onChange={(e) => { setFeedback(prev => ({ ...prev, comment: e.target.value })); }}
+                  onChange={(e) => setFeedback(prev => ({ ...prev, comment: e.target.value }))}
                   placeholder="Share your experience with our team..."
                   rows={4}
                 />

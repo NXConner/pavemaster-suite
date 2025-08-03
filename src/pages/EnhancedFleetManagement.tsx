@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
-import {
-  Truck,
+import { 
+  Truck, 
   Fuel,
   Shield,
   AlertTriangle,
@@ -14,7 +14,7 @@ import {
   Plus,
   DollarSign,
   Activity,
-  TrendingUp,
+  TrendingUp
 } from 'lucide-react';
 
 interface Vehicle {
@@ -84,20 +84,20 @@ const mockVehicles: Vehicle[] = [
     registration: {
       expirationDate: '2024-08-15',
       state: 'VA',
-      registrationNumber: 'REG123456',
+      registrationNumber: 'REG123456'
     },
     insurance: {
       provider: 'State Farm Commercial',
       policyNumber: 'SF-COM-789456',
       expirationDate: '2024-12-31',
       coverage: 'Full Coverage',
-      deductible: 1000,
+      deductible: 1000
     },
     mileage: 45230,
     fuelLevel: 75,
     lastMaintenance: '2024-01-05',
     nextMaintenance: '2024-04-05',
-    maintenanceCost: 2450,
+    maintenanceCost: 2450
   },
   {
     id: 'V002',
@@ -112,21 +112,21 @@ const mockVehicles: Vehicle[] = [
     registration: {
       expirationDate: '2024-09-20',
       state: 'VA',
-      registrationNumber: 'REG654321',
+      registrationNumber: 'REG654321'
     },
     insurance: {
       provider: 'State Farm Commercial',
       policyNumber: 'SF-COM-789457',
       expirationDate: '2024-12-31',
       coverage: 'Full Coverage',
-      deductible: 1000,
+      deductible: 1000
     },
     mileage: 38750,
     fuelLevel: 45,
     lastMaintenance: '2024-01-15',
     nextMaintenance: '2024-02-15',
-    maintenanceCost: 3200,
-  },
+    maintenanceCost: 3200
+  }
 ];
 
 const mockMaintenanceRecords: MaintenanceRecord[] = [
@@ -140,7 +140,7 @@ const mockMaintenanceRecords: MaintenanceRecord[] = [
     mileage: 45000,
     status: 'completed',
     technician: 'Mike Johnson',
-    partsUsed: ['Oil Filter', 'Air Filter', 'Engine Oil'],
+    partsUsed: ['Oil Filter', 'Air Filter', 'Engine Oil']
   },
   {
     id: 'MR002',
@@ -152,8 +152,8 @@ const mockMaintenanceRecords: MaintenanceRecord[] = [
     mileage: 38500,
     status: 'completed',
     technician: 'Sarah Davis',
-    partsUsed: ['Brake Pads', 'Brake Rotors'],
-  },
+    partsUsed: ['Brake Pads', 'Brake Rotors']
+  }
 ];
 
 const mockInspections: Inspection[] = [
@@ -165,7 +165,7 @@ const mockInspections: Inspection[] = [
     expirationDate: '2024-12-01',
     status: 'passed',
     inspector: 'VA DOT Inspector #123',
-    notes: 'All systems operational',
+    notes: 'All systems operational'
   },
   {
     id: 'INS002',
@@ -175,8 +175,8 @@ const mockInspections: Inspection[] = [
     expirationDate: '2024-11-15',
     status: 'passed',
     inspector: 'Certified Inspector',
-    notes: 'Minor brake wear noted for future monitoring',
-  },
+    notes: 'Minor brake wear noted for future monitoring'
+  }
 ];
 
 export default function EnhancedFleetManagement() {
@@ -316,13 +316,13 @@ export default function EnhancedFleetManagement() {
                         </p>
                       </div>
                     </div>
-
+                    
                     <div className="flex items-center space-x-6">
                       <div className="text-center">
                         <p className="text-sm font-medium">{vehicle.mileage.toLocaleString()}</p>
                         <p className="text-xs text-muted-foreground">Miles</p>
                       </div>
-
+                      
                       <div className="text-center">
                         <div className="flex items-center space-x-2">
                           <Progress value={vehicle.fuelLevel} className="w-20" />
@@ -330,11 +330,11 @@ export default function EnhancedFleetManagement() {
                         </div>
                         <p className="text-xs text-muted-foreground">Fuel</p>
                       </div>
-
+                      
                       <Badge variant={getStatusVariant(vehicle.status)}>
                         {vehicle.status}
                       </Badge>
-
+                      
                       <Button variant="outline" size="sm">
                         View Details
                       </Button>
@@ -359,7 +359,7 @@ export default function EnhancedFleetManagement() {
                 {vehicles.map((vehicle) => {
                   const regDays = getDaysUntilExpiration(vehicle.registration.expirationDate);
                   const insDays = getDaysUntilExpiration(vehicle.insurance.expirationDate);
-
+                  
                   return (
                     <div key={vehicle.id}>
                       {regDays <= 30 && (
@@ -623,7 +623,7 @@ export default function EnhancedFleetManagement() {
                     <div>☐ Check mirrors and visibility</div>
                   </div>
                 </div>
-
+                
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-2">Weekly Maintenance Check</h4>
                   <div className="grid grid-cols-2 gap-2 text-sm">

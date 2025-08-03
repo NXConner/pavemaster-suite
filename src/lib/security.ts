@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const sanitizeHtml = (input: string): string => {
   return DOMPurify.sanitize(input, {
     ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u'],
-    ALLOWED_ATTR: [],
+    ALLOWED_ATTR: []
   });
 };
 
@@ -86,10 +86,10 @@ class SecurityRateLimiter {
   private attempts: Map<string, { count: number; resetTime: number }> = new Map();
 
   isAllowed(
-    identifier: string,
-    maxAttempts: number = 5,
+    identifier: string, 
+    maxAttempts: number = 5, 
     windowMs: number = 300000,
-    action: string = 'default',
+    action: string = 'default'
   ): boolean {
     const key = `${identifier}:${action}`;
     const now = Date.now();
@@ -155,9 +155,9 @@ export const logSecurityEvent = async (event: SecurityEvent) => {
 
 // Input validation helper with security logging
 export const validateInput = <T>(
-  schema: z.ZodSchema<T>,
+  schema: z.ZodSchema<T>, 
   data: unknown,
-  context?: string,
+  context?: string
 ): { success: boolean; data?: T; errors?: Record<string, string> } => {
   try {
     const validatedData = schema.parse(data);
@@ -176,7 +176,7 @@ export const validateInput = <T>(
         type: 'input_validation',
         severity: 'medium',
         action: 'validation_failed',
-        metadata: { context, errors: error.errors },
+        metadata: { context, errors: error.errors }
       });
 
       return { success: false, errors };
@@ -207,13 +207,13 @@ export const getUserAgent = (): string => {
 // Content Security Policy helper
 export const getCSPHeader = (): string => {
   return [
-    'default-src \'self\'',
-    'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'',
-    'style-src \'self\' \'unsafe-inline\'',
-    'img-src \'self\' data: https:',
-    'connect-src \'self\' https:',
-    'font-src \'self\'',
-    'frame-ancestors \'none\'',
-    'base-uri \'self\'',
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https:",
+    "font-src 'self'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'"
   ].join('; ');
 };

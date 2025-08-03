@@ -25,7 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-      },
+      }
     );
 
     // THEN check for existing session
@@ -35,18 +35,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    return () => { subscription.unsubscribe(); };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
-
+    
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl,
-      },
+        emailRedirectTo: redirectUrl
+      }
     });
     return { error };
   };

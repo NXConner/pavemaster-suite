@@ -6,7 +6,7 @@ import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Progress } from '../components/ui/progress';
-import {
+import { 
   Smartphone,
   Download,
   Wifi,
@@ -20,7 +20,7 @@ import {
   Zap,
   Cloud,
   HardDrive,
-  RefreshCw,
+  RefreshCw
 } from 'lucide-react';
 
 export default function Mobile() {
@@ -40,7 +40,7 @@ export default function Mobile() {
       signal: 4,
       last_sync: '2024-01-16T10:30:00Z',
       location: 'Church Site - Richmond, VA',
-      features: ['GPS', 'Camera', 'Offline Mode', 'Push Notifications'],
+      features: ['GPS', 'Camera', 'Offline Mode', 'Push Notifications']
     },
     {
       id: 'MD002',
@@ -53,8 +53,8 @@ export default function Mobile() {
       signal: 2,
       last_sync: '2024-01-16T08:15:00Z',
       location: 'Equipment Yard',
-      features: ['GPS', 'Camera', 'Offline Mode', 'Barcode Scanner'],
-    },
+      features: ['GPS', 'Camera', 'Offline Mode', 'Barcode Scanner']
+    }
   ];
 
   const offlineData = [
@@ -64,7 +64,7 @@ export default function Mobile() {
       title: 'Foundation Inspection - Site A',
       size: '12.5 MB',
       created: '2024-01-16T09:45:00Z',
-      sync_status: 'pending',
+      sync_status: 'pending'
     },
     {
       id: 'OD002',
@@ -72,8 +72,8 @@ export default function Mobile() {
       title: 'Work Hours - Jan 15',
       size: '0.2 MB',
       created: '2024-01-15T17:30:00Z',
-      sync_status: 'synced',
-    },
+      sync_status: 'synced'
+    }
   ];
 
   const getStatusColor = (status: string) => {
@@ -86,8 +86,8 @@ export default function Mobile() {
   };
 
   const getSignalStrength = (signal: number) => {
-    if (signal >= 4) { return 'text-green-600'; }
-    if (signal >= 2) { return 'text-yellow-600'; }
+    if (signal >= 4) return 'text-green-600';
+    if (signal >= 2) return 'text-yellow-600';
     return 'text-red-600';
   };
 
@@ -100,8 +100,8 @@ export default function Mobile() {
   };
 
   const triggerZapier = async (mobileData: any) => {
-    if (!webhookUrl) { return; }
-
+    if (!webhookUrl) return;
+    
     try {
       await fetch(webhookUrl, {
         method: 'POST',
@@ -110,8 +110,8 @@ export default function Mobile() {
         body: JSON.stringify({
           event: 'mobile_sync',
           data: mobileData,
-          timestamp: new Date().toISOString(),
-        }),
+          timestamp: new Date().toISOString()
+        })
       });
     } catch (error) {
       console.error('Zapier webhook failed:', error);
@@ -395,11 +395,11 @@ export default function Mobile() {
                 <Input
                   id="webhook-url"
                   value={webhookUrl}
-                  onChange={(e) => { setWebhookUrl(e.target.value); }}
+                  onChange={(e) => setWebhookUrl(e.target.value)}
                   placeholder="https://hooks.zapier.com/hooks/catch/..."
                 />
               </div>
-              <Button
+              <Button 
                 className="w-full"
                 onClick={() => triggerZapier({ test: true })}
                 disabled={!webhookUrl}

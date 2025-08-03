@@ -13,8 +13,8 @@ export function TacticalHUD() {
   const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => { setCurrentTime(new Date()); }, 1000);
-    return () => { clearInterval(timer); };
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const getAlertIcon = (type: string) => {
@@ -34,11 +34,11 @@ export function TacticalHUD() {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
+    return date.toLocaleTimeString('en-US', { 
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
+      second: '2-digit'
     });
   };
 
@@ -59,7 +59,7 @@ export function TacticalHUD() {
                 size="sm"
                 variant="ghost"
                 className="h-6 w-6 p-0"
-                onClick={() => { setIsMinimized(!isMinimized); }}
+                onClick={() => setIsMinimized(!isMinimized)}
               >
                 {isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
               </Button>
@@ -83,7 +83,7 @@ export function TacticalHUD() {
                   size="sm"
                   variant="ghost"
                   className="h-6 px-2 text-xs"
-                  onClick={() => { alerts.forEach(alert => acknowledgeAlert(alert.id)); }}
+                  onClick={() => alerts.forEach(alert => acknowledgeAlert(alert.id))}
                 >
                   Dismiss All
                 </Button>
@@ -133,7 +133,7 @@ export function TacticalHUD() {
                   size="sm"
                   variant="ghost"
                   className="h-6 px-2 text-xs"
-                  onClick={() => { window.location.reload(); }}
+                  onClick={() => window.location.reload()}
                 >
                   Dismiss All
                 </Button>
@@ -142,7 +142,7 @@ export function TacticalHUD() {
                 <div key={mission.id} className="text-xs">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{mission.name}</span>
-                    <Badge
+                    <Badge 
                       variant={mission.priority === 'critical' ? 'destructive' : 'default'}
                       className="text-xs"
                     >
@@ -151,7 +151,7 @@ export function TacticalHUD() {
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="flex-1 bg-muted rounded-full h-1">
-                      <div
+                      <div 
                         className="bg-primary h-1 rounded-full transition-all"
                         style={{ width: `${mission.progress}%` }}
                       />
@@ -178,7 +178,7 @@ export function TacticalHUD() {
                 size="sm"
                 variant="ghost"
                 className="h-6 px-2 text-xs"
-                onClick={() => { window.location.reload(); }}
+                onClick={() => window.location.reload()}
               >
                 Dismiss
               </Button>

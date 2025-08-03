@@ -1,22 +1,22 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { Progress } from '../ui/progress';
-import {
-  Cloud,
-  Sun,
-  CloudRain,
-  Snowflake,
-  Wind,
-  Thermometer,
-  Droplets,
-  Eye,
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Progress } from "../ui/progress";
+import { 
+  Cloud, 
+  Sun, 
+  CloudRain, 
+  Snowflake, 
+  Wind, 
+  Thermometer, 
+  Droplets, 
+  Eye, 
   AlertTriangle,
   CheckCircle,
   Clock,
-  MapPin,
-} from 'lucide-react';
+  MapPin
+} from "lucide-react";
 
 interface WeatherData {
   temperature: number;
@@ -66,7 +66,7 @@ export function PaveWiseWeatherApp() {
       { date: 'Tomorrow', temperature: { min: 62, max: 78 }, condition: 'Partly Cloudy', humidity: 55, suitability: 'good' },
       { date: 'Wednesday', temperature: { min: 65, max: 80 }, condition: 'Clear', humidity: 40, suitability: 'optimal' },
       { date: 'Thursday', temperature: { min: 68, max: 82 }, condition: 'Sunny', humidity: 35, suitability: 'optimal' },
-      { date: 'Friday', temperature: { min: 70, max: 85 }, condition: 'Hot', humidity: 30, suitability: 'good' },
+      { date: 'Friday', temperature: { min: 70, max: 85 }, condition: 'Hot', humidity: 30, suitability: 'good' }
     ],
     alerts: [
       {
@@ -74,8 +74,8 @@ export function PaveWiseWeatherApp() {
         type: 'temperature_warning',
         message: 'Optimal temperature conditions for asphalt paving operations',
         severity: 'low',
-        active: true,
-      },
+        active: true
+      }
     ],
     suitability: {
       overall: 'optimal',
@@ -86,17 +86,17 @@ export function PaveWiseWeatherApp() {
         'Excellent conditions for asphalt paving - temperature range 58-75°F',
         'Perfect humidity levels (45%) for sealcoating applications',
         'Light winds ideal for line striping operations',
-        'Extended working hours possible with current conditions',
+        'Extended working hours possible with current conditions'
       ],
       restrictions: [
-        'Monitor temperature if it exceeds 85°F for crew safety',
-      ],
-    },
+        'Monitor temperature if it exceeds 85°F for crew safety'
+      ]
+    }
   });
 
   const [location] = useState({
     name: 'Richmond, VA',
-    coords: { lat: 37.5407, lng: -77.4360 },
+    coords: { lat: 37.5407, lng: -77.4360 }
   });
 
   const getWeatherIcon = (condition: string) => {
@@ -218,11 +218,11 @@ export function PaveWiseWeatherApp() {
                   </div>
                 </Badge>
               </div>
-              <Progress
-                value={weatherData.suitability.asphaltPaving === 'optimal' ? 100
-                  : weatherData.suitability.asphaltPaving === 'good' ? 80
-                    : weatherData.suitability.asphaltPaving === 'fair' ? 60 : 40}
-                className="h-2"
+              <Progress 
+                value={weatherData.suitability.asphaltPaving === 'optimal' ? 100 : 
+                       weatherData.suitability.asphaltPaving === 'good' ? 80 : 
+                       weatherData.suitability.asphaltPaving === 'fair' ? 60 : 40} 
+                className="h-2" 
               />
             </div>
 
@@ -236,11 +236,11 @@ export function PaveWiseWeatherApp() {
                   </div>
                 </Badge>
               </div>
-              <Progress
-                value={weatherData.suitability.sealcoating === 'optimal' ? 100
-                  : weatherData.suitability.sealcoating === 'good' ? 80
-                    : weatherData.suitability.sealcoating === 'fair' ? 60 : 40}
-                className="h-2"
+              <Progress 
+                value={weatherData.suitability.sealcoating === 'optimal' ? 100 : 
+                       weatherData.suitability.sealcoating === 'good' ? 80 : 
+                       weatherData.suitability.sealcoating === 'fair' ? 60 : 40} 
+                className="h-2" 
               />
             </div>
 
@@ -254,11 +254,11 @@ export function PaveWiseWeatherApp() {
                   </div>
                 </Badge>
               </div>
-              <Progress
-                value={weatherData.suitability.lineStriping === 'optimal' ? 100
-                  : weatherData.suitability.lineStriping === 'good' ? 80
-                    : weatherData.suitability.lineStriping === 'fair' ? 60 : 40}
-                className="h-2"
+              <Progress 
+                value={weatherData.suitability.lineStriping === 'optimal' ? 100 : 
+                       weatherData.suitability.lineStriping === 'good' ? 80 : 
+                       weatherData.suitability.lineStriping === 'fair' ? 60 : 40} 
+                className="h-2" 
               />
             </div>
           </div>
@@ -313,8 +313,8 @@ export function PaveWiseWeatherApp() {
                   <div className="font-medium">{day.temperature.max}°F</div>
                   <div className="text-muted-foreground">{day.temperature.min}°F</div>
                 </div>
-                <Badge
-                  variant="outline"
+                <Badge 
+                  variant="outline" 
                   className={`text-xs ${getSuitabilityColor(day.suitability)}`}
                 >
                   {day.suitability.toUpperCase()}
@@ -337,10 +337,10 @@ export function PaveWiseWeatherApp() {
               {weatherData.alerts.map((alert) => (
                 <div key={alert.id} className="flex items-start gap-3 p-3 border rounded-lg">
                   <AlertTriangle className={`h-5 w-5 mt-0.5 ${
-                    alert.severity === 'critical' ? 'text-red-500'
-                      : alert.severity === 'high' ? 'text-orange-500'
-                        : alert.severity === 'medium' ? 'text-yellow-500'
-                          : 'text-blue-500'
+                    alert.severity === 'critical' ? 'text-red-500' :
+                    alert.severity === 'high' ? 'text-orange-500' :
+                    alert.severity === 'medium' ? 'text-yellow-500' :
+                    'text-blue-500'
                   }`} />
                   <div>
                     <div className="font-medium">{alert.type.replace('_', ' ').toUpperCase()}</div>

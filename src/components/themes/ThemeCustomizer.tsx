@@ -7,7 +7,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Separator } from '../ui/separator';
-import {
+import { 
   Palette,
   Download,
   Eye,
@@ -17,7 +17,7 @@ import {
   Zap,
   Copy,
   Save,
-  Share2,
+  Share2
 } from 'lucide-react';
 
 interface ThemeCustomizerProps {
@@ -41,39 +41,39 @@ export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
       surface: '#f8fafc',
       text: '#1e293b',
       textSecondary: '#64748b',
-      border: '#e2e8f0',
+      border: '#e2e8f0'
     },
     gradients: {
       primary: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
       secondary: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
-      hero: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+      hero: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)'
     },
     typography: {
       fontFamily: 'Inter',
       fontSize: {
         base: '1rem',
         lg: '1.125rem',
-        xl: '1.25rem',
-      },
+        xl: '1.25rem'
+      }
     },
     spacing: {
       sm: '0.5rem',
       md: '1rem',
-      lg: '1.5rem',
+      lg: '1.5rem'
     },
     borderRadius: {
       sm: '0.375rem',
       md: '0.5rem',
-      lg: '0.75rem',
+      lg: '0.75rem'
     },
     animations: {
       duration: '300ms',
-      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
     },
     effects: {
       blur: 'blur(8px)',
-      shadow: 'soft',
-    },
+      shadow: 'soft'
+    }
   });
 
   const colorCategories = [
@@ -84,7 +84,7 @@ export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
     { key: 'surface', label: 'Surface', description: 'Card backgrounds' },
     { key: 'text', label: 'Text', description: 'Primary text color' },
     { key: 'textSecondary', label: 'Text Secondary', description: 'Muted text color' },
-    { key: 'border', label: 'Border', description: 'Border color' },
+    { key: 'border', label: 'Border', description: 'Border color' }
   ];
 
   const fontOptions = [
@@ -93,14 +93,14 @@ export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
     { value: 'Playfair Display', label: 'Playfair (Elegant Serif)' },
     { value: 'JetBrains Mono', label: 'JetBrains Mono (Code)' },
     { value: 'Nunito', label: 'Nunito (Friendly Sans)' },
-    { value: 'Orbitron', label: 'Orbitron (Futuristic)' },
+    { value: 'Orbitron', label: 'Orbitron (Futuristic)' }
   ];
 
   const animationPresets = [
     { value: '150ms', label: 'Fast (150ms)' },
     { value: '300ms', label: 'Medium (300ms)' },
     { value: '500ms', label: 'Slow (500ms)' },
-    { value: '750ms', label: 'Very Slow (750ms)' },
+    { value: '750ms', label: 'Very Slow (750ms)' }
   ];
 
   const easingOptions = [
@@ -109,7 +109,7 @@ export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
     { value: 'ease-out', label: 'Ease Out' },
     { value: 'ease-in-out', label: 'Ease In-Out' },
     { value: 'cubic-bezier(0.4, 0, 0.2, 1)', label: 'Material' },
-    { value: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)', label: 'Bounce' },
+    { value: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)', label: 'Bounce' }
   ];
 
   const updateColor = (colorKey: string, value: string) => {
@@ -117,8 +117,8 @@ export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
       ...customTheme,
       colors: {
         ...customTheme.colors,
-        [colorKey]: value,
-      },
+        [colorKey]: value
+      }
     };
     setCustomTheme(updatedTheme);
     handleThemeChange(updatedTheme);
@@ -155,7 +155,7 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
           <p className="text-muted-foreground">Create and customize your perfect theme</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => { setIsPreviewMode(!isPreviewMode); }}>
+          <Button variant="outline" onClick={() => setIsPreviewMode(!isPreviewMode)}>
             <Eye className="h-4 w-4 mr-2" />
             {isPreviewMode ? 'Exit Preview' : 'Preview'}
           </Button>
@@ -210,12 +210,12 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                         id={category.key}
                         type="color"
                         value={customTheme.colors[category.key as keyof typeof customTheme.colors]}
-                        onChange={(e) => { updateColor(category.key, e.target.value); }}
+                        onChange={(e) => updateColor(category.key, e.target.value)}
                         className="w-16 h-10 p-1 border rounded"
                       />
                       <Input
                         value={customTheme.colors[category.key as keyof typeof customTheme.colors]}
-                        onChange={(e) => { updateColor(category.key, e.target.value); }}
+                        onChange={(e) => updateColor(category.key, e.target.value)}
                         placeholder="#000000"
                         className="flex-1"
                       />
@@ -232,14 +232,14 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <Label>Primary Gradient</Label>
-                    <div
+                    <div 
                       className="h-12 rounded-lg border mt-2"
                       style={{ background: generateGradient(customTheme.colors.primary, customTheme.colors.secondary) }}
                     />
                   </div>
                   <div>
                     <Label>Accent Gradient</Label>
-                    <div
+                    <div 
                       className="h-12 rounded-lg border mt-2"
                       style={{ background: generateGradient(customTheme.colors.accent, customTheme.colors.primary) }}
                     />
@@ -260,14 +260,12 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="font-family">Font Family</Label>
-                  <Select
+                  <Select 
                     value={customTheme.typography.fontFamily}
-                    onValueChange={(value) => {
-                      setCustomTheme(prev => ({
-                        ...prev,
-                        typography: { ...prev.typography, fontFamily: value },
-                      }));
-                    }}
+                    onValueChange={(value) => setCustomTheme(prev => ({
+                      ...prev,
+                      typography: { ...prev.typography, fontFamily: value }
+                    }))}
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -287,15 +285,13 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                     <Label>Base Font Size</Label>
                     <Input
                       value={customTheme.typography.fontSize.base}
-                      onChange={(e) => {
-                        setCustomTheme(prev => ({
-                          ...prev,
-                          typography: {
-                            ...prev.typography,
-                            fontSize: { ...prev.typography.fontSize, base: e.target.value },
-                          },
-                        }));
-                      }}
+                      onChange={(e) => setCustomTheme(prev => ({
+                        ...prev,
+                        typography: {
+                          ...prev.typography,
+                          fontSize: { ...prev.typography.fontSize, base: e.target.value }
+                        }
+                      }))}
                       className="mt-2"
                     />
                   </div>
@@ -303,15 +299,13 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                     <Label>Large Font Size</Label>
                     <Input
                       value={customTheme.typography.fontSize.lg}
-                      onChange={(e) => {
-                        setCustomTheme(prev => ({
-                          ...prev,
-                          typography: {
-                            ...prev.typography,
-                            fontSize: { ...prev.typography.fontSize, lg: e.target.value },
-                          },
-                        }));
-                      }}
+                      onChange={(e) => setCustomTheme(prev => ({
+                        ...prev,
+                        typography: {
+                          ...prev.typography,
+                          fontSize: { ...prev.typography.fontSize, lg: e.target.value }
+                        }
+                      }))}
                       className="mt-2"
                     />
                   </div>
@@ -319,15 +313,13 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                     <Label>Extra Large Font Size</Label>
                     <Input
                       value={customTheme.typography.fontSize.xl}
-                      onChange={(e) => {
-                        setCustomTheme(prev => ({
-                          ...prev,
-                          typography: {
-                            ...prev.typography,
-                            fontSize: { ...prev.typography.fontSize, xl: e.target.value },
-                          },
-                        }));
-                      }}
+                      onChange={(e) => setCustomTheme(prev => ({
+                        ...prev,
+                        typography: {
+                          ...prev.typography,
+                          fontSize: { ...prev.typography.fontSize, xl: e.target.value }
+                        }
+                      }))}
                       className="mt-2"
                     />
                   </div>
@@ -359,12 +351,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Small Spacing</Label>
                       <Input
                         value={customTheme.spacing.sm}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            spacing: { ...prev.spacing, sm: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          spacing: { ...prev.spacing, sm: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -372,12 +362,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Medium Spacing</Label>
                       <Input
                         value={customTheme.spacing.md}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            spacing: { ...prev.spacing, md: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          spacing: { ...prev.spacing, md: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -385,12 +373,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Large Spacing</Label>
                       <Input
                         value={customTheme.spacing.lg}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            spacing: { ...prev.spacing, lg: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          spacing: { ...prev.spacing, lg: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -404,12 +390,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Small Radius</Label>
                       <Input
                         value={customTheme.borderRadius.sm}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            borderRadius: { ...prev.borderRadius, sm: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          borderRadius: { ...prev.borderRadius, sm: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -417,12 +401,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Medium Radius</Label>
                       <Input
                         value={customTheme.borderRadius.md}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            borderRadius: { ...prev.borderRadius, md: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          borderRadius: { ...prev.borderRadius, md: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -430,12 +412,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                       <Label>Large Radius</Label>
                       <Input
                         value={customTheme.borderRadius.lg}
-                        onChange={(e) => {
-                          setCustomTheme(prev => ({
-                            ...prev,
-                            borderRadius: { ...prev.borderRadius, lg: e.target.value },
-                          }));
-                        }}
+                        onChange={(e) => setCustomTheme(prev => ({
+                          ...prev,
+                          borderRadius: { ...prev.borderRadius, lg: e.target.value }
+                        }))}
                         className="mt-2"
                       />
                     </div>
@@ -446,29 +426,29 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <div className="p-4 border rounded-lg">
                 <h3 className="text-lg font-medium mb-4">Spacing Preview</h3>
                 <div className="space-y-4">
-                  <div
+                  <div 
                     className="bg-primary/10 border border-primary/20"
-                    style={{
+                    style={{ 
                       padding: customTheme.spacing.sm,
-                      borderRadius: customTheme.borderRadius.sm,
+                      borderRadius: customTheme.borderRadius.sm 
                     }}
                   >
                     Small spacing and radius
                   </div>
-                  <div
+                  <div 
                     className="bg-primary/10 border border-primary/20"
-                    style={{
+                    style={{ 
                       padding: customTheme.spacing.md,
-                      borderRadius: customTheme.borderRadius.md,
+                      borderRadius: customTheme.borderRadius.md 
                     }}
                   >
                     Medium spacing and radius
                   </div>
-                  <div
+                  <div 
                     className="bg-primary/10 border border-primary/20"
-                    style={{
+                    style={{ 
                       padding: customTheme.spacing.lg,
-                      borderRadius: customTheme.borderRadius.lg,
+                      borderRadius: customTheme.borderRadius.lg 
                     }}
                   >
                     Large spacing and radius
@@ -489,14 +469,12 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <Label>Animation Duration</Label>
-                  <Select
+                  <Select 
                     value={customTheme.animations.duration}
-                    onValueChange={(value) => {
-                      setCustomTheme(prev => ({
-                        ...prev,
-                        animations: { ...prev.animations, duration: value },
-                      }));
-                    }}
+                    onValueChange={(value) => setCustomTheme(prev => ({
+                      ...prev,
+                      animations: { ...prev.animations, duration: value }
+                    }))}
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -513,14 +491,12 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
 
                 <div>
                   <Label>Easing Function</Label>
-                  <Select
+                  <Select 
                     value={customTheme.animations.easing}
-                    onValueChange={(value) => {
-                      setCustomTheme(prev => ({
-                        ...prev,
-                        animations: { ...prev.animations, easing: value },
-                      }));
-                    }}
+                    onValueChange={(value) => setCustomTheme(prev => ({
+                      ...prev,
+                      animations: { ...prev.animations, easing: value }
+                    }))}
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -539,20 +515,20 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <div className="p-4 border rounded-lg">
                 <h3 className="text-lg font-medium mb-4">Animation Preview</h3>
                 <div className="space-y-4">
-                  <Button
+                  <Button 
                     className="w-full transition-all"
                     style={{
                       transitionDuration: customTheme.animations.duration,
-                      transitionTimingFunction: customTheme.animations.easing,
+                      transitionTimingFunction: customTheme.animations.easing
                     }}
                   >
                     Hover me to see animation
                   </Button>
-                  <div
+                  <div 
                     className="h-4 bg-primary rounded-full transition-all"
                     style={{
                       transitionDuration: customTheme.animations.duration,
-                      transitionTimingFunction: customTheme.animations.easing,
+                      transitionTimingFunction: customTheme.animations.easing
                     }}
                   />
                 </div>
@@ -573,12 +549,10 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                   <Label>Blur Intensity</Label>
                   <Input
                     value={customTheme.effects.blur}
-                    onChange={(e) => {
-                      setCustomTheme(prev => ({
-                        ...prev,
-                        effects: { ...prev.effects, blur: e.target.value },
-                      }));
-                    }}
+                    onChange={(e) => setCustomTheme(prev => ({
+                      ...prev,
+                      effects: { ...prev.effects, blur: e.target.value }
+                    }))}
                     className="mt-2"
                     placeholder="blur(8px)"
                   />
@@ -586,14 +560,12 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
 
                 <div>
                   <Label>Shadow Style</Label>
-                  <Select
+                  <Select 
                     value={customTheme.effects.shadow}
-                    onValueChange={(value) => {
-                      setCustomTheme(prev => ({
-                        ...prev,
-                        effects: { ...prev.effects, shadow: value },
-                      }));
-                    }}
+                    onValueChange={(value) => setCustomTheme(prev => ({
+                      ...prev,
+                      effects: { ...prev.effects, shadow: value }
+                    }))}
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -614,7 +586,7 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                   <div className="p-4 bg-background border rounded-lg shadow-md">
                     Standard card with shadow
                   </div>
-                  <div
+                  <div 
                     className="p-4 bg-background/80 border rounded-lg backdrop-blur-sm"
                     style={{ backdropFilter: customTheme.effects.blur }}
                   >
@@ -633,13 +605,13 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <CardDescription>See how your custom theme looks in action</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6" style={{
+              <div className="space-y-6" style={{ 
                 backgroundColor: customTheme.colors.background,
                 color: customTheme.colors.text,
                 fontFamily: customTheme.typography.fontFamily,
                 padding: customTheme.spacing.lg,
                 borderRadius: customTheme.borderRadius.lg,
-                border: `1px solid ${customTheme.colors.border}`,
+                border: `1px solid ${customTheme.colors.border}`
               }}>
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-bold">Dashboard Preview</h3>
@@ -649,31 +621,31 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div style={{
+                  <div style={{ 
                     backgroundColor: customTheme.colors.surface,
                     padding: customTheme.spacing.md,
                     borderRadius: customTheme.borderRadius.md,
-                    border: `1px solid ${customTheme.colors.border}`,
+                    border: `1px solid ${customTheme.colors.border}`
                   }}>
                     <h4 className="font-medium mb-2">Primary Card</h4>
                     <p style={{ color: customTheme.colors.textSecondary }}>
                       This is how cards will look with your theme
                     </p>
                   </div>
-                  <div style={{
+                  <div style={{ 
                     background: customTheme.gradients.primary,
                     padding: customTheme.spacing.md,
                     borderRadius: customTheme.borderRadius.md,
-                    color: customTheme.colors.background,
+                    color: customTheme.colors.background
                   }}>
                     <h4 className="font-medium mb-2">Gradient Card</h4>
                     <p>With primary gradient background</p>
                   </div>
-                  <div style={{
+                  <div style={{ 
                     backgroundColor: customTheme.colors.accent,
                     padding: customTheme.spacing.md,
                     borderRadius: customTheme.borderRadius.md,
-                    color: customTheme.colors.background,
+                    color: customTheme.colors.background
                   }}>
                     <h4 className="font-medium mb-2">Accent Card</h4>
                     <p>Using accent color</p>
@@ -681,21 +653,21 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
                 </div>
 
                 <div className="flex gap-2">
-                  <Button
-                    style={{
+                  <Button 
+                    style={{ 
                       backgroundColor: customTheme.colors.primary,
                       color: customTheme.colors.background,
-                      borderRadius: customTheme.borderRadius.md,
+                      borderRadius: customTheme.borderRadius.md
                     }}
                   >
                     Primary Button
                   </Button>
-                  <Button
+                  <Button 
                     variant="outline"
-                    style={{
+                    style={{ 
                       borderColor: customTheme.colors.border,
                       color: customTheme.colors.text,
-                      borderRadius: customTheme.borderRadius.md,
+                      borderRadius: customTheme.borderRadius.md
                     }}
                   >
                     Secondary Button

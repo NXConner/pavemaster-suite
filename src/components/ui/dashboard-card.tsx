@@ -31,7 +31,7 @@ export function DashboardCard({
   action,
   icon,
   className,
-  children,
+  children
 }: DashboardCardProps) {
   return (
     <Card className={cn('hover:shadow-md transition-shadow', className)}>
@@ -43,7 +43,7 @@ export function DashboardCard({
         {value && (
           <div className="text-2xl font-bold mb-1">{value}</div>
         )}
-
+        
         {trend && (
           <div className="flex items-center text-xs text-muted-foreground mb-2">
             {trend.isPositive ? (
@@ -57,13 +57,13 @@ export function DashboardCard({
             <span className="ml-1">{trend.label}</span>
           </div>
         )}
-
+        
         {description && (
           <p className="text-xs text-muted-foreground mb-4">{description}</p>
         )}
-
+        
         {children}
-
+        
         {action && (
           <Button
             variant={action.variant || 'default'}

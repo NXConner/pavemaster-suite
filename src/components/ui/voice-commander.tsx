@@ -23,7 +23,7 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [isSupported, setIsSupported] = useState(false);
-
+  
   const recognitionRef = useRef<any>(null);
   const synthesisRef = useRef<SpeechSynthesis | null>(null);
 
@@ -31,28 +31,28 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
     // Check for speech recognition support
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const SpeechSynthesis = window.speechSynthesis;
-
+    
     if (SpeechRecognition && SpeechSynthesis) {
       setIsSupported(true);
-
+      
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = 'en-US';
-
+      
       recognition.onstart = () => {
         setIsListening(true);
         speak('Voice commands activated');
       };
-
+      
       recognition.onend = () => {
         setIsListening(false);
       };
-
+      
       recognition.onresult = (event: any) => {
         let finalTranscript = '';
         let interimTranscript = '';
-
+        
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
@@ -61,24 +61,24 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
             interimTranscript += transcript;
           }
         }
-
+        
         setTranscript(interimTranscript || finalTranscript);
-
+        
         if (finalTranscript) {
           handleVoiceCommand(finalTranscript.toLowerCase().trim());
         }
       };
-
+      
       recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error('Voice recognition error: ' + event.error);
       };
-
+      
       recognitionRef.current = recognition;
       synthesisRef.current = SpeechSynthesis;
     }
-
+    
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -87,20 +87,20 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
   }, []);
 
   const speak = (text: string) => {
-    if (!synthesisRef.current) { return; }
-
+    if (!synthesisRef.current) return;
+    
     // Cancel any ongoing speech
     synthesisRef.current.cancel();
-
+    
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.8;
     utterance.pitch = 1;
     utterance.volume = 0.8;
-
-    utterance.onstart = () => { setIsSpeaking(true); };
-    utterance.onend = () => { setIsSpeaking(false); };
-    utterance.onerror = () => { setIsSpeaking(false); };
-
+    
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    
     synthesisRef.current.speak(utterance);
   };
 
@@ -108,14 +108,14 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
     // Enhanced security for voice commands
     const sanitizedCommand = sanitizeString(command);
     console.log('Voice command received:', sanitizedCommand);
-
+    
     // Rate limiting for voice commands
     if (!rateLimiter.isAllowed('voice_command', 10, 60000)) {
       speak('Too many voice commands. Please wait a moment.');
       logSecurityEvent({
         type: 'rate_limit',
         severity: 'medium',
-        action: 'voice_command_rate_limited',
+        action: 'voice_command_rate_limited'
       });
       return;
     }
@@ -125,9 +125,9 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
       type: 'input_validation',
       severity: 'low',
       action: 'voice_command_processed',
-      metadata: { command: sanitizedCommand.substring(0, 50) },
+      metadata: { command: sanitizedCommand.substring(0, 50) }
     });
-
+    
     // Built-in navigation commands
     if (command.includes('go to') || command.includes('navigate to') || command.includes('open')) {
       const routes: Record<string, string> = {
@@ -155,7 +155,7 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
         'contracts': '/contracts',
         'customer portal': '/customer-portal',
       };
-
+      
       for (const [page, route] of Object.entries(routes)) {
         if (command.includes(page)) {
           window.location.href = route;
@@ -164,30 +164,30 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
         }
       }
     }
-
+    
     // System commands
     if (command.includes('stop listening') || command.includes('disable voice')) {
       stopListening();
       speak('Voice commands disabled');
       return;
     }
-
+    
     if (command.includes('help') || command.includes('what can you do')) {
       speak('I can help you navigate the app, create projects, check weather, and more. Try saying "go to dashboard" or "create new project"');
       return;
     }
-
+    
     if (command.includes('time') || command.includes('what time')) {
       const time = new Date().toLocaleTimeString();
       speak(`Current time is ${time}`);
       return;
     }
-
+    
     // Custom commands
     if (onCommand) {
       onCommand(command);
     }
-
+    
     // Default response for unrecognized commands
     speak('Command not recognized. Try saying "help" for available commands.');
   };
@@ -220,7 +220,7 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Button
-            variant={isListening ? 'destructive' : 'default'}
+            variant={isListening ? "destructive" : "default"}
             size="sm"
             onClick={isListening ? stopListening : startListening}
             className="gap-2"
@@ -228,9 +228,9 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             {isListening ? 'Stop' : 'Listen'}
           </Button>
-
+          
           <Button
-            variant={isSpeaking ? 'destructive' : 'outline'}
+            variant={isSpeaking ? "destructive" : "outline"}
             size="sm"
             onClick={stopSpeaking}
             disabled={!isSpeaking}
@@ -240,19 +240,19 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
             {isSpeaking ? 'Stop' : 'Muted'}
           </Button>
         </div>
-
+        
         <div className="flex gap-1">
           {isListening && <Badge variant="secondary" className="animate-pulse">Listening</Badge>}
           {isSpeaking && <Badge variant="destructive" className="animate-pulse">Speaking</Badge>}
         </div>
       </div>
-
+      
       {transcript && (
         <div className="text-sm text-muted-foreground p-2 bg-muted/50 rounded border">
           "{transcript}"
         </div>
       )}
-
+      
       <div className="text-xs text-muted-foreground mt-2">
         Try: "Go to dashboard", "Open projects", "Help", or "What time is it?"
       </div>

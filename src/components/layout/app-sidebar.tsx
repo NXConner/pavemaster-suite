@@ -1,9 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import {
   Users,
   Bot,
-  Truck,
-  Building,
+  Truck, 
+  Building, 
   Calculator,
   Calendar,
   MapPin,
@@ -17,45 +17,46 @@ import {
   DollarSign,
   UserCheck,
   Wrench,
-  Image as ImageIcon,
-} from 'lucide-react';
+  Image as ImageIcon
+} from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const navigationItems = [
-  { title: 'Dashboard', url: '/', icon: Home },
-  { title: 'Projects', url: '/projects', icon: Building },
-  { title: 'Team', url: '/team', icon: Users },
-  { title: 'Employees', url: '/employees', icon: UserCheck },
-  { title: 'Veteran Resources', url: '/veteran-resources', icon: Shield },
-  { title: 'Equipment', url: '/equipment', icon: Truck },
-  { title: 'Fleet', url: '/fleet', icon: MapPin },
-  { title: 'Materials', url: '/materials', icon: Wrench },
-  { title: 'Safety', url: '/safety', icon: Shield },
-  { title: 'Finance', url: '/finance', icon: DollarSign },
+  { title: "Dashboard", url: "/", icon: Home },
+  { title: "Projects", url: "/projects", icon: Building },
+  { title: "Team", url: "/team", icon: Users },
+  { title: "Employees", url: "/employees", icon: UserCheck },
+  { title: "Veteran Resources", url: "/veteran-resources", icon: Shield },
+  { title: "Equipment", url: "/equipment", icon: Truck },
+  { title: "Fleet", url: "/fleet", icon: MapPin },
+  { title: "Materials", url: "/materials", icon: Wrench },
+  { title: "Safety", url: "/safety", icon: Shield },
+  { title: "Finance", url: "/finance", icon: DollarSign },
 ];
 
 const toolsItems = [
-  { title: 'Estimates', url: '/estimates', icon: Calculator },
-  { title: 'Schedule', url: '/schedule', icon: Calendar },
-  { title: 'Tracking', url: '/tracking', icon: MapPin },
-  { title: 'Mapping', url: '/mapping', icon: Map },
-  { title: 'Weather', url: '/weather', icon: Cloud },
-  { title: 'Documents', url: '/documents', icon: FileText },
-  { title: 'Photo Reports', url: '/photo-reports', icon: ImageIcon },
-  { title: 'Notifications', url: '/notifications', icon: Bot },
-  { title: 'CRM', url: '/crm', icon: Users },
-  { title: 'Accounting', url: '/accounting', icon: DollarSign },
-  { title: 'Analytics', url: '/analytics', icon: BarChart },
+  { title: "Estimates", url: "/estimates", icon: Calculator },
+  { title: "Schedule", url: "/schedule", icon: Calendar },
+  { title: "Tracking", url: "/tracking", icon: MapPin },
+  { title: "Mapping", url: "/mapping", icon: Map },
+  { title: "Weather", url: "/weather", icon: Cloud },
+  { title: "Documents", url: "/documents", icon: FileText },
+  { title: "Photo Reports", url: "/photo-reports", icon: ImageIcon },
+  { title: "Notifications", url: "/notifications", icon: Bot },
+  { title: "CRM", url: "/crm", icon: Users },
+  { title: "Accounting", url: "/accounting", icon: DollarSign },
+  { title: "Analytics", url: "/analytics", icon: BarChart },
 ];
 
 const advancedItems = [
-  { title: 'AI Assistant', url: '/ai-assistant', icon: Bot },
-  { title: 'AI Knowledge', url: '/knowledge', icon: Bot },
-  { title: 'OverWatch', url: '/overwatch', icon: Shield },
+  { title: "AI Assistant", url: "/ai-assistant", icon: Bot },
+  { title: "AI Knowledge", url: "/knowledge", icon: Bot },
+  { title: "OverWatch", url: "/overwatch", icon: Shield },
 ];
 
 export function AppSidebar() {
+
   return (
     <Card className="w-60 h-screen rounded-none border-r border-l-0 border-t-0 border-b-0">
       <CardHeader>

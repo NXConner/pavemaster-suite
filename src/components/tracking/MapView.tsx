@@ -29,7 +29,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
   // Simulate map center based on devices
   const mapCenter = devices.length > 0 ? {
     lat: devices.reduce((sum, d) => sum + d.latitude, 0) / devices.length,
-    lng: devices.reduce((sum, d) => sum + d.longitude, 0) / devices.length,
+    lng: devices.reduce((sum, d) => sum + d.longitude, 0) / devices.length
   } : { lat: 37.7749, lng: -122.4194 };
 
   const handleDeviceClick = (device: Device) => {
@@ -73,7 +73,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => { setIsPlaying(!isPlaying); }}
+              onClick={() => setIsPlaying(!isPlaying)}
             >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               {isPlaying ? 'Pause' : 'Play'} Tracking
@@ -84,9 +84,9 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
             </Button>
             <div className="flex items-center gap-2 ml-auto">
               <span className="text-sm">Playback Speed:</span>
-              <select
-                value={playbackSpeed}
-                onChange={(e) => { setPlaybackSpeed(Number(e.target.value)); }}
+              <select 
+                value={playbackSpeed} 
+                onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
                 className="text-sm border rounded px-2 py-1"
               >
                 <option value={0.5}>0.5x</option>
@@ -98,7 +98,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
           </div>
 
           {/* Map Container */}
-          <div
+          <div 
             ref={mapRef}
             className="relative w-full h-96 bg-muted rounded-lg border overflow-hidden"
           >
@@ -124,9 +124,9 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all hover:scale-110"
                 style={{
                   left: `${20 + (index % 5) * 15}%`,
-                  top: `${20 + Math.floor(index / 5) * 15}%`,
+                  top: `${20 + Math.floor(index / 5) * 15}%`
                 }}
-                onClick={() => { handleDeviceClick(device); }}
+                onClick={() => handleDeviceClick(device)}
               >
                 <div className={`w-4 h-4 rounded-full ${getDeviceColor(device)} animate-pulse`}>
                   <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-background border rounded px-1 whitespace-nowrap">

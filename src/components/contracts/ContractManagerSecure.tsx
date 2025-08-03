@@ -17,7 +17,7 @@ const contractFormSchema = z.object({
   type: z.enum(['paving', 'sealcoating', 'line_striping', 'maintenance']),
   amount: z.number().min(0, 'Amount must be positive').max(999999999, 'Amount too large'),
   expiry_date: z.string().min(1, 'Expiry date required'),
-  terms: z.string().max(5000, 'Terms too long').transform(sanitizeHtml),
+  terms: z.string().max(5000, 'Terms too long').transform(sanitizeHtml)
 });
 
 interface Contract {
@@ -56,7 +56,7 @@ Weather permitting delays will extend completion date accordingly
 PAYMENT TERMS:
 50% deposit required to begin work
 Balance due upon completion and acceptance
-Payment terms: Net 30 days`,
+Payment terms: Net 30 days`
   },
   sealcoating: {
     title: 'Sealcoating Service Contract',
@@ -78,8 +78,8 @@ Excludes damage from freeze/thaw cycles
 
 PAYMENT TERMS:
 Payment due upon completion
-Accepted methods: Check, cash, credit card`,
-  },
+Accepted methods: Check, cash, credit card`
+  }
 };
 
 export default function ContractManager() {
@@ -94,7 +94,7 @@ export default function ContractManager() {
     amount: 0,
     expiry_date: '',
     template: 'paving',
-    terms: CONTRACT_TEMPLATES.paving.terms,
+    terms: CONTRACT_TEMPLATES.paving.terms
   });
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function ContractManager() {
         expiry_date: '2024-03-15',
         signed_date: '2024-01-20' as string,
         template: 'paving',
-        terms: CONTRACT_TEMPLATES.paving.terms,
+        terms: CONTRACT_TEMPLATES.paving.terms
       },
       {
         id: '2',
@@ -123,15 +123,15 @@ export default function ContractManager() {
         created_date: '2024-01-20',
         expiry_date: '2024-02-20',
         template: 'sealcoating',
-        terms: CONTRACT_TEMPLATES.sealcoating.terms,
-      },
+        terms: CONTRACT_TEMPLATES.sealcoating.terms
+      }
     ];
     setContracts(sampleContracts);
   }, []);
 
   const filteredContracts = contracts.filter(contract => {
-    const matchesSearch = contract.title.toLowerCase().includes(searchTerm.toLowerCase())
-                         || contract.client.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = contract.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         contract.client.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || contract.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -146,7 +146,7 @@ export default function ContractManager() {
         type: 'input_validation',
         severity: 'medium',
         action: 'contract_validation_failed',
-        metadata: { errors: validation.errors },
+        metadata: { errors: validation.errors }
       });
       return;
     }
@@ -157,7 +157,7 @@ export default function ContractManager() {
       logSecurityEvent({
         type: 'rate_limit',
         severity: 'high',
-        action: 'contract_creation_rate_limited',
+        action: 'contract_creation_rate_limited'
       });
       return;
     }
@@ -179,7 +179,7 @@ export default function ContractManager() {
       amount: 0,
       expiry_date: '',
       template: 'paving',
-      terms: CONTRACT_TEMPLATES.paving.terms,
+      terms: CONTRACT_TEMPLATES.paving.terms
     });
     setShowNewContract(false);
     toast.success('Contract created successfully');
@@ -189,7 +189,7 @@ export default function ContractManager() {
       type: 'data_access',
       severity: 'low',
       action: 'contract_created',
-      metadata: { contractId: contract.id },
+      metadata: { contractId: contract.id }
     });
   };
 
@@ -200,14 +200,14 @@ export default function ContractManager() {
       return;
     }
 
-    setContracts(prev => prev.map(contract =>
-      contract.id === id
-        ? {
-          ...contract,
-          status,
-          signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : contract.signed_date || undefined,
-        }
-        : contract,
+    setContracts(prev => prev.map(contract => 
+      contract.id === id 
+        ? { 
+            ...contract, 
+            status,
+            signed_date: status === 'signed' ? new Date().toISOString().split('T')[0] : contract.signed_date || undefined
+          }
+        : contract
     ));
     toast.success(`Contract status updated to ${status}`);
 
@@ -216,7 +216,7 @@ export default function ContractManager() {
       type: 'data_access',
       severity: status === 'signed' ? 'medium' : 'low',
       action: 'contract_status_updated',
-      metadata: { contractId: id, newStatus: status },
+      metadata: { contractId: id, newStatus: status }
     });
   };
 
@@ -262,7 +262,7 @@ export default function ContractManager() {
                 <Input
                   placeholder="Search contracts by title or client..."
                   value={searchTerm}
-                  onChange={(e) => { setSearchTerm(sanitizeString(e.target.value)); }}
+                  onChange={(e) => setSearchTerm(sanitizeString(e.target.value))}
                   className="pl-10"
                   maxLength={100}
                 />
@@ -281,8 +281,8 @@ export default function ContractManager() {
                 <SelectItem value="expired">Expired</SelectItem>
               </SelectContent>
             </Select>
-            <Button
-              onClick={() => { setShowNewContract(!showNewContract); }}
+            <Button 
+              onClick={() => setShowNewContract(!showNewContract)}
               className="gap-2"
             >
               <Plus className="w-4 h-4" />
@@ -302,7 +302,7 @@ export default function ContractManager() {
                     <label className="text-sm font-medium">Contract Title *</label>
                     <Input
                       value={newContract.title}
-                      onChange={(e) => { setNewContract(prev => ({ ...prev, title: e.target.value })); }}
+                      onChange={(e) => setNewContract(prev => ({ ...prev, title: e.target.value }))}
                       placeholder="Enter contract title"
                       maxLength={100}
                       required
@@ -312,7 +312,7 @@ export default function ContractManager() {
                     <label className="text-sm font-medium">Client Name *</label>
                     <Input
                       value={newContract.client}
-                      onChange={(e) => { setNewContract(prev => ({ ...prev, client: e.target.value })); }}
+                      onChange={(e) => setNewContract(prev => ({ ...prev, client: e.target.value }))}
                       placeholder="Enter client name"
                       maxLength={100}
                       required
@@ -320,16 +320,16 @@ export default function ContractManager() {
                   </div>
                   <div>
                     <label className="text-sm font-medium">Contract Type</label>
-                    <Select
-                      value={newContract.type}
+                    <Select 
+                      value={newContract.type} 
                       onValueChange={(value) => {
                         const contractType = value as Contract['type'];
                         const template = contractType === 'sealcoating' ? CONTRACT_TEMPLATES.sealcoating : CONTRACT_TEMPLATES.paving;
-                        setNewContract(prev => ({
-                          ...prev,
+                        setNewContract(prev => ({ 
+                          ...prev, 
                           type: contractType,
                           template: contractType,
-                          terms: template.terms,
+                          terms: template.terms
                         }));
                       }}
                     >
@@ -349,7 +349,7 @@ export default function ContractManager() {
                     <Input
                       type="number"
                       value={newContract.amount}
-                      onChange={(e) => { setNewContract(prev => ({ ...prev, amount: Number(e.target.value) })); }}
+                      onChange={(e) => setNewContract(prev => ({ ...prev, amount: Number(e.target.value) }))}
                       placeholder="0.00"
                       min="0"
                       max="999999999"
@@ -360,7 +360,7 @@ export default function ContractManager() {
                     <Input
                       type="date"
                       value={newContract.expiry_date}
-                      onChange={(e) => { setNewContract(prev => ({ ...prev, expiry_date: e.target.value })); }}
+                      onChange={(e) => setNewContract(prev => ({ ...prev, expiry_date: e.target.value }))}
                       required
                     />
                   </div>
@@ -369,7 +369,7 @@ export default function ContractManager() {
                   <label className="text-sm font-medium">Contract Terms</label>
                   <Textarea
                     value={newContract.terms}
-                    onChange={(e) => { setNewContract(prev => ({ ...prev, terms: e.target.value })); }}
+                    onChange={(e) => setNewContract(prev => ({ ...prev, terms: e.target.value }))}
                     rows={8}
                     className="font-mono text-sm"
                     maxLength={5000}
@@ -377,7 +377,7 @@ export default function ContractManager() {
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={handleCreateContract}>Create Contract</Button>
-                  <Button variant="outline" onClick={() => { setShowNewContract(false); }}>Cancel</Button>
+                  <Button variant="outline" onClick={() => setShowNewContract(false)}>Cancel</Button>
                 </div>
               </CardContent>
             </Card>
@@ -412,17 +412,17 @@ export default function ContractManager() {
                         <Edit className="w-4 h-4" />
                       </Button>
                       {contract.status === 'draft' && (
-                        <Button
+                        <Button 
                           size="sm"
-                          onClick={() => { updateContractStatus(contract.id, 'pending'); }}
+                          onClick={() => updateContractStatus(contract.id, 'pending')}
                         >
                           Send for Signature
                         </Button>
                       )}
                       {contract.status === 'pending' && (
-                        <Button
+                        <Button 
                           size="sm"
-                          onClick={() => { updateContractStatus(contract.id, 'signed'); }}
+                          onClick={() => updateContractStatus(contract.id, 'signed')}
                         >
                           Mark as Signed
                         </Button>
