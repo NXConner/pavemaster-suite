@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { 
   Shield, 
@@ -7,10 +8,13 @@ import {
   Signal, 
   Clock,
   MapPin,
-  Thermometer
+  Thermometer,
+  Minimize2,
+  Maximize2
 } from 'lucide-react';
 
 export function ISACStatusBar() {
+  const [isMinimized, setIsMinimized] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [systemData, setSystemData] = useState({
     networkStatus: 'ONLINE',
@@ -32,6 +36,22 @@ export function ISACStatusBar() {
 
     return () => clearInterval(interval);
   }, []);
+
+  if (isMinimized) {
+    return (
+      <div className="fixed bottom-4 left-4 z-50">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => setIsMinimized(false)}
+          className="bg-black/80 backdrop-blur-sm border-orange-500/30 text-orange-500 hover:bg-orange-500/20"
+        >
+          <Maximize2 className="h-4 w-4 mr-1" />
+          Status
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-sm border-t border-orange-500/30 px-4 py-2 z-50">
@@ -94,6 +114,15 @@ export function ISACStatusBar() {
             <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse animation-delay-200"></div>
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse animation-delay-400"></div>
           </div>
+
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setIsMinimized(true)}
+            className="text-orange-500 hover:bg-orange-500/20 h-6 w-6 p-0 ml-2"
+          >
+            <Minimize2 className="h-3 w-3" />
+          </Button>
         </div>
       </div>
     </div>

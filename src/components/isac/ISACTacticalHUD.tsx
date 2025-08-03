@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '../ui/card';
+import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { 
@@ -9,7 +10,9 @@ import {
   Satellite, 
   Radio,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  Minimize2,
+  Maximize2
 } from 'lucide-react';
 
 interface SystemStatus {
@@ -21,21 +24,22 @@ interface SystemStatus {
 }
 
 export function ISACTacticalHUD() {
+  const [isMinimized, setIsMinimized] = useState(false);
   const [systems, setSystems] = useState<SystemStatus[]>([
     { id: 'power', name: 'Power Grid', status: 'online', value: 94, unit: '%' },
     { id: 'comms', name: 'Communications', status: 'online', value: 98, unit: '%' },
     { id: 'sensors', name: 'Sensor Array', status: 'warning', value: 73, unit: '%' },
-    { id: 'defense', name: 'Defense Grid', status: 'critical', value: 45, unit: '%' },
+    { id: 'defense', name: 'Defense Grid', status: 'online', value: 87, unit: '%' },
   ]);
 
-  const [threatLevel, setThreatLevel] = useState<'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL'>('MODERATE');
+  const [threatLevel, setThreatLevel] = useState<'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL'>('LOW');
   const [activeOperations, setActiveOperations] = useState(3);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSystems(prev => prev.map(system => ({
         ...system,
-        value: Math.max(0, Math.min(100, system.value + (Math.random() - 0.5) * 10))
+        value: Math.max(0, Math.min(100, system.value + (Math.random() - 0.5) * 5))
       })));
     }, 5000);
 
@@ -72,6 +76,22 @@ export function ISACTacticalHUD() {
     }
   };
 
+  if (isMinimized) {
+    return (
+      <div className="fixed top-4 right-4 z-50">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => setIsMinimized(false)}
+          className="bg-black/80 backdrop-blur-sm border-orange-500/30 text-orange-500 hover:bg-orange-500/20"
+        >
+          <Maximize2 className="h-4 w-4 mr-1" />
+          ISAC-OS
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed top-4 right-4 w-80 space-y-2 z-50 pointer-events-none">
       {/* ISAC Header */}
@@ -82,9 +102,19 @@ export function ISACTacticalHUD() {
               <Shield className="h-5 w-5 text-orange-500" />
               <span className="text-orange-500 font-mono text-sm font-bold">ISAC-OS</span>
             </div>
-            <Badge className={getThreatColor(threatLevel)}>
-              THREAT: {threatLevel}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge className={getThreatColor(threatLevel)}>
+                THREAT: {threatLevel}
+              </Badge>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsMinimized(true)}
+                className="text-orange-500 hover:bg-orange-500/20 pointer-events-auto h-6 w-6 p-0"
+              >
+                <Minimize2 className="h-3 w-3" />
+              </Button>
+            </div>
           </div>
           <div className="text-xs text-orange-300/80 font-mono">
             {new Date().toLocaleTimeString()} - TACTICAL OVERRIDE ACTIVE
