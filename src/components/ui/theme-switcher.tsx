@@ -112,24 +112,24 @@ export function ThemeSwitcher() {
     const themeVariables = {
       "isac-os": {
         light: {
-          "--primary": "210 100% 50%",
+          "--primary": "25 100% 60%",
           "--primary-foreground": "0 0% 100%",
-          "--secondary": "197 100% 45%",
-          "--accent": "280 100% 70%",
-          "--background": "210 25% 5%",
+          "--secondary": "33 83% 57%",
+          "--accent": "40 95% 65%",
+          "--background": "220 15% 5%",
           "--foreground": "0 0% 95%",
-          "--card": "210 25% 8%",
-          "--border": "210 50% 20%"
+          "--card": "220 15% 8%",
+          "--border": "25 50% 35%"
         },
         dark: {
-          "--primary": "210 100% 60%",
+          "--primary": "25 100% 65%",
           "--primary-foreground": "0 0% 100%",
-          "--secondary": "197 100% 55%",
-          "--accent": "280 100% 80%",
-          "--background": "210 25% 3%",
+          "--secondary": "33 83% 62%",
+          "--accent": "40 95% 70%",
+          "--background": "220 15% 3%",
           "--foreground": "0 0% 98%",
-          "--card": "210 25% 6%",
-          "--border": "210 50% 15%"
+          "--card": "220 15% 6%",
+          "--border": "25 50% 30%"
         }
       },
       "defcon-tactical": {

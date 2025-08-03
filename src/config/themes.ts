@@ -69,17 +69,17 @@ export const INDUSTRY_THEMES: IndustryTheme[] = [
   {
     id: 'isac-os',
     name: 'ISAC-OS Tactical',
-    icon: '🎯',
+    icon: '🔶',
     industry: 'Defense',
-    description: 'Military-grade interface for tactical operations',
+    description: 'Military-grade interface with Division cybernetic orange',
     colors: {
-      primary: 'hsl(200, 100%, 50%)',
-      secondary: 'hsl(120, 100%, 40%)',
-      accent: 'hsl(60, 100%, 50%)',
+      primary: 'hsl(25, 100%, 60%)',
+      secondary: 'hsl(33, 83%, 57%)',
+      accent: 'hsl(40, 95%, 65%)',
       background: 'hsl(220, 15%, 8%)',
       foreground: 'hsl(0, 0%, 95%)',
       muted: 'hsl(0, 0%, 65%)',
-      border: 'hsl(200, 50%, 25%)',
+      border: 'hsl(25, 50%, 35%)',
     },
     fonts: {
       heading: '"Inter", sans-serif',
@@ -130,18 +130,18 @@ export const ISAC_OS_THEME: ISACTheme = {
   id: 'isac-os',
   name: 'ISAC-OS Tactical',
   colors: {
-    primary: 'hsl(200, 100%, 50%)', // Tactical blue
-    secondary: 'hsl(120, 100%, 40%)', // Command green
-    accent: 'hsl(60, 100%, 50%)', // Alert yellow
+    primary: 'hsl(25, 100%, 60%)', // Division cybernetic orange
+    secondary: 'hsl(33, 83%, 57%)', // Secondary division amber
+    accent: 'hsl(40, 95%, 65%)', // Bright tactical amber
     background: 'hsl(220, 15%, 8%)', // Dark tactical
     surface: 'hsl(220, 15%, 12%)', // Slightly lighter
     text: 'hsl(0, 0%, 95%)', // High contrast white
     muted: 'hsl(0, 0%, 65%)', // Muted text
-    border: 'hsl(200, 50%, 25%)', // Tactical border
+    border: 'hsl(25, 50%, 35%)', // Orange tactical border
     success: 'hsl(120, 100%, 40%)', // Success green
     warning: 'hsl(45, 100%, 50%)', // Warning amber
     error: 'hsl(0, 100%, 50%)', // Error red
-    info: 'hsl(200, 100%, 50%)', // Info blue
+    info: 'hsl(25, 100%, 60%)', // Info orange (matching primary)
   },
   fonts: {
     primary: '"Inter", "Segoe UI", system-ui, sans-serif',
