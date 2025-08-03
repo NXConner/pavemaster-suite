@@ -19,10 +19,10 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 15%;
 
-    /* ISAC-OS Tactical Blue Primary */
-    --primary: 210 100% 60%;
+    /* ISAC-OS Cybernetic Orange Primary (Division Inspired) */
+    --primary: 25 100% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 210 100% 70%;
+    --primary-glow: 25 100% 70%;
 
     /* Professional Blue Secondary */
     --secondary: 213 84% 22%;
@@ -34,9 +34,9 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --accent-foreground: 213 84% 22%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 210 50% 20%;
-    --input: 210 25% 10%;
-    --ring: 210 100% 60%;
+    --border: 25 50% 25%;
+    --input: 25 25% 15%;
+    --ring: 25 100% 60%;
 
     /* Enterprise Success/Warning/Info Colors */
     --success: 142 76% 36%;
@@ -46,14 +46,14 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --info: 213 84% 22%;
     --info-foreground: 0 0% 100%;
 
-    /* ISAC-OS Tactical Interface Variables */
-    --isac-primary: 210 100% 50%;
-    --isac-secondary: 197 100% 45%;
-    --isac-accent: 280 100% 70%;
-    --isac-background: 210 25% 5%;
+    /* ISAC-OS Tactical Interface Variables - Division Orange Theme */
+    --isac-primary: 25 100% 60%;
+    --isac-secondary: 33 83% 57%;
+    --isac-accent: 40 95% 65%;
+    --isac-background: 220 15% 5%;
     --isac-foreground: 0 0% 95%;
-    --isac-card: 210 25% 8%;
-    --isac-border: 210 50% 20%;
+    --isac-card: 220 15% 8%;
+    --isac-border: 25 50% 35%;
 
     /* DEFCON Tactical Variables */
     --defcon-critical: 0 100% 50%;
@@ -69,12 +69,12 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --overwatch-background: 220 15% 8%;
     --overwatch-foreground: 0 0% 92%;
 
-    /* Military Grid & Tactical Elements */
-    --grid-primary: 210 100% 50%;
-    --grid-secondary: 197 100% 45%;
+    /* Military Grid & Tactical Elements - Division Orange */
+    --grid-primary: 25 100% 60%;
+    --grid-secondary: 33 83% 57%;
     --grid-opacity: 0.3;
-    --tactical-glow: 210 100% 50%;
-    --tactical-pulse: 280 100% 70%;
+    --tactical-glow: 25 100% 60%;
+    --tactical-pulse: 40 95% 65%;
 
     /* Wallpaper & Environment */
     --wallpaper-image: url('/wallpapers/tactical-grid-4k.jpg');
