@@ -18,6 +18,7 @@ import {
   UserCheck,
   Wrench,
   Image as ImageIcon,
+  User,
 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -136,6 +137,32 @@ export function AppSidebar() {
 
         {/* Settings */}
         <div className="pt-4 border-t">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors ${
+                isActive
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-muted'
+              }`
+            }
+          >
+            <User className="h-4 w-4" />
+            Profile
+          </NavLink>
+          <NavLink
+            to="/company-setup"
+            className={({ isActive }) =>
+              `flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors ${
+                isActive
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-muted'
+              }`
+            }
+          >
+            <Building className="h-4 w-4" />
+            Company Setup
+          </NavLink>
           <NavLink
             to="/settings"
             className={({ isActive }) =>

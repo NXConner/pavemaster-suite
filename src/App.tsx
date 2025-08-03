@@ -38,6 +38,8 @@ const Mobile = lazy(() => import('./pages/Mobile'));
 const Enterprise = lazy(() => import('./pages/Enterprise'));
 const Security = lazy(() => import('./pages/Security'));
 const VeteranResources = lazy(() => import('./pages/VeteranResources'));
+const Profile = lazy(() => import('./pages/Profile'));
+const CompanySetup = lazy(() => import('./pages/CompanySetup'));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -243,6 +245,16 @@ export default function App() {
                   <Route path="/settings" element={
                     <ProtectedRoute>
                       <Settings />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/profile" element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/company-setup" element={
+                    <ProtectedRoute>
+                      <CompanySetup />
                     </ProtectedRoute>
                   } />
                   <Route path="*" element={<Navigate to="/" replace />} />
