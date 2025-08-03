@@ -1,0 +1,392 @@
+experiment:
+  name: "real_pavement_analysis_v3"
+  description: "Advanced AI training on real-world pavement datasets with quality assessment and multi-architecture ensemble"
+  tags: ["pavement", "real_data", "computer_vision", "condition_assessment", "production"]
+  version: "3.0.0"
+  author: "PaveMaster AI Team"
+
+data:
+  # Image preprocessing settings
+  image_size: [224, 224, 3]
+  quality_threshold: 0.6  # Minimum quality score for inclusion
+  normalize: true
+  
+  # Dataset splitting
+  validation_split: 0.2
+  test_split: 0.15
+  stratify: true  # Maintain class distribution across splits
+  
+  # Class definitions for pavement conditions
+  condition_classes:
+    - "excellent"    # PCI 85-100: New or like-new pavement
+    - "good"         # PCI 70-84: Minor defects, excellent ride quality
+    - "fair"         # PCI 55-69: Moderate defects, acceptable ride quality
+    - "poor"         # PCI 40-54: Significant defects, poor ride quality
+    - "very_poor"    # PCI 25-39: Severe defects, very poor ride quality
+    - "failed"       # PCI 0-24: Failed pavement requiring reconstruction
+  
+  # Data augmentation settings
+  augmentation:
+    enabled: true
+    augmentation_factor: 8  # Number of augmented versions per original image
+    
+    # Geometric transformations
+    geometric:
+      horizontal_flip: 0.5
+      rotation_limit: 15
+      shift_scale_rotate:
+        shift_limit: 0.1
+        scale_limit: 0.1
+        rotate_limit: 10
+        probability: 0.3
+    
+    # Weather and lighting conditions
+    environmental:
+      brightness_contrast:
+        brightness_limit: 0.2
+        contrast_limit: 0.2
+        probability: 0.5
+      hue_saturation_value:
+        hue_shift_limit: 10
+        sat_shift_limit: 20
+        val_shift_limit: 20
+        probability: 0.3
+      shadow_probability: 0.3
+      rain_probability: 0.2
+      sun_flare_probability: 0.1
+    
+    # Camera and motion effects
+    camera_effects:
+      gaussian_blur:
+        blur_limit: 3
+        probability: 0.2
+      motion_blur:
+        blur_limit: 3
+        probability: 0.2
+      gaussian_noise:
+        var_limit: [10, 50]
+        probability: 0.3
+      iso_noise_probability: 0.2
+    
+    # Pavement-specific augmentations
+    pavement_specific:
+      grid_distortion_probability: 0.2  # Simulates road curvature
+      optical_distortion_probability: 0.2  # Camera lens distortion
+      
+  # Quality assessment parameters
+  quality_assessment:
+    enabled: true
+    metrics:
+      blur_weight: 0.3
+      brightness_weight: 0.2
+      contrast_weight: 0.3
+      edge_density_weight: 0.2
+    thresholds:
+      min_blur_score: 50.0
+      brightness_range: [30, 225]  # Acceptable brightness range
+      min_contrast: 20.0
+      min_edge_density: 0.05
+
+training:
+  # Basic training parameters
+  batch_size: 32
+  epochs: 120
+  learning_rate: 0.001
+  optimizer: "adam"
+  
+  # Learning rate scheduling
+  lr_schedule:
+    enabled: true
+    scheduler: "reduce_on_plateau"
+    factor: 0.5
+    patience: 10
+    min_lr: 1e-7
+    monitor: "val_accuracy"
+  
+  # Early stopping
+  early_stopping:
+    enabled: true
+    patience: 20
+    monitor: "val_accuracy"
+    min_delta: 0.001
+    restore_best_weights: true
+  
+  # Class balancing
+  class_weights:
+    enabled: true
+    method: "balanced"  # 'balanced', 'manual', or 'none'
+    # manual_weights:  # Uncomment if method is 'manual'
+    #   excellent: 1.0
+    #   good: 1.2
+    #   fair: 1.5
+    #   poor: 2.0
+    #   very_poor: 2.5
+    #   failed: 3.0
+  
+  # Advanced training techniques
+  mixed_precision: true
+  gradient_clipping: 1.0
+  warmup_epochs: 5
+
+models:
+  # Model architectures to train
+  architectures:
+    - "attention_resnet"
+    - "multi_scale_cnn"
+    - "efficientnet_b0"
+    - "densenet121"
+  
+  # Ensemble configuration
+  ensemble:
+    enabled: true
+    method: "average"  # 'average', 'weighted', or 'stacking'
+    weights: null  # Will be determined automatically if null
+  
+  # Transfer learning settings
+  transfer_learning:
+    enabled: true
+    pretrained_weights: "imagenet"
+    freeze_base_model: false
+    fine_tune_layers: -50  # Number of layers to fine-tune (-1 for all)
+  
+  # Model-specific configurations
+  attention_resnet:
+    base_model: "ResNet50"
+    attention_mechanism: "channel_spatial"
+    dropout_rate: 0.5
+    
+  multi_scale_cnn:
+    kernel_sizes: [3, 5, 7]
+    filters: [64, 128, 256]
+    dropout_rate: 0.4
+    
+  efficientnet_b0:
+    dropout_rate: 0.3
+    drop_connect_rate: 0.2
+    
+  densenet121:
+    growth_rate: 32
+    dropout_rate: 0.4
+
+evaluation:
+  # Evaluation metrics
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "roc_auc"
+    - "cohen_kappa"
+    - "confusion_matrix"
+  
+  # Cross-validation
+  cross_validation:
+    enabled: false  # Enable for more robust evaluation
+    folds: 5
+    stratified: true
+  
+  # Test-time augmentation
+  test_time_augmentation:
+    enabled: true
+    n_augmentations: 5
+    
+  # Evaluation reports
+  generate_reports:
+    classification_report: true
+    confusion_matrix: true
+    roc_curves: true
+    precision_recall_curves: true
+    feature_maps: true  # Generate feature map visualizations
+
+monitoring:
+  # Experiment tracking
+  wandb:
+    enabled: false  # Set to true if using Weights & Biases
+    project: "pavement_ai_training"
+    entity: "pavemaster_team"
+    
+  tensorboard:
+    enabled: true
+    log_dir: "./logs"
+    
+  # Model checkpointing
+  checkpointing:
+    enabled: true
+    save_best_only: true
+    monitor: "val_f1_weighted"
+    mode: "max"
+    save_frequency: 5  # Save every N epochs
+    
+  # Logging configuration
+  logging:
+    level: "INFO"
+    save_to_file: true
+    log_predictions: true
+    log_gradients: false  # Can be memory intensive
+
+deployment:
+  # Model export formats
+  export_formats:
+    - "savedmodel"  # TensorFlow SavedModel
+    - "h5"         # Keras HDF5
+    - "tflite"     # TensorFlow Lite for mobile
+    - "onnx"       # ONNX for cross-platform deployment
+  
+  # Model optimization
+  optimization:
+    quantization:
+      enabled: true
+      type: "dynamic"  # 'dynamic', 'static', or 'qat'
+    
+    pruning:
+      enabled: false
+      sparsity: 0.5
+      
+    knowledge_distillation:
+      enabled: false
+      teacher_model: null
+      temperature: 3.0
+      alpha: 0.7
+  
+  # Performance requirements
+  performance_targets:
+    accuracy: 0.90
+    inference_time_ms: 150
+    model_size_mb: 100
+    
+  # API configuration
+  api:
+    host: "0.0.0.0"
+    port: 5000
+    max_batch_size: 32
+    timeout_seconds: 30
+    
+  # Caching
+  caching:
+    enabled: true
+    backend: "redis"
+    ttl_seconds: 3600
+    max_cache_size_mb: 1024
+
+hardware:
+  # GPU configuration
+  gpu:
+    enabled: true
+    memory_growth: true
+    memory_limit_mb: null  # null for unlimited
+    
+  # Multi-GPU training
+  multi_gpu:
+    enabled: false
+    strategy: "mirrored"  # 'mirrored', 'multi_worker_mirrored', or 'parameter_server'
+    
+  # CPU configuration
+  cpu:
+    threads: null  # null for auto-detection
+    
+  # Memory management
+  memory:
+    limit_gb: null  # null for unlimited
+    buffer_size: 1000  # Number of samples to buffer
+
+data_sources:
+  # Real pavement data sources
+  local_directories:
+    - path: "./data/pavement_images"
+      condition_mapping:
+        excellent: "excellent"
+        good: "good"
+        fair: "fair"
+        poor: "poor"
+        very_poor: "very_poor"
+        failed: "failed"
+  
+  # Mobile app data
+  mobile_app:
+    enabled: true
+    data_directory: "./data/mobile_uploads"
+    metadata_format: "json"
+    
+  # Drone survey data
+  drone_surveys:
+    enabled: true
+    data_directory: "./data/drone_surveys"
+    flight_metadata_required: true
+    
+  # Public datasets (examples)
+  public_datasets:
+    - name: "pavementai_dataset"
+      url: "https://example.com/datasets/pavementai.zip"
+      type: "zip"
+      condition_mapping:
+        class_0: "excellent"
+        class_1: "good"
+        class_2: "fair"
+        class_3: "poor"
+        class_4: "failed"
+        
+    - name: "road_condition_dataset"
+      url: "https://example.com/datasets/road_conditions.zip"
+      type: "zip"
+      condition_mapping:
+        new: "excellent"
+        good: "good"
+        moderate: "fair"
+        bad: "poor"
+        severe: "failed"
+
+preprocessing:
+  # Image preprocessing pipeline
+  resize_method: "bilinear"
+  maintain_aspect_ratio: false
+  
+  # Normalization
+  normalization:
+    method: "imagenet"  # 'imagenet', 'custom', or 'none'
+    # custom_mean: [0.485, 0.456, 0.406]  # Uncomment if method is 'custom'
+    # custom_std: [0.229, 0.224, 0.225]
+  
+  # Color space
+  color_space: "RGB"  # 'RGB', 'BGR', 'HSV', 'LAB'
+  
+  # Edge enhancement
+  edge_enhancement:
+    enabled: false
+    method: "unsharp_mask"
+    strength: 0.5
+
+validation:
+  # Validation strategy
+  strategy: "holdout"  # 'holdout', 'kfold', 'stratified_kfold'
+  
+  # Additional validation datasets
+  external_validation:
+    enabled: false
+    datasets:
+      - name: "external_test_set"
+        path: "./data/external_validation"
+        
+  # Performance monitoring during training
+  performance_monitoring:
+    early_warning: true
+    degradation_threshold: 0.05  # Trigger warning if performance drops by this much
+    
+output:
+  # Output directory structure
+  base_directory: "./training_output"
+  create_subdirectories: true
+  subdirectory_format: "%Y%m%d_%H%M%S"  # strftime format
+  
+  # Save artifacts
+  save_artifacts:
+    models: true
+    training_history: true
+    evaluation_plots: true
+    configuration: true
+    logs: true
+    predictions: true
+    
+  # Compression
+  compression:
+    enabled: true
+    format: "zip"  # 'zip', 'tar', 'gzip'
