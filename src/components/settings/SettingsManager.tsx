@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Badge } from '../ui/badge';
+import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Switch } from '../ui/switch';
@@ -18,34 +17,26 @@ import {
   Save,
   User,
   Bell,
-  Palette,
   Globe,
   Database,
-  Lock,
   Mail,
   Smartphone,
   Monitor,
-  HardDrive,
-  Wifi,
   Download,
-  Upload,
   Trash2,
   AlertCircle,
-  CheckCircle,
   Camera,
   Users,
-  MapPin,
   Clock,
   DollarSign,
+  Volume2,
 } from 'lucide-react';
 
 import { JargonSwitcher } from '../ui/jargon-switcher';
 import { SystemStatus } from '../system/SystemStatus';
 import { AdvancedThemeSwitcher } from '../themes/AdvancedThemeSwitcher';
-import { useJargon } from '../../contexts/JargonContext';
 
 export function SettingsManager() {
-  const { getText } = useJargon();
   const [settings, setSettings] = useState({
     // Profile Settings
     firstName: 'John',
@@ -411,9 +402,6 @@ export function SettingsManager() {
                     <Slider
                       value={[settings.refreshInterval]}
                       onValueChange={([value]) => updateSetting('refreshInterval', value)}
-                      max={300}
-                      min={10}
-                      step={10}
                       className="w-full"
                     />
                     <p className="text-sm text-muted-foreground">
@@ -506,7 +494,7 @@ export function SettingsManager() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <volume-2 className="h-4 w-4" />
+                    <Volume2 className="h-4 w-4" />
                     <div>
                       <Label>Sound Alerts</Label>
                       <p className="text-sm text-muted-foreground">
@@ -575,9 +563,6 @@ export function SettingsManager() {
                   <Slider
                     value={[settings.sessionTimeout]}
                     onValueChange={([value]) => updateSetting('sessionTimeout', value)}
-                    max={480}
-                    min={15}
-                    step={15}
                     className="w-full"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -717,9 +702,6 @@ export function SettingsManager() {
                   <Slider
                     value={[settings.dataRetention]}
                     onValueChange={([value]) => updateSetting('dataRetention', value)}
-                    max={1095}
-                    min={30}
-                    step={30}
                     className="w-full"
                   />
                   <p className="text-sm text-muted-foreground">

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DashboardLayout } from '../components/layout/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
@@ -32,9 +32,6 @@ import {
   Users, 
   Calendar,
   Target,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
   BarChart3,
   PieChart as PieChartIcon,
   Activity,
@@ -74,7 +71,6 @@ const crewPerformance = [
 
 export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
-  const [selectedMetric, setSelectedMetric] = useState('revenue');
 
   // Calculate KPIs
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.revenue, 0);
