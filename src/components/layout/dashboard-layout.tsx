@@ -1,6 +1,3 @@
-import { AppSidebar } from './app-sidebar';
-import { ISACTacticalHUD } from '../isac/ISACTacticalHUD';
-import { ISACStatusBar } from '../isac/ISACStatusBar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -17,6 +14,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </main>
       <ISACTacticalHUD />
       <ISACStatusBar />
+      <TacticalOverrideNotifications />
     </div>
   );
 }
