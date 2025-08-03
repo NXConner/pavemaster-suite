@@ -30,6 +30,9 @@ import AIKnowledge from './pages/AIKnowledge';
 import PhotoReports from './pages/PhotoReports';
 import Notifications from './pages/Notifications';
 import Contracts from './pages/Contracts';
+import Mobile from './pages/Mobile';
+import Enterprise from './pages/Enterprise';
+import Security from './pages/Security';
 import VeteranResources from './pages/VeteranResources';
 import './App.css';
 
@@ -209,6 +212,21 @@ export default function App() {
             <Route path="/contracts" element={
               <ProtectedRoute>
                 <Contracts />
+              </ProtectedRoute>
+            } />
+            <Route path="/mobile" element={
+              <ProtectedRoute>
+                <Mobile />
+              </ProtectedRoute>
+            } />
+            <Route path="/enterprise" element={
+              <ProtectedRoute>
+                <Enterprise />
+              </ProtectedRoute>
+            } />
+            <Route path="/security" element={
+              <ProtectedRoute>
+                <Security />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
