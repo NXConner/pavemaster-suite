@@ -93,6 +93,19 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     --shadow-lg: 0 10px 25px hsl(220 15% 15% / 0.15);
     --shadow-primary: 0 8px 25px hsl(var(--primary) / 0.25);
 
+    /* ISAC-OS Theme Variables */
+    --isac-primary: hsl(25, 95%, 53%);
+    --isac-secondary: hsl(25, 90%, 45%);
+    --isac-accent: hsl(45, 100%, 60%);
+    --isac-background: hsl(0, 0%, 8%);
+    --isac-surface: hsl(0, 0%, 12%);
+    --isac-text: hsl(0, 0%, 95%);
+    --isac-border: hsl(25, 70%, 35%);
+    --isac-glow-intensity: 80%;
+    --isac-animation-speed: 75%;
+    --isac-transparency: 15%;
+    --isac-wallpaper: url('/wallpapers/tactical-grid-4k.jpg');
+
     /* Professional Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-quick: all 0.15s ease-out;
