@@ -53,7 +53,7 @@ export default function ComplianceManagement() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [newViolationDialogOpen, setNewViolationDialogOpen] = useState(false);
+  
 
   useEffect(() => {
     fetchData();
