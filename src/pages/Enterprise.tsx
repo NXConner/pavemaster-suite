@@ -8,21 +8,13 @@ import { Label } from '../components/ui/label';
 import { Progress } from '../components/ui/progress';
 import { 
   Building2,
-  Users,
   TrendingUp,
   BarChart3,
   PieChart,
   LineChart,
-  Database,
-  Cloud,
   Zap,
   Settings,
-  Lock,
-  Shield,
-  CheckCircle,
-  AlertTriangle,
   Activity,
-  Globe,
   DollarSign,
   Target,
   Briefcase
