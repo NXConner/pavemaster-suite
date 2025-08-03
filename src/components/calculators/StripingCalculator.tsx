@@ -645,7 +645,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     <li>• Retroreflectivity below minimum levels</li>
                     <li>• Significant color fading or change</li>
                     <li>• Paint deterioration or peeling</li>
-                    <li>• Line width reduction >25%</li>
+                                          <li>• Line width reduction &gt;25%</li>
                   </ul>
                 </div>
               </div>
