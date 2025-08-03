@@ -4,15 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { Progress } from '../components/ui/progress';
+
 import { 
-  Calendar,
   Clock,
   MapPin,
   Users,
   Truck,
   CloudRain,
-  Sun,
   AlertTriangle,
   Plus,
   CalendarDays,
