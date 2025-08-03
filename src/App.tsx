@@ -29,6 +29,7 @@ import Accounting from './pages/Accounting';
 import AIKnowledge from './pages/AIKnowledge';
 import PhotoReports from './pages/PhotoReports';
 import Notifications from './pages/Notifications';
+import Contracts from './pages/Contracts';
 import VeteranResources from './pages/VeteranResources';
 import './App.css';
 
@@ -203,6 +204,11 @@ export default function App() {
             <Route path="/veteran-resources" element={
               <ProtectedRoute>
                 <VeteranResources />
+              </ProtectedRoute>
+            } />
+            <Route path="/contracts" element={
+              <ProtectedRoute>
+                <Contracts />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
