@@ -7,7 +7,6 @@ import {
   Activity, 
   Cpu, 
   HardDrive, 
-  HardDrive, 
   Wifi, 
   AlertTriangle,
   CheckCircle,
