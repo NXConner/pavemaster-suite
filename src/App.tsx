@@ -29,6 +29,7 @@ import Accounting from './pages/Accounting';
 import AIKnowledge from './pages/AIKnowledge';
 import PhotoReports from './pages/PhotoReports';
 import Notifications from './pages/Notifications';
+import VeteranResources from './pages/VeteranResources';
 import './App.css';
 
 export default function App() {
@@ -197,6 +198,11 @@ export default function App() {
             <Route path="/notifications" element={
               <ProtectedRoute>
                 <Notifications />
+              </ProtectedRoute>
+            } />
+            <Route path="/veteran-resources" element={
+              <ProtectedRoute>
+                <VeteranResources />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={

@@ -27,6 +27,7 @@ const navigationItems = [
   { title: "Projects", url: "/projects", icon: Building },
   { title: "Team", url: "/team", icon: Users },
   { title: "Employees", url: "/employees", icon: UserCheck },
+  { title: "Veteran Resources", url: "/veteran-resources", icon: Shield },
   { title: "Equipment", url: "/equipment", icon: Truck },
   { title: "Fleet", url: "/fleet", icon: MapPin },
   { title: "Materials", url: "/materials", icon: Wrench },
