@@ -23,7 +23,7 @@ interface SystemStatus {
   unit: string;
 }
 
-export function ISACTacticalHUD() {
+export function AsphaltTacticalHUD() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [systems, setSystems] = useState<SystemStatus[]>([
     { id: 'power', name: 'Power Grid', status: 'online', value: 94, unit: '%' },
@@ -86,7 +86,7 @@ export function ISACTacticalHUD() {
           className="bg-black/80 backdrop-blur-sm border-orange-500/30 text-orange-500 hover:bg-orange-500/20"
         >
           <Maximize2 className="h-4 w-4 mr-1" />
-          ISAC-OS
+          Asphalt-OS
         </Button>
       </div>
     );
@@ -94,13 +94,13 @@ export function ISACTacticalHUD() {
 
   return (
     <div className="fixed top-4 right-4 w-80 space-y-2 z-50 pointer-events-none">
-      {/* ISAC Header */}
+      {/* Asphalt Header */}
       <Card className="bg-black/80 backdrop-blur-sm border-orange-500/30">
         <CardContent className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-orange-500" />
-              <span className="text-orange-500 font-mono text-sm font-bold">ISAC-OS</span>
+              <span className="text-orange-500 font-mono text-sm font-bold">Asphalt-OS</span>
             </div>
             <div className="flex items-center gap-2">
               <Badge className={getThreatColor(threatLevel)}>

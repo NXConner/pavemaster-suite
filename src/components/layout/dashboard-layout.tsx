@@ -1,8 +1,8 @@
 
 import { AppSidebar } from './app-sidebar';
-import { ISACTacticalHUD } from '../isac/ISACTacticalHUD';
-import { ISACStatusBar } from '../isac/ISACStatusBar';
-import { TacticalOverrideNotifications } from '../isac/TacticalOverrideNotifications';
+import { AsphaltTacticalHUD } from '../asphalt/AsphaltTacticalHUD';
+import { AsphaltStatusBar } from '../asphalt/AsphaltStatusBar';
+import { TacticalOverrideNotifications } from '../asphalt/TacticalOverrideNotifications';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -17,8 +17,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {children}
         </div>
       </main>
-      <ISACTacticalHUD />
-      <ISACStatusBar />
+      <AsphaltTacticalHUD />
+      <AsphaltStatusBar />
       <TacticalOverrideNotifications />
     </div>
   );

@@ -13,7 +13,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 
-export function ISACStatusBar() {
+export function AsphaltStatusBar() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [systemData, setSystemData] = useState({
@@ -60,7 +60,7 @@ export function ISACStatusBar() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-orange-500" />
-            <span className="text-orange-500 font-bold">ISAC-OS</span>
+            <span className="text-orange-500 font-bold">Asphalt-OS</span>
             <Badge className="bg-green-600 text-white text-xs">OPERATIONAL</Badge>
           </div>
 
