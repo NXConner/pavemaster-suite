@@ -1,22 +1,22 @@
 import { useState } from 'react';
-import { DashboardLayout } from "../components/layout/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Label } from "../components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Badge } from "../components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { 
-  ShieldCheck, 
-  AlertTriangle, 
-  FileText, 
-  Users, 
-  HardHat, 
-  Eye, 
+import { DashboardLayout } from '../components/layout/dashboard-layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Label } from '../components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Badge } from '../components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import {
+  ShieldCheck,
+  AlertTriangle,
+  FileText,
+  Users,
+  HardHat,
+  Eye,
   CheckCircle,
   XCircle,
-  TrendingUp
-} from "lucide-react";
+  TrendingUp,
+} from 'lucide-react';
 
 interface SafetyIncident {
   id: string;
@@ -64,7 +64,7 @@ export default function Safety() {
       location: 'Church Parking Lot - Section A',
       employeeInvolved: 'John Smith',
       status: 'resolved',
-      actions: ['Added non-slip mats', 'Reviewed wet weather procedures', 'Additional training scheduled']
+      actions: ['Added non-slip mats', 'Reviewed wet weather procedures', 'Additional training scheduled'],
     },
     {
       id: '2',
@@ -75,7 +75,7 @@ export default function Safety() {
       location: 'Equipment Yard',
       employeeInvolved: 'Mike Johnson',
       status: 'resolved',
-      actions: ['Vehicle repaired', 'Spotter assigned for backing', 'Refresher training completed']
+      actions: ['Vehicle repaired', 'Spotter assigned for backing', 'Refresher training completed'],
     },
     {
       id: '3',
@@ -86,8 +86,8 @@ export default function Safety() {
       location: 'Shopping Center Project',
       employeeInvolved: 'Sarah Williams',
       status: 'resolved',
-      actions: ['First aid administered', 'Cut-resistant gloves provided', 'Tool safety review']
-    }
+      actions: ['First aid administered', 'Cut-resistant gloves provided', 'Tool safety review'],
+    },
   ];
 
   const safetyInspections: SafetyInspection[] = [
@@ -99,7 +99,7 @@ export default function Safety() {
       type: 'routine',
       score: 95,
       issues: 2,
-      status: 'pass'
+      status: 'pass',
     },
     {
       id: '2',
@@ -109,7 +109,7 @@ export default function Safety() {
       type: 'scheduled',
       score: 88,
       issues: 5,
-      status: 'conditional'
+      status: 'conditional',
     },
     {
       id: '3',
@@ -119,8 +119,8 @@ export default function Safety() {
       type: 'surprise',
       score: 92,
       issues: 3,
-      status: 'pass'
-    }
+      status: 'pass',
+    },
   ];
 
   const trainingRecords: TrainingRecord[] = [
@@ -130,7 +130,7 @@ export default function Safety() {
       course: 'OSHA 30-Hour Construction',
       completedDate: '2023-06-15',
       expiryDate: '2026-06-15',
-      status: 'current'
+      status: 'current',
     },
     {
       id: '2',
@@ -138,7 +138,7 @@ export default function Safety() {
       course: 'First Aid/CPR',
       completedDate: '2023-03-20',
       expiryDate: '2025-03-20',
-      status: 'current'
+      status: 'current',
     },
     {
       id: '3',
@@ -146,7 +146,7 @@ export default function Safety() {
       course: 'Equipment Safety Training',
       completedDate: '2023-08-10',
       expiryDate: '2024-02-10',
-      status: 'expiring'
+      status: 'expiring',
     },
     {
       id: '4',
@@ -154,8 +154,8 @@ export default function Safety() {
       course: 'Office Safety Training',
       completedDate: '2022-12-05',
       expiryDate: '2023-12-05',
-      status: 'expired'
-    }
+      status: 'expired',
+    },
   ];
 
   const getIncidentSeverityColor = (severity: string) => {

@@ -13,7 +13,7 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
       const originalCreateElement = document.createElement;
       document.createElement = function(tagName: string) {
         const element = originalCreateElement.call(this, tagName);
-        
+
         if (tagName.toLowerCase() === 'script') {
           logSecurityEvent({
             type: 'input_validation',
@@ -21,10 +21,10 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
             action: 'script_element_created',
             ip: getClientIP(),
             userAgent: getUserAgent(),
-            metadata: { tagName }
+            metadata: { tagName },
           });
         }
-        
+
         return element;
       };
 
@@ -37,7 +37,7 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
           action: 'eval_attempt',
           ip: getClientIP(),
           userAgent: getUserAgent(),
-          metadata: { script: script.substring(0, 100) }
+          metadata: { script: script.substring(0, 100) },
         });
         return originalEval.call(this, script);
       };
@@ -51,10 +51,10 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
               type: 'input_validation',
               severity: 'high',
               action: `${name}_script_injection_attempt`,
-              metadata: { key, value: value.substring(0, 100) }
+              metadata: { key, value: value.substring(0, 100) },
             });
           }
-          return originalSetItem.call(this, key, value);
+          originalSetItem.call(this, key, value);
         };
       };
 
@@ -68,17 +68,17 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
             mutation.addedNodes.forEach((node) => {
               if (node.nodeType === Node.ELEMENT_NODE) {
                 const element = node as Element;
-                if (element.tagName === 'SCRIPT' || 
-                    element.innerHTML.includes('<script') ||
-                    element.innerHTML.includes('javascript:')) {
+                if (element.tagName === 'SCRIPT'
+                    || element.innerHTML.includes('<script')
+                    || element.innerHTML.includes('javascript:')) {
                   logSecurityEvent({
                     type: 'input_validation',
                     severity: 'critical',
                     action: 'suspicious_dom_manipulation',
-                    metadata: { 
+                    metadata: {
                       tagName: element.tagName,
-                      innerHTML: element.innerHTML.substring(0, 100)
-                    }
+                      innerHTML: element.innerHTML.substring(0, 100),
+                    },
                   });
                 }
               }
@@ -87,9 +87,9 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
         });
       });
 
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true 
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
       });
 
       return () => {
@@ -104,14 +104,14 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
     const meta = document.createElement('meta');
     meta.httpEquiv = 'Content-Security-Policy';
     meta.content = [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https:",
-      "connect-src 'self' https:",
-      "font-src 'self'",
-      "frame-ancestors 'none'",
-      "base-uri 'self'"
+      'default-src \'self\'',
+      'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'',
+      'style-src \'self\' \'unsafe-inline\'',
+      'img-src \'self\' data: https:',
+      'connect-src \'self\' https:',
+      'font-src \'self\'',
+      'frame-ancestors \'none\'',
+      'base-uri \'self\'',
     ].join('; ');
     document.head.appendChild(meta);
 

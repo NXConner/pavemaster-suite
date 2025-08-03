@@ -1,21 +1,21 @@
-import { DashboardLayout } from "../components/layout/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Badge } from "../components/ui/badge";
-import { Progress } from "../components/ui/progress";
-import { 
-  Truck, 
-  Plus, 
-  Search, 
+import { DashboardLayout } from '../components/layout/dashboard-layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Progress } from '../components/ui/progress';
+import {
+  Truck,
+  Plus,
+  Search,
   Wrench,
   Calendar,
   AlertTriangle,
   CheckCircle,
   Clock,
   Fuel,
-  MapPin
-} from "lucide-react";
+  MapPin,
+} from 'lucide-react';
 
 interface Equipment {
   id: string;
@@ -41,7 +41,7 @@ const mockEquipment: Equipment[] = [
     lastMaintenance: '2024-01-10',
     nextMaintenance: '2024-02-10',
     hours: 1247,
-    fuelLevel: 85
+    fuelLevel: 85,
   },
   {
     id: '2',
@@ -53,7 +53,7 @@ const mockEquipment: Equipment[] = [
     lastMaintenance: '2024-01-05',
     nextMaintenance: '2024-02-05',
     hours: 892,
-    fuelLevel: 60
+    fuelLevel: 60,
   },
   {
     id: '3',
@@ -64,7 +64,7 @@ const mockEquipment: Equipment[] = [
     lastMaintenance: '2024-01-20',
     nextMaintenance: '2024-01-25',
     hours: 1456,
-    fuelLevel: 30
+    fuelLevel: 30,
   },
   {
     id: '4',
@@ -76,8 +76,8 @@ const mockEquipment: Equipment[] = [
     lastMaintenance: '2024-01-15',
     nextMaintenance: '2024-02-15',
     hours: 654,
-    fuelLevel: 95
-  }
+    fuelLevel: 95,
+  },
 ];
 
 const getStatusColor = (status: string) => {
@@ -112,8 +112,8 @@ const getTypeIcon = (type: string) => {
 };
 
 const getFuelColor = (level: number) => {
-  if (level > 70) return 'text-green-600';
-  if (level > 30) return 'text-yellow-600';
+  if (level > 70) { return 'text-green-600'; }
+  if (level > 30) { return 'text-yellow-600'; }
   return 'text-red-600';
 };
 
@@ -147,7 +147,7 @@ export default function Equipment() {
               <p className="text-xs text-muted-foreground">Vehicles & machinery</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Operational</CardTitle>
@@ -223,7 +223,7 @@ export default function Equipment() {
                           <p className="text-sm text-muted-foreground capitalize">{item.type}</p>
                         </div>
                       </div>
-                      
+
                       <div className="text-right">
                         <div className="text-lg font-semibold">
                           {item.hours.toLocaleString()} hrs
@@ -242,7 +242,7 @@ export default function Equipment() {
                         </div>
                         <div className="text-sm font-medium">{item.location}</div>
                       </div>
-                      
+
                       <div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                           <Wrench className="h-3 w-3" />
@@ -252,7 +252,7 @@ export default function Equipment() {
                           {item.operator || 'Not assigned'}
                         </div>
                       </div>
-                      
+
                       <div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                           <Calendar className="h-3 w-3" />
@@ -298,7 +298,7 @@ export default function Equipment() {
                           </>
                         )}
                       </div>
-                      
+
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" className="gap-1">
                           <MapPin className="h-3 w-3" />

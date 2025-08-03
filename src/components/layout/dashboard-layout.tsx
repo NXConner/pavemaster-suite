@@ -1,6 +1,6 @@
-import { AppSidebar } from "./app-sidebar";
-import { ISACTacticalHUD } from "../isac/ISACTacticalHUD";
-import { ISACStatusBar } from "../isac/ISACStatusBar";
+import { AppSidebar } from './app-sidebar';
+import { ISACTacticalHUD } from '../isac/ISACTacticalHUD';
+import { ISACStatusBar } from '../isac/ISACStatusBar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

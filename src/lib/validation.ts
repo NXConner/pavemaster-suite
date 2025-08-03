@@ -64,17 +64,17 @@ class RateLimiter {
   isAllowed(key: string, maxAttempts: number = 5, windowMs: number = 300000): boolean {
     const now = Date.now();
     const attempts = this.attempts.get(key) || [];
-    
+
     // Remove old attempts outside the window
     const validAttempts = attempts.filter(time => now - time < windowMs);
-    
+
     if (validAttempts.length >= maxAttempts) {
       return false;
     }
-    
+
     validAttempts.push(now);
     this.attempts.set(key, validAttempts);
-    
+
     return true;
   }
 
