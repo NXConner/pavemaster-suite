@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Switch } from '../components/ui/switch';
 import { Progress } from '../components/ui/progress';
-import { 
+import {
   Shield,
   Lock,
   Key,
@@ -22,7 +22,7 @@ import {
   Activity,
   UserCheck,
   Fingerprint,
-  Smartphone
+  Smartphone,
 } from 'lucide-react';
 
 export default function Security() {
@@ -37,7 +37,7 @@ export default function Security() {
     vulnerability_count: 2,
     last_audit: '2024-01-10T00:00:00Z',
     incidents_this_month: 0,
-    failed_logins: 3
+    failed_logins: 3,
   };
 
   const securityEvents = [
@@ -48,7 +48,7 @@ export default function Security() {
       timestamp: '2024-01-16T10:30:00Z',
       ip: '192.168.1.100',
       location: 'Richmond, VA',
-      severity: 'info'
+      severity: 'info',
     },
     {
       id: 'SE002',
@@ -57,7 +57,7 @@ export default function Security() {
       timestamp: '2024-01-16T09:45:00Z',
       ip: '203.45.67.89',
       location: 'Unknown',
-      severity: 'warning'
+      severity: 'warning',
     },
     {
       id: 'SE003',
@@ -66,8 +66,8 @@ export default function Security() {
       timestamp: '2024-01-16T08:15:00Z',
       ip: '192.168.1.101',
       location: 'Richmond, VA',
-      severity: 'medium'
-    }
+      severity: 'medium',
+    },
   ];
 
   const complianceStatus = [
@@ -75,7 +75,7 @@ export default function Security() {
     { name: 'GDPR', status: 'compliant', lastReview: '2023-12-15', nextReview: '2024-06-15' },
     { name: 'HIPAA', status: 'not_applicable', lastReview: null, nextReview: null },
     { name: 'PCI DSS', status: 'in_progress', lastReview: '2024-01-05', nextReview: '2024-04-05' },
-    { name: 'ISO 27001', status: 'pending', lastReview: null, nextReview: '2024-03-01' }
+    { name: 'ISO 27001', status: 'pending', lastReview: null, nextReview: '2024-03-01' },
   ];
 
   const accessControls = [
@@ -84,7 +84,7 @@ export default function Security() {
     { name: 'Role-Based Access Control', enabled: true, users: 8, coverage: 100 },
     { name: 'Session Management', enabled: true, users: 8, coverage: 100 },
     { name: 'IP Whitelisting', enabled: false, users: 0, coverage: 0 },
-    { name: 'Device Trust', enabled: true, users: 6, coverage: 75 }
+    { name: 'Device Trust', enabled: true, users: 6, coverage: 75 },
   ];
 
   const getSeverityColor = (severity: string) => {
@@ -119,8 +119,8 @@ export default function Security() {
   };
 
   const triggerZapier = async (securityData: any) => {
-    if (!webhookUrl) return;
-    
+    if (!webhookUrl) { return; }
+
     try {
       await fetch(webhookUrl, {
         method: 'POST',
@@ -129,8 +129,8 @@ export default function Security() {
         body: JSON.stringify({
           event: 'security_alert',
           data: securityData,
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       });
     } catch (error) {
       console.error('Zapier webhook failed:', error);
@@ -378,17 +378,17 @@ export default function Security() {
                     <div>
                       <h3 className="font-medium">{compliance.name}</h3>
                       <p className="text-sm text-muted-foreground">
-                        {compliance.status === 'not_applicable' 
+                        {compliance.status === 'not_applicable'
                           ? 'Not applicable to current operations'
-                          : compliance.lastReview 
-                          ? `Last review: ${new Date(compliance.lastReview).toLocaleDateString()}`
-                          : 'No review completed'
+                          : compliance.lastReview
+                            ? `Last review: ${new Date(compliance.lastReview).toLocaleDateString()}`
+                            : 'No review completed'
                         }
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <Badge 
+                    <Badge
                       variant={compliance.status === 'compliant' ? 'default' : 'secondary'}
                       className={getComplianceColor(compliance.status)}
                     >
@@ -454,16 +454,16 @@ export default function Security() {
                 <Input
                   id="webhook-url"
                   value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
+                  onChange={(e) => { setWebhookUrl(e.target.value); }}
                   placeholder="https://hooks.zapier.com/hooks/catch/..."
                 />
               </div>
-              <Button 
+              <Button
                 className="w-full"
-                onClick={() => triggerZapier({ 
+                onClick={() => triggerZapier({
                   metrics: securityMetrics,
                   events: securityEvents.slice(0, 3),
-                  compliance: complianceStatus 
+                  compliance: complianceStatus,
                 })}
                 disabled={!webhookUrl}
               >

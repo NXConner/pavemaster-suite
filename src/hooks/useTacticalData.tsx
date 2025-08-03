@@ -17,20 +17,20 @@ export function useTacticalData() {
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      
+
       const [alertsData, missionsData, metricsResponse] = await Promise.all([
         commandService.getActiveAlerts(),
         commandService.getMissionStatus(),
-        apiService.getDashboardMetrics()
+        apiService.getDashboardMetrics(),
       ]);
 
       setAlerts(alertsData);
       setMissions(missionsData);
-      
+
       if (metricsResponse.status === 'success') {
         setMetrics(metricsResponse.data);
       }
-      
+
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load tactical data');
@@ -47,8 +47,8 @@ export function useTacticalData() {
 
     // Subscribe to mission updates
     const missionSubscription = commandService.subscribeToMissionUpdates((updatedMission) => {
-      setMissions(prev => prev.map(mission => 
-        mission.id === updatedMission.id ? updatedMission : mission
+      setMissions(prev => prev.map(mission =>
+        mission.id === updatedMission.id ? updatedMission : mission,
       ));
     });
 
@@ -70,7 +70,7 @@ export function useTacticalData() {
     const success = await commandService.updateMissionProgress(missionId, progress);
     if (success) {
       setMissions(prev => prev.map(mission =>
-        mission.id === missionId ? { ...mission, progress } : mission
+        mission.id === missionId ? { ...mission, progress } : mission,
       ));
     }
     return success;
@@ -88,6 +88,6 @@ export function useTacticalData() {
     error,
     acknowledgeAlert,
     updateMissionProgress,
-    refreshData
+    refreshData,
   };
 }

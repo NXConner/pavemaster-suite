@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { DashboardLayout } from "../components/layout/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { VehicleDetailsForm } from "../components/vehicle/VehicleDetailsForm";
-import { 
-  Truck, 
-  MapPin, 
+import { DashboardLayout } from '../components/layout/dashboard-layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { VehicleDetailsForm } from '../components/vehicle/VehicleDetailsForm';
+import {
+  Truck,
+  MapPin,
   Fuel,
   Navigation,
   Shield,
@@ -16,8 +16,8 @@ import {
   CheckCircle,
   Wrench,
   FileText,
-  Plus
-} from "lucide-react";
+  Plus,
+} from 'lucide-react';
 
 interface Vehicle {
   id: string;
@@ -42,7 +42,7 @@ const mockVehicles: Vehicle[] = [
     driver: 'John Mitchell',
     speed: 0,
     fuel: 85,
-    lastUpdate: '2 minutes ago'
+    lastUpdate: '2 minutes ago',
   },
   {
     id: '2',
@@ -54,7 +54,7 @@ const mockVehicles: Vehicle[] = [
     speed: 45,
     fuel: 60,
     lastUpdate: '1 minute ago',
-    destination: 'Shopping Center'
+    destination: 'Shopping Center',
   },
   {
     id: '3',
@@ -65,8 +65,8 @@ const mockVehicles: Vehicle[] = [
     driver: 'Mike Rodriguez',
     speed: 0,
     fuel: 95,
-    lastUpdate: '5 minutes ago'
-  }
+    lastUpdate: '5 minutes ago',
+  },
 ];
 
 const getStatusColor = (status: string) => {
@@ -98,16 +98,16 @@ export default function Fleet() {
       <DashboardLayout>
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setSelectedVehicle(null)}
+            <Button
+              variant="outline"
+              onClick={() => { setSelectedVehicle(null); }}
             >
               ← Back to Fleet
             </Button>
             <h1 className="text-2xl font-bold">Vehicle Details</h1>
           </div>
-          <VehicleDetailsForm 
-            vehicleId={selectedVehicle} 
+          <VehicleDetailsForm
+            vehicleId={selectedVehicle}
             onSave={(data) => {
               console.log('Vehicle data saved:', data);
               setSelectedVehicle(null);
@@ -153,7 +153,7 @@ export default function Fleet() {
               <p className="text-xs text-muted-foreground">Fleet size</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active</CardTitle>
@@ -211,129 +211,129 @@ export default function Fleet() {
           <TabsContent value="overview" className="space-y-6">
             {/* Live Vehicle Tracking */}
             <Card>
-          <CardHeader>
-            <CardTitle>Live Vehicle Tracking</CardTitle>
-            <CardDescription>Real-time positions and status updates</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Vehicle List */}
-            <div className="space-y-4">
-              {mockVehicles.map((vehicle) => (
-                <div key={vehicle.id} className="border rounded-lg p-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-                        <Truck className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{vehicle.name}</h3>
-                          <div className={`w-2 h-2 rounded-full ${getStatusColor(vehicle.status)}`}></div>
-                          <Badge variant="outline">{getStatusText(vehicle.status)}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
+              <CardHeader>
+                <CardTitle>Live Vehicle Tracking</CardTitle>
+                <CardDescription>Real-time positions and status updates</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Vehicle List */}
+                <div className="space-y-4">
+                  {mockVehicles.map((vehicle) => (
+                    <div key={vehicle.id} className="border rounded-lg p-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+                            <Truck className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold">{vehicle.name}</h3>
+                              <div className={`w-2 h-2 rounded-full ${getStatusColor(vehicle.status)}`}></div>
+                              <Badge variant="outline">{getStatusText(vehicle.status)}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
                           Driver: {vehicle.driver}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="text-right">
-                      <div className="text-lg font-semibold">
-                        {vehicle.speed} mph
-                      </div>
-                      <div className="text-sm text-muted-foreground">
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <div className="text-lg font-semibold">
+                            {vehicle.speed} mph
+                          </div>
+                          <div className="text-sm text-muted-foreground">
                         Current speed
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <div className="grid gap-4 md:grid-cols-4">
-                    <div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <MapPin className="h-3 w-3" />
+                      <div className="grid gap-4 md:grid-cols-4">
+                        <div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                            <MapPin className="h-3 w-3" />
                         Current Location
-                      </div>
-                      <div className="text-sm font-medium">{vehicle.location}</div>
-                    </div>
-                    
-                    <div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Navigation className="h-3 w-3" />
+                          </div>
+                          <div className="text-sm font-medium">{vehicle.location}</div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                            <Navigation className="h-3 w-3" />
                         Destination
-                      </div>
-                      <div className="text-sm">
-                        {vehicle.destination || 'No destination set'}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Fuel className="h-3 w-3" />
+                          </div>
+                          <div className="text-sm">
+                            {vehicle.destination || 'No destination set'}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                            <Fuel className="h-3 w-3" />
                         Fuel Level
-                      </div>
-                      <div className="text-sm font-medium">{vehicle.fuel}%</div>
-                    </div>
+                          </div>
+                          <div className="text-sm font-medium">{vehicle.fuel}%</div>
+                        </div>
 
-                    <div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Clock className="h-3 w-3" />
+                        <div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                            <Clock className="h-3 w-3" />
                         Last Update
+                          </div>
+                          <div className="text-sm">{vehicle.lastUpdate}</div>
+                        </div>
                       </div>
-                      <div className="text-sm">{vehicle.lastUpdate}</div>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="flex items-center gap-2">
-                      {vehicle.status === 'active' && (
-                        <>
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span className="text-sm text-green-600">Operational</span>
-                        </>
-                      )}
-                      {vehicle.status === 'en-route' && (
-                        <>
-                          <Navigation className="h-4 w-4 text-blue-500" />
-                          <span className="text-sm text-blue-600">En Route</span>
-                        </>
-                      )}
-                      {vehicle.status === 'parked' && (
-                        <>
-                          <Shield className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">Parked</span>
-                        </>
-                      )}
-                      {vehicle.status === 'maintenance' && (
-                        <>
-                          <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm text-yellow-600">Maintenance</span>
-                        </>
-                      )}
-                    </div>
-                    
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="gap-1">
-                          <MapPin className="h-3 w-3" />
+                      <div className="flex items-center justify-between pt-2 border-t">
+                        <div className="flex items-center gap-2">
+                          {vehicle.status === 'active' && (
+                            <>
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <span className="text-sm text-green-600">Operational</span>
+                            </>
+                          )}
+                          {vehicle.status === 'en-route' && (
+                            <>
+                              <Navigation className="h-4 w-4 text-blue-500" />
+                              <span className="text-sm text-blue-600">En Route</span>
+                            </>
+                          )}
+                          {vehicle.status === 'parked' && (
+                            <>
+                              <Shield className="h-4 w-4 text-gray-500" />
+                              <span className="text-sm text-gray-600">Parked</span>
+                            </>
+                          )}
+                          {vehicle.status === 'maintenance' && (
+                            <>
+                              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                              <span className="text-sm text-yellow-600">Maintenance</span>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm" className="gap-1">
+                            <MapPin className="h-3 w-3" />
                           Track
-                        </Button>
-                        <Button variant="outline" size="sm" className="gap-1">
-                          <Navigation className="h-3 w-3" />
+                          </Button>
+                          <Button variant="outline" size="sm" className="gap-1">
+                            <Navigation className="h-3 w-3" />
                           Navigate
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setSelectedVehicle(vehicle.id)}
-                        >
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => { setSelectedVehicle(vehicle.id); }}
+                          >
                           Manage
-                        </Button>
+                          </Button>
+                        </div>
                       </div>
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="maintenance" className="space-y-6">
@@ -354,7 +354,7 @@ export default function Fleet() {
                     </div>
                     <Badge variant="destructive">Overdue</Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-4 border rounded-lg border-yellow-200 bg-yellow-50">
                     <div className="flex items-center gap-3">
                       <Clock className="h-5 w-5 text-yellow-600" />
@@ -410,7 +410,7 @@ export default function Fleet() {
                       </div>
                     </div>
                   </Card>
-                  
+
                   <Card className="p-4">
                     <div className="flex items-center gap-3">
                       <Shield className="h-8 w-8 text-green-600" />
@@ -441,7 +441,7 @@ export default function Fleet() {
                 </div>
                 <Badge variant="outline" className="bg-green-50 text-green-700">Healthy</Badge>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border rounded">
                 <div className="flex items-center gap-2">
                   <Fuel className="h-4 w-4 text-yellow-500" />
@@ -449,7 +449,7 @@ export default function Fleet() {
                 </div>
                 <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Warning</Badge>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border rounded">
                 <div className="flex items-center gap-2">
                   <Navigation className="h-4 w-4 text-green-500" />
@@ -470,17 +470,17 @@ export default function Fleet() {
                 <span className="text-sm">Total Miles Driven</span>
                 <span className="font-semibold">247 miles</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm">Active Hours</span>
                 <span className="font-semibold">32 hours</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm">Fuel Consumed</span>
                 <span className="font-semibold">45 gallons</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm">Average Speed</span>
                 <span className="font-semibold">28 mph</span>

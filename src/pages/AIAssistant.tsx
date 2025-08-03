@@ -19,21 +19,21 @@ export default function AIAssistant() {
       id: '1',
       type: 'assistant',
       content: 'Hello! I\'m your AI assistant for PaveMaster Suite. I can help you with project estimates, scheduling, equipment management, and more. How can I assist you today?',
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim()) { return; }
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
       content: inputMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -46,7 +46,7 @@ export default function AIAssistant() {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
         content: 'I understand you need help with that. Let me analyze your request and provide the best solution...',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
@@ -57,7 +57,7 @@ export default function AIAssistant() {
     { label: 'Calculate Materials', icon: Brain, color: 'bg-blue-500' },
     { label: 'Schedule Crew', icon: Zap, color: 'bg-green-500' },
     { label: 'Generate Estimate', icon: Bot, color: 'bg-purple-500' },
-    { label: 'Weather Check', icon: Brain, color: 'bg-orange-500' }
+    { label: 'Weather Check', icon: Brain, color: 'bg-orange-500' },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function AIAssistant() {
                     key={index}
                     variant="outline"
                     className="w-full justify-start gap-2"
-                    onClick={() => setInputMessage(action.label)}
+                    onClick={() => { setInputMessage(action.label); }}
                   >
                     <div className={`p-1 rounded ${action.color}`}>
                       <action.icon className="h-3 w-3 text-white" />
@@ -111,7 +111,7 @@ export default function AIAssistant() {
                   AI Chat
                 </CardTitle>
               </CardHeader>
-              
+
               <CardContent className="flex-1 flex flex-col">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-4 mb-4">
@@ -134,7 +134,7 @@ export default function AIAssistant() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {isProcessing && (
                     <div className="flex justify-start">
                       <div className="bg-muted p-3 rounded-lg">
@@ -152,7 +152,7 @@ export default function AIAssistant() {
                 <div className="flex gap-2">
                   <Input
                     value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
+                    onChange={(e) => { setInputMessage(e.target.value); }}
                     placeholder="Ask me anything about your projects..."
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     disabled={isProcessing}
@@ -160,12 +160,12 @@ export default function AIAssistant() {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => setIsListening(!isListening)}
+                    onClick={() => { setIsListening(!isListening); }}
                     className={isListening ? 'bg-red-100' : ''}
                   >
                     {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim() || isProcessing}
                   >

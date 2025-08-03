@@ -5,10 +5,10 @@ import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
 import { AppSidebar } from '../components/layout/app-sidebar';
-import { 
-  DollarSign, 
-  Receipt, 
-  FileText, 
+import {
+  DollarSign,
+  Receipt,
+  FileText,
   TrendingUp,
   Calendar,
   Camera,
@@ -16,7 +16,7 @@ import {
   Upload,
   Download,
   Eye,
-  Calculator
+  Calculator,
 } from 'lucide-react';
 
 export default function Accounting() {
@@ -26,20 +26,20 @@ export default function Accounting() {
     revenue: 145280,
     expenses: 89450,
     profit: 55830,
-    taxes: 11166
+    taxes: 11166,
   };
 
   const recentTransactions = [
     { id: 1, type: 'revenue', description: 'Church Parking Lot - St. Mary', amount: 8500, date: '2024-01-15', status: 'completed' },
     { id: 2, type: 'expense', description: 'Fuel & Equipment', amount: -342, date: '2024-01-14', status: 'completed' },
     { id: 3, type: 'revenue', description: 'Driveway Sealcoating - Residential', amount: 1250, date: '2024-01-14', status: 'pending' },
-    { id: 4, type: 'expense', description: 'Material Purchase - SealMaster', amount: -2100, date: '2024-01-13', status: 'completed' }
+    { id: 4, type: 'expense', description: 'Material Purchase - SealMaster', amount: -2100, date: '2024-01-13', status: 'completed' },
   ];
 
   const payrollData = [
     { id: 1, employee: 'John Smith', role: 'Crew Leader', hours: 42, rate: 28, gross: 1176, taxes: 235, net: 941 },
     { id: 2, employee: 'Mike Johnson', role: 'Equipment Operator', hours: 38, rate: 24, gross: 912, taxes: 182, net: 730 },
-    { id: 3, employee: 'Sarah Davis', role: 'Project Manager', hours: 40, rate: 32, gross: 1280, taxes: 256, net: 1024 }
+    { id: 3, employee: 'Sarah Davis', role: 'Project Manager', hours: 40, rate: 32, gross: 1280, taxes: 256, net: 1024 },
   ];
 
   const receiptCategories = [
@@ -48,7 +48,7 @@ export default function Accounting() {
     { name: 'Materials', count: 15, amount: 8900 },
     { name: 'Meals & Travel', count: 12, amount: 980 },
     { name: 'Office Supplies', count: 6, amount: 340 },
-    { name: 'Insurance', count: 3, amount: 2200 }
+    { name: 'Insurance', count: 3, amount: 2200 },
   ];
 
   return (
@@ -167,9 +167,9 @@ export default function Accounting() {
                         <div className={`p-2 rounded-full ${
                           transaction.type === 'revenue' ? 'bg-green-100' : 'bg-red-100'
                         }`}>
-                          {transaction.type === 'revenue' ? 
-                            <TrendingUp className="h-4 w-4 text-green-600" /> :
-                            <Receipt className="h-4 w-4 text-red-600" />
+                          {transaction.type === 'revenue'
+                            ? <TrendingUp className="h-4 w-4 text-green-600" />
+                            : <Receipt className="h-4 w-4 text-red-600" />
                           }
                         </div>
                         <div>
@@ -184,8 +184,8 @@ export default function Accounting() {
                           ${Math.abs(transaction.amount).toLocaleString()}
                         </div>
                         <Badge variant={
-                          transaction.status === 'completed' ? 'default' :
-                          transaction.status === 'pending' ? 'secondary' : 'destructive'
+                          transaction.status === 'completed' ? 'default'
+                            : transaction.status === 'pending' ? 'secondary' : 'destructive'
                         }>
                           {transaction.status}
                         </Badge>
@@ -294,7 +294,7 @@ export default function Accounting() {
                             key={category}
                             variant={scanMode === category.toLowerCase() ? 'default' : 'outline'}
                             size="sm"
-                            onClick={() => setScanMode(category.toLowerCase())}
+                            onClick={() => { setScanMode(category.toLowerCase()); }}
                           >
                             {category}
                           </Button>
@@ -336,14 +336,14 @@ export default function Accounting() {
                   {[
                     { vendor: 'Shell Gas Station', amount: 87.45, category: 'Fuel', status: 'processed' },
                     { vendor: 'Home Depot', amount: 234.67, category: 'Materials', status: 'processing' },
-                    { vendor: 'Equipment Rental Co', amount: 450.00, category: 'Equipment', status: 'review' }
+                    { vendor: 'Equipment Rental Co', amount: 450.00, category: 'Equipment', status: 'review' },
                   ].map((receipt, i) => (
                     <div key={i} className="border rounded-lg p-3">
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-medium text-sm">{receipt.vendor}</div>
                         <Badge variant={
-                          receipt.status === 'processed' ? 'default' :
-                          receipt.status === 'processing' ? 'secondary' : 'destructive'
+                          receipt.status === 'processed' ? 'default'
+                            : receipt.status === 'processing' ? 'secondary' : 'destructive'
                         }>
                           {receipt.status}
                         </Badge>
@@ -427,7 +427,7 @@ export default function Accounting() {
                 'Tax Summary Report',
                 'Payroll Summary',
                 'Expense Analysis',
-                'Revenue Breakdown'
+                'Revenue Breakdown',
               ].map((report) => (
                 <Card key={report} className="cursor-pointer hover:bg-muted/50">
                   <CardContent className="p-4 text-center">

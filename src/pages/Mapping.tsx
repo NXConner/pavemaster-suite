@@ -6,12 +6,12 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
 import { AppSidebar } from '../components/layout/app-sidebar';
-import { 
-  Map, 
-  Ruler, 
-  Square, 
-  Circle, 
-  Layers, 
+import {
+  Map,
+  Ruler,
+  Square,
+  Circle,
+  Layers,
   Download,
   Upload,
   Maximize,
@@ -20,7 +20,7 @@ import {
   Zap,
   Eye,
   Settings,
-  Calculator
+  Calculator,
 } from 'lucide-react';
 
 export default function Mapping() {
@@ -39,21 +39,21 @@ export default function Mapping() {
     { name: 'Stamen Terrain', type: 'terrain', status: 'active' },
     { name: 'HERE Maps', type: 'hybrid', status: 'premium' },
     { name: 'TomTom Maps', type: 'navigation', status: 'premium' },
-    { name: 'MapTiler', type: 'custom', status: 'premium' }
+    { name: 'MapTiler', type: 'custom', status: 'premium' },
   ];
 
   const measurementTools = [
     { name: 'Distance', icon: Ruler, mode: 'distance' },
     { name: 'Area', icon: Square, mode: 'area' },
     { name: 'Perimeter', icon: Circle, mode: 'perimeter' },
-    { name: 'Volume', icon: Calculator, mode: 'volume' }
+    { name: 'Volume', icon: Calculator, mode: 'volume' },
   ];
 
   const drawingTools = [
     { name: 'Rectangle', icon: Square, tool: 'rectangle' },
     { name: 'Circle', icon: Circle, tool: 'circle' },
     { name: 'Polygon', icon: Target, tool: 'polygon' },
-    { name: 'Line', icon: Ruler, tool: 'line' }
+    { name: 'Line', icon: Ruler, tool: 'line' },
   ];
 
   return (
@@ -96,7 +96,7 @@ export default function Mapping() {
                 <div className="relative h-[500px] bg-gradient-to-br from-green-100 to-blue-100 rounded-lg overflow-hidden">
                   {/* Map placeholder with grid overlay */}
                   <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-                  
+
                   {/* Sample parking lot layout */}
                   <div className="absolute top-20 left-20 w-80 h-60 bg-gray-200 rounded border-2 border-gray-400">
                     <div className="p-4">
@@ -159,7 +159,7 @@ export default function Mapping() {
                     className={`flex items-center justify-between p-2 rounded cursor-pointer ${
                       activeMap === service.type ? 'bg-primary/10' : 'hover:bg-muted'
                     }`}
-                    onClick={() => setActiveMap(service.type)}
+                    onClick={() => { setActiveMap(service.type); }}
                   >
                     <div>
                       <div className="text-sm font-medium">{service.name}</div>
@@ -192,7 +192,7 @@ export default function Mapping() {
                     variant={measurementMode === tool.mode ? 'default' : 'outline'}
                     size="sm"
                     className="w-full justify-start"
-                    onClick={() => setMeasurementMode(tool.mode)}
+                    onClick={() => { setMeasurementMode(tool.mode); }}
                   >
                     <tool.icon className="h-4 w-4 mr-2" />
                     {tool.name}
@@ -216,7 +216,7 @@ export default function Mapping() {
                     id="spaces"
                     type="number"
                     value={parkingSpaces}
-                    onChange={(e) => setParkingSpaces(parseInt(e.target.value))}
+                    onChange={(e) => { setParkingSpaces(parseInt(e.target.value)); }}
                     className="h-8 text-sm"
                   />
                 </div>
@@ -332,7 +332,7 @@ export default function Mapping() {
                   'ADA Compliance',
                   'Snow Routes',
                   'Emergency Access',
-                  'Lighting Zones'
+                  'Lighting Zones',
                 ].map((overlay) => (
                   <Card key={overlay} className="cursor-pointer hover:bg-muted/50">
                     <CardContent className="p-4 text-center">

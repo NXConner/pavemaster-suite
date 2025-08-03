@@ -4,9 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { 
-  Bell, 
-  BellRing, 
+import {
+  Bell,
+  BellRing,
   AlertTriangle,
   CheckCircle,
   Info,
@@ -16,7 +16,7 @@ import {
   X,
   Settings as SettingsIcon,
   Eye,
-  Archive
+  Archive,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -73,14 +73,14 @@ export default function NotificationCenter() {
       safety: true,
       compliance: true,
       weather: true,
-      system: true
+      system: true,
     },
     priority: {
       low: false,
       medium: true,
       high: true,
-      urgent: true
-    }
+      urgent: true,
+    },
   });
   const [activeTab, setActiveTab] = useState('all');
   const [showSettings, setShowSettings] = useState(false);
@@ -97,24 +97,24 @@ export default function NotificationCenter() {
     // Set up real-time subscription for notifications
     const channel = supabase
       .channel('notifications')
-      .on('postgres_changes', 
-        { 
-          event: 'INSERT', 
-          schema: 'public', 
-          table: 'notifications' 
-        }, 
+      .on('postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+        },
         (payload) => {
           const newNotification = payload.new as Notification;
           setNotifications(prev => [newNotification, ...prev]);
-          
+
           // Show toast for high priority notifications
           if (newNotification.priority === 'high' || newNotification.priority === 'urgent') {
             toast(newNotification.title, {
               description: newNotification.message,
-              duration: newNotification.priority === 'urgent' ? 10000 : 5000
+              duration: newNotification.priority === 'urgent' ? 10000 : 5000,
             });
           }
-        }
+        },
       )
       .subscribe();
 
@@ -143,7 +143,7 @@ export default function NotificationCenter() {
         actionRequired: true,
         actionUrl: '/equipment',
         userId: 'user-1',
-        metadata: { equipmentId: 'paver-3' }
+        metadata: { equipmentId: 'paver-3' },
       },
       {
         id: '2',
@@ -157,7 +157,7 @@ export default function NotificationCenter() {
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
         actionRequired: false,
         userId: 'user-1',
-        metadata: { location: 'Richmond, VA' }
+        metadata: { location: 'Richmond, VA' },
       },
       {
         id: '3',
@@ -172,7 +172,7 @@ export default function NotificationCenter() {
         actionRequired: true,
         actionUrl: '/safety',
         userId: 'user-1',
-        metadata: { employeeId: 'emp-1' }
+        metadata: { employeeId: 'emp-1' },
       },
       {
         id: '4',
@@ -186,7 +186,7 @@ export default function NotificationCenter() {
         timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
         actionRequired: false,
         userId: 'user-1',
-        metadata: { projectId: 'proj-1' }
+        metadata: { projectId: 'proj-1' },
       },
       {
         id: '5',
@@ -200,8 +200,8 @@ export default function NotificationCenter() {
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
         actionRequired: true,
         actionUrl: '/crm',
-        userId: 'user-1'
-      }
+        userId: 'user-1',
+      },
     ];
 
     setNotifications(demoNotifications);
@@ -209,13 +209,13 @@ export default function NotificationCenter() {
 
   const markAsRead = (id: string) => {
     setNotifications(prev =>
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
+      prev.map(n => n.id === id ? { ...n, read: true } : n),
     );
   };
 
   const markAsArchived = (id: string) => {
     setNotifications(prev =>
-      prev.map(n => n.id === id ? { ...n, archived: true } : n)
+      prev.map(n => n.id === id ? { ...n, archived: true } : n),
     );
   };
 
@@ -225,7 +225,7 @@ export default function NotificationCenter() {
 
   const markAllAsRead = () => {
     setNotifications(prev =>
-      prev.map(n => ({ ...n, read: true }))
+      prev.map(n => ({ ...n, read: true })),
     );
   };
 
@@ -261,9 +261,9 @@ export default function NotificationCenter() {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    if (activeTab === 'unread') return !notification.read;
-    if (activeTab === 'archived') return notification.archived;
-    if (activeTab === 'urgent') return notification.priority === 'urgent' || notification.priority === 'high';
+    if (activeTab === 'unread') { return !notification.read; }
+    if (activeTab === 'archived') { return notification.archived; }
+    if (activeTab === 'urgent') { return notification.priority === 'urgent' || notification.priority === 'high'; }
     return !notification.archived; // 'all' tab shows non-archived
   });
 
@@ -298,7 +298,7 @@ export default function NotificationCenter() {
           <Button variant="outline" onClick={markAllAsRead}>
             Mark All Read
           </Button>
-          <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
+          <Button variant="outline" onClick={() => { setShowSettings(!showSettings); }}>
             <SettingsIcon className="h-4 w-4" />
             Settings
           </Button>
@@ -332,13 +332,13 @@ export default function NotificationCenter() {
                 <Bell className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">No notifications</h3>
                 <p className="text-muted-foreground text-center">
-                  {activeTab === 'unread' 
-                    ? "You're all caught up! No unread notifications."
+                  {activeTab === 'unread'
+                    ? 'You\'re all caught up! No unread notifications.'
                     : activeTab === 'urgent'
-                    ? "No urgent notifications at this time."
-                    : activeTab === 'archived'
-                    ? "No archived notifications."
-                    : "No notifications to display."
+                      ? 'No urgent notifications at this time.'
+                      : activeTab === 'archived'
+                        ? 'No archived notifications.'
+                        : 'No notifications to display.'
                   }
                 </p>
               </CardContent>
@@ -354,7 +354,7 @@ export default function NotificationCenter() {
                       <div className="flex-shrink-0">
                         {getIcon(notification.type)}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
                           <h3 className="font-semibold text-sm">
@@ -368,11 +368,11 @@ export default function NotificationCenter() {
                             </Badge>
                           </div>
                         </div>
-                        
+
                         <p className="text-sm text-muted-foreground mb-3">
                           {notification.message}
                         </p>
-                        
+
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span>
@@ -385,36 +385,36 @@ export default function NotificationCenter() {
                               </span>
                             )}
                           </div>
-                          
+
                           <div className="flex items-center gap-2">
                             {notification.actionRequired && notification.actionUrl && (
                               <Button size="sm" variant="default">
                                 Take Action
                               </Button>
                             )}
-                            
+
                             {!notification.read && (
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
-                                onClick={() => markAsRead(notification.id)}
+                                onClick={() => { markAsRead(notification.id); }}
                               >
                                 <Eye className="h-3 w-3" />
                               </Button>
                             )}
-                            
-                            <Button 
-                              size="sm" 
+
+                            <Button
+                              size="sm"
                               variant="outline"
-                              onClick={() => markAsArchived(notification.id)}
+                              onClick={() => { markAsArchived(notification.id); }}
                             >
                               <Archive className="h-3 w-3" />
                             </Button>
-                            
-                            <Button 
-                              size="sm" 
+
+                            <Button
+                              size="sm"
                               variant="outline"
-                              onClick={() => deleteNotification(notification.id)}
+                              onClick={() => { deleteNotification(notification.id); }}
                             >
                               <X className="h-3 w-3" />
                             </Button>
@@ -441,26 +441,26 @@ export default function NotificationCenter() {
               <h3 className="text-sm font-medium mb-3">Delivery Methods</h3>
               <div className="space-y-2">
                 <label className="flex items-center space-x-2">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={preferences.email}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, email: e.target.checked }))}
+                    onChange={(e) => { setPreferences(prev => ({ ...prev, email: e.target.checked })); }}
                   />
                   <span className="text-sm">Email Notifications</span>
                 </label>
                 <label className="flex items-center space-x-2">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={preferences.push}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, push: e.target.checked }))}
+                    onChange={(e) => { setPreferences(prev => ({ ...prev, push: e.target.checked })); }}
                   />
                   <span className="text-sm">Push Notifications</span>
                 </label>
                 <label className="flex items-center space-x-2">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={preferences.inApp}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, inApp: e.target.checked }))}
+                    onChange={(e) => { setPreferences(prev => ({ ...prev, inApp: e.target.checked })); }}
                   />
                   <span className="text-sm">In-App Notifications</span>
                 </label>
@@ -472,13 +472,15 @@ export default function NotificationCenter() {
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries(preferences.categories).map(([category, enabled]) => (
                   <label key={category} className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={enabled}
-                      onChange={(e) => setPreferences(prev => ({ 
-                        ...prev, 
-                        categories: { ...prev.categories, [category]: e.target.checked }
-                      }))}
+                      onChange={(e) => {
+                        setPreferences(prev => ({
+                          ...prev,
+                          categories: { ...prev.categories, [category]: e.target.checked },
+                        }));
+                      }}
                     />
                     <span className="text-sm capitalize">{category}</span>
                   </label>
@@ -491,13 +493,15 @@ export default function NotificationCenter() {
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries(preferences.priority).map(([priority, enabled]) => (
                   <label key={priority} className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={enabled}
-                      onChange={(e) => setPreferences(prev => ({ 
-                        ...prev, 
-                        priority: { ...prev.priority, [priority]: e.target.checked }
-                      }))}
+                      onChange={(e) => {
+                        setPreferences(prev => ({
+                          ...prev,
+                          priority: { ...prev.priority, [priority]: e.target.checked },
+                        }));
+                      }}
                     />
                     <span className="text-sm capitalize">{priority}</span>
                   </label>

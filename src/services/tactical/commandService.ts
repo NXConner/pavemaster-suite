@@ -25,7 +25,7 @@ export class CommandService {
       message: 'Equipment failure detected on Truck Alpha',
       source: 'equipment',
       timestamp: new Date().toISOString(),
-      acknowledged: false
+      acknowledged: false,
     },
     {
       id: '2',
@@ -33,8 +33,8 @@ export class CommandService {
       message: 'Weather conditions not optimal for operations',
       source: 'system',
       timestamp: new Date().toISOString(),
-      acknowledged: false
-    }
+      acknowledged: false,
+    },
   ];
 
   private mockMissions: MissionStatus[] = [
@@ -45,7 +45,7 @@ export class CommandService {
       priority: 'high',
       assignedPersonnel: ['crew-1', 'crew-2'],
       location: { lat: 38.9072, lng: -77.0369 },
-      progress: 65
+      progress: 65,
     },
     {
       id: '2',
@@ -54,14 +54,14 @@ export class CommandService {
       priority: 'medium',
       assignedPersonnel: ['crew-3'],
       location: { lat: 38.9072, lng: -77.0369 },
-      progress: 25
-    }
+      progress: 25,
+    },
   ];
 
   // Mock alert system
   async getActiveAlerts(): Promise<TacticalAlert[]> {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(this.mockAlerts.filter(a => !a.acknowledged)), 100);
+      setTimeout(() => { resolve(this.mockAlerts.filter(a => !a.acknowledged)); }, 100);
     });
   }
 
@@ -82,7 +82,7 @@ export class CommandService {
   // Mock mission tracking
   async getMissionStatus(): Promise<MissionStatus[]> {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(this.mockMissions), 100);
+      setTimeout(() => { resolve(this.mockMissions); }, 100);
     });
   }
 
@@ -103,27 +103,27 @@ export class CommandService {
   // Mock personnel tracking
   async getPersonnelStatus(): Promise<any[]> {
     return new Promise((resolve) => {
-      setTimeout(() => resolve([]), 100);
+      setTimeout(() => { resolve([]); }, 100);
     });
   }
 
   // Mock equipment monitoring
   async getEquipmentStatus(): Promise<any[]> {
     return new Promise((resolve) => {
-      setTimeout(() => resolve([]), 100);
+      setTimeout(() => { resolve([]); }, 100);
     });
   }
 
   // Mock subscriptions (return dummy subscription objects)
   subscribeToAlerts(_callback: (alert: TacticalAlert) => void) {
     return {
-      unsubscribe: () => console.log('Unsubscribed from alerts')
+      unsubscribe: () => { console.log('Unsubscribed from alerts'); },
     };
   }
 
   subscribeToMissionUpdates(_callback: (mission: MissionStatus) => void) {
     return {
-      unsubscribe: () => console.log('Unsubscribed from missions')
+      unsubscribe: () => { console.log('Unsubscribed from missions'); },
     };
   }
 }

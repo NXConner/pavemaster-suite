@@ -8,7 +8,7 @@ export type InputVariant = 'default' | 'outline' | 'filled' | 'underline';
 export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 // Input Props Interface
-export interface InputProps 
+export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   variant?: InputVariant;
   size?: InputSize;
@@ -36,7 +36,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
     default: 'border-gray-300 focus:border-primary focus:ring-primary',
     outline: 'border-2 border-gray-400 focus:border-primary focus:ring-primary',
     filled: 'bg-gray-100 border-transparent focus:bg-white focus:border-primary',
-    underline: 'border-b-2 border-x-0 border-t-0 border-gray-300 focus:border-primary'
+    underline: 'border-b-2 border-x-0 border-t-0 border-gray-300 focus:border-primary',
   };
 
   // Size-specific classes
@@ -45,12 +45,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
     sm: 'px-3 py-2 text-sm',
     md: 'px-4 py-2 text-base',
     lg: 'px-5 py-3 text-lg',
-    xl: 'px-6 py-4 text-xl'
+    xl: 'px-6 py-4 text-xl',
   };
 
   // Error state classes
-  const errorClasses = error 
-    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+  const errorClasses = error
+    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
     : '';
 
   return (
@@ -66,17 +66,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
             sizeClasses[size],
             errorClasses,
             fullWidth && 'w-full',
-            className
+            className,
           )}
           {...props}
         />
         {endIcon && <span className="ml-2">{endIcon}</span>}
       </div>
       {helperText && (
-        <p 
+        <p
           className={cn(
             'mt-1 text-sm',
-            error ? 'text-red-500' : 'text-gray-500'
+            error ? 'text-red-500' : 'text-gray-500',
           )}
         >
           {helperText}

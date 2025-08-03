@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
   Activity,
   Lock,
   Eye,
   FileText,
-  Server
-} from "lucide-react";
+  Server,
+} from 'lucide-react';
 import { SecurityStatus } from './SecurityStatus';
 
 interface SecurityEvent {
@@ -43,7 +43,7 @@ export function SecurityDashboard() {
     activeThreats: 0,
     blockedAttempts: 0,
     lastScanTime: new Date(),
-    systemStatus: 'secure'
+    systemStatus: 'secure',
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function SecurityDashboard() {
         action: 'Failed login attempt',
         timestamp: new Date(Date.now() - 30000),
         description: 'Multiple failed login attempts from IP 192.168.1.100',
-        source: '192.168.1.100'
+        source: '192.168.1.100',
       },
       {
         id: '2',
@@ -65,7 +65,7 @@ export function SecurityDashboard() {
         action: 'Invalid input detected',
         timestamp: new Date(Date.now() - 120000),
         description: 'SQL injection attempt blocked in form submission',
-        source: 'Form Validation'
+        source: 'Form Validation',
       },
       {
         id: '3',
@@ -74,8 +74,8 @@ export function SecurityDashboard() {
         action: 'Rate limit exceeded',
         timestamp: new Date(Date.now() - 300000),
         description: 'API rate limit exceeded for user session',
-        source: 'API Gateway'
-      }
+        source: 'API Gateway',
+      },
     ];
 
     setSecurityEvents(mockEvents);
@@ -85,8 +85,8 @@ export function SecurityDashboard() {
       activeThreats: 2,
       blockedAttempts: 15,
       lastScanTime: new Date(),
-      systemStatus: mockEvents.some(e => e.severity === 'critical') ? 'critical' : 
-                   mockEvents.some(e => e.severity === 'high') ? 'warning' : 'secure'
+      systemStatus: mockEvents.some(e => e.severity === 'critical') ? 'critical'
+        : mockEvents.some(e => e.severity === 'high') ? 'warning' : 'secure',
     });
   }, []);
 
@@ -120,7 +120,7 @@ export function SecurityDashboard() {
         </div>
         <div className="flex items-center gap-2">
           {getStatusIcon(metrics.systemStatus)}
-          <Badge 
+          <Badge
             variant={metrics.systemStatus === 'secure' ? 'outline' : 'destructive'}
             className="capitalize"
           >
@@ -207,7 +207,7 @@ export function SecurityDashboard() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <SecurityStatus />
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Recent Security Events</CardTitle>
@@ -341,7 +341,7 @@ export function SecurityDashboard() {
                   <li>• Failed Login Attempts: 5 max</li>
                 </ul>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Security Policies</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">

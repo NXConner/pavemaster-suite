@@ -2,7 +2,7 @@
 // ENHANCED MOBILE DETECTION HOOKS - PaveMaster Suite
 // ============================================================================
 
-import * as React from "react";
+import * as React from 'react';
 // Device detection utilities moved inline
 
 // Breakpoint constants
@@ -12,7 +12,7 @@ const BREAKPOINTS = {
   md: 768,
   lg: 1024,
   xl: 1280,
-  '2xl': 1536
+  '2xl': 1536,
 } as const;
 
 const MOBILE_BREAKPOINT = BREAKPOINTS.md;
@@ -23,19 +23,19 @@ export function useIsMobile() {
 
   React.useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    
+
     const onChange = () => {
       const mobile = window.innerWidth < MOBILE_BREAKPOINT;
       setIsMobile(mobile);
     };
-    
+
     // Set initial value
     onChange();
-    
+
     // Listen for changes
-    mql.addEventListener("change", onChange);
-    
-    return () => mql.removeEventListener("change", onChange);
+    mql.addEventListener('change', onChange);
+
+    return () => { mql.removeEventListener('change', onChange); };
   }, []);
 
   return !!isMobile;
@@ -51,25 +51,21 @@ export function useDevice() {
     isAndroid: false,
     viewport: { width: 0, height: 0 },
     orientation: 'portrait' as 'portrait' | 'landscape',
-    breakpoint: 'xs' as keyof typeof BREAKPOINTS
+    breakpoint: 'xs' as keyof typeof BREAKPOINTS,
   });
 
   React.useEffect(() => {
     const updateDeviceInfo = () => {
       const viewport = {
         width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
-        height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+        height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0),
       };
       const width = viewport.width;
-      
+
       // Determine breakpoint
       let breakpoint: keyof typeof BREAKPOINTS = 'xs';
-      if (width >= BREAKPOINTS['2xl']) breakpoint = '2xl';
-      else if (width >= BREAKPOINTS.xl) breakpoint = 'xl';
-      else if (width >= BREAKPOINTS.lg) breakpoint = 'lg';
-      else if (width >= BREAKPOINTS.md) breakpoint = 'md';
-      else if (width >= BREAKPOINTS.sm) breakpoint = 'sm';
-      
+      if (width >= BREAKPOINTS['2xl']) { breakpoint = '2xl'; } else if (width >= BREAKPOINTS.xl) { breakpoint = 'xl'; } else if (width >= BREAKPOINTS.lg) { breakpoint = 'lg'; } else if (width >= BREAKPOINTS.md) { breakpoint = 'md'; } else if (width >= BREAKPOINTS.sm) { breakpoint = 'sm'; }
+
       setDeviceInfo({
         isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
         isTablet: /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(navigator.userAgent),
@@ -78,7 +74,7 @@ export function useDevice() {
         isAndroid: /Android/.test(navigator.userAgent),
         viewport,
         orientation: viewport.width > viewport.height ? 'landscape' : 'portrait',
-        breakpoint
+        breakpoint,
       });
     };
 
@@ -105,19 +101,14 @@ export function useBreakpoint() {
   React.useEffect(() => {
     const updateBreakpoint = () => {
       const width = window.innerWidth;
-      
-      if (width >= BREAKPOINTS['2xl']) setBreakpoint('2xl');
-      else if (width >= BREAKPOINTS.xl) setBreakpoint('xl');
-      else if (width >= BREAKPOINTS.lg) setBreakpoint('lg');
-      else if (width >= BREAKPOINTS.md) setBreakpoint('md');
-      else if (width >= BREAKPOINTS.sm) setBreakpoint('sm');
-      else setBreakpoint('xs');
+
+      if (width >= BREAKPOINTS['2xl']) { setBreakpoint('2xl'); } else if (width >= BREAKPOINTS.xl) { setBreakpoint('xl'); } else if (width >= BREAKPOINTS.lg) { setBreakpoint('lg'); } else if (width >= BREAKPOINTS.md) { setBreakpoint('md'); } else if (width >= BREAKPOINTS.sm) { setBreakpoint('sm'); } else { setBreakpoint('xs'); }
     };
 
     updateBreakpoint();
     window.addEventListener('resize', updateBreakpoint);
 
-    return () => window.removeEventListener('resize', updateBreakpoint);
+    return () => { window.removeEventListener('resize', updateBreakpoint); };
   }, []);
 
   return breakpoint;
@@ -129,16 +120,16 @@ export function useMediaQuery(query: string) {
 
   React.useEffect(() => {
     const mql = window.matchMedia(query);
-    
-    const onChange = () => setMatches(mql.matches);
-    
+
+    const onChange = () => { setMatches(mql.matches); };
+
     // Set initial value
     onChange();
-    
+
     // Listen for changes
     mql.addEventListener('change', onChange);
-    
-    return () => mql.removeEventListener('change', onChange);
+
+    return () => { mql.removeEventListener('change', onChange); };
   }, [query]);
 
   return matches;
@@ -152,14 +143,14 @@ export function useViewportSize() {
     const updateViewport = () => {
       setViewport({
         width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
-        height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+        height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0),
       });
     };
 
     updateViewport();
     window.addEventListener('resize', updateViewport);
 
-    return () => window.removeEventListener('resize', updateViewport);
+    return () => { window.removeEventListener('resize', updateViewport); };
   }, []);
 
   return viewport;
@@ -173,14 +164,14 @@ export function useBrowserCapabilities() {
     supportsServiceWorker: false,
     supportsNotifications: false,
     supportsGeolocation: false,
-    isOnline: true
+    isOnline: true,
   });
 
   React.useEffect(() => {
     const checkCapabilities = () => {
       const canvas = document.createElement('canvas');
       const webglContext = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      
+
       return {
         supportsWebP: (() => {
           const canvas = document.createElement('canvas');
@@ -190,7 +181,7 @@ export function useBrowserCapabilities() {
         supportsServiceWorker: 'serviceWorker' in navigator,
         supportsNotifications: 'Notification' in window,
         supportsGeolocation: 'geolocation' in navigator,
-        isOnline: navigator.onLine
+        isOnline: navigator.onLine,
       };
     };
 
@@ -233,21 +224,21 @@ export function useNetworkInfo() {
     effectiveType: 'unknown',
     downlink: 0,
     rtt: 0,
-    saveData: false
+    saveData: false,
   });
 
   React.useEffect(() => {
     const updateNetworkInfo = () => {
-      const connection = (navigator as any).connection || 
-                        (navigator as any).mozConnection || 
-                        (navigator as any).webkitConnection;
+      const connection = (navigator as any).connection
+                        || (navigator as any).mozConnection
+                        || (navigator as any).webkitConnection;
 
       if (connection) {
         setNetworkInfo({
           effectiveType: connection.effectiveType || 'unknown',
           downlink: connection.downlink || 0,
           rtt: connection.rtt || 0,
-          saveData: connection.saveData || false
+          saveData: connection.saveData || false,
         });
       }
     };
@@ -275,20 +266,20 @@ export function useOrientation() {
     angle: 0,
     type: 'portrait-primary',
     landscape: false,
-    portrait: true
+    portrait: true,
   });
 
   React.useEffect(() => {
     const updateOrientation = () => {
       const screen = window.screen as any;
       const orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
-      
+
       if (orientation) {
         setOrientation({
           angle: orientation.angle || 0,
           type: orientation.type || 'portrait-primary',
           landscape: orientation.type?.includes('landscape') || false,
-          portrait: orientation.type?.includes('portrait') || true
+          portrait: orientation.type?.includes('portrait') || true,
         });
       } else {
         // Fallback based on viewport dimensions
@@ -298,7 +289,7 @@ export function useOrientation() {
           angle: width > height ? 90 : 0,
           type: width > height ? 'landscape-primary' : 'portrait-primary',
           landscape: width > height,
-          portrait: height >= width
+          portrait: height >= width,
         });
       }
     };
@@ -322,7 +313,7 @@ export function usePerformance() {
   const [performance, setPerformance] = React.useState({
     memory: null as { used: number; total: number; percentage: number } | null,
     connectionType: 'unknown',
-    isSlowConnection: false
+    isSlowConnection: false,
   });
 
   React.useEffect(() => {
@@ -330,8 +321,8 @@ export function usePerformance() {
       const memoryUsage = (window.performance as any).memory ? {
         used: (window.performance as any).memory.usedJSHeapSize,
         total: (window.performance as any).memory.totalJSHeapSize,
-        percentage: ((window.performance as any).memory.usedJSHeapSize / 
-                    (window.performance as any).memory.totalJSHeapSize) * 100
+        percentage: ((window.performance as any).memory.usedJSHeapSize
+                    / (window.performance as any).memory.totalJSHeapSize) * 100,
       } : null;
 
       const connection = (navigator as any).connection;
@@ -341,7 +332,7 @@ export function usePerformance() {
       setPerformance({
         memory: memoryUsage,
         connectionType,
-        isSlowConnection
+        isSlowConnection,
       });
     };
 
@@ -350,7 +341,7 @@ export function usePerformance() {
     // Update periodically
     const interval = setInterval(updatePerformance, 30000); // Every 30 seconds
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   return performance;
@@ -381,13 +372,13 @@ export function usePrefersReducedMotion() {
 
   React.useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
-    const onChange = () => setPrefersReducedMotion(mql.matches);
-    
+
+    const onChange = () => { setPrefersReducedMotion(mql.matches); };
+
     onChange();
     mql.addEventListener('change', onChange);
-    
-    return () => mql.removeEventListener('change', onChange);
+
+    return () => { mql.removeEventListener('change', onChange); };
   }, []);
 
   return prefersReducedMotion;
@@ -399,13 +390,13 @@ export function usePrefersHighContrast() {
 
   React.useEffect(() => {
     const mql = window.matchMedia('(prefers-contrast: high)');
-    
-    const onChange = () => setPrefersHighContrast(mql.matches);
-    
+
+    const onChange = () => { setPrefersHighContrast(mql.matches); };
+
     onChange();
     mql.addEventListener('change', onChange);
-    
-    return () => mql.removeEventListener('change', onChange);
+
+    return () => { mql.removeEventListener('change', onChange); };
   }, []);
 
   return prefersHighContrast;
@@ -418,18 +409,16 @@ export function usePrefersColorScheme() {
   React.useEffect(() => {
     const darkMql = window.matchMedia('(prefers-color-scheme: dark)');
     const lightMql = window.matchMedia('(prefers-color-scheme: light)');
-    
+
     const onChange = () => {
-      if (darkMql.matches) setColorScheme('dark');
-      else if (lightMql.matches) setColorScheme('light');
-      else setColorScheme('no-preference');
+      if (darkMql.matches) { setColorScheme('dark'); } else if (lightMql.matches) { setColorScheme('light'); } else { setColorScheme('no-preference'); }
     };
-    
+
     onChange();
-    
+
     darkMql.addEventListener('change', onChange);
     lightMql.addEventListener('change', onChange);
-    
+
     return () => {
       darkMql.removeEventListener('change', onChange);
       lightMql.removeEventListener('change', onChange);
@@ -454,5 +443,5 @@ export default {
   useVisibility,
   usePrefersReducedMotion,
   usePrefersHighContrast,
-  usePrefersColorScheme
+  usePrefersColorScheme,
 };
