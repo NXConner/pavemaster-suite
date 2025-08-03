@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import React, { type ReactElement } from 'react';
+import { render, type RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { vi } from 'vitest';
@@ -89,7 +89,7 @@ export const createMockFormData = (data: Record<string, any>) => {
 // Mock file for file upload tests
 export const createMockFile = (
   name = 'test-file.jpg',
-  size = 1024,
+  _size = 1024, // Prefix with underscore to indicate intentionally unused
   type = 'image/jpeg'
 ) => {
   return new File(['test content'], name, { type, lastModified: Date.now() });
