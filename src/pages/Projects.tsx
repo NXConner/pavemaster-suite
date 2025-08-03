@@ -1,21 +1,21 @@
-import { DashboardLayout } from "../components/layout/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Badge } from "../components/ui/badge";
-import { Progress } from "../components/ui/progress";
-import { 
-  Building, 
-  Plus, 
-  Search, 
+import { DashboardLayout } from '../components/layout/dashboard-layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Progress } from '../components/ui/progress';
+import {
+  Building,
+  Plus,
+  Search,
   Calendar,
   Users,
   DollarSign,
   Clock,
   CheckCircle,
-  
-  MapPin
-} from "lucide-react";
+
+  MapPin,
+} from 'lucide-react';
 
 interface Project {
   id: string;
@@ -41,7 +41,7 @@ const mockProjects: Project[] = [
     endDate: '2024-01-17',
     budget: 12500,
     spent: 11800,
-    crew: ['John Mitchell', 'Sarah Chen']
+    crew: ['John Mitchell', 'Sarah Chen'],
   },
   {
     id: '2',
@@ -53,7 +53,7 @@ const mockProjects: Project[] = [
     endDate: '2024-02-05',
     budget: 35000,
     spent: 22750,
-    crew: ['Mike Rodriguez', 'Tom Wilson', 'Lisa Davis']
+    crew: ['Mike Rodriguez', 'Tom Wilson', 'Lisa Davis'],
   },
   {
     id: '3',
@@ -65,8 +65,8 @@ const mockProjects: Project[] = [
     endDate: '2024-02-15',
     budget: 18500,
     spent: 0,
-    crew: []
-  }
+    crew: [],
+  },
 ];
 
 const getStatusColor = (status: string) => {
@@ -119,7 +119,7 @@ export default function Projects() {
               <p className="text-xs text-muted-foreground">+2 this month</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active</CardTitle>
@@ -188,7 +188,7 @@ export default function Projects() {
                       </div>
                       <p className="text-sm text-muted-foreground">{project.client}</p>
                     </div>
-                    
+
                     <div className="text-right">
                       <div className="text-lg font-semibold">
                         ${project.budget.toLocaleString()}
@@ -209,7 +209,7 @@ export default function Projects() {
                         {new Date(project.startDate).toLocaleDateString()} - {new Date(project.endDate).toLocaleDateString()}
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                         <Users className="h-3 w-3" />
@@ -219,7 +219,7 @@ export default function Projects() {
                         {project.crew.length > 0 ? `${project.crew.length} members` : 'Not assigned'}
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                         <Clock className="h-3 w-3" />
@@ -253,7 +253,7 @@ export default function Projects() {
                         </>
                       )}
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="gap-1">
                         <MapPin className="h-3 w-3" />

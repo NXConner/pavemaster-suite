@@ -3,12 +3,12 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { 
-  ClipboardCheck, 
-  CheckCircle, 
+import {
+  ClipboardCheck,
+  CheckCircle,
   Clock,
   FileText,
-  Star
+  Star,
 } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
 
@@ -43,11 +43,11 @@ export const InspectionManagement = () => {
     try {
       const [checklistsResponse, resultsResponse] = await Promise.all([
         supabase.from('inspection_checklists').select('*'),
-        supabase.from('inspection_results').select('*')
+        supabase.from('inspection_results').select('*'),
       ]);
 
-      if (checklistsResponse.data) setChecklists(checklistsResponse.data);
-      if (resultsResponse.data) setResults(resultsResponse.data);
+      if (checklistsResponse.data) { setChecklists(checklistsResponse.data); }
+      if (resultsResponse.data) { setResults(resultsResponse.data); }
     } catch (error) {
       console.error('Error loading inspection data:', error);
     } finally {
@@ -57,8 +57,8 @@ export const InspectionManagement = () => {
 
   const InspectionDashboard = () => {
     const totalInspections = results.length;
-    const completedToday = results.filter(r => 
-      r.completed_at && new Date(r.completed_at).toDateString() === new Date().toDateString()
+    const completedToday = results.filter(r =>
+      r.completed_at && new Date(r.completed_at).toDateString() === new Date().toDateString(),
     ).length;
     const pendingInspections = checklists.length - results.length;
 
@@ -153,7 +153,7 @@ export const InspectionManagement = () => {
                 </div>
                 <FileText className="h-5 w-5 text-muted-foreground" />
               </div>
-              
+
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">Edit</Button>
                 <Button variant="outline" size="sm">Use</Button>

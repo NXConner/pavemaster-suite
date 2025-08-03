@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import type { AdvancedTheme } from '../../config/advanced-themes';
-import { 
+import {
   Palette,
   Eye,
   Download,
@@ -14,7 +14,7 @@ import {
   Crown,
   Sparkles,
   Heart,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 
 interface ThemePreviewProps {
@@ -50,13 +50,13 @@ export function ThemePreview({ theme, isActive, onApply, onPreview }: ThemePrevi
   };
 
   return (
-    <Card 
+    <Card
       className={`relative overflow-hidden transition-all duration-300 cursor-pointer
         ${isActive ? 'ring-2 ring-primary ring-offset-2' : ''}
         ${isHovered ? 'shadow-lg scale-[1.02]' : 'shadow-md'}
       `}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => { setIsHovered(true); }}
+      onMouseLeave={() => { setIsHovered(false); }}
       onClick={() => onPreview?.(theme.id)}
     >
       {theme.isPremium && (
@@ -96,27 +96,27 @@ export function ThemePreview({ theme, isActive, onApply, onPreview }: ThemePrevi
         <div>
           <p className="text-sm font-medium mb-2">Color Palette</p>
           <div className="flex gap-1">
-            <div 
+            <div
               className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
               style={{ backgroundColor: theme.colors.primary }}
               title="Primary"
             />
-            <div 
+            <div
               className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
               style={{ backgroundColor: theme.colors.secondary }}
               title="Secondary"
             />
-            <div 
+            <div
               className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
               style={{ backgroundColor: theme.colors.accent }}
               title="Accent"
             />
-            <div 
+            <div
               className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
               style={{ backgroundColor: theme.colors.background }}
               title="Background"
             />
-            <div 
+            <div
               className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
               style={{ backgroundColor: theme.colors.surface }}
               title="Surface"
@@ -128,11 +128,11 @@ export function ThemePreview({ theme, isActive, onApply, onPreview }: ThemePrevi
         <div>
           <p className="text-sm font-medium mb-2">Gradients</p>
           <div className="space-y-1">
-            <div 
+            <div
               className="h-4 rounded-md"
               style={{ background: theme.gradients.primary }}
             />
-            <div 
+            <div
               className="h-4 rounded-md"
               style={{ background: theme.gradients.hero }}
             />
@@ -142,11 +142,11 @@ export function ThemePreview({ theme, isActive, onApply, onPreview }: ThemePrevi
         {/* Typography Preview */}
         <div>
           <p className="text-sm font-medium mb-2">Typography</p>
-          <div 
+          <div
             className="space-y-1"
-            style={{ 
+            style={{
               fontFamily: theme.typography.fontFamily,
-              color: theme.colors.text 
+              color: theme.colors.text,
             }}
           >
             <p className="text-lg font-bold">Heading Text</p>
@@ -160,19 +160,19 @@ export function ThemePreview({ theme, isActive, onApply, onPreview }: ThemePrevi
             <p className="text-sm font-medium" style={{ color: theme.colors.text }}>
               Sample Component
             </p>
-            <Badge 
-              style={{ 
+            <Badge
+              style={{
                 backgroundColor: theme.colors.primary,
-                color: theme.colors.background 
+                color: theme.colors.background,
               }}
             >
               New
             </Badge>
           </div>
-          <Progress 
-            value={75} 
+          <Progress
+            value={75}
             className="h-2"
-            style={{ 
+            style={{
               backgroundColor: theme.colors.border,
             }}
           />

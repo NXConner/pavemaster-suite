@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Badge } from "../ui/badge";
-import { Textarea } from "../ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { 
-  User, 
-  FileText, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Badge } from '../ui/badge';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import {
+  User,
+  FileText,
   Shield,
   Camera,
   Upload,
@@ -18,9 +18,9 @@ import {
   Award,
   AlertTriangle,
   CheckCircle,
-  Heart
-} from "lucide-react";
-import { sanitizeString, validateInput, employeeProfileSchema, rateLimiter, logSecurityEvent } from "../../lib/security";
+  Heart,
+} from 'lucide-react';
+import { sanitizeString, validateInput, employeeProfileSchema, rateLimiter, logSecurityEvent } from '../../lib/security';
 
 interface EmployeeProfileProps {
   employeeId: string;
@@ -40,7 +40,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
     city: '',
     state: 'VA',
     zipCode: '',
-    
+
     // Employment
     role: '',
     department: '',
@@ -49,17 +49,17 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
     hourlyRate: '',
     salary: '',
     weeklyHours: '40',
-    
+
     // Driver Info
     driverLicenseNumber: '',
     driverLicenseExpiry: '',
     driverLicenseState: 'VA',
     cdlClass: '',
-    
+
     // Performance
     performanceScore: '',
     lastReviewDate: '',
-    nextReviewDate: ''
+    nextReviewDate: '',
   });
 
   const [emergencyContact, setEmergencyContact] = useState({
@@ -71,7 +71,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
     address: '',
     city: '',
     state: 'VA',
-    zipCode: ''
+    zipCode: '',
   });
 
   const [documents] = useState([
@@ -79,7 +79,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
     { type: 'contract', name: 'Employment Contract', uploaded: false, expiry: '', verified: false },
     { type: 'photo_id', name: 'Photo ID', uploaded: false, expiry: '', verified: false },
     { type: 'w4', name: 'W-4 Form', uploaded: false, expiry: '', verified: false },
-    { type: 'i9', name: 'I-9 Form', uploaded: false, expiry: '', verified: false }
+    { type: 'i9', name: 'I-9 Form', uploaded: false, expiry: '', verified: false },
   ]);
 
   const [performanceReview, setPerformanceReview] = useState({
@@ -94,7 +94,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
     certificationsEarned: '',
     notes: '',
     improvementAreas: '',
-    strengths: ''
+    strengths: '',
   });
 
   const handleSaveProfile = () => {
@@ -105,7 +105,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
         type: 'rate_limit',
         severity: 'medium',
         action: 'profile_save_rate_limit_exceeded',
-        metadata: { action: 'save_profile' }
+        metadata: { action: 'save_profile' },
       });
       return;
     }
@@ -118,7 +118,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
         type: 'input_validation',
         severity: 'medium',
         action: 'invalid_employee_profile_data',
-        metadata: { errors: validation.errors }
+        metadata: { errors: validation.errors },
       });
       return;
     }
@@ -133,7 +133,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
       city: sanitizeString(employeeData.city),
       zipCode: sanitizeString(employeeData.zipCode),
       phonePersonal: sanitizeString(employeeData.phonePersonal),
-      phoneWork: sanitizeString(employeeData.phoneWork)
+      phoneWork: sanitizeString(employeeData.phoneWork),
     };
 
     const sanitizedEmergencyContact = {
@@ -142,14 +142,14 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
       relationship: sanitizeString(emergencyContact.relationship),
       email: sanitizeString(emergencyContact.email),
       address: sanitizeString(emergencyContact.address),
-      city: sanitizeString(emergencyContact.city)
+      city: sanitizeString(emergencyContact.city),
     };
 
     logSecurityEvent({
       type: 'data_access',
       severity: 'low',
       action: 'employee_profile_saved',
-      metadata: { employeeId: employeeId }
+      metadata: { employeeId: employeeId },
     });
 
     onSave?.({ employeeData: sanitizedEmployeeData, emergencyContact: sanitizedEmergencyContact });
@@ -228,9 +228,9 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                       {employeeData.firstName?.[0]}{employeeData.lastName?.[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0"
                   >
                     <Camera className="h-4 w-4" />
@@ -250,7 +250,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="firstName"
                     value={employeeData.firstName}
-                    onChange={(e) => setEmployeeData({...employeeData, firstName: sanitizeString(e.target.value)})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, firstName: sanitizeString(e.target.value) }); }}
                     placeholder="Enter first name"
                     maxLength={50}
                     required
@@ -261,7 +261,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="lastName"
                     value={employeeData.lastName}
-                    onChange={(e) => setEmployeeData({...employeeData, lastName: sanitizeString(e.target.value)})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, lastName: sanitizeString(e.target.value) }); }}
                     placeholder="Enter last name"
                     maxLength={50}
                     required
@@ -273,7 +273,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="email"
                     type="email"
                     value={employeeData.email}
-                    onChange={(e) => setEmployeeData({...employeeData, email: sanitizeString(e.target.value)})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, email: sanitizeString(e.target.value) }); }}
                     placeholder="Enter email address"
                     maxLength={100}
                     required
@@ -285,7 +285,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="phonePersonal"
                     type="tel"
                     value={employeeData.phonePersonal}
-                    onChange={(e) => setEmployeeData({...employeeData, phonePersonal: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, phonePersonal: e.target.value }); }}
                     placeholder="(555) 123-4567"
                     required
                   />
@@ -296,7 +296,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="phoneWork"
                     type="tel"
                     value={employeeData.phoneWork}
-                    onChange={(e) => setEmployeeData({...employeeData, phoneWork: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, phoneWork: e.target.value }); }}
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -307,7 +307,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                 <Input
                   id="address"
                   value={employeeData.address}
-                  onChange={(e) => setEmployeeData({...employeeData, address: e.target.value})}
+                  onChange={(e) => { setEmployeeData({ ...employeeData, address: e.target.value }); }}
                   placeholder="Enter street address"
                   required
                 />
@@ -319,7 +319,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="city"
                     value={employeeData.city}
-                    onChange={(e) => setEmployeeData({...employeeData, city: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, city: e.target.value }); }}
                     placeholder="Enter city"
                     required
                   />
@@ -328,7 +328,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="state">State *</Label>
                   <Select
                     value={employeeData.state}
-                    onValueChange={(value) => setEmployeeData({...employeeData, state: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, state: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -347,7 +347,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="zipCode"
                     value={employeeData.zipCode}
-                    onChange={(e) => setEmployeeData({...employeeData, zipCode: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, zipCode: e.target.value }); }}
                     placeholder="12345"
                     required
                   />
@@ -367,7 +367,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="role">Job Title *</Label>
                   <Select
                     value={employeeData.role}
-                    onValueChange={(value) => setEmployeeData({...employeeData, role: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, role: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select job title" />
@@ -387,7 +387,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="department">Department *</Label>
                   <Select
                     value={employeeData.department}
-                    onValueChange={(value) => setEmployeeData({...employeeData, department: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, department: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select department" />
@@ -407,7 +407,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="hireDate"
                     type="date"
                     value={employeeData.hireDate}
-                    onChange={(e) => setEmployeeData({...employeeData, hireDate: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, hireDate: e.target.value }); }}
                     required
                   />
                 </div>
@@ -415,7 +415,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="employmentStatus">Employment Status *</Label>
                   <Select
                     value={employeeData.employmentStatus}
-                    onValueChange={(value) => setEmployeeData({...employeeData, employmentStatus: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, employmentStatus: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -435,7 +435,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     type="number"
                     step="0.01"
                     value={employeeData.hourlyRate}
-                    onChange={(e) => setEmployeeData({...employeeData, hourlyRate: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, hourlyRate: e.target.value }); }}
                     placeholder="25.00"
                   />
                 </div>
@@ -445,7 +445,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="weeklyHours"
                     type="number"
                     value={employeeData.weeklyHours}
-                    onChange={(e) => setEmployeeData({...employeeData, weeklyHours: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, weeklyHours: e.target.value }); }}
                     placeholder="40"
                   />
                 </div>
@@ -465,7 +465,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="driverLicenseNumber"
                     value={employeeData.driverLicenseNumber}
-                    onChange={(e) => setEmployeeData({...employeeData, driverLicenseNumber: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, driverLicenseNumber: e.target.value }); }}
                     placeholder="Enter license number"
                   />
                 </div>
@@ -473,7 +473,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="driverLicenseState">License State</Label>
                   <Select
                     value={employeeData.driverLicenseState}
-                    onValueChange={(value) => setEmployeeData({...employeeData, driverLicenseState: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, driverLicenseState: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -493,14 +493,14 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="driverLicenseExpiry"
                     type="date"
                     value={employeeData.driverLicenseExpiry}
-                    onChange={(e) => setEmployeeData({...employeeData, driverLicenseExpiry: e.target.value})}
+                    onChange={(e) => { setEmployeeData({ ...employeeData, driverLicenseExpiry: e.target.value }); }}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cdlClass">CDL Class (if applicable)</Label>
                   <Select
                     value={employeeData.cdlClass}
-                    onValueChange={(value) => setEmployeeData({...employeeData, cdlClass: value})}
+                    onValueChange={(value) => { setEmployeeData({ ...employeeData, cdlClass: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select CDL class" />
@@ -543,8 +543,8 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                         <div>
                           <h4 className="font-medium">{doc.name}</h4>
                           <div className="flex items-center gap-2">
-                            <Badge variant={doc.uploaded ? "default" : "secondary"}>
-                              {doc.uploaded ? "Uploaded" : "Required"}
+                            <Badge variant={doc.uploaded ? 'default' : 'secondary'}>
+                              {doc.uploaded ? 'Uploaded' : 'Required'}
                             </Badge>
                             {doc.verified && (
                               <Badge variant="outline" className="text-green-600 border-green-600">
@@ -562,10 +562,10 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                             <div className="font-medium">{doc.expiry}</div>
                           </div>
                         )}
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
-                          onClick={() => handleUploadDocument(doc.type)}
+                          onClick={() => { handleUploadDocument(doc.type); }}
                         >
                           <Upload className="h-4 w-4 mr-2" />
                           {doc.uploaded ? 'Replace' : 'Upload'}
@@ -604,7 +604,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="contactName"
                     value={emergencyContact.contactName}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, contactName: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, contactName: e.target.value }); }}
                     placeholder="Enter contact name"
                     required
                   />
@@ -613,7 +613,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="relationship">Relationship *</Label>
                   <Select
                     value={emergencyContact.relationship}
-                    onValueChange={(value) => setEmergencyContact({...emergencyContact, relationship: value})}
+                    onValueChange={(value) => { setEmergencyContact({ ...emergencyContact, relationship: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select relationship" />
@@ -634,7 +634,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="phonePrimary"
                     type="tel"
                     value={emergencyContact.phonePrimary}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, phonePrimary: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, phonePrimary: e.target.value }); }}
                     placeholder="(555) 123-4567"
                     required
                   />
@@ -645,7 +645,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="phoneSecondary"
                     type="tel"
                     value={emergencyContact.phoneSecondary}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, phoneSecondary: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, phoneSecondary: e.target.value }); }}
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -655,7 +655,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                     id="emergencyEmail"
                     type="email"
                     value={emergencyContact.email}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, email: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, email: e.target.value }); }}
                     placeholder="Enter email address"
                   />
                 </div>
@@ -666,7 +666,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                 <Input
                   id="emergencyAddress"
                   value={emergencyContact.address}
-                  onChange={(e) => setEmergencyContact({...emergencyContact, address: e.target.value})}
+                  onChange={(e) => { setEmergencyContact({ ...emergencyContact, address: e.target.value }); }}
                   placeholder="Enter street address"
                 />
               </div>
@@ -677,7 +677,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="emergencyCity"
                     value={emergencyContact.city}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, city: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, city: e.target.value }); }}
                     placeholder="Enter city"
                   />
                 </div>
@@ -685,7 +685,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Label htmlFor="emergencyState">State</Label>
                   <Select
                     value={emergencyContact.state}
-                    onValueChange={(value) => setEmergencyContact({...emergencyContact, state: value})}
+                    onValueChange={(value) => { setEmergencyContact({ ...emergencyContact, state: value }); }}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -704,7 +704,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Input
                     id="emergencyZip"
                     value={emergencyContact.zipCode}
-                    onChange={(e) => setEmergencyContact({...emergencyContact, zipCode: e.target.value})}
+                    onChange={(e) => { setEmergencyContact({ ...emergencyContact, zipCode: e.target.value }); }}
                     placeholder="12345"
                   />
                 </div>
@@ -736,13 +736,13 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                         min="1"
                         max="10"
                         value={performanceReview.punctualityScore}
-                        onChange={(e) => setPerformanceReview({...performanceReview, punctualityScore: parseInt(e.target.value)})}
+                        onChange={(e) => { setPerformanceReview({ ...performanceReview, punctualityScore: parseInt(e.target.value) }); }}
                         className="w-20"
                       />
                       <span className="text-sm text-muted-foreground">
-                        {performanceReview.punctualityScore >= 9 ? 'Excellent' : 
-                         performanceReview.punctualityScore >= 7 ? 'Good' : 
-                         performanceReview.punctualityScore >= 5 ? 'Average' : 'Needs Improvement'}
+                        {performanceReview.punctualityScore >= 9 ? 'Excellent'
+                          : performanceReview.punctualityScore >= 7 ? 'Good'
+                            : performanceReview.punctualityScore >= 5 ? 'Average' : 'Needs Improvement'}
                       </span>
                     </div>
                   </div>
@@ -755,13 +755,13 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                         min="1"
                         max="10"
                         value={performanceReview.qualityScore}
-                        onChange={(e) => setPerformanceReview({...performanceReview, qualityScore: parseInt(e.target.value)})}
+                        onChange={(e) => { setPerformanceReview({ ...performanceReview, qualityScore: parseInt(e.target.value) }); }}
                         className="w-20"
                       />
                       <span className="text-sm text-muted-foreground">
-                        {performanceReview.qualityScore >= 9 ? 'Excellent' : 
-                         performanceReview.qualityScore >= 7 ? 'Good' : 
-                         performanceReview.qualityScore >= 5 ? 'Average' : 'Needs Improvement'}
+                        {performanceReview.qualityScore >= 9 ? 'Excellent'
+                          : performanceReview.qualityScore >= 7 ? 'Good'
+                            : performanceReview.qualityScore >= 5 ? 'Average' : 'Needs Improvement'}
                       </span>
                     </div>
                   </div>
@@ -776,13 +776,13 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                         min="1"
                         max="10"
                         value={performanceReview.safetyScore}
-                        onChange={(e) => setPerformanceReview({...performanceReview, safetyScore: parseInt(e.target.value)})}
+                        onChange={(e) => { setPerformanceReview({ ...performanceReview, safetyScore: parseInt(e.target.value) }); }}
                         className="w-20"
                       />
                       <span className="text-sm text-muted-foreground">
-                        {performanceReview.safetyScore >= 9 ? 'Excellent' : 
-                         performanceReview.safetyScore >= 7 ? 'Good' : 
-                         performanceReview.safetyScore >= 5 ? 'Average' : 'Needs Improvement'}
+                        {performanceReview.safetyScore >= 9 ? 'Excellent'
+                          : performanceReview.safetyScore >= 7 ? 'Good'
+                            : performanceReview.safetyScore >= 5 ? 'Average' : 'Needs Improvement'}
                       </span>
                     </div>
                   </div>
@@ -795,13 +795,13 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                         min="1"
                         max="10"
                         value={performanceReview.teamworkScore}
-                        onChange={(e) => setPerformanceReview({...performanceReview, teamworkScore: parseInt(e.target.value)})}
+                        onChange={(e) => { setPerformanceReview({ ...performanceReview, teamworkScore: parseInt(e.target.value) }); }}
                         className="w-20"
                       />
                       <span className="text-sm text-muted-foreground">
-                        {performanceReview.teamworkScore >= 9 ? 'Excellent' : 
-                         performanceReview.teamworkScore >= 7 ? 'Good' : 
-                         performanceReview.teamworkScore >= 5 ? 'Average' : 'Needs Improvement'}
+                        {performanceReview.teamworkScore >= 9 ? 'Excellent'
+                          : performanceReview.teamworkScore >= 7 ? 'Good'
+                            : performanceReview.teamworkScore >= 5 ? 'Average' : 'Needs Improvement'}
                       </span>
                     </div>
                   </div>
@@ -811,8 +811,8 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
               <div className="p-4 bg-muted rounded-lg">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">
-                    {((performanceReview.punctualityScore + performanceReview.qualityScore + 
-                       performanceReview.safetyScore + performanceReview.teamworkScore) / 4).toFixed(1)}
+                    {((performanceReview.punctualityScore + performanceReview.qualityScore
+                       + performanceReview.safetyScore + performanceReview.teamworkScore) / 4).toFixed(1)}
                   </div>
                   <div className="text-sm text-muted-foreground">Overall Performance Score</div>
                 </div>
@@ -824,7 +824,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Textarea
                     id="strengths"
                     value={performanceReview.strengths}
-                    onChange={(e) => setPerformanceReview({...performanceReview, strengths: e.target.value})}
+                    onChange={(e) => { setPerformanceReview({ ...performanceReview, strengths: e.target.value }); }}
                     placeholder="List employee strengths and positive attributes"
                     rows={3}
                   />
@@ -835,7 +835,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Textarea
                     id="improvementAreas"
                     value={performanceReview.improvementAreas}
-                    onChange={(e) => setPerformanceReview({...performanceReview, improvementAreas: e.target.value})}
+                    onChange={(e) => { setPerformanceReview({ ...performanceReview, improvementAreas: e.target.value }); }}
                     placeholder="List areas where employee can improve"
                     rows={3}
                   />
@@ -846,7 +846,7 @@ export function EmployeeProfileForm({ employeeId, onSave }: EmployeeProfileProps
                   <Textarea
                     id="notes"
                     value={performanceReview.notes}
-                    onChange={(e) => setPerformanceReview({...performanceReview, notes: e.target.value})}
+                    onChange={(e) => { setPerformanceReview({ ...performanceReview, notes: e.target.value }); }}
                     placeholder="Additional notes and comments about performance"
                     rows={3}
                   />

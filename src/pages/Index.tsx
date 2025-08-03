@@ -1,23 +1,22 @@
-import { DashboardLayout } from "../components/layout/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Button } from "../components/ui/button";
+import { DashboardLayout } from '../components/layout/dashboard-layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 
-import { 
-  Building, 
-  Users, 
-  Truck, 
+import {
+  Building,
+  Users,
+  Truck,
   Calculator,
   AlertTriangle,
   CheckCircle,
   Clock,
   TrendingUp,
   MapPin,
-  Calendar
-} from "lucide-react";
+  Calendar,
+} from 'lucide-react';
 
 export default function Index() {
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -97,7 +96,7 @@ export default function Index() {
                   <p className="text-xs text-muted-foreground">2 hours ago</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-yellow-500" />
                 <div className="flex-1">
@@ -105,7 +104,7 @@ export default function Index() {
                   <p className="text-xs text-muted-foreground">Started this morning</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <AlertTriangle className="h-5 w-5 text-orange-500" />
                 <div className="flex-1">
@@ -113,7 +112,7 @@ export default function Index() {
                   <p className="text-xs text-muted-foreground">Truck #3 needs service</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-blue-500" />
                 <div className="flex-1">
@@ -135,22 +134,22 @@ export default function Index() {
                 <Calculator className="h-4 w-4" />
                 Create New Estimate
               </Button>
-              
+
               <Button className="w-full justify-start gap-2" variant="outline">
                 <Calendar className="h-4 w-4" />
                 Schedule Job
               </Button>
-              
+
               <Button className="w-full justify-start gap-2" variant="outline">
                 <Users className="h-4 w-4" />
                 Assign Crew
               </Button>
-              
+
               <Button className="w-full justify-start gap-2" variant="outline">
                 <MapPin className="h-4 w-4" />
                 Track Equipment
               </Button>
-              
+
               <Button className="w-full justify-start gap-2" variant="outline">
                 <Building className="h-4 w-4" />
                 View Projects
@@ -173,14 +172,14 @@ export default function Index() {
                 <p className="text-sm text-muted-foreground">Clear skies, ideal for asphalt work</p>
                 <Badge variant="outline" className="bg-green-50 text-green-700">Optimal</Badge>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium">System Health</h4>
                 <div className="text-2xl font-bold text-green-600">98%</div>
                 <p className="text-sm text-muted-foreground">All systems operational</p>
                 <Badge variant="outline" className="bg-green-50 text-green-700">Healthy</Badge>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium">Active Crews</h4>
                 <div className="text-2xl font-bold">3</div>

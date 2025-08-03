@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Button } from "../components/ui/button";
-import { Progress } from "../components/ui/progress";
-import { MilitaryStatusBar } from "../components/ui/military-status-bar";
-import { TacticalGrid } from "../components/ui/tactical-grid";
-import { ThemeSwitcher } from "../components/ui/theme-switcher";
-import { MapView } from "../components/tracking/MapView";
-import { 
-  Shield, 
-  Satellite, 
-  Activity, 
-  AlertTriangle, 
-  Eye, 
-  Radar, 
-  Radio, 
-  Users, 
-  MapPin, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { Progress } from '../components/ui/progress';
+import { MilitaryStatusBar } from '../components/ui/military-status-bar';
+import { TacticalGrid } from '../components/ui/tactical-grid';
+import { ThemeSwitcher } from '../components/ui/theme-switcher';
+import { MapView } from '../components/tracking/MapView';
+import {
+  Shield,
+  Satellite,
+  Activity,
+  AlertTriangle,
+  Eye,
+  Radar,
+  Radio,
+  Users,
+  MapPin,
   Zap,
   Crosshair,
   Command,
@@ -27,8 +27,8 @@ import {
   Lock,
   Wifi,
   Database,
-  Server
-} from "lucide-react";
+  Server,
+} from 'lucide-react';
 
 interface SystemStatus {
   name: string;
@@ -58,83 +58,83 @@ interface Camera {
 
 export default function OverWatch() {
   const [systems] = useState<SystemStatus[]>([
-    { 
-      name: 'QUANTUM SURVEILLANCE NETWORK', 
-      status: 'online', 
-      metrics: 99.7, 
+    {
+      name: 'QUANTUM SURVEILLANCE NETWORK',
+      status: 'online',
+      metrics: 99.7,
       classification: 'TOP SECRET',
-      lastUpdate: '0.03s ago'
+      lastUpdate: '0.03s ago',
     },
-    { 
-      name: 'TACTICAL THREAT ASSESSMENT', 
-      status: 'secure', 
-      metrics: 97.3, 
+    {
+      name: 'TACTICAL THREAT ASSESSMENT',
+      status: 'secure',
+      metrics: 97.3,
       classification: 'SECRET',
-      lastUpdate: '0.12s ago'
+      lastUpdate: '0.12s ago',
     },
-    { 
-      name: 'PERSONNEL BIOMETRIC GRID', 
-      status: 'online', 
-      metrics: 98.9, 
+    {
+      name: 'PERSONNEL BIOMETRIC GRID',
+      status: 'online',
+      metrics: 98.9,
       classification: 'CLASSIFIED',
-      lastUpdate: '0.05s ago'
+      lastUpdate: '0.05s ago',
     },
-    { 
-      name: 'ENVIRONMENTAL MONITORING', 
-      status: 'warning', 
-      metrics: 94.1, 
+    {
+      name: 'ENVIRONMENTAL MONITORING',
+      status: 'warning',
+      metrics: 94.1,
       classification: 'UNCLASSIFIED',
-      lastUpdate: '2.3s ago'
+      lastUpdate: '2.3s ago',
     },
-    { 
-      name: 'QUANTUM COMMUNICATION HUB', 
-      status: 'online', 
-      metrics: 99.9, 
+    {
+      name: 'QUANTUM COMMUNICATION HUB',
+      status: 'online',
+      metrics: 99.9,
       classification: 'TOP SECRET',
-      lastUpdate: '0.01s ago'
+      lastUpdate: '0.01s ago',
     },
-    { 
-      name: 'AI PREDICTIVE ANALYSIS', 
-      status: 'online', 
-      metrics: 96.8, 
+    {
+      name: 'AI PREDICTIVE ANALYSIS',
+      status: 'online',
+      metrics: 96.8,
       classification: 'SECRET',
-      lastUpdate: '0.08s ago'
-    }
+      lastUpdate: '0.08s ago',
+    },
   ]);
 
   const [alerts] = useState<Alert[]>([
-    { 
-      id: 1, 
-      type: 'INTRUSION DETECTION', 
-      severity: 'high', 
+    {
+      id: 1,
+      type: 'INTRUSION DETECTION',
+      severity: 'high',
       message: 'Unauthorized access attempt on sector 7-Alpha',
       timestamp: '12:34:56',
-      location: 'PERIMETER GRID 7-A'
+      location: 'PERIMETER GRID 7-A',
     },
-    { 
-      id: 2, 
-      type: 'ENVIRONMENTAL ANOMALY', 
-      severity: 'medium', 
+    {
+      id: 2,
+      type: 'ENVIRONMENTAL ANOMALY',
+      severity: 'medium',
       message: 'Temperature spike detected in equipment bay',
       timestamp: '12:31:22',
-      location: 'FACILITY ZONE C'
+      location: 'FACILITY ZONE C',
     },
-    { 
-      id: 3, 
-      type: 'PERSONNEL MOVEMENT', 
-      severity: 'low', 
+    {
+      id: 3,
+      type: 'PERSONNEL MOVEMENT',
+      severity: 'low',
       message: 'Shift change initiated - Alpha team returning',
       timestamp: '12:28:14',
-      location: 'CHECKPOINT BRAVO'
+      location: 'CHECKPOINT BRAVO',
     },
-    { 
-      id: 4, 
-      type: 'SYSTEM MAINTENANCE', 
-      severity: 'low', 
+    {
+      id: 4,
+      type: 'SYSTEM MAINTENANCE',
+      severity: 'low',
       message: 'Scheduled quantum core calibration complete',
       timestamp: '12:15:03',
-      location: 'CORE FACILITY'
-    }
+      location: 'CORE FACILITY',
+    },
   ]);
 
   const [cameras] = useState<Camera[]>([
@@ -143,7 +143,7 @@ export default function OverWatch() {
     { id: 'CAM-003', name: 'EAST PERIMETER', status: 'online', sector: 'CHARLIE', resolution: '4K', nightVision: true },
     { id: 'CAM-004', name: 'WEST PERIMETER', status: 'maintenance', sector: 'DELTA', resolution: '4K', nightVision: true },
     { id: 'CAM-005', name: 'COMMAND CENTER', status: 'online', sector: 'CENTRAL', resolution: '8K', nightVision: true },
-    { id: 'CAM-006', name: 'EQUIPMENT BAY', status: 'online', sector: 'ECHO', resolution: '4K', nightVision: false }
+    { id: 'CAM-006', name: 'EQUIPMENT BAY', status: 'online', sector: 'ECHO', resolution: '4K', nightVision: false },
   ]);
 
   const [operationalData, setOperationalData] = useState({
@@ -152,7 +152,7 @@ export default function OverWatch() {
     personnelTracked: 24,
     threatLevel: 2,
     systemEfficiency: 98.7,
-    powerConsumption: 87.2
+    powerConsumption: 87.2,
   });
 
   useEffect(() => {
@@ -161,11 +161,11 @@ export default function OverWatch() {
         ...prev,
         dataStreamsMbps: prev.dataStreamsMbps + (Math.random() - 0.5) * 50,
         systemEfficiency: Math.max(95, Math.min(100, prev.systemEfficiency + (Math.random() - 0.5) * 0.5)),
-        powerConsumption: Math.max(80, Math.min(95, prev.powerConsumption + (Math.random() - 0.5) * 2))
+        powerConsumption: Math.max(80, Math.min(95, prev.powerConsumption + (Math.random() - 0.5) * 2)),
       }));
     }, 2000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -204,7 +204,7 @@ export default function OverWatch() {
       <div className="fixed inset-0 pointer-events-none">
         <TacticalGrid intensity={0.2} animated={true} />
       </div>
-      
+
       {/* Military Status Bar */}
       <div className="relative z-10 p-4">
         <MilitaryStatusBar />
@@ -423,11 +423,11 @@ export default function OverWatch() {
                 </div>
                 <div className="pt-2 border-t border-border/50 space-y-1">
                   <div className="text-xs text-muted-foreground font-mono">
-                    Signal: <span className="text-success">98.7%</span> | 
+                    Signal: <span className="text-success">98.7%</span> |
                     Encryption: <span className="text-primary">QUANTUM-256</span>
                   </div>
                   <div className="text-xs text-muted-foreground font-mono">
-                    Latency: <span className="text-accent">0.03ms</span> | 
+                    Latency: <span className="text-accent">0.03ms</span> |
                     Bandwidth: <span className="text-info">10Gbps</span>
                   </div>
                 </div>
@@ -478,7 +478,7 @@ export default function OverWatch() {
                 <div className="pt-2 border-t border-border/50">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
                     <MapPin className="h-3 w-3" />
-                    GPS: <span className="text-success">LOCKED</span> | 
+                    GPS: <span className="text-success">LOCKED</span> |
                     Vitals: <span className="text-primary">NOMINAL</span>
                   </div>
                 </div>
@@ -578,7 +578,7 @@ export default function OverWatch() {
             <CardDescription>Real-time geospatial intelligence and tracking</CardDescription>
           </CardHeader>
           <CardContent>
-            <MapView 
+            <MapView
               devices={[
                 {
                   id: '1',
@@ -589,7 +589,7 @@ export default function OverWatch() {
                   status: 'online',
                   lastUpdate: '0.3s ago',
                   speed: 25,
-                  heading: 180
+                  heading: 180,
                 },
                 {
                   id: '2',
@@ -598,7 +598,7 @@ export default function OverWatch() {
                   latitude: 37.7849,
                   longitude: -122.4094,
                   status: 'online',
-                  lastUpdate: '1.2s ago'
+                  lastUpdate: '1.2s ago',
                 },
                 {
                   id: '3',
@@ -607,8 +607,8 @@ export default function OverWatch() {
                   latitude: 37.7649,
                   longitude: -122.4294,
                   status: 'idle',
-                  lastUpdate: '5.7s ago'
-                }
+                  lastUpdate: '5.7s ago',
+                },
               ]}
             />
           </CardContent>

@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 
-import { 
+import {
   Clock,
   MapPin,
   Users,
@@ -14,7 +14,7 @@ import {
   AlertTriangle,
   Plus,
   CalendarDays,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 export default function Schedule() {
@@ -31,8 +31,8 @@ export default function Schedule() {
       priority: 'high',
       location: { address: '123 Church Street, Richmond, VA' },
       assigned_crew: ['John Mitchell', 'Mike Johnson', 'Tom Wilson'],
-      equipment_needed: ['Excavator', 'Compactor', 'Grade Laser']
-    }
+      equipment_needed: ['Excavator', 'Compactor', 'Grade Laser'],
+    },
   ];
 
   return (
@@ -78,7 +78,7 @@ export default function Schedule() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">{event.description}</p>
-                  
+
                   <div className="grid gap-4 md:grid-cols-3">
                     <div>
                       <div className="flex items-center gap-2 text-sm font-medium mb-1">

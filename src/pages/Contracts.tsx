@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { 
+import {
   FileText,
   Plus,
   Calendar,
@@ -18,13 +18,12 @@ import {
   Zap,
   CheckCircle,
   Download,
-  Edit
+  Edit,
 } from 'lucide-react';
 
 export default function Contracts() {
   const [activeTab, setActiveTab] = useState('active');
   const [webhookUrl, setWebhookUrl] = useState('');
-  
 
   const mockContracts = [
     {
@@ -40,7 +39,7 @@ export default function Contracts() {
       progress: 65,
       terms: 'Net 30 payment terms',
       scope: 'Complete asphalt repair, sealcoating, and line striping',
-      location: '123 Church Street, Richmond, VA'
+      location: '123 Church Street, Richmond, VA',
     },
     {
       id: 'CTR002',
@@ -55,8 +54,8 @@ export default function Contracts() {
       progress: 0,
       terms: 'Net 15 payment terms',
       scope: 'New asphalt driveway installation',
-      location: '456 Community Lane, Richmond, VA'
-    }
+      location: '456 Community Lane, Richmond, VA',
+    },
   ];
 
   const getStatusColor = (status: string) => {
@@ -70,8 +69,8 @@ export default function Contracts() {
   };
 
   const triggerZapier = async (contractData: any) => {
-    if (!webhookUrl) return;
-    
+    if (!webhookUrl) { return; }
+
     try {
       await fetch(webhookUrl, {
         method: 'POST',
@@ -80,8 +79,8 @@ export default function Contracts() {
         body: JSON.stringify({
           event: 'contract_created',
           contract: contractData,
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       });
     } catch (error) {
       console.error('Zapier webhook failed:', error);
@@ -302,11 +301,11 @@ export default function Contracts() {
                 <Input
                   id="webhook-url"
                   value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
+                  onChange={(e) => { setWebhookUrl(e.target.value); }}
                   placeholder="https://hooks.zapier.com/hooks/catch/..."
                 />
               </div>
-              <Button 
+              <Button
                 className="w-full"
                 onClick={() => triggerZapier({ test: true })}
                 disabled={!webhookUrl}

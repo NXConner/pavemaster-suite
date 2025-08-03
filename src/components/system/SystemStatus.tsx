@@ -3,15 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
-import { 
-  Shield, 
-  Activity, 
-  Users, 
-  Truck, 
-  AlertTriangle, 
+import {
+  Shield,
+  Activity,
+  Users,
+  Truck,
+  AlertTriangle,
   CheckCircle,
   Settings,
-  BarChart3
+  BarChart3,
 } from 'lucide-react';
 import { useTacticalData } from '../../hooks/useTacticalData';
 import { useJargon } from '../../contexts/JargonContext';
@@ -24,7 +24,7 @@ export function SystemStatus() {
     database: 98,
     api: 97,
     frontend: 96,
-    realtime: 94
+    realtime: 94,
   });
 
   useEffect(() => {
@@ -35,22 +35,22 @@ export function SystemStatus() {
         database: Math.max(95, Math.min(100, prev.database + (Math.random() - 0.5) * 1)),
         api: Math.max(90, Math.min(100, prev.api + (Math.random() - 0.5) * 2)),
         frontend: Math.max(92, Math.min(100, prev.frontend + (Math.random() - 0.5) * 1.5)),
-        realtime: Math.max(88, Math.min(100, prev.realtime + (Math.random() - 0.5) * 3))
+        realtime: Math.max(88, Math.min(100, prev.realtime + (Math.random() - 0.5) * 3)),
       }));
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const getHealthColor = (value: number) => {
-    if (value >= 95) return 'text-green-500';
-    if (value >= 85) return 'text-yellow-500';
+    if (value >= 95) { return 'text-green-500'; }
+    if (value >= 85) { return 'text-yellow-500'; }
     return 'text-red-500';
   };
 
   const getHealthBadge = (value: number) => {
-    if (value >= 95) return 'default';
-    if (value >= 85) return 'secondary';
+    if (value >= 95) { return 'default'; }
+    if (value >= 85) { return 'secondary'; }
     return 'destructive';
   };
 
@@ -99,7 +99,7 @@ export function SystemStatus() {
               </div>
               <Progress value={systemHealth.database} className="h-2" />
             </div>
-            
+
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span>API Services</span>
@@ -109,7 +109,7 @@ export function SystemStatus() {
               </div>
               <Progress value={systemHealth.api} className="h-2" />
             </div>
-            
+
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span>Frontend</span>
@@ -119,7 +119,7 @@ export function SystemStatus() {
               </div>
               <Progress value={systemHealth.frontend} className="h-2" />
             </div>
-            
+
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span>Real-time</span>
@@ -150,7 +150,7 @@ export function SystemStatus() {
               <div className="text-2xl font-bold">{metrics?.activeProjects || 0}</div>
               <div className="text-sm text-muted-foreground">{getText('projects')}</div>
             </div>
-            
+
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-full mx-auto mb-2">
                 <Truck className="h-6 w-6 text-primary" />
@@ -158,7 +158,7 @@ export function SystemStatus() {
               <div className="text-2xl font-bold">{metrics?.equipmentUtilization || 0}%</div>
               <div className="text-sm text-muted-foreground">{getText('equipment')}</div>
             </div>
-            
+
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-2">
                 <AlertTriangle className="h-6 w-6 text-red-600" />
@@ -166,7 +166,7 @@ export function SystemStatus() {
               <div className="text-2xl font-bold">{alerts.length}</div>
               <div className="text-sm text-muted-foreground">{getText('alerts')}</div>
             </div>
-            
+
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mx-auto mb-2">
                 <CheckCircle className="h-6 w-6 text-green-600" />
@@ -197,7 +197,7 @@ export function SystemStatus() {
                 </div>
               </div>
             </Button>
-            
+
             <Button variant="outline" className="h-auto p-4 justify-start">
               <div className="flex items-center gap-3">
                 <Shield className="h-5 w-5" />

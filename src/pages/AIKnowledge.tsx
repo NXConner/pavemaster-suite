@@ -5,10 +5,10 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { AppSidebar } from '../components/layout/app-sidebar';
-import { 
-  Brain, 
-  Search, 
-  BookOpen, 
+import {
+  Brain,
+  Search,
+  BookOpen,
   FileText,
   Video,
   MessageSquare,
@@ -23,7 +23,7 @@ import {
   Download,
   Upload,
   Filter,
-  Send
+  Send,
 } from 'lucide-react';
 
 export default function AIKnowledge() {
@@ -34,7 +34,7 @@ export default function AIKnowledge() {
     totalArticles: 1247,
     categories: 24,
     recentAdded: 8,
-    totalViews: 15420
+    totalViews: 15420,
   };
 
   const categories = [
@@ -43,7 +43,7 @@ export default function AIKnowledge() {
     { id: 'safety', name: 'Safety Protocols', count: 67, color: 'bg-red-500' },
     { id: 'equipment', name: 'Equipment & Tools', count: 134, color: 'bg-purple-500' },
     { id: 'regulations', name: 'Regulations & Compliance', count: 45, color: 'bg-orange-500' },
-    { id: 'best-practices', name: 'Best Practices', count: 78, color: 'bg-teal-500' }
+    { id: 'best-practices', name: 'Best Practices', count: 78, color: 'bg-teal-500' },
   ];
 
   const recentKnowledge = [
@@ -56,7 +56,7 @@ export default function AIKnowledge() {
       views: 234,
       rating: 4.8,
       lastUpdated: '2 hours ago',
-      tags: ['cold weather', 'temperature', 'application']
+      tags: ['cold weather', 'temperature', 'application'],
     },
     {
       id: 2,
@@ -67,7 +67,7 @@ export default function AIKnowledge() {
       views: 567,
       rating: 4.9,
       lastUpdated: '1 day ago',
-      tags: ['parking', 'layout', 'church', 'optimization']
+      tags: ['parking', 'layout', 'church', 'optimization'],
     },
     {
       id: 3,
@@ -78,8 +78,8 @@ export default function AIKnowledge() {
       views: 345,
       rating: 4.7,
       lastUpdated: '3 days ago',
-      tags: ['Virginia', 'compliance', 'contractor', 'legal']
-    }
+      tags: ['Virginia', 'compliance', 'contractor', 'legal'],
+    },
   ];
 
   const aiInsights = [
@@ -89,8 +89,8 @@ export default function AIKnowledge() {
         'Winter preparation techniques',
         'Eco-friendly sealcoating options',
         'Parking space optimization',
-        'Equipment maintenance schedules'
-      ]
+        'Equipment maintenance schedules',
+      ],
     },
     {
       title: 'Recommended Learning',
@@ -98,9 +98,9 @@ export default function AIKnowledge() {
         'Advanced crack sealing methods',
         'Customer communication best practices',
         'Weather-based scheduling',
-        'Cost estimation accuracy'
-      ]
-    }
+        'Cost estimation accuracy',
+      ],
+    },
   ];
 
   return (
@@ -196,7 +196,7 @@ export default function AIKnowledge() {
                     <Input
                       placeholder="Search knowledge base..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={(e) => { setSearchQuery(e.target.value); }}
                       className="pl-10"
                     />
                   </div>
@@ -224,7 +224,7 @@ export default function AIKnowledge() {
                       className={`flex items-center justify-between p-2 rounded cursor-pointer ${
                         selectedCategory === 'all' ? 'bg-primary/10' : 'hover:bg-muted'
                       }`}
-                      onClick={() => setSelectedCategory('all')}
+                      onClick={() => { setSelectedCategory('all'); }}
                     >
                       <span className="text-sm font-medium">All Categories</span>
                       <Badge variant="outline">{knowledgeStats.totalArticles}</Badge>
@@ -235,7 +235,7 @@ export default function AIKnowledge() {
                         className={`flex items-center justify-between p-2 rounded cursor-pointer ${
                           selectedCategory === category.id ? 'bg-primary/10' : 'hover:bg-muted'
                         }`}
-                        onClick={() => setSelectedCategory(category.id)}
+                        onClick={() => { setSelectedCategory(category.id); }}
                       >
                         <div className="flex items-center gap-2">
                           <div className={`w-3 h-3 rounded-full ${category.color}`}></div>
@@ -355,7 +355,7 @@ export default function AIKnowledge() {
                   'Winter Sealcoating Best Practices for Virginia Climate',
                   'Church Parking Lot Striping Regulations and Guidelines',
                   'Equipment Maintenance Checklist for Asphalt Crews',
-                  'Customer Communication Templates for Project Updates'
+                  'Customer Communication Templates for Project Updates',
                 ].map((suggestion, i) => (
                   <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
@@ -382,7 +382,7 @@ export default function AIKnowledge() {
                   { title: 'Virginia Contractor Certification', progress: 75, modules: 8 },
                   { title: 'Advanced Sealcoating Techniques', progress: 45, modules: 12 },
                   { title: 'Business Management for Contractors', progress: 20, modules: 15 },
-                  { title: 'Safety Compliance Training', progress: 90, modules: 6 }
+                  { title: 'Safety Compliance Training', progress: 90, modules: 6 },
                 ].map((path, i) => (
                   <div key={i} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
@@ -427,7 +427,7 @@ export default function AIKnowledge() {
                       </div>
                       <div className="bg-white p-3 rounded-lg flex-1">
                         <p className="text-sm">
-                          Hello! I'm your AI Knowledge Assistant. I can help you with questions about asphalt paving, 
+                          Hello! I'm your AI Knowledge Assistant. I can help you with questions about asphalt paving,
                           sealcoating, safety regulations, and business best practices. What would you like to know?
                         </p>
                       </div>
@@ -453,7 +453,7 @@ export default function AIKnowledge() {
                     'What temperature is best for sealcoating?',
                     'How do I calculate asphalt tonnage?',
                     'What are Virginia contractor requirements?',
-                    'Best practices for church parking lots?'
+                    'Best practices for church parking lots?',
                   ].map((question, i) => (
                     <Button key={i} variant="outline" className="text-left justify-start h-auto p-3">
                       {question}
@@ -475,7 +475,7 @@ export default function AIKnowledge() {
                     'Sealcoating Application Guide',
                     'Safety Protocol Checklist',
                     'Equipment Maintenance Log',
-                    'Weather Guidelines'
+                    'Weather Guidelines',
                   ].map((item, i) => (
                     <div key={i} className="flex justify-between text-sm">
                       <span>{item}</span>

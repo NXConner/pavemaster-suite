@@ -5,15 +5,15 @@ import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
-import { 
-  Palette, 
-  Monitor, 
-  Smartphone, 
-  Settings, 
-  Crown, 
+import {
+  Palette,
+  Monitor,
+  Smartphone,
+  Settings,
+  Crown,
   Eye,
   Download,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
 import { advancedThemes, getThemeById } from '../../config/advanced-themes';
 import { ISAC_OS_THEME, applyISACTheme } from '../../config/themes';
@@ -28,7 +28,7 @@ export function EnhancedThemeSwitcher() {
     reducedMotion: false,
     fontSize: 16,
     contrastMode: false,
-    compactMode: false
+    compactMode: false,
   });
 
   const applyTheme = (themeId: string) => {
@@ -75,14 +75,14 @@ export function EnhancedThemeSwitcher() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={() => setPreviewMode(!previewMode)}
+          <Button
+            variant="outline"
+            onClick={() => { setPreviewMode(!previewMode); }}
           >
             <Eye className="h-4 w-4 mr-2" />
             {previewMode ? 'Exit Preview' : 'Preview Mode'}
           </Button>
-          <Button onClick={() => exportThemeConfig(selectedTheme)}>
+          <Button onClick={() => { exportThemeConfig(selectedTheme); }}>
             <Download className="h-4 w-4 mr-2" />
             Export Theme
           </Button>
@@ -132,8 +132,8 @@ export function EnhancedThemeSwitcher() {
                     </CardDescription>
                   </div>
                 </div>
-                <Button 
-                  onClick={() => applyTheme('isac-os')}
+                <Button
+                  onClick={() => { applyTheme('isac-os'); }}
                   variant={selectedTheme === 'isac-os' ? 'default' : 'outline'}
                   className="bg-orange-500 hover:bg-orange-600 text-white"
                 >
@@ -182,8 +182,8 @@ export function EnhancedThemeSwitcher() {
                         {theme.category}
                       </Badge>
                     </div>
-                    <Button 
-                      onClick={() => applyTheme(theme.id)}
+                    <Button
+                      onClick={() => { applyTheme(theme.id); }}
                       variant={selectedTheme === theme.id ? 'default' : 'outline'}
                       size="sm"
                     >
@@ -212,7 +212,7 @@ export function EnhancedThemeSwitcher() {
         </TabsContent>
 
         <TabsContent value="customizer" className="space-y-6">
-          <ThemeCustomizer 
+          <ThemeCustomizer
             onThemeChange={(theme) => {
               // Handle custom theme application
               console.log('Custom theme applied:', theme);
@@ -230,21 +230,19 @@ export function EnhancedThemeSwitcher() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="contrast-mode">High Contrast Mode</Label>
-                  <Switch 
+                  <Switch
                     id="contrast-mode"
                     checked={customSettings.contrastMode}
-                    onCheckedChange={(checked) => 
-                      setCustomSettings(prev => ({ ...prev, contrastMode: checked }))
+                    onCheckedChange={(checked) => { setCustomSettings(prev => ({ ...prev, contrastMode: checked })); }
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
                   <Label htmlFor="reduced-motion">Reduce Motion</Label>
-                  <Switch 
+                  <Switch
                     id="reduced-motion"
                     checked={customSettings.reducedMotion}
-                    onCheckedChange={(checked) => 
-                      setCustomSettings(prev => ({ ...prev, reducedMotion: checked }))
+                    onCheckedChange={(checked) => { setCustomSettings(prev => ({ ...prev, reducedMotion: checked })); }
                     }
                   />
                 </div>
@@ -258,8 +256,7 @@ export function EnhancedThemeSwitcher() {
                       max={24}
                       step={1}
                       value={customSettings.fontSize}
-                      onChange={(e) => 
-                        setCustomSettings(prev => ({ ...prev, fontSize: parseInt(e.target.value) }))
+                      onChange={(e) => { setCustomSettings(prev => ({ ...prev, fontSize: parseInt(e.target.value) })); }
                       }
                       className="w-full"
                     />
@@ -276,21 +273,19 @@ export function EnhancedThemeSwitcher() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="animations">Enable Animations</Label>
-                  <Switch 
+                  <Switch
                     id="animations"
                     checked={customSettings.animations}
-                    onCheckedChange={(checked) => 
-                      setCustomSettings(prev => ({ ...prev, animations: checked }))
+                    onCheckedChange={(checked) => { setCustomSettings(prev => ({ ...prev, animations: checked })); }
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
                   <Label htmlFor="compact-mode">Compact Mode</Label>
-                  <Switch 
+                  <Switch
                     id="compact-mode"
                     checked={customSettings.compactMode}
-                    onCheckedChange={(checked) => 
-                      setCustomSettings(prev => ({ ...prev, compactMode: checked }))
+                    onCheckedChange={(checked) => { setCustomSettings(prev => ({ ...prev, compactMode: checked })); }
                     }
                   />
                 </div>

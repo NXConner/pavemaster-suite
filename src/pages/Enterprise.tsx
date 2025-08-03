@@ -6,7 +6,7 @@ import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Progress } from '../components/ui/progress';
-import { 
+import {
   Building2,
   TrendingUp,
   BarChart3,
@@ -17,7 +17,7 @@ import {
   Activity,
   DollarSign,
   Target,
-  Briefcase
+  Briefcase,
 } from 'lucide-react';
 
 export default function Enterprise() {
@@ -28,7 +28,7 @@ export default function Enterprise() {
     revenue: { current: 285000, previous: 240000, growth: 18.8 },
     projects: { current: 45, previous: 38, growth: 18.4 },
     efficiency: { current: 94, previous: 87, growth: 8.0 },
-    satisfaction: { current: 96, previous: 92, growth: 4.3 }
+    satisfaction: { current: 96, previous: 92, growth: 4.3 },
   };
 
   const integrations = [
@@ -37,36 +37,36 @@ export default function Enterprise() {
       category: 'Accounting',
       status: 'connected',
       description: 'Financial data synchronization',
-      lastSync: '2024-01-16T10:30:00Z'
+      lastSync: '2024-01-16T10:30:00Z',
     },
     {
       name: 'ADP Workforce',
       category: 'HR/Payroll',
       status: 'pending',
       description: 'Employee management and payroll',
-      lastSync: null
+      lastSync: null,
     },
     {
       name: 'Microsoft Teams',
       category: 'Communication',
       status: 'connected',
       description: 'Team collaboration and messaging',
-      lastSync: '2024-01-16T09:15:00Z'
+      lastSync: '2024-01-16T09:15:00Z',
     },
     {
       name: 'SAP Business One',
       category: 'ERP',
       status: 'disconnected',
       description: 'Enterprise resource planning',
-      lastSync: '2024-01-14T16:22:00Z'
+      lastSync: '2024-01-14T16:22:00Z',
     },
     {
       name: 'Fleet Tracking Pro',
       category: 'GPS/Fleet',
       status: 'connected',
       description: 'Vehicle and equipment tracking',
-      lastSync: '2024-01-16T10:45:00Z'
-    }
+      lastSync: '2024-01-16T10:45:00Z',
+    },
   ];
 
   const kpiMetrics = [
@@ -75,7 +75,7 @@ export default function Enterprise() {
     { name: 'Client Satisfaction', value: 4.7, target: 4.5, trend: 'up' },
     { name: 'Equipment Utilization', value: 87, target: 90, trend: 'up' },
     { name: 'Safety Score', value: 98, target: 95, trend: 'up' },
-    { name: 'Profit Margin', value: 22.5, target: 20.0, trend: 'up' }
+    { name: 'Profit Margin', value: 22.5, target: 20.0, trend: 'up' },
   ];
 
   const getStatusColor = (status: string) => {
@@ -88,23 +88,22 @@ export default function Enterprise() {
   };
 
   const getTrendIcon = (trend: string) => {
-    return trend === 'up' ? 
-      <TrendingUp className="h-3 w-3 text-green-600" /> : 
-      <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
+    return trend === 'up'
+      ? <TrendingUp className="h-3 w-3 text-green-600" />
+      : <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
   };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(amount);
   };
 
-
   const triggerZapier = async (enterpriseData: any) => {
-    if (!webhookUrl) return;
-    
+    if (!webhookUrl) { return; }
+
     try {
       await fetch(webhookUrl, {
         method: 'POST',
@@ -113,8 +112,8 @@ export default function Enterprise() {
         body: JSON.stringify({
           event: 'enterprise_update',
           data: enterpriseData,
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       });
     } catch (error) {
       console.error('Zapier webhook failed:', error);
@@ -253,25 +252,25 @@ export default function Enterprise() {
                     <div className="flex items-center gap-2">
                       {getTrendIcon(metric.trend)}
                       <span className="text-sm font-medium">
-                        {metric.name.includes('Rate') || metric.name.includes('Score') || metric.name.includes('Utilization') 
-                          ? `${metric.value}%` 
-                          : metric.name.includes('Satisfaction')
-                          ? metric.value.toFixed(1)
-                          : metric.name.includes('Variance')
+                        {metric.name.includes('Rate') || metric.name.includes('Score') || metric.name.includes('Utilization')
                           ? `${metric.value}%`
-                          : `${metric.value}%`
+                          : metric.name.includes('Satisfaction')
+                            ? metric.value.toFixed(1)
+                            : metric.name.includes('Variance')
+                              ? `${metric.value}%`
+                              : `${metric.value}%`
                         }
                       </span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Progress 
-                      value={metric.name.includes('Variance') ? Math.abs(metric.value) : metric.value} 
-                      className="h-2" 
+                    <Progress
+                      value={metric.name.includes('Variance') ? Math.abs(metric.value) : metric.value}
+                      className="h-2"
                     />
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span>Target: {
-                        metric.name.includes('Satisfaction') 
+                        metric.name.includes('Satisfaction')
                           ? metric.target.toFixed(1)
                           : `${metric.target}%`
                       }</span>
@@ -310,8 +309,8 @@ export default function Enterprise() {
                   <div>
                     <p className="text-sm font-medium">Category: {integration.category}</p>
                     <p className="text-xs text-muted-foreground">
-                      Last sync: {integration.lastSync 
-                        ? new Date(integration.lastSync).toLocaleString() 
+                      Last sync: {integration.lastSync
+                        ? new Date(integration.lastSync).toLocaleString()
                         : 'Never'
                       }
                     </p>
@@ -398,16 +397,16 @@ export default function Enterprise() {
                 <Input
                   id="webhook-url"
                   value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
+                  onChange={(e) => { setWebhookUrl(e.target.value); }}
                   placeholder="https://hooks.zapier.com/hooks/catch/..."
                 />
               </div>
-              <Button 
+              <Button
                 className="w-full"
-                onClick={() => triggerZapier({ 
+                onClick={() => triggerZapier({
                   analytics: analyticsData,
                   kpis: kpiMetrics,
-                  integrations: integrations 
+                  integrations: integrations,
                 })}
                 disabled={!webhookUrl}
               >

@@ -3,16 +3,15 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
-import { 
-  Shield, 
-  Zap, 
-  Activity, 
-  Satellite, 
+import {
+  Shield,
+  Zap,
+  Activity,
+  Satellite,
   Radio,
   AlertTriangle,
   CheckCircle,
-  Minimize2,
-  Maximize2
+
 } from 'lucide-react';
 
 interface SystemStatus {
@@ -39,11 +38,11 @@ export function ISACTacticalHUD() {
     const interval = setInterval(() => {
       setSystems(prev => prev.map(system => ({
         ...system,
-        value: Math.max(0, Math.min(100, system.value + (Math.random() - 0.5) * 5))
+
       })));
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -136,8 +135,8 @@ export function ISACTacticalHUD() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 min-w-0">
-                  <Progress 
-                    value={system.value} 
+                  <Progress
+                    value={system.value}
                     className="w-12 h-1"
                   />
                   <span className={`text-xs font-mono ${getStatusColor(system.status)} min-w-0`}>
@@ -179,19 +178,21 @@ export function ISACTacticalHUD() {
       <Card className="bg-black/80 backdrop-blur-sm border-orange-500/30 pointer-events-auto">
         <CardContent className="p-2">
           <div className="grid grid-cols-2 gap-1">
-            <button 
+            <button
               className="px-2 py-1 text-xs font-mono bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded text-orange-400 transition-colors"
-              onClick={() => setThreatLevel(prev => 
-                prev === 'LOW' ? 'MODERATE' : 
-                prev === 'MODERATE' ? 'HIGH' :
-                prev === 'HIGH' ? 'CRITICAL' : 'LOW'
-              )}
+              onClick={() => {
+                setThreatLevel(prev =>
+                  prev === 'LOW' ? 'MODERATE'
+                    : prev === 'MODERATE' ? 'HIGH'
+                      : prev === 'HIGH' ? 'CRITICAL' : 'LOW',
+                );
+              }}
             >
               THREAT
             </button>
-            <button 
+            <button
               className="px-2 py-1 text-xs font-mono bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded text-blue-400 transition-colors"
-              onClick={() => setActiveOperations(prev => prev === 3 ? 5 : 3)}
+              onClick={() => { setActiveOperations(prev => prev === 3 ? 5 : 3); }}
             >
               OPS
             </button>

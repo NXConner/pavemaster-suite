@@ -3,15 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Button } from '../ui/button';
-import { 
-  Activity, 
-  Cpu, 
-  HardDrive, 
-  Wifi, 
+import {
+  Activity,
+  Cpu,
+  HardDrive,
+  Wifi,
   AlertTriangle,
   CheckCircle,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
 } from 'lucide-react';
 
 interface PerformanceMetric {
@@ -33,7 +33,7 @@ export function SystemPerformanceMonitor() {
       unit: '%',
       status: 'optimal',
       trend: 'stable',
-      history: [32, 33, 34, 35, 34]
+      history: [32, 33, 34, 35, 34],
     },
     {
       id: 'memory',
@@ -42,7 +42,7 @@ export function SystemPerformanceMonitor() {
       unit: '%',
       status: 'warning',
       trend: 'up',
-      history: [60, 62, 64, 66, 67]
+      history: [60, 62, 64, 66, 67],
     },
     {
       id: 'disk',
@@ -51,7 +51,7 @@ export function SystemPerformanceMonitor() {
       unit: '%',
       status: 'optimal',
       trend: 'stable',
-      history: [44, 45, 45, 46, 45]
+      history: [44, 45, 45, 46, 45],
     },
     {
       id: 'network',
@@ -60,8 +60,8 @@ export function SystemPerformanceMonitor() {
       unit: 'Mbps',
       status: 'optimal',
       trend: 'down',
-      history: [30, 28, 26, 24, 23]
-    }
+      history: [30, 28, 26, 24, 23],
+    },
   ]);
 
   const [systemHealth, setSystemHealth] = useState({
@@ -69,7 +69,7 @@ export function SystemPerformanceMonitor() {
     uptime: '7d 14h 23m',
     lastReboot: '2024-01-08 02:30:00',
     activeProcesses: 156,
-    loadAverage: 1.23
+    loadAverage: 1.23,
   });
 
   useEffect(() => {
@@ -78,34 +78,32 @@ export function SystemPerformanceMonitor() {
         const variance = (Math.random() - 0.5) * 10;
         const newValue = Math.max(0, Math.min(100, metric.value + variance));
         const newHistory = [...metric.history.slice(1), newValue];
-        
+
         let status: 'optimal' | 'warning' | 'critical' = 'optimal';
-        if (newValue > 80) status = 'critical';
-        else if (newValue > 60) status = 'warning';
-        
+        if (newValue > 80) { status = 'critical'; } else if (newValue > 60) { status = 'warning'; }
+
         let trend: 'up' | 'down' | 'stable' = 'stable';
         const recentAvg = newHistory.slice(-3).reduce((a, b) => a + b, 0) / 3;
         const olderAvg = newHistory.slice(-5, -2).reduce((a, b) => a + b, 0) / 3;
-        if (recentAvg > olderAvg + 2) trend = 'up';
-        else if (recentAvg < olderAvg - 2) trend = 'down';
-        
+        if (recentAvg > olderAvg + 2) { trend = 'up'; } else if (recentAvg < olderAvg - 2) { trend = 'down'; }
+
         return {
           ...metric,
           value: newValue,
           status,
           trend,
-          history: newHistory
+          history: newHistory,
         };
       }));
-      
+
       setSystemHealth(prev => ({
         ...prev,
         overall: Math.max(75, Math.min(100, prev.overall + (Math.random() - 0.5) * 2)),
-        activeProcesses: Math.max(100, Math.min(200, prev.activeProcesses + Math.floor((Math.random() - 0.5) * 10)))
+        activeProcesses: Math.max(100, Math.min(200, prev.activeProcesses + Math.floor((Math.random() - 0.5) * 10))),
       }));
     }, 3000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -203,24 +201,24 @@ export function SystemPerformanceMonitor() {
                   </span>
                   <span className="text-sm text-muted-foreground">{metric.unit}</span>
                 </div>
-                
-                <Progress 
-                  value={metric.value} 
+
+                <Progress
+                  value={metric.value}
                   className="h-2"
                 />
-                
+
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Last 5 readings</span>
-                  <Badge 
+                  <Badge
                     variant={
-                      metric.status === 'optimal' ? 'default' :
-                      metric.status === 'warning' ? 'secondary' : 'destructive'
+                      metric.status === 'optimal' ? 'default'
+                        : metric.status === 'warning' ? 'secondary' : 'destructive'
                     }
                   >
                     {metric.status.toUpperCase()}
                   </Badge>
                 </div>
-                
+
                 {/* Mini Chart */}
                 <div className="flex items-end gap-1 h-8">
                   {metric.history.map((value, index) => (

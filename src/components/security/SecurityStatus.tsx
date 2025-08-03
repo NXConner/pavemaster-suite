@@ -17,7 +17,7 @@ export function SecurityStatus() {
     securityLevel: 'low',
     lastScan: new Date().toISOString(),
     failedAttempts: 0,
-    authenticatedSessions: 1
+    authenticatedSessions: 1,
   });
 
   useEffect(() => {
@@ -28,11 +28,11 @@ export function SecurityStatus() {
         lastScan: new Date().toISOString(),
         // Simulate low activity for demo
         activeThreats: Math.random() > 0.9 ? 1 : 0,
-        failedAttempts: Math.floor(Math.random() * 3)
+        failedAttempts: Math.floor(Math.random() * 3),
       }));
     }, 30000); // Update every 30 seconds
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const getSecurityLevelIcon = () => {
@@ -44,7 +44,7 @@ export function SecurityStatus() {
     }
   };
 
-  const getSecurityLevelVariant = (): "default" | "secondary" | "destructive" | "outline" => {
+  const getSecurityLevelVariant = (): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (metrics.securityLevel) {
       case 'critical': return 'destructive';
       case 'high': return 'destructive';
@@ -69,28 +69,28 @@ export function SecurityStatus() {
             {metrics.securityLevel.toUpperCase()}
           </Badge>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">Active Threats</span>
           <span className="text-sm font-medium">
             {metrics.activeThreats}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">Failed Attempts</span>
           <span className="text-sm font-medium">
             {metrics.failedAttempts}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">Active Sessions</span>
           <span className="text-sm font-medium">
             {metrics.authenticatedSessions}
           </span>
         </div>
-        
+
         <div className="pt-2 border-t border-border/50">
           <div className="text-xs text-muted-foreground">
             Last scan: {new Date(metrics.lastScan).toLocaleTimeString()}

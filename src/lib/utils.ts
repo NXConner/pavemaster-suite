@@ -1,6 +1,6 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { format, isValid, parseISO, formatDistanceToNow, startOfDay, endOfDay, addDays, subDays, type Locale } from "date-fns";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { format, isValid, parseISO, formatDistanceToNow, startOfDay, endOfDay, addDays, subDays, type Locale } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -242,18 +242,18 @@ const JARGON_TERMS: Record<string, { civilian: string; military: string; acronym
   'mission': { civilian: 'Mission', military: 'Operation' },
   'vision': { civilian: 'Vision', military: 'Mission' },
   'value': { civilian: 'Value', military: 'Principle' },
-  'principle': { civilian: 'Principle', military: 'Standard' }
+  'principle': { civilian: 'Principle', military: 'Standard' },
 };
 
 // Jargon translation function
 export function translateJargon(
-  text: string, 
-  mode: 'civilian' | 'military' | 'hybrid'
+  text: string,
+  mode: 'civilian' | 'military' | 'hybrid',
 ): string {
   if (mode === 'civilian') {
     return text;
   }
-  
+
   // Handle hybrid mode
   if (mode === 'hybrid') {
     // In hybrid mode, show both terms when available
@@ -264,7 +264,7 @@ export function translateJargon(
     }
     return text;
   }
-  
+
   // Military mode - translate to military terminology
   if (mode === 'military') {
     const lowerText = text.toLowerCase();
@@ -281,7 +281,7 @@ export function translateJargon(
       return translation.military;
     }
   }
-  
+
   return text;
 }
 
@@ -308,8 +308,8 @@ export function formatDateWithLocale(date: Date | string, pattern: string = 'PPP
   useAdditionalDayOfYearTokens?: boolean;
 }): string {
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
-  if (!isValid(dateObj)) return 'Invalid Date';
-  
+  if (!isValid(dateObj)) { return 'Invalid Date'; }
+
   return format(dateObj, pattern, options);
 }
 
@@ -319,12 +319,12 @@ export function createRelativeDateFormatter(
     locale?: Locale;
     addSuffix?: boolean;
     includeSeconds?: boolean;
-  }
+  },
 ) {
   return (date: Date | string): string => {
     const dateObj = typeof date === 'string' ? parseISO(date) : date;
-    if (!isValid(dateObj)) return 'Invalid date';
-    
+    if (!isValid(dateObj)) { return 'Invalid date'; }
+
     return formatDistanceToNow(dateObj, options);
   };
 }
@@ -333,7 +333,7 @@ export function createRelativeDateFormatter(
 export function getDateRange(type: 'today' | 'yesterday' | 'thisWeek' | 'lastWeek' | 'thisMonth' | 'lastMonth' | 'thisYear' | 'lastYear'): { start: Date; end: Date } {
   const now = new Date();
   const today = startOfDay(now);
-  
+
   switch (type) {
     case 'today':
       return { start: today, end: endOfDay(now) };
@@ -377,43 +377,43 @@ export function getDateRange(type: 'today' | 'yesterday' | 'thisWeek' | 'lastWee
 const validationPatterns = {
   email: {
     regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    message: 'Please enter a valid email address'
+    message: 'Please enter a valid email address',
   },
   phone: {
     regex: /^[\+]?[1-9][\d]{0,15}$/,
-    message: 'Please enter a valid phone number'
+    message: 'Please enter a valid phone number',
   },
   url: {
     regex: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
-    message: 'Please enter a valid URL'
+    message: 'Please enter a valid URL',
   },
   ipAddress: {
     regex: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
-    message: 'Please enter a valid IP address'
+    message: 'Please enter a valid IP address',
   },
   macAddress: {
     regex: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
-    message: 'Please enter a valid MAC address'
+    message: 'Please enter a valid MAC address',
   },
   creditCard: {
     regex: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$/,
-    message: 'Please enter a valid credit card number'
+    message: 'Please enter a valid credit card number',
   },
   zipCode: {
     regex: /^\d{5}(-\d{4})?$/,
-    message: 'Please enter a valid ZIP code'
+    message: 'Please enter a valid ZIP code',
   },
   strongPassword: {
     regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    message: 'Password must be at least 8 characters with uppercase, lowercase, number, and special character'
-  }
+    message: 'Password must be at least 8 characters with uppercase, lowercase, number, and special character',
+  },
 } as const;
 
 // Validation function
 export function validateInput(value: string, type: keyof typeof validationPatterns): boolean {
   const pattern = validationPatterns[type];
-  if (!pattern) return false;
-  
+  if (!pattern) { return false; }
+
   const regex = pattern.regex;
   return regex?.test(value) ?? false;
 }
@@ -428,36 +428,36 @@ export function getValidationMessage(type: keyof typeof validationPatterns): str
 // ============================================================================
 
 // Debounce function with immediate option
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends(...args: any[]) => any>(
   func: T,
   wait: number,
-  immediate: boolean = false
+  immediate: boolean = false,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null;
-  
+
   return (...args: Parameters<T>) => {
     const callNow = immediate && !timeout;
-    
+
     if (timeout) {
       clearTimeout(timeout);
     }
-    
+
     timeout = setTimeout(() => {
       timeout = null;
-      if (!immediate) func(...args);
+      if (!immediate) { func(...args); }
     }, wait);
-    
-    if (callNow) func(...args);
+
+    if (callNow) { func(...args); }
   };
 }
 
 // Throttle function
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends(...args: any[]) => any>(
   func: T,
-  limit: number
+  limit: number,
 ): (...args: Parameters<T>) => void {
   let inThrottle = false;
-  
+
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
@@ -468,37 +468,37 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 // Memoization with TTL
-export function memoizeWithTTL<T extends (...args: any[]) => any>(
+export function memoizeWithTTL<T extends(...args: any[]) => any>(
   func: T,
-  ttl: number = 5000
+  ttl: number = 5000,
 ): T {
   const cache = new Map<string, { value: ReturnType<T>; timestamp: number }>();
-  
+
   return ((...args: Parameters<T>): ReturnType<T> => {
     const key = JSON.stringify(args);
     const now = Date.now();
     const cached = cache.get(key);
-    
+
     if (cached && (now - cached.timestamp) < ttl) {
       return cached.value;
     }
-    
+
     const result = func(...args);
     cache.set(key, { value: result, timestamp: now });
-    
+
     return result;
   }) as T;
 }
 
 // Deep object access with path
 export function getNestedValue<T>(obj: any, path: string, defaultValue?: T): T | undefined {
-  if (!obj || typeof path !== 'string') return defaultValue;
-  
+  if (!obj || typeof path !== 'string') { return defaultValue; }
+
   try {
     const objPath = path.split('.');
-    return objPath.reduce((current, key) => {
+    return objPath.reduce<any>((current, key) => {
       return current && typeof current === 'object' ? (current as any)[key] : undefined;
-    }, obj as any) ?? defaultValue;
+    }, obj) ?? defaultValue;
   } catch {
     return defaultValue;
   }
@@ -506,20 +506,20 @@ export function getNestedValue<T>(obj: any, path: string, defaultValue?: T): T |
 
 // Deep object setting with path
 export function setNestedValue(obj: any, path: string, value: any): void {
-  if (!obj || typeof path !== 'string') return;
-  
+  if (!obj || typeof path !== 'string') { return; }
+
   const keys = path.split('.');
   const lastKey = keys.pop();
-  
-  if (!lastKey) return;
-  
+
+  if (!lastKey) { return; }
+
   const target = keys.reduce((current, key) => {
     if (!current[key] || typeof current[key] !== 'object') {
       current[key] = {};
     }
     return current[key];
   }, obj);
-  
+
   target[lastKey] = value;
 }
 
@@ -536,50 +536,50 @@ export function formatNumber(
     percentage?: boolean;
     compact?: boolean;
     locale?: string;
-  } = {}
+  } = {},
 ): string {
   const {
     decimals = 2,
     currency,
     percentage = false,
     compact = false,
-    locale = 'en-US'
+    locale = 'en-US',
   } = options;
-  
+
   if (percentage) {
     return new Intl.NumberFormat(locale, {
       style: 'percent',
       minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
+      maximumFractionDigits: decimals,
     }).format(value / 100);
   }
-  
+
   if (currency) {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
-      notation: compact ? 'compact' : 'standard'
+      notation: compact ? 'compact' : 'standard',
     }).format(value);
   }
-  
+
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-    notation: compact ? 'compact' : 'standard'
+    notation: compact ? 'compact' : 'standard',
   }).format(value);
 }
 
 // Calculate percentage
 export function calculatePercentage(value: number, total: number): number {
-  if (total === 0) return 0;
+  if (total === 0) { return 0; }
   return (value / total) * 100;
 }
 
 // Calculate percentage change
 export function calculatePercentageChange(oldValue: number, newValue: number): number {
-  if (oldValue === 0) return newValue > 0 ? 100 : 0;
+  if (oldValue === 0) { return newValue > 0 ? 100 : 0; }
   return ((newValue - oldValue) / oldValue) * 100;
 }
 
@@ -604,7 +604,7 @@ export function mapRange(
   fromMin: number,
   fromMax: number,
   toMin: number,
-  toMax: number
+  toMax: number,
 ): number {
   const factor = (value - fromMin) / (fromMax - fromMin);
   return lerp(toMin, toMax, factor);
@@ -643,14 +643,14 @@ export function uniqueBy<T>(array: T[], keyFn: (item: T) => any): T[] {
 
 // Group array by key
 export function groupBy<T>(array: T[], keyFn: (item: T) => string): Record<string, T[]> {
-  return array.reduce((groups, item) => {
+  return array.reduce<Record<string, T[]>>((groups, item) => {
     const key = keyFn(item);
     if (!groups[key]) {
       groups[key] = [];
     }
     groups[key].push(item);
     return groups;
-  }, {} as Record<string, T[]>);
+  }, {});
 }
 
 // Sort array by multiple criteria
@@ -659,9 +659,9 @@ export function sortBy<T>(array: T[], ...criteria: ((item: T) => any)[]): T[] {
     for (const criterion of criteria) {
       const aVal = criterion(a);
       const bVal = criterion(b);
-      
-      if (aVal < bVal) return -1;
-      if (aVal > bVal) return 1;
+
+      if (aVal < bVal) { return -1; }
+      if (aVal > bVal) { return 1; }
     }
     return 0;
   });
@@ -708,7 +708,7 @@ export function toSnakeCase(str: string): string {
 
 // Truncate string with ellipsis
 export function truncate(str: string, length: number, suffix: string = '...'): string {
-  if (str.length <= length) return str;
+  if (str.length <= length) { return str; }
   return str.substring(0, length - suffix.length) + suffix;
 }
 
@@ -737,13 +737,13 @@ export function parseQueryString(query: string): Record<string, string> {
 // Convert object to query string
 export function buildQueryString(params: Record<string, any>): string {
   const searchParams = new URLSearchParams();
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== null && value !== undefined) {
       searchParams.append(key, String(value));
     }
   });
-  
+
   return searchParams.toString();
 }
 
@@ -761,7 +761,7 @@ export const storage = {
       return defaultValue ?? null;
     }
   },
-  
+
   set(key: string, value: any): void {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -769,7 +769,7 @@ export const storage = {
       // Handle storage quota exceeded
     }
   },
-  
+
   remove(key: string): void {
     try {
       localStorage.removeItem(key);
@@ -777,14 +777,14 @@ export const storage = {
       // Handle errors
     }
   },
-  
+
   clear(): void {
     try {
       localStorage.clear();
     } catch {
       // Handle errors
     }
-  }
+  },
 };
 
 // ============================================================================
@@ -794,15 +794,15 @@ export const storage = {
 // Simple event emitter
 export class EventEmitter<T extends Record<string, any>> {
   private events: Map<keyof T, Function[]> = new Map();
-  
+
   on<K extends keyof T>(event: K, listener: (data: T[K]) => void): () => void {
     if (!this.events.has(event)) {
       this.events.set(event, []);
     }
-    
+
     const listeners = this.events.get(event)!;
     listeners.push(listener);
-    
+
     // Return unsubscribe function
     return () => {
       const index = listeners.indexOf(listener);
@@ -811,20 +811,20 @@ export class EventEmitter<T extends Record<string, any>> {
       }
     };
   }
-  
+
   emit<K extends keyof T>(event: K, data: T[K]): void {
     const listeners = this.events.get(event);
     if (listeners) {
       listeners.forEach(listener => listener(data));
     }
   }
-  
+
   off<K extends keyof T>(event: K, listener?: Function): void {
     if (!listener) {
       this.events.delete(event);
       return;
     }
-    
+
     const listeners = this.events.get(event);
     if (listeners) {
       const index = listeners.indexOf(listener);
@@ -845,35 +845,35 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
   return result ? {
     r: parseInt(result[1] || '0', 16),
     g: parseInt(result[2] || '0', 16),
-    b: parseInt(result[3] || '0', 16)
+    b: parseInt(result[3] || '0', 16),
   } : null;
 }
 
 // Convert RGB to hex
 export function rgbToHex(r: number, g: number, b: number): string {
-  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 // Convert hex to HSL
 export function hexToHsl(hex: string): { h: number; s: number; l: number } | null {
   const rgb = hexToRgb(hex);
-  if (!rgb) return null;
-  
+  if (!rgb) { return null; }
+
   const { r, g, b } = rgb;
   const rNorm = r / 255;
   const gNorm = g / 255;
   const bNorm = b / 255;
-  
+
   const max = Math.max(rNorm, gNorm, bNorm);
   const min = Math.min(rNorm, gNorm, bNorm);
   let h = 0;
   let s = 0;
   const l = (max + min) / 2;
-  
+
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    
+
     switch (max) {
       case rNorm: h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0); break;
       case gNorm: h = (bNorm - rNorm) / d + 2; break;
@@ -881,11 +881,11 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } | nul
     }
     h /= 6;
   }
-  
+
   return {
     h: Math.round(h * 360),
     s: Math.round(s * 100),
-    l: Math.round(l * 100)
+    l: Math.round(l * 100),
   };
 }
 
@@ -897,14 +897,14 @@ export function generateRandomColor(): string {
 // Lighten/darken color
 export function adjustColorBrightness(hex: string, amount: number): string {
   const rgb = hexToRgb(hex);
-  if (!rgb) return hex;
-  
+  if (!rgb) { return hex; }
+
   const adjust = (value: number) => Math.max(0, Math.min(255, value + amount));
-  
+
   return rgbToHex(
     adjust(rgb.r),
     adjust(rgb.g),
-    adjust(rgb.b)
+    adjust(rgb.b),
   );
 }
 
@@ -922,25 +922,25 @@ export async function retryWithBackoff<T>(
   fn: () => Promise<T>,
   maxRetries: number = 3,
   baseDelay: number = 1000,
-  maxDelay: number = 10000
+  maxDelay: number = 10000,
 ): Promise<T> {
   let lastError: Error;
-  
+
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt === maxRetries) {
         throw lastError;
       }
-      
+
       const delay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);
       await sleep(delay);
     }
   }
-  
+
   throw lastError!;
 }
 
@@ -948,13 +948,13 @@ export async function retryWithBackoff<T>(
 export function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number,
-  timeoutMessage: string = 'Operation timed out'
+  timeoutMessage: string = 'Operation timed out',
 ): Promise<T> {
   return Promise.race([
     promise,
     new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
-    })
+      setTimeout(() => { reject(new Error(timeoutMessage)); }, timeoutMs);
+    }),
   ]);
 }
 
@@ -966,14 +966,14 @@ export function withTimeout<T>(
 export function downloadAsFile(data: string, filename: string, mimeType: string = 'text/plain'): void {
   const blob = new Blob([data], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  
+
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
+
   URL.revokeObjectURL(url);
 }
 
@@ -981,7 +981,7 @@ export function downloadAsFile(data: string, filename: string, mimeType: string 
 export function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
+    reader.onload = () => { resolve(reader.result as string); };
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
@@ -990,8 +990,8 @@ export function fileToBase64(file: File): Promise<string> {
 // Format file size
 export function formatFileSize(bytes: number): string {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 B';
-  
+  if (bytes === 0) { return '0 B'; }
+
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
 }
@@ -1014,7 +1014,7 @@ export function isTouchDevice(): boolean {
 export function getViewportDimensions(): { width: number; height: number } {
   return {
     width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
-    height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0),
   };
 }
 
@@ -1025,12 +1025,12 @@ export function getViewportDimensions(): { width: number; height: number } {
 // Focus trap for modals
 export function createFocusTrap(element: HTMLElement): () => void {
   const focusableElements = element.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
   ) as NodeListOf<HTMLElement>;
-  
+
   const firstElement = focusableElements[0];
   const lastElement = focusableElements[focusableElements.length - 1];
-  
+
   function handleTabKey(e: KeyboardEvent) {
     if (e.key === 'Tab') {
       if (e.shiftKey) {
@@ -1038,20 +1038,18 @@ export function createFocusTrap(element: HTMLElement): () => void {
           lastElement.focus();
           e.preventDefault();
         }
-      } else {
-        if (document.activeElement === lastElement && firstElement) {
-          firstElement.focus();
-          e.preventDefault();
-        }
+      } else if (document.activeElement === lastElement && firstElement) {
+        firstElement.focus();
+        e.preventDefault();
       }
     }
   }
-  
+
   element.addEventListener('keydown', handleTabKey);
-  
+
   // Focus first element
   firstElement?.focus();
-  
+
   // Return cleanup function
   return () => {
     element.removeEventListener('keydown', handleTabKey);
@@ -1117,5 +1115,5 @@ export default {
   isTouchDevice,
   getViewportDimensions,
   createFocusTrap,
-  generateId
+  generateId,
 };

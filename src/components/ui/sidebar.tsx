@@ -2,19 +2,19 @@
 import { cn } from '../../lib/utils';
 import { Button } from './button';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  FolderOpen, 
-  Wrench, 
-  Users, 
-  BarChart3, 
+import {
+  Home,
+  FolderOpen,
+  Wrench,
+  Users,
+  BarChart3,
   Settings,
   MapPin,
   FileText,
   Calendar,
   Truck,
   Bot,
-  Eye
+  Eye,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -40,13 +40,13 @@ const navigation = [
 
 export function Sidebar({ className, isCollapsed = false }: SidebarProps) {
   const location = useLocation();
-  
+
   return (
     <div className={cn(
       'flex h-full flex-col bg-sidebar border-r border-sidebar-border',
       isCollapsed ? 'w-16' : 'w-64',
       'transition-all duration-300 ease-in-out',
-      className
+      className,
     )}>
       {/* Logo */}
       <div className="flex h-16 items-center px-4 border-b border-sidebar-border">
@@ -70,7 +70,7 @@ export function Sidebar({ className, isCollapsed = false }: SidebarProps) {
                 className={cn(
                   'w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                   location.pathname === item.href && 'bg-sidebar-accent text-sidebar-accent-foreground',
-                  isCollapsed ? 'px-2' : 'px-3'
+                  isCollapsed ? 'px-2' : 'px-3',
                 )}
                 asChild
               >

@@ -6,12 +6,12 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
-import { 
-  Camera, 
-  MapPin, 
-  Upload, 
-  Filter, 
-  Search, 
+import {
+  Camera,
+  MapPin,
+  Upload,
+  Filter,
+  Search,
   Download,
   Eye,
   Grid,
@@ -22,7 +22,7 @@ import {
   Share,
   CheckCircle,
   AlertCircle,
-  Info
+  Info,
 } from 'lucide-react';
 
 interface PhotoReport {
@@ -56,8 +56,8 @@ const mockReports: PhotoReport[] = [
       project_id: 'proj-001',
       tags: ['base-layer', 'grading', 'progress'],
       priority: 'medium',
-      category: 'progress'
-    }
+      category: 'progress',
+    },
   },
   {
     id: 'PR002',
@@ -72,9 +72,9 @@ const mockReports: PhotoReport[] = [
       project_id: 'proj-001',
       tags: ['quality-control', 'temperature', 'asphalt'],
       priority: 'high',
-      category: 'quality'
-    }
-  }
+      category: 'quality',
+    },
+  },
 ];
 
 export default function PhotoReports() {
@@ -87,7 +87,7 @@ export default function PhotoReports() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) { return; }
 
     setIsUploading(true);
     setUploadProgress(0);
@@ -121,7 +121,7 @@ export default function PhotoReports() {
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) { return '0 Bytes'; }
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -192,7 +192,7 @@ export default function PhotoReports() {
                     <Input
                       placeholder="Search photos..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => { setSearchTerm(e.target.value); }}
                       className="pl-10"
                     />
                   </div>
@@ -201,14 +201,14 @@ export default function PhotoReports() {
                   <Button
                     variant={viewMode === 'grid' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setViewMode('grid')}
+                    onClick={() => { setViewMode('grid'); }}
                   >
                     <Grid className="h-4 w-4" />
                   </Button>
                   <Button
                     variant={viewMode === 'list' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setViewMode('list')}
+                    onClick={() => { setViewMode('list'); }}
                   >
                     <List className="h-4 w-4" />
                   </Button>
