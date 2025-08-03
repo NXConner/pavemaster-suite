@@ -109,9 +109,6 @@ export default function Enterprise() {
     }).format(amount);
   };
 
-  const calculateGrowth = (current: number, previous: number) => {
-    return ((current - previous) / previous * 100).toFixed(1);
-  };
 
   const triggerZapier = async (enterpriseData: any) => {
     if (!webhookUrl) return;

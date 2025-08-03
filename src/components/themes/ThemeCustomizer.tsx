@@ -5,34 +5,30 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Slider } from '../ui/slider';
-import { Switch } from '../ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Separator } from '../ui/separator';
 import { 
   Palette,
   Download,
-  Upload,
-  Save,
-  RefreshCw,
   Eye,
-  Settings,
-  Brush,
   Type,
   Layout,
   Sparkles,
   Zap,
-  Crown,
-  Share2,
-  Copy
+  Copy,
+  Save,
+  Share2
 } from 'lucide-react';
 
 interface ThemeCustomizerProps {
   onThemeChange?: (theme: any) => void;
-  currentTheme?: any;
 }
 
-export function ThemeCustomizer({ onThemeChange, currentTheme }: ThemeCustomizerProps) {
+export function ThemeCustomizer({ onThemeChange }: ThemeCustomizerProps) {
+  // Use onThemeChange callback when theme is updated
+  const handleThemeChange = (theme: any) => {
+    onThemeChange?.(theme);
+  };
   const [activeTab, setActiveTab] = useState('colors');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [customTheme, setCustomTheme] = useState({
@@ -117,13 +113,15 @@ export function ThemeCustomizer({ onThemeChange, currentTheme }: ThemeCustomizer
   ];
 
   const updateColor = (colorKey: string, value: string) => {
-    setCustomTheme(prev => ({
-      ...prev,
+    const updatedTheme = {
+      ...customTheme,
       colors: {
-        ...prev.colors,
+        ...customTheme.colors,
         [colorKey]: value
       }
-    }));
+    };
+    setCustomTheme(updatedTheme);
+    handleThemeChange(updatedTheme);
   };
 
   const generateGradient = (color1: string, color2: string) => {

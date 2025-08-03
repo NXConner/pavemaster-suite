@@ -301,7 +301,7 @@ export default function Mobile() {
                     <span className="text-sm">{device.location}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Sync className="h-4 w-4" />
+                    <RefreshCw className="h-4 w-4" />
                     <span className="text-sm">
                       {new Date(device.last_sync).toLocaleTimeString()}
                     </span>
