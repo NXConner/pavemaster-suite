@@ -1,0 +1,92 @@
+{
+  "experiment": {
+    "name": "pavement_condition_assessment_v2",
+    "description": "Advanced pavement condition analysis with multiple architectures and ensemble methods",
+    "tags": ["pavement", "computer_vision", "condition_assessment", "deep_learning", "production"]
+  },
+  "data": {
+    "synthetic_samples_per_class": 2000,
+    "real_data_augmentation_factor": 8,
+    "validation_split": 0.2,
+    "test_split": 0.1,
+    "image_size": [224, 224, 3],
+    "class_weights": "auto",
+    "data_quality_checks": true
+  },
+  "training": {
+    "batch_size": 64,
+    "epochs": 150,
+    "learning_rate": 0.0001,
+    "optimizer": "adam",
+    "early_stopping_patience": 20,
+    "reduce_lr_patience": 8,
+    "mixed_precision": true,
+    "gradient_clipping": 1.0,
+    "warmup_epochs": 10
+  },
+  "models": {
+    "architectures": [
+      "resnet",
+      "efficientnet",
+      "attention_cnn",
+      "vision_transformer",
+      "mobile"
+    ],
+    "ensemble": true,
+    "multi_task": true,
+    "transfer_learning": {
+      "enabled": true,
+      "freeze_layers": 0.7,
+      "fine_tune_epochs": 50
+    }
+  },
+  "evaluation": {
+    "metrics": [
+      "accuracy",
+      "precision",
+      "recall",
+      "f1_score",
+      "roc_auc",
+      "confusion_matrix"
+    ],
+    "class_weights": "auto",
+    "cross_validation": false,
+    "stratified_split": true
+  },
+  "monitoring": {
+    "use_wandb": false,
+    "save_best_only": true,
+    "monitor_metric": "val_f1_weighted",
+    "tensorboard": true,
+    "model_checkpointing": true,
+    "save_frequency": 5
+  },
+  "deployment": {
+    "export_formats": [
+      "savedmodel",
+      "tflite"
+    ],
+    "optimization": {
+      "quantization": false,
+      "pruning": false,
+      "knowledge_distillation": false
+    },
+    "performance_targets": {
+      "accuracy": 0.90,
+      "inference_time_ms": 100,
+      "model_size_mb": 50
+    }
+  },
+  "hardware": {
+    "use_gpu": true,
+    "mixed_precision": true,
+    "multi_gpu": false,
+    "memory_limit_gb": 8
+  },
+  "logging": {
+    "level": "INFO",
+    "save_logs": true,
+    "log_frequency": 10,
+    "save_predictions": true
+  }
+}
