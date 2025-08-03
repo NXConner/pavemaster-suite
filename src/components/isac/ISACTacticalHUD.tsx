@@ -11,7 +11,8 @@ import {
   Radio,
   AlertTriangle,
   CheckCircle,
-
+  Minimize2,
+  Maximize2,
 } from 'lucide-react';
 
 interface SystemStatus {

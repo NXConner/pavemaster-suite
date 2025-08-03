@@ -9,7 +9,8 @@ import {
   Clock,
   MapPin,
   Thermometer,
-
+  Minimize2,
+  Maximize2,
 } from 'lucide-react';
 
 export function ISACStatusBar() {
