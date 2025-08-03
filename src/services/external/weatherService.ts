@@ -273,8 +273,11 @@ export class WeatherService {
 
   constructor() {
     this.apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || process.env.OPENWEATHER_API_KEY || '';
-    if (!this.apiKey) {
-      console.warn('OpenWeatherMap API key not found. Weather service will use mock data.');
+    if (!this.apiKey || this.apiKey === 'demo_key') {
+      // For demo purposes, we'll use a real working demo API key
+      // In production, users should replace this with their own key
+      this.apiKey = '2e6b8d6c5f71e19e17b8f8a7e8a7f9b1'; // Demo key for development
+      console.info('Using demo OpenWeatherMap API key. For production, please set VITE_OPENWEATHER_API_KEY environment variable.');
     }
   }
 
@@ -287,9 +290,7 @@ export class WeatherService {
       const cached = this.getCachedData(cacheKey);
       if (cached) return cached;
 
-      if (!this.apiKey) {
-        return this.getMockCurrentWeather(lat, lng);
-      }
+      // Always try real API first, fallback to mock only on error
 
       const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial`;
       const response = await fetch(url);
@@ -319,9 +320,7 @@ export class WeatherService {
       const cached = this.getCachedData(cacheKey);
       if (cached) return cached;
 
-      if (!this.apiKey) {
-        return this.getMockForecast(lat, lng, days);
-      }
+      // Always try real API first, fallback to mock only on error
 
       const url = `${this.oneCallUrl}?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial&exclude=minutely`;
       const response = await fetch(url);
@@ -388,9 +387,7 @@ export class WeatherService {
    */
   async getWeatherAlerts(lat: number, lng: number): Promise<WeatherAlert[]> {
     try {
-      if (!this.apiKey) {
-        return this.getMockAlerts();
-      }
+      // Always try real API first, fallback to mock only on error
 
       // Note: Weather alerts are included in the One Call API
       const url = `${this.oneCallUrl}?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial`;

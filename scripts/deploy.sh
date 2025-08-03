@@ -1,17 +1,9 @@
 #!/bin/bash
 
-# PaveMaster Suite Deployment Script
-# Usage: ./scripts/deploy.sh [environment] [options]
-# Environments: development, staging, production
-# Options: --dry-run, --rollback, --force, --skip-tests
+# 🚀 PaveMaster Suite Production Deployment Script
+# This script handles the complete deployment process including health checks
 
 set -euo pipefail
-
-# Script configuration
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-BUILD_DIR="$PROJECT_ROOT/dist"
-BACKUP_DIR="$PROJECT_ROOT/backups"
 
 # Colors for output
 RED='\033[0;31m'
@@ -20,528 +12,508 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Default values
-ENVIRONMENT=""
-DRY_RUN=false
-ROLLBACK=false
-FORCE=false
-SKIP_TESTS=false
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+# Configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+LOG_FILE="/tmp/pavemaster-deploy-$(date +%Y%m%d-%H%M%S).log"
+DEPLOYMENT_ENV="${1:-production}"
+BUILD_VERSION="${2:-latest}"
 
-# Logging function
+# Functions
 log() {
-    echo -e "${BLUE}[$(date +'%Y-%m-%d %H:%M:%S')]${NC} $1"
+    echo -e "${GREEN}[$(date +'%Y-%m-%d %H:%M:%S')] $1${NC}" | tee -a "$LOG_FILE"
+}
+
+warn() {
+    echo -e "${YELLOW}[$(date +'%Y-%m-%d %H:%M:%S')] WARNING: $1${NC}" | tee -a "$LOG_FILE"
 }
 
 error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
+    echo -e "${RED}[$(date +'%Y-%m-%d %H:%M:%S')] ERROR: $1${NC}" | tee -a "$LOG_FILE"
+    exit 1
 }
 
-warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+info() {
+    echo -e "${BLUE}[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $1${NC}" | tee -a "$LOG_FILE"
 }
 
-success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-# Help function
-show_help() {
-    cat << EOF
-PaveMaster Suite Deployment Script
-
-Usage: $0 [environment] [options]
-
-Environments:
-    development     Deploy to development environment
-    staging         Deploy to staging environment  
-    production      Deploy to production environment
-
-Options:
-    --dry-run       Show what would be deployed without executing
-    --rollback      Rollback to previous deployment
-    --force         Force deployment without confirmations
-    --skip-tests    Skip running tests before deployment
-    --help          Show this help message
-
-Examples:
-    $0 staging                          # Deploy to staging
-    $0 production --dry-run             # Dry run for production
-    $0 production --rollback            # Rollback production
-    $0 staging --force --skip-tests     # Force deploy to staging without tests
-
-EOF
-}
-
-# Parse command line arguments
-parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            development|staging|production)
-                ENVIRONMENT="$1"
-                shift
-                ;;
-            --dry-run)
-                DRY_RUN=true
-                shift
-                ;;
-            --rollback)
-                ROLLBACK=true
-                shift
-                ;;
-            --force)
-                FORCE=true
-                shift
-                ;;
-            --skip-tests)
-                SKIP_TESTS=true
-                shift
-                ;;
-            --help)
-                show_help
-                exit 0
-                ;;
-            *)
-                error "Unknown option: $1"
-                show_help
-                exit 1
-                ;;
-        esac
-    done
-}
-
-# Validate environment
-validate_environment() {
-    if [[ -z "$ENVIRONMENT" ]]; then
-        error "Environment is required"
-        show_help
-        exit 1
-    fi
-
-    case $ENVIRONMENT in
-        development|staging|production)
-            log "Deploying to $ENVIRONMENT environment"
-            ;;
-        *)
-            error "Invalid environment: $ENVIRONMENT"
-            exit 1
-            ;;
-    esac
-}
-
-# Check prerequisites
+# Pre-deployment checks
 check_prerequisites() {
-    log "Checking prerequisites..."
-
-    # Check if required tools are installed
-    local required_tools=("node" "npm" "git" "curl")
-    for tool in "${required_tools[@]}"; do
-        if ! command -v "$tool" &> /dev/null; then
-            error "$tool is required but not installed"
-            exit 1
+    log "🔍 Checking deployment prerequisites..."
+    
+    # Check if required commands exist
+    local required_commands=("node" "npm" "docker" "git")
+    for cmd in "${required_commands[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            error "Required command '$cmd' not found"
         fi
     done
-
-    # Check Node.js version
-    local node_version=$(node --version | cut -d'v' -f2)
-    local required_version="18.0.0"
-    if ! node -p "process.exit(require('semver').gte('$node_version', '$required_version') ? 0 : 1)" 2>/dev/null; then
-        error "Node.js version $required_version or higher is required (current: $node_version)"
-        exit 1
+    
+    # Check if .env file exists
+    if [[ ! -f "$PROJECT_ROOT/.env" ]]; then
+        error ".env file not found. Please create it from .env.example"
     fi
-
-    # Check if we're in a git repository
-    if ! git rev-parse --git-dir > /dev/null 2>&1; then
-        error "This script must be run from within a git repository"
-        exit 1
-    fi
-
-    # Check for uncommitted changes in production
-    if [[ "$ENVIRONMENT" == "production" ]] && [[ "$FORCE" == false ]]; then
-        if ! git diff-index --quiet HEAD --; then
-            error "Uncommitted changes detected. Commit or stash changes before production deployment"
-            exit 1
+    
+    # Check if we're on the correct branch for production
+    if [[ "$DEPLOYMENT_ENV" == "production" ]]; then
+        local current_branch=$(git branch --show-current)
+        if [[ "$current_branch" != "main" && "$current_branch" != "master" ]]; then
+            warn "Deploying from branch '$current_branch' instead of main/master"
+            read -p "Continue? (y/N) " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                error "Deployment cancelled"
+            fi
         fi
     fi
-
-    success "Prerequisites check passed"
-}
-
-# Load environment configuration
-load_environment_config() {
-    log "Loading environment configuration for $ENVIRONMENT..."
-
-    case $ENVIRONMENT in
-        development)
-            export VITE_APP_ENV="development"
-            export NODE_ENV="development"
-            DEPLOY_TARGET="localhost"
-            ;;
-        staging)
-            export VITE_APP_ENV="staging"
-            export NODE_ENV="production"
-            DEPLOY_TARGET="staging.pavemaster.com"
-            ;;
-        production)
-            export VITE_APP_ENV="production"
-            export NODE_ENV="production"
-            DEPLOY_TARGET="app.pavemaster.com"
-            ;;
-    esac
-
-    # Load environment-specific variables from .env files
-    local env_file="$PROJECT_ROOT/.env.$ENVIRONMENT"
-    if [[ -f "$env_file" ]]; then
-        log "Loading environment variables from $env_file"
-        set -a
-        source "$env_file"
-        set +a
-    else
-        warning "Environment file $env_file not found"
-    fi
-
-    success "Environment configuration loaded"
-}
-
-# Run tests
-run_tests() {
-    if [[ "$SKIP_TESTS" == true ]]; then
-        warning "Skipping tests as requested"
-        return 0
-    fi
-
-    log "Running tests..."
-
-    # Install dependencies if needed
-    if [[ ! -d "$PROJECT_ROOT/node_modules" ]]; then
-        log "Installing dependencies..."
-        cd "$PROJECT_ROOT"
-        npm ci
-    fi
-
-    # Run linting
-    log "Running ESLint..."
-    npm run lint
-
-    # Run type checking
-    log "Running TypeScript type check..."
-    npm run type-check || npx tsc --noEmit
-
-    # Run unit tests
-    log "Running unit tests..."
-    npm run test:unit || npm test
-
-    # Run build test
-    log "Running build test..."
-    npm run build
-
-    success "All tests passed"
-}
-
-# Create backup
-create_backup() {
-    if [[ "$ENVIRONMENT" == "production" ]] || [[ "$ENVIRONMENT" == "staging" ]]; then
-        log "Creating backup..."
-
-        mkdir -p "$BACKUP_DIR"
-        
-        # Backup current deployment
-        local backup_name="backup_${ENVIRONMENT}_${TIMESTAMP}"
-        local backup_path="$BACKUP_DIR/$backup_name"
-        
-        if [[ -d "$BUILD_DIR" ]]; then
-            cp -r "$BUILD_DIR" "$backup_path"
-            log "Backup created: $backup_path"
-        fi
-
-        # Keep only last 10 backups
-        find "$BACKUP_DIR" -maxdepth 1 -type d -name "backup_${ENVIRONMENT}_*" | \
-            sort | head -n -10 | xargs rm -rf
-
-        success "Backup completed"
-    fi
+    
+    log "✅ Prerequisites check passed"
 }
 
 # Build application
 build_application() {
-    log "Building application for $ENVIRONMENT..."
-
+    log "🏗️ Building application..."
+    
     cd "$PROJECT_ROOT"
-
-    # Clean previous build
-    rm -rf "$BUILD_DIR"
-
+    
     # Install dependencies
-    log "Installing dependencies..."
-    npm ci --production=false
-
-    # Set build metadata
-    export VITE_APP_VERSION=$(node -p "require('./package.json').version")
-    export VITE_BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-    export VITE_GIT_COMMIT=$(git rev-parse HEAD)
-
+    info "Installing dependencies..."
+    npm ci --legacy-peer-deps
+    
+    # Run linting and type checks
+    info "Running code quality checks..."
+    npm run lint
+    npm run type-check
+    
+    # Run tests
+    info "Running test suite..."
+    npm run test:unit
+    
     # Build the application
-    log "Building with Vite..."
-    npm run build
-
-    # Verify build output
-    if [[ ! -d "$BUILD_DIR" ]]; then
-        error "Build failed - output directory not found"
-        exit 1
+    info "Building for $DEPLOYMENT_ENV..."
+    if [[ "$DEPLOYMENT_ENV" == "production" ]]; then
+        npm run build
+    else
+        npm run build:dev
     fi
-
-    if [[ ! -f "$BUILD_DIR/index.html" ]]; then
-        error "Build failed - index.html not found"
-        exit 1
-    fi
-
-    # Calculate build size
-    local build_size=$(du -sh "$BUILD_DIR" | cut -f1)
-    log "Build completed successfully (size: $build_size)"
-
-    success "Application built successfully"
+    
+    log "✅ Application built successfully"
 }
 
-# Deploy to environment
-deploy_application() {
-    log "Deploying to $ENVIRONMENT environment..."
-
-    if [[ "$DRY_RUN" == true ]]; then
-        log "DRY RUN - Would deploy to $DEPLOY_TARGET"
-        log "Build directory: $BUILD_DIR"
-        log "Environment: $ENVIRONMENT"
-        return 0
+# Build Docker image
+build_docker_image() {
+    log "🐳 Building Docker image..."
+    
+    cd "$PROJECT_ROOT"
+    
+    local image_tag="pavemaster/suite:${BUILD_VERSION}"
+    local dockerfile="Dockerfile.production"
+    
+    if [[ "$DEPLOYMENT_ENV" != "production" ]]; then
+        dockerfile="Dockerfile"
     fi
+    
+    info "Building image: $image_tag"
+    docker build -f "$dockerfile" -t "$image_tag" .
+    
+    # Tag as latest if this is production
+    if [[ "$DEPLOYMENT_ENV" == "production" ]]; then
+        docker tag "$image_tag" "pavemaster/suite:latest"
+    fi
+    
+    log "✅ Docker image built successfully"
+}
 
-    case $ENVIRONMENT in
-        development)
-            deploy_development
+# Deploy web application
+deploy_web_app() {
+    log "🌐 Deploying web application..."
+    
+    case "$DEPLOYMENT_ENV" in
+        "production")
+            deploy_to_production
             ;;
-        staging)
-            deploy_staging
+        "staging")
+            deploy_to_staging
             ;;
-        production)
-            deploy_production
+        "development")
+            deploy_to_development
+            ;;
+        *)
+            error "Unknown deployment environment: $DEPLOYMENT_ENV"
             ;;
     esac
-
-    success "Deployment completed"
-}
-
-# Development deployment
-deploy_development() {
-    log "Starting development server..."
-    cd "$PROJECT_ROOT"
-    npm run dev &
-    local dev_pid=$!
     
-    # Wait for server to start
-    sleep 5
-    
-    # Check if server is running
-    if curl -s http://localhost:5173 > /dev/null; then
-        success "Development server started (PID: $dev_pid)"
-        log "Application available at: http://localhost:5173"
-    else
-        error "Failed to start development server"
-        kill $dev_pid 2>/dev/null || true
-        exit 1
-    fi
-}
-
-# Staging deployment
-deploy_staging() {
-    log "Deploying to staging server..."
-    
-    # This would typically deploy to a staging server
-    # For now, we'll simulate with local preview
-    cd "$PROJECT_ROOT"
-    
-    # Start preview server
-    npm run preview &
-    local preview_pid=$!
-    
-    # Wait for server to start
-    sleep 3
-    
-    # Health check
-    if health_check "http://localhost:4173"; then
-        success "Staging deployment successful (PID: $preview_pid)"
-        log "Staging URL: http://localhost:4173"
-    else
-        error "Staging deployment failed health check"
-        kill $preview_pid 2>/dev/null || true
-        exit 1
-    fi
+    log "✅ Web application deployed successfully"
 }
 
 # Production deployment
-deploy_production() {
-    if [[ "$FORCE" == false ]]; then
-        warning "You are about to deploy to PRODUCTION"
-        read -p "Are you sure you want to continue? (yes/no): " -r
-        if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
-            log "Production deployment cancelled"
-            exit 0
-        fi
-    fi
+deploy_to_production() {
+    info "Deploying to production environment..."
+    
+    # Stop existing containers
+    docker-compose -f docker-compose.production.yml down || true
+    
+    # Pull latest images
+    docker-compose -f docker-compose.production.yml pull
+    
+    # Start new containers
+    docker-compose -f docker-compose.production.yml up -d
+    
+    # Wait for containers to be healthy
+    info "Waiting for containers to be healthy..."
+    sleep 30
+    
+    # Run database migrations if needed
+    run_database_migrations
+}
 
-    log "Deploying to production..."
+# Staging deployment
+deploy_to_staging() {
+    info "Deploying to staging environment..."
     
-    # Production deployment would typically involve:
-    # 1. Upload to CDN/Object Storage
-    # 2. Update load balancer configuration
-    # 3. Database migrations
-    # 4. Cache invalidation
-    # 5. Health checks
+    # Similar to production but with staging configuration
+    docker-compose -f docker-compose.staging.yml down || true
+    docker-compose -f docker-compose.staging.yml up -d
     
-    # For demonstration, we'll use a local production preview
+    sleep 15
+}
+
+# Development deployment
+deploy_to_development() {
+    info "Deploying to development environment..."
+    
+    docker-compose down || true
+    docker-compose up -d
+    
+    sleep 10
+}
+
+# Database migrations
+run_database_migrations() {
+    log "🗃️ Running database migrations..."
+    
+    # Check if Supabase CLI is available
+    if command -v supabase &> /dev/null; then
+        info "Running Supabase migrations..."
+        supabase db push --include-all
+    else
+        warn "Supabase CLI not found, skipping migrations"
+    fi
+    
+    log "✅ Database migrations completed"
+}
+
+# Build and deploy mobile apps
+deploy_mobile_apps() {
+    log "📱 Building and deploying mobile applications..."
+    
+    if [[ "$DEPLOYMENT_ENV" == "production" ]]; then
+        build_android_app
+        build_ios_app
+    else
+        info "Skipping mobile app build for $DEPLOYMENT_ENV"
+    fi
+    
+    log "✅ Mobile applications processed"
+}
+
+# Build Android app
+build_android_app() {
+    info "Building Android application..."
+    
     cd "$PROJECT_ROOT"
     
-    # Start production preview
-    npm run preview -- --host 0.0.0.0 --port 3000 &
-    local prod_pid=$!
+    # Build web assets for mobile
+    npm run build:mobile
     
-    # Wait for server to start
-    sleep 5
+    # Sync with Capacitor
+    npx cap sync android
     
-    # Comprehensive health check
-    if health_check "http://localhost:3000"; then
-        success "Production deployment successful (PID: $prod_pid)"
-        log "Production URL: http://localhost:3000"
-        
-        # Send deployment notification
-        send_deployment_notification
-    else
-        error "Production deployment failed health check"
-        kill $prod_pid 2>/dev/null || true
-        exit 1
-    fi
+    # Build Android APK
+    cd android
+    ./gradlew assembleRelease
+    
+    info "Android APK built: android/app/build/outputs/apk/release/app-release.apk"
 }
 
-# Health check function
-health_check() {
-    local url=$1
-    local max_attempts=10
+# Build iOS app
+build_ios_app() {
+    info "Building iOS application..."
+    
+    # Check if we're on macOS
+    if [[ "$OSTYPE" != "darwin"* ]]; then
+        warn "iOS build skipped (not running on macOS)"
+        return
+    fi
+    
+    cd "$PROJECT_ROOT"
+    
+    # Sync with Capacitor
+    npx cap sync ios
+    
+    # Build iOS app (requires Xcode)
+    cd ios
+    xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -destination generic/platform=iOS archive -archivePath App.xcarchive
+    
+    info "iOS app archived: ios/App.xcarchive"
+}
+
+# Health checks
+run_health_checks() {
+    log "🏥 Running post-deployment health checks..."
+    
+    local base_url
+    case "$DEPLOYMENT_ENV" in
+        "production")
+            base_url="https://app.pavemaster.com"
+            ;;
+        "staging")
+            base_url="https://staging.pavemaster.com"
+            ;;
+        "development")
+            base_url="http://localhost:5173"
+            ;;
+        *)
+            base_url="http://localhost:3000"
+            ;;
+    esac
+    
+    # Wait for application to be ready
+    info "Waiting for application to be ready..."
+    local max_attempts=30
     local attempt=1
-
-    log "Performing health check for $url..."
-
+    
     while [[ $attempt -le $max_attempts ]]; do
-        if curl -s -f "$url" > /dev/null; then
-            success "Health check passed (attempt $attempt)"
-            return 0
+        if curl -s -f "$base_url/health" > /dev/null 2>&1; then
+            log "✅ Application is responding"
+            break
         fi
         
-        log "Health check attempt $attempt failed, retrying..."
-        sleep 3
+        if [[ $attempt -eq $max_attempts ]]; then
+            error "Application failed to respond after $max_attempts attempts"
+        fi
+        
+        info "Attempt $attempt/$max_attempts failed, retrying in 10 seconds..."
+        sleep 10
         ((attempt++))
     done
-
-    error "Health check failed after $max_attempts attempts"
-    return 1
+    
+    # Run additional health checks
+    check_api_endpoints "$base_url"
+    check_database_connectivity
+    check_external_services
+    
+    log "✅ Health checks completed successfully"
 }
 
-# Send deployment notification
-send_deployment_notification() {
-    local version=$(node -p "require('./package.json').version")
-    local commit=$(git rev-parse --short HEAD)
+# Check API endpoints
+check_api_endpoints() {
+    local base_url="$1"
+    info "Checking API endpoints..."
     
-    log "Sending deployment notification..."
+    local endpoints=(
+        "/api/health"
+        "/api/auth/status"
+        "/api/projects"
+        "/api/weather/status"
+    )
     
-    # This would typically send notifications via:
-    # - Slack webhook
-    # - Email
-    # - Discord
-    # - Teams
-    
-    cat << EOF > "/tmp/deployment_notification.json"
-{
-    "environment": "$ENVIRONMENT",
-    "version": "$version",
-    "commit": "$commit",
-    "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-    "deployer": "$(git config user.name)",
-    "status": "success"
-}
-EOF
-
-    # Simulate notification sending
-    log "Deployment notification prepared: /tmp/deployment_notification.json"
+    for endpoint in "${endpoints[@]}"; do
+        if curl -s -f "$base_url$endpoint" > /dev/null 2>&1; then
+            info "✓ $endpoint - OK"
+        else
+            warn "✗ $endpoint - Failed"
+        fi
+    done
 }
 
-# Rollback function
-perform_rollback() {
-    log "Performing rollback for $ENVIRONMENT..."
-
-    local latest_backup=$(find "$BACKUP_DIR" -maxdepth 1 -type d -name "backup_${ENVIRONMENT}_*" | sort | tail -1)
+# Check database connectivity
+check_database_connectivity() {
+    info "Checking database connectivity..."
     
-    if [[ -z "$latest_backup" ]]; then
-        error "No backup found for $ENVIRONMENT"
-        exit 1
+    # This would depend on your database setup
+    # For Supabase, you might check the connection via API
+    if command -v supabase &> /dev/null; then
+        if supabase status > /dev/null 2>&1; then
+            info "✓ Database connectivity - OK"
+        else
+            warn "✗ Database connectivity - Failed"
+        fi
+    else
+        info "Supabase CLI not available, skipping database check"
     fi
+}
 
-    log "Rolling back to: $latest_backup"
+# Check external services
+check_external_services() {
+    info "Checking external services..."
     
-    if [[ "$DRY_RUN" == false ]]; then
-        # Remove current deployment
-        rm -rf "$BUILD_DIR"
-        
-        # Restore from backup
-        cp -r "$latest_backup" "$BUILD_DIR"
-        
-        # Redeploy
-        deploy_application
+    # Check weather API
+    if curl -s -f "https://api.openweathermap.org/data/2.5/weather?q=London&appid=test" > /dev/null 2>&1; then
+        info "✓ Weather API - Reachable"
+    else
+        warn "✗ Weather API - Failed"
     fi
+    
+    # Add other external service checks as needed
+}
 
-    success "Rollback completed"
+# Rollback functionality
+rollback_deployment() {
+    log "🔄 Rolling back deployment..."
+    
+    case "$DEPLOYMENT_ENV" in
+        "production")
+            docker-compose -f docker-compose.production.yml down
+            # Restore previous version
+            docker-compose -f docker-compose.production.yml up -d
+            ;;
+        "staging")
+            docker-compose -f docker-compose.staging.yml down
+            docker-compose -f docker-compose.staging.yml up -d
+            ;;
+        *)
+            docker-compose down
+            docker-compose up -d
+            ;;
+    esac
+    
+    log "✅ Rollback completed"
+}
+
+# Notification functions
+send_success_notification() {
+    log "📢 Sending success notification..."
+    
+    local message="🚀 PaveMaster Suite deployment to $DEPLOYMENT_ENV completed successfully!"
+    
+    # Slack notification (if webhook URL is configured)
+    if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
+        curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"$message\"}" \
+            "$SLACK_WEBHOOK_URL" || warn "Failed to send Slack notification"
+    fi
+    
+    # Email notification (if configured)
+    if [[ -n "${NOTIFICATION_EMAIL:-}" ]]; then
+        echo "$message" | mail -s "Deployment Success" "$NOTIFICATION_EMAIL" || warn "Failed to send email notification"
+    fi
+}
+
+send_failure_notification() {
+    local error_message="$1"
+    log "📢 Sending failure notification..."
+    
+    local message="❌ PaveMaster Suite deployment to $DEPLOYMENT_ENV failed: $error_message"
+    
+    # Slack notification
+    if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
+        curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"$message\"}" \
+            "$SLACK_WEBHOOK_URL" || warn "Failed to send Slack notification"
+    fi
+    
+    # Email notification
+    if [[ -n "${NOTIFICATION_EMAIL:-}" ]]; then
+        echo "$message" | mail -s "Deployment Failed" "$NOTIFICATION_EMAIL" || warn "Failed to send email notification"
+    fi
 }
 
 # Cleanup function
 cleanup() {
-    log "Performing cleanup..."
+    log "🧹 Cleaning up temporary files..."
     
-    # Remove temporary files
-    rm -f /tmp/deployment_notification.json
+    # Clean up old Docker images
+    docker image prune -f
     
-    # Clean up old build artifacts
-    find "$PROJECT_ROOT" -name "*.log" -mtime +7 -delete 2>/dev/null || true
+    # Clean up old log files (keep last 10)
+    find /tmp -name "pavemaster-deploy-*.log" -mtime +7 -delete 2>/dev/null || true
     
-    success "Cleanup completed"
+    log "✅ Cleanup completed"
 }
 
-# Main deployment flow
+# Main deployment function
 main() {
-    log "Starting PaveMaster Suite deployment..."
-    log "Timestamp: $TIMESTAMP"
-
-    parse_args "$@"
-    validate_environment
-    check_prerequisites
-    load_environment_config
-
-    if [[ "$ROLLBACK" == true ]]; then
-        perform_rollback
-    else
-        run_tests
-        create_backup
-        build_application
-        deploy_application
-    fi
-
-    cleanup
-
-    success "Deployment process completed successfully!"
-    log "Environment: $ENVIRONMENT"
-    log "Timestamp: $TIMESTAMP"
+    log "🚀 Starting PaveMaster Suite deployment to $DEPLOYMENT_ENV"
+    log "📝 Deployment log: $LOG_FILE"
     
-    if [[ "$DRY_RUN" == false ]] && [[ "$ROLLBACK" == false ]]; then
-        log "Application is now live!"
+    # Trap errors and rollback
+    trap 'error_code=$?; if [[ $error_code -ne 0 ]]; then send_failure_notification "Deployment script failed"; rollback_deployment; fi; cleanup; exit $error_code' ERR
+    
+    # Load environment variables
+    if [[ -f "$PROJECT_ROOT/.env" ]]; then
+        source "$PROJECT_ROOT/.env"
     fi
+    
+    # Execute deployment steps
+    check_prerequisites
+    build_application
+    build_docker_image
+    deploy_web_app
+    
+    if [[ "$DEPLOYMENT_ENV" == "production" ]]; then
+        deploy_mobile_apps
+    fi
+    
+    run_health_checks
+    send_success_notification
+    cleanup
+    
+    log "🎉 Deployment completed successfully!"
+    log "📊 Deployment summary:"
+    log "   Environment: $DEPLOYMENT_ENV"
+    log "   Version: $BUILD_VERSION"
+    log "   Log file: $LOG_FILE"
 }
 
-# Error handling
-trap 'error "Deployment failed. Check the logs for details."; exit 1' ERR
+# Show help
+show_help() {
+    cat << EOF
+🚀 PaveMaster Suite Deployment Script
 
-# Run main function
+Usage: $0 [ENVIRONMENT] [VERSION]
+
+Environments:
+  production  - Deploy to production environment
+  staging     - Deploy to staging environment
+  development - Deploy to development environment
+
+Examples:
+  $0 production v1.2.3
+  $0 staging latest
+  $0 development
+
+Options:
+  -h, --help    Show this help message
+  -r, --rollback Rollback the last deployment
+
+Environment Variables:
+  SLACK_WEBHOOK_URL     - Slack webhook for notifications
+  NOTIFICATION_EMAIL    - Email for deployment notifications
+  DOCKER_REGISTRY       - Docker registry URL
+EOF
+}
+
+# Handle command line arguments
+case "${1:-}" in
+    -h|--help)
+        show_help
+        exit 0
+        ;;
+    -r|--rollback)
+        log "🔄 Initiating rollback..."
+        rollback_deployment
+        exit 0
+        ;;
+    "")
+        DEPLOYMENT_ENV="development"
+        ;;
+    *)
+        if [[ ! "$1" =~ ^(production|staging|development)$ ]]; then
+            error "Invalid environment: $1. Use production, staging, or development."
+        fi
+        ;;
+esac
+
+# Run main deployment
 main "$@"

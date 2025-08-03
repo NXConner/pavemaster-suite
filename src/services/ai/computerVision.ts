@@ -96,11 +96,24 @@ export class ComputerVisionService {
     if (this.isModelLoaded) return;
 
     try {
-      // In a real implementation, this would load a pre-trained model
-      // For now, we'll create a mock model structure
-      this.model = await this.createMockModel();
+      console.log('Loading computer vision model...');
+      
+      // Try to load the actual TensorFlow.js model first
+      try {
+        const modelUrl = '/models/model.json';
+        this.model = await tf.loadLayersModel(modelUrl);
+        console.log('Real computer vision model loaded successfully');
+        console.log('Model input shape:', this.model.inputs[0].shape);
+        console.log('Model output shape:', this.model.outputs[0].shape);
+      } catch (modelError) {
+        console.warn('Real model not available, using fallback model:', modelError);
+        // Fallback to creating a model for development
+        this.model = await this.createMockModel();
+        console.log('Fallback model created successfully');
+      }
+      
       this.isModelLoaded = true;
-      console.log('Pavement defect detection model loaded successfully');
+      console.log('Pavement defect detection model ready');
     } catch (error) {
       console.error('Failed to load model:', error);
       throw new Error('Computer vision model failed to load');

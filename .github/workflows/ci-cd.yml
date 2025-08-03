@@ -1,42 +1,437 @@
-name: CI/CD Pipeline
+name: 🚀 PaveMaster Suite CI/CD Pipeline
 
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [ published ]
 
 env:
-  NODE_VERSION: '18'
-  SUPABASE_URL: 'https://vodglzbgqsafghlihivy.supabase.co'
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvZGdsemJncXNhZmdobGloaXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNDcwMDQsImV4cCI6MjA2NDkyMzAwNH0.uLAZ_zY3zY-QmDDXwkAuspCUW9NpotsTV5fVCiHf5mM'
+  NODE_VERSION: '18.x'
+  CACHE_KEY: node-modules
 
 jobs:
-  test:
-    name: Test Suite
+  # Security and Quality Checks
+  security-audit:
+    name: 🔒 Security Audit
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
-      - name: Install Dependencies
-        run: npm ci
-        
-      - name: Type Check
-        run: npm run type-check
-        
-      - name: Lint Code
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run security audit
+        run: npm audit --audit-level=high
+
+      - name: Run vulnerability check
+        run: npx audit-ci --config audit-ci.json
+
+  # Code Quality and Linting
+  code-quality:
+    name: 📝 Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run ESLint
         run: npm run lint
-        
-      - name: Run Unit Tests
-        run: npm run test
-        
-      - name: Build Application
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+      - name: Check code formatting
+        run: npx prettier --check .
+
+  # Unit and Integration Tests
+  test-suite:
+    name: 🧪 Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-type: [unit, integration]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run unit tests
+        if: matrix.test-type == 'unit'
+        run: npm run test:unit
+
+      - name: Run integration tests
+        if: matrix.test-type == 'integration'
+        run: npm run test:integration
+
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: ${{ matrix.test-type }}
+
+  # End-to-End Tests
+  e2e-tests:
+    name: 🎭 E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build application
         run: npm run build
+
+      - name: Start application
+        run: npm run preview &
+        env:
+          CI: true
+
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload E2E results
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: e2e-results
+          path: test-results/
+
+  # Build and Bundle Analysis
+  build-analysis:
+    name: 📦 Build Analysis
+    runs-on: ubuntu-latest
+    needs: [security-audit, code-quality]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Analyze bundle size
+        run: npm run analyze-bundle
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle-analysis
+          path: stats.html
+
+  # Mobile App Build (Android)
+  build-android:
+    name: 📱 Build Android
+    runs-on: ubuntu-latest
+    needs: [build-analysis]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build web app
+        run: npm run build:mobile
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+  # Mobile App Build (iOS)
+  build-ios:
+    name: 🍎 Build iOS
+    runs-on: macos-latest
+    needs: [build-analysis]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build web app
+        run: npm run build:mobile
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      - name: Build iOS app
+        run: |
+          cd ios
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination generic/platform=iOS -archivePath App.xcarchive archive
+
+      - name: Upload iOS build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-build
+          path: ios/App.xcarchive
+
+  # Docker Build and Push
+  docker-build:
+    name: 🐳 Docker Build
+    runs-on: ubuntu-latest
+    needs: [test-suite, e2e-tests]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: pavemaster/suite
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Deploy to Staging
+  deploy-staging:
+    name: 🚀 Deploy Staging
+    runs-on: ubuntu-latest
+    needs: [docker-build]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment commands here
+          # This could include updating Kubernetes deployments,
+          # calling deployment APIs, etc.
+
+  # Deploy to Production
+  deploy-production:
+    name: 🌟 Deploy Production
+    runs-on: ubuntu-latest
+    needs: [docker-build, build-android, build-ios]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment commands here
+
+      - name: Health check
+        run: |
+          echo "Running post-deployment health checks..."
+          # Add health check commands here
+
+      - name: Notify team
+        if: success()
+        run: |
+          echo "Deployment successful! Notifying team..."
+          # Add notification logic (Slack, email, etc.)
+
+  # Performance Testing
+  performance-test:
+    name: ⚡ Performance Test
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Run load testing
+        run: |
+          # Add load testing commands here
+          echo "Running load tests..."
+
+  # Accessibility Testing
+  accessibility-test:
+    name: ♿ Accessibility Test
+    runs-on: ubuntu-latest
+    needs: [build-analysis]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run accessibility tests
+        run: npm run test:a11y
+
+  # Release Management
+  create-release:
+    name: 📋 Create Release
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate changelog
+        run: |
+          echo "Generating changelog..."
+          # Add changelog generation logic
+
+      - name: Create release notes
+        run: |
+          echo "Creating release notes..."
+          # Add release notes creation logic
+
+      - name: Upload release artifacts
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./dist/pavemaster-suite.zip
+          asset_name: pavemaster-suite-${{ github.event.release.tag_name }}.zip
+          asset_content_type: application/zip
+
+  # Cleanup
+  cleanup:
+    name: 🧹 Cleanup
+    runs-on: ubuntu-latest
+    needs: [create-release]
+    if: always()
+    steps:
+      - name: Clean up old artifacts
+        run: |
+          echo "Cleaning up old build artifacts..."
+          # Add cleanup logic for old builds, images, etc.
+
+      - name: Clean up Docker images
+        run: |
+          echo "Cleaning up old Docker images..."
+          # Add Docker cleanup logic
