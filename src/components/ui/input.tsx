@@ -1,90 +1,135 @@
 import React, { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
+import { Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-// Input Variant Types
-export type InputVariant = 'default' | 'outline' | 'filled' | 'underline';
-
-// Input Size Types
-export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
-// Input Props Interface
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  variant?: InputVariant;
-  size?: InputSize;
-  fullWidth?: boolean;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-  error?: boolean;
-  helperText?: string;
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
+  success?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  variant?: 'default' | 'ghost' | 'tactical';
+  inputSize?: 'sm' | 'default' | 'lg';
 }
 
-// Input Component
-const Input = forwardRef<HTMLInputElement, InputProps>(({
-  className,
-  variant = 'default',
-  size = 'md',
-  fullWidth = false,
-  startIcon,
-  endIcon,
-  error = false,
-  helperText,
-  ...props
-}, ref) => {
-  // Variant-specific classes
-  const variantClasses = {
-    default: 'border-gray-300 focus:border-primary focus:ring-primary',
-    outline: 'border-2 border-gray-400 focus:border-primary focus:ring-primary',
-    filled: 'bg-gray-100 border-transparent focus:bg-white focus:border-primary',
-    underline: 'border-b-2 border-x-0 border-t-0 border-gray-300 focus:border-primary',
-  };
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ 
+    className, 
+    type, 
+    error, 
+    success, 
+    leftIcon, 
+    rightIcon, 
+    variant = 'default',
+    inputSize = 'default',
+    disabled,
+    ...props 
+  }, ref) => {
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [isFocused, setIsFocused] = React.useState(false);
+    
+    const isPassword = type === 'password';
+    const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
+    
+    const getVariantStyles = () => {
+      switch (variant) {
+        case 'ghost':
+          return 'border-0 bg-transparent focus:bg-accent/50';
+        case 'tactical':
+          return 'border-green-400/30 bg-slate-900/50 text-green-400 placeholder:text-green-400/50 focus:border-green-400/70 focus:bg-slate-900/70 font-mono';
+        default:
+          return 'border-input bg-background';
+      }
+    };
+    
+    const getSizeStyles = () => {
+      switch (inputSize) {
+        case 'sm':
+          return 'h-8 px-2 text-sm';
+        case 'lg':
+          return 'h-12 px-4 text-base';
+        default:
+          return 'h-10 px-3';
+      }
+    };
+    
+    const getStateStyles = () => {
+      if (error) return 'border-destructive focus:border-destructive';
+      if (success) return 'border-green-500 focus:border-green-500';
+      return 'focus:border-primary';
+    };
 
-  // Size-specific classes
-  const sizeClasses = {
-    xs: 'px-2 py-1 text-xs',
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-5 py-3 text-lg',
-    xl: 'px-6 py-4 text-xl',
-  };
-
-  // Error state classes
-  const errorClasses = error
-    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-    : '';
-
-  return (
-    <div className={cn('relative', fullWidth && 'w-full')}>
-      <div className="flex items-center">
-        {startIcon && <span className="mr-2">{startIcon}</span>}
-        <input
-          ref={ref}
-          className={cn(
-            'block w-full rounded-md shadow-sm transition-all duration-200 ease-in-out',
-            'focus:outline-none focus:ring-2 focus:ring-opacity-50',
-            variantClasses[variant],
-            sizeClasses[size],
-            errorClasses,
-            fullWidth && 'w-full',
-            className,
+    return (
+      <div className="relative w-full">
+        <div className="relative">
+          {leftIcon && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              {leftIcon}
+            </div>
           )}
-          {...props}
-        />
-        {endIcon && <span className="ml-2">{endIcon}</span>}
+          
+          <input
+            type={inputType}
+            className={cn(
+              'flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
+              getSizeStyles(),
+              getVariantStyles(),
+              getStateStyles(),
+              leftIcon && 'pl-10',
+              (rightIcon || isPassword || error || success) && 'pr-10',
+              isFocused && 'ring-2 ring-ring ring-offset-2 transform scale-[1.01]',
+              className
+            )}
+            ref={ref}
+            disabled={disabled}
+            onFocus={(e) => {
+              setIsFocused(true);
+              props.onFocus?.(e);
+            }}
+            onBlur={(e) => {
+              setIsFocused(false);
+              props.onBlur?.(e);
+            }}
+            {...props}
+          />
+          
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+            {error && (
+              <AlertCircle className="h-4 w-4 text-destructive" />
+            )}
+            {success && !error && (
+              <CheckCircle2 className="h-4 w-4 text-green-500" />
+            )}
+            {isPassword && (
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            )}
+            {rightIcon && !isPassword && !error && !success && (
+              <div className="text-muted-foreground">
+                {rightIcon}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {error && (
+          <p className="mt-1 text-sm text-destructive animate-in slide-in-from-top-1">
+            {error}
+          </p>
+        )}
       </div>
-      {helperText && (
-        <p
-          className={cn(
-            'mt-1 text-sm',
-            error ? 'text-red-500' : 'text-gray-500',
-          )}
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
-  );
-});
+    );
+  }
+);
 
 Input.displayName = 'Input';
 
