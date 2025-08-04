@@ -40,6 +40,13 @@ const Security = lazy(() => import('./pages/Security'));
 const VeteranResources = lazy(() => import('./pages/VeteranResources'));
 const Profile = lazy(() => import('./pages/Profile'));
 const CompanySetup = lazy(() => import('./pages/CompanySetup'));
+const ConversationalHub = lazy(() => import('./pages/ConversationalHub'));
+const ConnectivityHub = lazy(() => import('./pages/ConnectivityHub'));
+const ComputerVision = lazy(() => import('./pages/ComputerVision'));
+const SmartRecommendations = lazy(() => import('./pages/SmartRecommendations'));
+const ExperienceRevolution = lazy(() => import('./pages/ExperienceRevolution'));
+const PlatformEcosystem = lazy(() => import('./pages/PlatformEcosystem'));
+const FutureTechnologies = lazy(() => import('./pages/FutureTechnologies'));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -130,6 +137,11 @@ export default function App() {
                   <Route path="/ai-assistant" element={
                     <ProtectedRoute>
                       <AIAssistant />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/conversational-hub" element={
+                    <ProtectedRoute>
+                      <ConversationalHub />
                     </ProtectedRoute>
                   } />
                   <Route path="/overwatch" element={
@@ -255,6 +267,36 @@ export default function App() {
                   <Route path="/company-setup" element={
                     <ProtectedRoute>
                       <CompanySetup />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/computer-vision" element={
+                    <ProtectedRoute>
+                      <ComputerVision />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/smart-recommendations" element={
+                    <ProtectedRoute>
+                      <SmartRecommendations />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/connectivity-hub" element={
+                    <ProtectedRoute>
+                      <ConnectivityHub />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/experience-revolution" element={
+                    <ProtectedRoute>
+                      <ExperienceRevolution />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/platform-ecosystem" element={
+                    <ProtectedRoute>
+                      <PlatformEcosystem />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/future-technologies" element={
+                    <ProtectedRoute>
+                      <FutureTechnologies />
                     </ProtectedRoute>
                   } />
                   <Route path="*" element={<Navigate to="/" replace />} />
