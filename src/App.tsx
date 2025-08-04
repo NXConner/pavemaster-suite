@@ -40,6 +40,7 @@ const Security = lazy(() => import('./pages/Security'));
 const VeteranResources = lazy(() => import('./pages/VeteranResources'));
 const Profile = lazy(() => import('./pages/Profile'));
 const CompanySetup = lazy(() => import('./pages/CompanySetup'));
+const ConversationalHub = lazy(() => import('./pages/ConversationalHub'));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -130,6 +131,11 @@ export default function App() {
                   <Route path="/ai-assistant" element={
                     <ProtectedRoute>
                       <AIAssistant />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/conversational-hub" element={
+                    <ProtectedRoute>
+                      <ConversationalHub />
                     </ProtectedRoute>
                   } />
                   <Route path="/overwatch" element={
