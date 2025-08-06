@@ -95,7 +95,7 @@ export function IntelligenceEngine() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
@@ -114,7 +114,7 @@ export function IntelligenceEngine() {
           {insights.map((insight) => (
             <Card 
               key={insight.id} 
-              className={`border-border/50 bg-surface/80 backdrop-blur-sm cursor-pointer transition-all hover:border-primary/50 ${
+              className={`border/50 bg-surface/80 backdrop-blur-sm cursor-pointer transition-all hover:border-primary/50 ${
                 selectedInsight?.id === insight.id ? 'border-primary/50 bg-primary/5' : ''
               }`}
               onClick={() => setSelectedInsight(insight)}
@@ -167,7 +167,7 @@ export function IntelligenceEngine() {
         </div>
 
         {/* Insight Details */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
@@ -246,7 +246,7 @@ export function IntelligenceEngine() {
 
       {/* Intelligence Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
@@ -262,7 +262,7 @@ export function IntelligenceEngine() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
@@ -278,7 +278,7 @@ export function IntelligenceEngine() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-yellow-500/10">

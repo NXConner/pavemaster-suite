@@ -216,7 +216,7 @@ export function VoiceCommander({ onCommand, className }: VoiceCommanderProps) {
   }
 
   return (
-    <Card className={`p-4 bg-background/95 backdrop-blur border-primary/20 ${className}`}>
+    <Card className={`p-4 bg-card/95 backdrop-blur border-primary/20 ${className}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Button

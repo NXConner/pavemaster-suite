@@ -140,7 +140,7 @@ export function BlockchainIntegration() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-primary" />
@@ -175,7 +175,7 @@ export function BlockchainIntegration() {
       {selectedTab === 'transactions' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Transactions */}
-          <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+          <Card className="border/50 bg-surface/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Hash className="h-5 w-5 text-primary" />
@@ -188,7 +188,7 @@ export function BlockchainIntegration() {
                   {transactions.map((transaction) => (
                     <div
                       key={transaction.id}
-                      className="p-3 rounded-lg border border-border/50 bg-surface/30"
+                      className="p-3 rounded-lg border border/50 bg-surface/30"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
@@ -230,7 +230,7 @@ export function BlockchainIntegration() {
           </Card>
 
           {/* Transaction Analytics */}
-          <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+          <Card className="border/50 bg-surface/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Link className="h-5 w-5 text-primary" />
@@ -258,7 +258,7 @@ export function BlockchainIntegration() {
                   </div>
                 </div>
                 
-                <div className="pt-4 border-t border-border/50">
+                <div className="pt-4 border-t border/50">
                   <h4 className="font-medium mb-2">Security Features</h4>
                   <div className="space-y-2">
                     {[
@@ -286,7 +286,7 @@ export function BlockchainIntegration() {
       {selectedTab === 'contracts' && (
         <div className="space-y-4">
           {contracts.map((contract) => (
-            <Card key={contract.id} className="border-border/50 bg-surface/80 backdrop-blur-sm">
+            <Card key={contract.id} className="border/50 bg-surface/80 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="space-y-1">
@@ -327,7 +327,7 @@ export function BlockchainIntegration() {
       )}
 
       {selectedTab === 'security' && (
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Key className="h-5 w-5 text-primary" />

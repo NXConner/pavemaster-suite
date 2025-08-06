@@ -12,7 +12,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex min-h-screen w-full">
       <AppSidebar />
-      <main className="flex-1 bg-background">
+      <main className="flex-1 bg-card">
         <div className="container mx-auto py-6 px-4 pb-20">
           {children}
         </div>

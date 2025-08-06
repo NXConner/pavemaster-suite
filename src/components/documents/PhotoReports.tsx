@@ -224,7 +224,7 @@ export default function PhotoReports() {
             <select
               value={selectedTag}
               onChange={(e) => { setSelectedTag(e.target.value); }}
-              className="px-3 py-2 border rounded-md bg-background"
+              className="px-3 py-2 border rounded-md bg-card"
             >
               <option value="">All Tags</option>
               {allTags.map(tag => (

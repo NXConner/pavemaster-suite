@@ -106,7 +106,7 @@ export default function Mapping() {
                           <div
                             key={i}
                             className={`h-6 w-8 border border-gray-400 ${
-                              i % 3 === 0 ? 'bg-red-200' : 'bg-white'
+                              i % 3 === 0 ? 'bg-red-200' : 'bg-card'
                             }`}
                           />
                         ))}
@@ -115,7 +115,7 @@ export default function Mapping() {
                   </div>
 
                   {/* Measurement overlay */}
-                  <div className="absolute top-10 right-10 bg-white/90 p-3 rounded-lg shadow-lg">
+                  <div className="absolute top-10 right-10 bg-card/90 p-3 rounded-lg shadow-lg">
                     <div className="text-sm font-semibold mb-1">Current Measurement</div>
                     <div className="text-xs space-y-1">
                       <div>Area: 2,450 sq ft</div>
@@ -131,7 +131,7 @@ export default function Mapping() {
                         key={tool.name}
                         variant="outline"
                         size="sm"
-                        className="bg-white/90"
+                        className="bg-card/90"
                       >
                         <tool.icon className="h-4 w-4" />
                       </Button>

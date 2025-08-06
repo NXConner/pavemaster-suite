@@ -324,7 +324,7 @@ export function EnhancedThemeSwitcher() {
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="aspect-[9/16] bg-muted rounded-lg p-4 relative">
                   <div className="text-xs font-medium mb-2">iPhone 14 Pro</div>
-                  <div className="bg-background rounded border h-full p-2">
+                  <div className="bg-card rounded border h-full p-2">
                     <div className="bg-primary h-8 rounded mb-2"></div>
                     <div className="space-y-1">
                       <div className="bg-muted h-3 rounded"></div>
@@ -335,7 +335,7 @@ export function EnhancedThemeSwitcher() {
                 </div>
                 <div className="aspect-[3/4] bg-muted rounded-lg p-4 relative">
                   <div className="text-xs font-medium mb-2">iPad Pro</div>
-                  <div className="bg-background rounded border h-full p-3">
+                  <div className="bg-card rounded border h-full p-3">
                     <div className="bg-primary h-6 rounded mb-3"></div>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="bg-muted h-12 rounded"></div>
@@ -345,7 +345,7 @@ export function EnhancedThemeSwitcher() {
                 </div>
                 <div className="aspect-[16/9] bg-muted rounded-lg p-4 relative">
                   <div className="text-xs font-medium mb-2">Desktop</div>
-                  <div className="bg-background rounded border h-full p-2">
+                  <div className="bg-card rounded border h-full p-2">
                     <div className="flex gap-2">
                       <div className="bg-primary h-16 rounded flex-1"></div>
                       <div className="bg-muted h-16 rounded w-1/3"></div>

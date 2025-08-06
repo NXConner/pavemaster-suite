@@ -611,11 +611,11 @@ export const customTheme = ${JSON.stringify(customTheme, null, 2)};`;
               <div className="p-4 border rounded-lg">
                 <h3 className="text-lg font-medium mb-4">Effects Preview</h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="p-4 bg-background border rounded-lg shadow-md">
+                  <div className="p-4 bg-card border rounded-lg shadow-md">
                     Standard card with shadow
                   </div>
                   <div
-                    className="p-4 bg-background/80 border rounded-lg backdrop-blur-sm"
+                    className="p-4 bg-card/80 border rounded-lg backdrop-blur-sm"
                     style={{ backdropFilter: customTheme.effects.blur }}
                   >
                     Blurred background effect

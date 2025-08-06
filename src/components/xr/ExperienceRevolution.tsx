@@ -907,7 +907,7 @@ export const ExperienceRevolution: React.FC = () => {
                           {scenes.map((scene) => (
                             <div
                               key={scene.id}
-                              className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedScene(scene)}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -1042,7 +1042,7 @@ export const ExperienceRevolution: React.FC = () => {
                           <Label className="text-sm font-medium">Scene Objects</Label>
                           <div className="space-y-2 mt-2">
                             {selectedScene.objects.map((object) => (
-                              <div key={object.id} className="p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                              <div key={object.id} className="p-2 bg-card dark:bg-gray-800 rounded">
                                 <div className="flex items-center justify-between mb-1">
                                   <span className="text-sm font-medium">{object.name}</span>
                                   <Badge variant={object.visible ? "default" : "outline"} className="text-xs">
@@ -1081,7 +1081,7 @@ export const ExperienceRevolution: React.FC = () => {
                           {arSessions.map((session) => (
                             <div
                               key={session.id}
-                              className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedAR(session)}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -1263,7 +1263,7 @@ export const ExperienceRevolution: React.FC = () => {
                           {vrEnvironments.map((environment) => (
                             <div
                               key={environment.id}
-                              className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedVR(environment)}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -1355,7 +1355,7 @@ export const ExperienceRevolution: React.FC = () => {
                           <Label className="text-sm font-medium">Controllers</Label>
                           <div className="grid grid-cols-2 gap-2 mt-2">
                             {Object.entries(selectedVR.controllers).map(([side, controller]) => (
-                              <div key={side} className="p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                              <div key={side} className="p-2 bg-card dark:bg-gray-800 rounded">
                                 <div className="flex items-center justify-between mb-1">
                                   <span className="text-sm font-medium capitalize">{side}</span>
                                   <Badge variant={controller.connected ? "default" : "outline"} className="text-xs">

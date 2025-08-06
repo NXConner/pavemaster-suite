@@ -119,7 +119,7 @@ export function IoTManagement() {
   };
 
   const getBatteryColor = (level?: number) => {
-    if (!level) return 'bg-gray-500';
+    if (!level) return 'bg-card0';
     if (level > 60) return 'bg-green-500';
     if (level > 30) return 'bg-yellow-500';
     return 'bg-red-500';
@@ -135,7 +135,7 @@ export function IoTManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wifi className="h-5 w-5 text-primary" />
@@ -150,7 +150,7 @@ export function IoTManagement() {
       {/* Device Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Device List */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Radio className="h-5 w-5 text-primary" />
@@ -169,7 +169,7 @@ export function IoTManagement() {
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
                         selectedDevice?.id === device.id 
                           ? 'border-primary/50 bg-primary/5' 
-                          : 'border-border/50 bg-surface/30 hover:border-border/80'
+                          : 'border/50 bg-surface/30 hover:border/80'
                       }`}
                       onClick={() => setSelectedDevice(device)}
                     >
@@ -202,7 +202,7 @@ export function IoTManagement() {
                             {/* Battery Level */}
                             {device.batteryLevel && (
                               <div className="flex items-center gap-1">
-                                <div className="w-4 h-2 border border-border/50 rounded-sm bg-background">
+                                <div className="w-4 h-2 border border/50 rounded-sm bg-card">
                                   <div 
                                     className={`h-full rounded-sm transition-all ${getBatteryColor(device.batteryLevel)}`}
                                     style={{ width: `${device.batteryLevel}%` }}
@@ -236,7 +236,7 @@ export function IoTManagement() {
         </Card>
 
         {/* Device Details */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Gauge className="h-5 w-5 text-primary" />
@@ -320,7 +320,7 @@ export function IoTManagement() {
       </div>
 
       {/* Recent Data */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />

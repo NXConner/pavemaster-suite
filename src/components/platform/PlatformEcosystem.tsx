@@ -990,7 +990,7 @@ export const PlatformEcosystem: React.FC = () => {
                             return (
                               <div
                                 key={extension.id}
-                                className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                                className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                                 onClick={() => setSelectedExtension(extension)}
                               >
                                 <div className="flex items-start justify-between mb-2">
@@ -1413,7 +1413,7 @@ export const PlatformEcosystem: React.FC = () => {
                             </div>
                             <p className="text-xs text-gray-600 mt-1">{example.description}</p>
                           </div>
-                          <div className="p-3 bg-gray-50 dark:bg-gray-800">
+                          <div className="p-3 bg-card dark:bg-gray-800">
                             <pre className="text-xs overflow-x-auto">
                               <code>{example.code.trim()}</code>
                             </pre>

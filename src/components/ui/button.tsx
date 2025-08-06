@@ -10,7 +10,7 @@ const buttonVariants = cva(
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]',
-        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]',
+        outline: 'border border-input bg-card hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]',
         ghost: 'hover:bg-accent hover:text-accent-foreground transform hover:scale-[1.02] active:scale-[0.98]',
         link: 'text-primary underline-offset-4 hover:underline',
@@ -73,7 +73,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         
         {/* Ripple effect overlay */}
         <span className="absolute inset-0 overflow-hidden rounded-md">
-          <span className="absolute inset-0 bg-white/20 translate-x-full transition-transform duration-500 group-hover:translate-x-0 skew-x-12" />
+          <span className="absolute inset-0 bg-card/20 translate-x-full transition-transform duration-500 group-hover:translate-x-0 skew-x-12" />
         </span>
       </button>
     );

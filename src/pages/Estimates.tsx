@@ -73,7 +73,7 @@ const getStatusColor = (status: string) => {
     case 'sent': return 'bg-blue-500';
     case 'draft': return 'bg-yellow-500';
     case 'rejected': return 'bg-red-500';
-    default: return 'bg-gray-500';
+    default: return 'bg-card0';
   }
 };
 
@@ -385,7 +385,7 @@ export default function Estimates() {
                               {Array.from({ length: 32 }).map((_, i) => (
                                 <div
                                   key={i}
-                                  className="h-4 w-6 border border-gray-500 bg-white"
+                                  className="h-4 w-6 border border-gray-500 bg-card"
                                 />
                               ))}
                             </div>
@@ -400,7 +400,7 @@ export default function Estimates() {
                         </div>
 
                         {/* Estimation overlay */}
-                        <div className="absolute top-10 right-10 bg-white/95 p-4 rounded-lg shadow-lg">
+                        <div className="absolute top-10 right-10 bg-card/95 p-4 rounded-lg shadow-lg">
                           <div className="text-sm font-semibold mb-2">Live Calculations</div>
                           <div className="text-xs space-y-1">
                             <div className="flex justify-between">
@@ -429,16 +429,16 @@ export default function Estimates() {
 
                         {/* Drawing tools overlay */}
                         <div className="absolute bottom-4 left-4 flex gap-2">
-                          <Button variant="outline" size="sm" className="bg-white/90">
+                          <Button variant="outline" size="sm" className="bg-card/90">
                             <Ruler className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm" className="bg-white/90">
+                          <Button variant="outline" size="sm" className="bg-card/90">
                             <Calculator className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm" className="bg-white/90">
+                          <Button variant="outline" size="sm" className="bg-card/90">
                             <Layers className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm" className="bg-white/90">
+                          <Button variant="outline" size="sm" className="bg-card/90">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </div>

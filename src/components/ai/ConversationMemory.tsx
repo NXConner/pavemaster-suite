@@ -784,7 +784,7 @@ export const ConversationMemory: React.FC<{
                         searchResults.map((memory) => (
                           <div
                             key={memory.id}
-                            className="p-3 border rounded-lg mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                            className="p-3 border rounded-lg mb-2 cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                             onClick={() => setSelectedMemory(memory)}
                           >
                             <div className="flex items-center justify-between mb-1">
@@ -838,7 +838,7 @@ export const ConversationMemory: React.FC<{
                         </div>
                         <div>
                           <Label className="text-sm font-medium">Context</Label>
-                          <div className="mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs">
+                          <div className="mt-1 p-2 bg-card dark:bg-gray-800 rounded text-xs">
                             <pre>{JSON.stringify(selectedMemory.context, null, 2)}</pre>
                           </div>
                         </div>
@@ -904,7 +904,7 @@ export const ConversationMemory: React.FC<{
                   <CardContent>
                     <div className="space-y-2">
                       {memoryEngine.getFrequentEntities(10).map((entity, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                        <div key={index} className="flex items-center justify-between p-2 bg-card dark:bg-gray-800 rounded">
                           <div className="flex items-center space-x-2">
                             <Badge variant="outline">{entity.type}</Badge>
                             <span className="text-sm">{entity.value}</span>
@@ -934,7 +934,7 @@ export const ConversationMemory: React.FC<{
                         .sort((a, b) => b.frequency - a.frequency)
                         .slice(0, 20)
                         .map((pattern, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                          <div key={index} className="flex items-center justify-between p-2 bg-card dark:bg-gray-800 rounded">
                             <div>
                               <span className="text-sm font-medium">{pattern.pattern}</span>
                               <p className="text-xs text-gray-600">

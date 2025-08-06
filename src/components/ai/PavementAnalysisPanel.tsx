@@ -453,7 +453,7 @@ const PavementAnalysisPanel: React.FC = () => {
                   {result.recommendations.map((recommendation, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
+                      className="flex items-start gap-3 p-3 bg-card rounded-lg"
                     >
                       <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
                         {index + 1}
@@ -486,7 +486,7 @@ const PavementAnalysisPanel: React.FC = () => {
                   const percentage = (count / batchResults.length * 100).toFixed(1);
                   
                   return (
-                    <div key={condition} className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div key={condition} className="text-center p-3 bg-card rounded-lg">
                       <div className="text-2xl font-bold text-gray-900">{count}</div>
                       <div className="text-sm text-gray-600 capitalize">{condition}</div>
                       <div className="text-xs text-gray-500">{percentage}%</div>
@@ -549,7 +549,7 @@ const PavementAnalysisPanel: React.FC = () => {
               {history.slice(0, 5).map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-4 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                  className="flex items-center gap-4 p-3 border rounded-lg hover:bg-card cursor-pointer"
                   onClick={() => {
                     setSelectedImage(item.image_url);
                     setResult(item.result);

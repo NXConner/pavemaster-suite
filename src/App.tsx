@@ -104,7 +104,7 @@ export default function App() {
       <JargonProvider>
         <SecurityMiddleware>
           <Router>
-            <div className="min-h-screen bg-background">
+            <div className="min-h-screen bg-card">
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
                   <Route path="/auth" element={<Auth />} />

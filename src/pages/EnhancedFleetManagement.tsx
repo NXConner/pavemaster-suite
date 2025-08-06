@@ -191,8 +191,8 @@ export default function EnhancedFleetManagement() {
       case 'active': return 'bg-green-500';
       case 'maintenance': return 'bg-yellow-500';
       case 'out-of-service': return 'bg-red-500';
-      case 'retired': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+      case 'retired': return 'bg-card0';
+      default: return 'bg-card0';
     }
   };
 

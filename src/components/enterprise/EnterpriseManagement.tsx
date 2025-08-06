@@ -175,7 +175,7 @@ export function EnterpriseManagement() {
       case 'ultimate': return 'bg-yellow-500/10 text-yellow-700 border-yellow-500/30';
       case 'enterprise': return 'bg-blue-500/10 text-blue-700 border-blue-500/30';
       case 'professional': return 'bg-green-500/10 text-green-700 border-green-500/30';
-      default: return 'bg-gray-500/10 text-gray-700 border-gray-500/30';
+      default: return 'bg-card0/10 text-gray-700 border-gray-500/30';
     }
   };
 
@@ -186,7 +186,7 @@ export function EnterpriseManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Crown className="h-5 w-5 text-primary" />
@@ -200,7 +200,7 @@ export function EnterpriseManagement() {
 
       {/* Enterprise Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
@@ -214,7 +214,7 @@ export function EnterpriseManagement() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
@@ -228,7 +228,7 @@ export function EnterpriseManagement() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-red-500/10">
@@ -242,7 +242,7 @@ export function EnterpriseManagement() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-purple-500/10">
@@ -276,7 +276,7 @@ export function EnterpriseManagement() {
       {/* Enterprise Features & Organization Units */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Enterprise Features */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
@@ -289,7 +289,7 @@ export function EnterpriseManagement() {
                 {filteredFeatures.map((feature) => (
                   <div
                     key={feature.id}
-                    className="p-4 rounded-lg border border-border/50 bg-surface/30"
+                    className="p-4 rounded-lg border border/50 bg-surface/30"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export function EnterpriseManagement() {
         </Card>
 
         {/* Organization Units */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building className="h-5 w-5 text-primary" />
@@ -346,7 +346,7 @@ export function EnterpriseManagement() {
               {orgUnits.map((unit) => (
                 <div
                   key={unit.id}
-                  className="p-4 rounded-lg border border-border/50 bg-surface/30"
+                  className="p-4 rounded-lg border border/50 bg-surface/30"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -405,7 +405,7 @@ export function EnterpriseManagement() {
       </div>
 
       {/* Security & Compliance Dashboard */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-primary" />

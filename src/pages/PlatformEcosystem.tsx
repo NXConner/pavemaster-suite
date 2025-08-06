@@ -5,7 +5,7 @@ import { PlatformEcosystem } from '../components/platform/PlatformEcosystem';
 
 const PlatformEcosystemPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-card dark:bg-gray-900">
       <Navbar />
       <div className="flex">
         <Sidebar />

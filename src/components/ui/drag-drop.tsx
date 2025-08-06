@@ -234,7 +234,7 @@ export function FileUpload({
                       'flex items-center justify-between p-3 rounded-lg border animate-slide-up',
                       variant === 'tactical' 
                         ? 'border-green-400/20 bg-green-400/5' 
-                        : 'border-border bg-muted/50'
+                        : 'border bg-muted/50'
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -356,7 +356,7 @@ export function SortableList({
             dragOverItem === item.id && 'scale-105',
             variant === 'tactical' 
               ? 'border-green-400/20 bg-green-400/5 hover:bg-green-400/10' 
-              : 'border-border bg-card hover:bg-muted/50',
+              : 'border bg-card hover:bg-muted/50',
             item.disabled && 'opacity-50 cursor-not-allowed',
             itemClassName
           )}
@@ -442,7 +442,7 @@ export function KanbanBoard({
           onDrop={(e) => handleDrop(e, column.id)}
         >
           <Card variant={variant === 'tactical' ? 'tactical' : 'default'}>
-            <div className="p-4 border-b border-border">
+            <div className="p-4 border-b border">
               <div className="flex items-center justify-between">
                 <h3 className={cn(
                   'font-semibold',
@@ -480,7 +480,7 @@ export function KanbanBoard({
                     draggedItem?.itemId === item.id && 'opacity-50 scale-95',
                     variant === 'tactical' 
                       ? 'border-green-400/20 bg-slate-800 hover:bg-slate-700' 
-                      : 'border-border bg-background hover:bg-muted/50'
+                      : 'border bg-card hover:bg-muted/50'
                   )}
                 >
                   {item.content}
@@ -492,7 +492,7 @@ export function KanbanBoard({
                   'flex items-center justify-center h-32 border-2 border-dashed rounded-lg',
                   variant === 'tactical' 
                     ? 'border-green-400/20 text-green-400/60' 
-                    : 'border-border text-muted-foreground'
+                    : 'border text-muted-foreground'
                 )}>
                   Drop items here
                 </div>

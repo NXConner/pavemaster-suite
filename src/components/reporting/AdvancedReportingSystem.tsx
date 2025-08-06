@@ -155,7 +155,7 @@ export function AdvancedReportingSystem() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
@@ -169,7 +169,7 @@ export function AdvancedReportingSystem() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
@@ -183,7 +183,7 @@ export function AdvancedReportingSystem() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
@@ -197,7 +197,7 @@ export function AdvancedReportingSystem() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-orange-500/10">
@@ -213,7 +213,7 @@ export function AdvancedReportingSystem() {
           </CardContent>
         </Card>
         
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-purple-500/10">
@@ -246,7 +246,7 @@ export function AdvancedReportingSystem() {
 
       {/* Report Templates */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <PieChart className="h-5 w-5 text-primary" />
@@ -259,7 +259,7 @@ export function AdvancedReportingSystem() {
                 {filteredTemplates.map((template) => (
                   <div
                     key={template.id}
-                    className="p-4 rounded-lg border border-border/50 bg-surface/30"
+                    className="p-4 rounded-lg border border/50 bg-surface/30"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -307,7 +307,7 @@ export function AdvancedReportingSystem() {
         </Card>
 
         {/* Generated Reports */}
-        <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+        <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Download className="h-5 w-5 text-primary" />
@@ -322,7 +322,7 @@ export function AdvancedReportingSystem() {
                   return (
                     <div
                       key={report.id}
-                      className="p-4 rounded-lg border border-border/50 bg-surface/30"
+                      className="p-4 rounded-lg border border/50 bg-surface/30"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
@@ -363,7 +363,7 @@ export function AdvancedReportingSystem() {
       </div>
 
       {/* Report Analytics */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-primary" />

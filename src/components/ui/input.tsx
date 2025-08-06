@@ -37,7 +37,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         case 'tactical':
           return 'border-green-400/30 bg-slate-900/50 text-green-400 placeholder:text-green-400/50 focus:border-green-400/70 focus:bg-slate-900/70 font-mono';
         default:
-          return 'border-input bg-background';
+          return 'border-input bg-card';
       }
     };
     

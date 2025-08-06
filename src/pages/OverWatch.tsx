@@ -199,7 +199,7 @@ export default function OverWatch() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-card relative overflow-hidden">
       {/* Tactical Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
         <TacticalGrid intensity={0.2} animated={true} />
@@ -374,7 +374,7 @@ export default function OverWatch() {
                     </div>
                   ))}
                 </div>
-                <div className="pt-2 border-t border-border/50">
+                <div className="pt-2 border-t border/50">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
                     <Cpu className="h-3 w-3" />
                     AI Processing: <span className="text-primary">97.3%</span>
@@ -421,7 +421,7 @@ export default function OverWatch() {
                     </Badge>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-border/50 space-y-1">
+                <div className="pt-2 border-t border/50 space-y-1">
                   <div className="text-xs text-muted-foreground font-mono">
                     Signal: <span className="text-success">98.7%</span> |
                     Encryption: <span className="text-primary">QUANTUM-256</span>
@@ -475,7 +475,7 @@ export default function OverWatch() {
                     <span className="text-xs text-info font-mono">10 READY</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-border/50">
+                <div className="pt-2 border-t border/50">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
                     <MapPin className="h-3 w-3" />
                     GPS: <span className="text-success">LOCKED</span> |
@@ -499,7 +499,7 @@ export default function OverWatch() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {systems.map((system, index) => (
-                <div key={index} className="p-4 rounded-lg border border-border/50 bg-muted/20">
+                <div key={index} className="p-4 rounded-lg border border/50 bg-muted/20">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Server className="h-4 w-4 text-primary" />

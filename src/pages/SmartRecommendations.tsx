@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navbar } from '../components/layout/Navbar';
 import { Sidebar } from '../components/layout/Sidebar';
-import { SmartRecommendationEngine } from '../components/ai/SmartRecommendationEngine';
+import { SmartRecommendationEngineComponent as SmartRecommendationEngine } from '../components/ai/SmartRecommendationEngine';
 
 const SmartRecommendations: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-card dark:bg-gray-900">
       <Navbar />
       <div className="flex">
         <Sidebar />

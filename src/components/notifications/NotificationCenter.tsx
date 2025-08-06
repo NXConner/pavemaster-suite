@@ -256,7 +256,7 @@ export default function NotificationCenter() {
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
       case 'low': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-card0';
     }
   };
 

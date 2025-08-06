@@ -28,7 +28,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
     <div
       ref={ref}
       className={cn(
-        'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out',
+        'fixed z-50 gap-4 bg-card p-6 shadow-lg transition ease-in-out',
         className,
       )}
       {...props}

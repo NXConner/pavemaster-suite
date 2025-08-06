@@ -42,7 +42,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
       case 'online': return 'bg-green-500';
       case 'offline': return 'bg-red-500';
       case 'idle': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-card0';
     }
   };
 
@@ -129,7 +129,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
                 onClick={() => { handleDeviceClick(device); }}
               >
                 <div className={`w-4 h-4 rounded-full ${getDeviceColor(device)} animate-pulse`}>
-                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-background border rounded px-1 whitespace-nowrap">
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-card border rounded px-1 whitespace-nowrap">
                     {getDeviceIcon(device.type)} {device.name}
                   </div>
                 </div>
@@ -137,7 +137,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
             ))}
 
             {/* Map Legend */}
-            <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-sm border rounded-lg p-3">
+            <div className="absolute bottom-4 left-4 bg-card/90 backdrop-blur-sm border rounded-lg p-3">
               <div className="text-xs font-medium mb-2">Legend</div>
               <div className="space-y-1 text-xs">
                 <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export function MapView({ devices, onDeviceSelect }: MapViewProps) {
             </div>
 
             {/* Map Info */}
-            <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm border rounded-lg p-3">
+            <div className="absolute top-4 right-4 bg-card/90 backdrop-blur-sm border rounded-lg p-3">
               <div className="text-xs space-y-1">
                 <div>Center: {mapCenter.lat.toFixed(4)}, {mapCenter.lng.toFixed(4)}</div>
                 <div>Active Devices: {devices.filter(d => d.status === 'online').length}</div>
