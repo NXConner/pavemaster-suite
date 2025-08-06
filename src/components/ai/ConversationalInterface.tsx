@@ -922,7 +922,7 @@ export const ConversationalInterface: React.FC = () => {
 
                   <div>
                     <Label className="text-sm font-medium">Memory</Label>
-                    <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="mt-2 p-3 bg-card dark:bg-gray-800 rounded-lg">
                       <pre className="text-xs overflow-auto">
                         {JSON.stringify(context.memory, null, 2)}
                       </pre>

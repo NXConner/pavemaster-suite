@@ -170,11 +170,11 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border;
   }
 
   body {
-    @apply bg-background text-foreground;
+          @apply bg-background text-foreground;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -199,7 +199,7 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
     backdrop-filter: blur(8px);
   }
 
-  .bg-background {
+      .bg-card {
     background: hsl(var(--background) / 0.95);
     backdrop-filter: blur(8px);
   }
@@ -219,7 +219,7 @@ All colors MUST be HSL. Military-grade interface with maximum situational awaren
 
   /* Professional Glass Effect */
   .glass {
-    @apply bg-background/80 backdrop-blur-md border border-border/50;
+    @apply bg-card/80 backdrop-blur-md border border;
   }
 
   /* Enhanced Button Styles */

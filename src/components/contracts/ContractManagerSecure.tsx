@@ -386,7 +386,7 @@ export default function ContractManager() {
           {/* Contracts List */}
           <div className="space-y-4">
             {filteredContracts.map((contract) => (
-              <Card key={contract.id} className="border-border/50 hover:border-primary/50 transition-colors">
+              <Card key={contract.id} className="border/50 hover:border-primary/50 transition-colors">
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">

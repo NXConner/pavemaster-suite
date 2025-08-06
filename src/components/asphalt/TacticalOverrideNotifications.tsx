@@ -72,7 +72,7 @@ export function TacticalOverrideNotifications() {
       case 'high': return 'border-orange-500/50 bg-orange-500/10';
       case 'medium': return 'border-yellow-500/50 bg-yellow-500/10';
       case 'low': return 'border-blue-500/50 bg-blue-500/10';
-      default: return 'border-gray-500/50 bg-gray-500/10';
+      default: return 'border-gray-500/50 bg-card0/10';
     }
   };
 

@@ -745,7 +745,7 @@ export const ConnectivityHub: React.FC = () => {
                           {apiEndpoints.map((endpoint) => (
                             <div
                               key={endpoint.id}
-                              className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedEndpoint(endpoint)}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -879,7 +879,7 @@ export const ConnectivityHub: React.FC = () => {
                           {integrations.map((integration) => (
                             <div
                               key={integration.id}
-                              className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedIntegration(integration)}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -950,7 +950,7 @@ export const ConnectivityHub: React.FC = () => {
 
                         <div>
                           <Label className="text-sm font-medium">Configuration</Label>
-                          <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs">
+                          <div className="mt-2 p-2 bg-card dark:bg-gray-800 rounded text-xs">
                             <pre>{JSON.stringify(selectedIntegration.config, null, 2)}</pre>
                           </div>
                         </div>
@@ -960,7 +960,7 @@ export const ConnectivityHub: React.FC = () => {
                             <Label className="text-sm font-medium">Webhooks</Label>
                             <div className="space-y-2 mt-2">
                               {selectedIntegration.webhooks.map((webhook) => (
-                                <div key={webhook.id} className="p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                                <div key={webhook.id} className="p-2 bg-card dark:bg-gray-800 rounded">
                                   <div className="flex items-center justify-between mb-1">
                                     <span className="text-sm font-medium">{webhook.name}</span>
                                     <Badge variant={getStatusColor(webhook.status) as any} className="text-xs">

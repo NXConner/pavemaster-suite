@@ -175,7 +175,7 @@ export default function CustomerPortal() {
         <TabsContent value="projects" className="space-y-4">
           <div className="grid gap-4">
             {activeProjects.map((project) => (
-              <Card key={project.id} className="border-border/50">
+              <Card key={project.id} className="border/50">
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -305,7 +305,7 @@ export default function CustomerPortal() {
         <TabsContent value="history" className="space-y-4">
           <div className="space-y-4">
             {estimateRequests.map((request) => (
-              <Card key={request.id} className="border-border/50">
+              <Card key={request.id} className="border/50">
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>

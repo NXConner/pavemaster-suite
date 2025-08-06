@@ -73,9 +73,9 @@ const getStatusColor = (status: string) => {
   switch (status) {
     case 'active': return 'bg-green-500';
     case 'en-route': return 'bg-blue-500';
-    case 'parked': return 'bg-gray-500';
+    case 'parked': return 'bg-card0';
     case 'maintenance': return 'bg-yellow-500';
-    default: return 'bg-gray-500';
+    default: return 'bg-card0';
   }
 };
 

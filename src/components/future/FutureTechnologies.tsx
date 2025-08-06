@@ -15,7 +15,7 @@ import {
   Zap,
   Satellite,
   Brain,
-  Atoms,
+  Atom,
   Activity,
   CheckCircle,
   AlertTriangle,
@@ -1049,7 +1049,7 @@ export const FutureTechnologies: React.FC = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Atoms className="h-6 w-6 text-purple-600" />
+                              <Atom className="h-6 w-6 text-purple-600" />
               <CardTitle>Future Technologies</CardTitle>
               <Badge variant="secondary">Phase 6</Badge>
             </div>
@@ -1069,7 +1069,7 @@ export const FutureTechnologies: React.FC = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="quantum">
-                <Atoms className="h-4 w-4 mr-2" />
+                <Atom className="h-4 w-4 mr-2" />
                 Quantum
               </TabsTrigger>
               <TabsTrigger value="blockchain">

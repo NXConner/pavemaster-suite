@@ -187,7 +187,7 @@ const MobileDataTable: React.FC<{
           key={index}
           className={`
             p-4 rounded-lg border cursor-pointer min-h-[56px]
-            ${selectedRow === index ? 'bg-primary/10 border-primary' : 'bg-background'}
+            ${selectedRow === index ? 'bg-primary/10 border-primary' : 'bg-card'}
           `}
           onTouchEnd={() => handleRowPress(index, row)}
           whileTap={{ scale: 0.98 }}
@@ -307,7 +307,7 @@ const MobileNavigation: React.FC<{
 
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 bg-background border-t z-50"
+      className="fixed bottom-0 left-0 right-0 bg-card border-t z-50"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', damping: 20 }}
@@ -347,7 +347,7 @@ const MobileNavigation: React.FC<{
       {/* Expanded menu */}
       {isExpanded && items.length > 4 && (
         <motion.div
-          className="bg-background border-t p-4"
+          className="bg-card border-t p-4"
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
@@ -522,7 +522,7 @@ const DeviceStatusBar: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-background border-b text-sm">
+    <div className="flex items-center justify-between px-4 py-2 bg-card border-b text-sm">
       <div className="flex items-center space-x-2">
         <span className="font-medium">{deviceInfo.time}</span>
       </div>
@@ -586,7 +586,7 @@ const TouchOptimizedDemo: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-card">
       <DeviceStatusBar />
       
       <div className="pb-20"> {/* Space for bottom navigation */}

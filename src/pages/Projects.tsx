@@ -75,7 +75,7 @@ const getStatusColor = (status: string) => {
     case 'active': return 'bg-blue-500';
     case 'planning': return 'bg-yellow-500';
     case 'on-hold': return 'bg-red-500';
-    default: return 'bg-gray-500';
+    default: return 'bg-card0';
   }
 };
 

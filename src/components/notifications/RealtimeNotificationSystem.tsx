@@ -217,7 +217,7 @@ export function RealtimeNotificationSystem() {
       case 'high': return 'text-orange-500 border-orange-500/50';
       case 'medium': return 'text-yellow-500 border-yellow-500/50';
       case 'low': return 'text-blue-500 border-blue-500/50';
-      default: return 'text-muted-foreground border-border/50';
+      default: return 'text-muted-foreground border/50';
     }
   };
 
@@ -233,7 +233,7 @@ export function RealtimeNotificationSystem() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -274,7 +274,7 @@ export function RealtimeNotificationSystem() {
         </CardHeader>
 
         {showSettings && (
-          <CardContent className="border-t border-border/50">
+          <CardContent className="border-t border/50">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -344,7 +344,7 @@ export function RealtimeNotificationSystem() {
       </div>
 
       {/* Notifications List */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <ScrollArea className="h-[600px]">
           <div className="p-4 space-y-3">
             {filteredNotifications.length === 0 ? (
@@ -359,7 +359,7 @@ export function RealtimeNotificationSystem() {
                   className={`
                     p-4 rounded-lg border transition-all cursor-pointer
                     ${notification.read 
-                      ? 'bg-surface/30 border-border/30' 
+                      ? 'bg-surface/30 border/30' 
                       : 'bg-primary/5 border-primary/30 shadow-sm'
                     }
                     ${getPriorityColor(notification.priority)}

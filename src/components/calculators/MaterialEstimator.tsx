@@ -414,7 +414,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     </div>
                   </div>
 
-                  <div className="p-3 bg-gray-50 rounded text-sm">
+                  <div className="p-3 bg-card rounded text-sm">
                     <strong>Zone Summary:</strong> {(zone.length * zone.width).toLocaleString()} sq ft, 
                     {((zone.length * zone.width * zone.thickness / 12) * ASPHALT_DENSITY).toFixed(1)} tons estimated
                   </div>

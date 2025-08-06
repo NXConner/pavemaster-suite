@@ -58,7 +58,7 @@ export function MobileNavigation() {
   return (
     <>
       {/* Mobile Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b px-4 py-3 md:hidden">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b px-4 py-3 md:hidden">
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
@@ -79,7 +79,7 @@ export function MobileNavigation() {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-t md:hidden">
         <div className="grid grid-cols-5 gap-1 p-2">
           {navItems.map((item, index) => (
             <Button
@@ -102,7 +102,7 @@ export function MobileNavigation() {
             className="absolute inset-0 bg-black/50"
             onClick={() => { setIsOpen(false); }}
           />
-          <div className="absolute left-0 top-0 bottom-0 w-80 bg-background border-r p-4">
+          <div className="absolute left-0 top-0 bottom-0 w-80 bg-card border-r p-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-4 border-b">
                 <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">

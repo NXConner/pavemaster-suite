@@ -45,7 +45,7 @@ export function TacticalHUD() {
   return (
     <div className="fixed top-4 right-4 space-y-2 z-50 max-w-sm">
       {/* Status Bar */}
-      <Card className="bg-background/95 backdrop-blur-sm border-primary/20">
+      <Card className="bg-card/95 backdrop-blur-sm border-primary/20">
         <CardContent className="p-3">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ export function TacticalHUD() {
 
       {/* Active Alerts */}
       {!isMinimized && alerts.length > 0 && (
-        <Card className="bg-background/95 backdrop-blur-sm border-destructive/20 animate-fade-in">
+        <Card className="bg-card/95 backdrop-blur-sm border-destructive/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -121,7 +121,7 @@ export function TacticalHUD() {
 
       {/* Mission Status */}
       {!isMinimized && missions.length > 0 && (
-        <Card className="bg-background/95 backdrop-blur-sm border-primary/20 animate-fade-in">
+        <Card className="bg-card/95 backdrop-blur-sm border-primary/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -167,7 +167,7 @@ export function TacticalHUD() {
 
       {/* System Metrics */}
       {!isMinimized && metrics && (
-        <Card className="bg-background/95 backdrop-blur-sm border-primary/20 animate-fade-in">
+        <Card className="bg-card/95 backdrop-blur-sm border-primary/20 animate-fade-in">
           <CardContent className="p-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">

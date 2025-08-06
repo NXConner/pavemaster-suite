@@ -256,7 +256,7 @@ export function DataTable<T extends Record<string, any>>({
             <thead>
               <tr className={cn(
                 'border-b',
-                variant === 'tactical' ? 'border-green-400/20' : 'border-border'
+                variant === 'tactical' ? 'border-green-400/20' : 'border'
               )}>
                 {selectable && (
                   <th className="w-12 p-3">

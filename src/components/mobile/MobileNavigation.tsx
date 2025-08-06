@@ -84,14 +84,14 @@ export function MobileNavigation() {
         <div className="fixed inset-0 z-50 md:hidden">
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-card/80 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
           
           {/* Navigation Panel */}
-          <div className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-background border-r border-border/50 shadow-lg">
+          <div className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-card border-r border/50 shadow-lg">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border/50">
+            <div className="flex items-center justify-between p-4 border-b border/50">
               <h2 className="font-semibold text-lg">PaveMaster Suite</h2>
               <Button 
                 variant="ghost" 
@@ -148,7 +148,7 @@ export function MobileNavigation() {
       )}
 
       {/* Bottom Navigation for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background border-t border-border/50">
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-card border-t border/50">
         <div className="grid grid-cols-4 gap-1 p-2">
           {NAV_ITEMS.slice(0, 4).map((item) => {
             const isActive = location.pathname === item.href;

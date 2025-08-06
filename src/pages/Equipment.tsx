@@ -85,8 +85,8 @@ const getStatusColor = (status: string) => {
     case 'operational': return 'bg-green-500';
     case 'maintenance': return 'bg-yellow-500';
     case 'repair': return 'bg-red-500';
-    case 'offline': return 'bg-gray-500';
-    default: return 'bg-gray-500';
+    case 'offline': return 'bg-card0';
+    default: return 'bg-card0';
   }
 };
 

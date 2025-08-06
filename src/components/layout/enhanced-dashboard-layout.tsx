@@ -88,7 +88,7 @@ export function EnhancedDashboardLayout({
 
   return (
     <div className={cn(
-      'min-h-screen bg-background',
+      'min-h-screen bg-card',
       variant === 'tactical' && 'bg-slate-950 text-green-400',
       fullScreenMode && 'overflow-hidden'
     )}>
@@ -99,10 +99,10 @@ export function EnhancedDashboardLayout({
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
         variant === 'tactical' 
           ? 'bg-slate-900 border-r border-green-400/20' 
-          : 'bg-card border-r border-border'
+          : 'bg-card border-r border'
       )}>
         {/* Sidebar Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border">
+        <div className="flex h-16 items-center justify-between px-4 border-b border">
           {sidebarCollapsed ? (
             <CompactLogo variant={variant === 'tactical' ? 'tactical' : 'default'} />
           ) : (
@@ -183,7 +183,7 @@ export function EnhancedDashboardLayout({
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border">
           <div className={cn(
             'flex items-center space-x-3',
             sidebarCollapsed && 'justify-center'
@@ -229,7 +229,7 @@ export function EnhancedDashboardLayout({
           'sticky top-0 z-20 flex h-16 items-center gap-4 border-b px-4 lg:px-6',
           variant === 'tactical' 
             ? 'bg-slate-900/95 backdrop-blur border-green-400/20' 
-            : 'bg-background/95 backdrop-blur border-border'
+            : 'bg-card/95 backdrop-blur border'
         )}>
           <Button
             variant="ghost"
@@ -293,7 +293,7 @@ export function EnhancedDashboardLayout({
         {(title || description || actions) && (
           <div className={cn(
             'border-b px-4 lg:px-6 py-6',
-            variant === 'tactical' ? 'border-green-400/20' : 'border-border'
+            variant === 'tactical' ? 'border-green-400/20' : 'border'
           )}>
             <div className={cn(
               'flex items-center justify-between',

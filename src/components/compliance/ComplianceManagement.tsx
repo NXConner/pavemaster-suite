@@ -235,7 +235,7 @@ export default function ComplianceManagement() {
       case 'C': return 'bg-yellow-500';
       case 'D': return 'bg-orange-500';
       case 'F': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-card0';
     }
   };
 
@@ -603,14 +603,14 @@ export default function ComplianceManagement() {
                   .map((score, index) => (
                     <div key={score.id} className={`flex items-center justify-between p-4 rounded-lg ${
                       index === 0 ? 'bg-yellow-50 border-yellow-200'
-                        : index === 1 ? 'bg-gray-50 border-gray-200'
+                        : index === 1 ? 'bg-card border-gray-200'
                           : index === 2 ? 'bg-orange-50 border-orange-200'
                             : 'border'
                     }`}>
                       <div className="flex items-center space-x-4">
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
                           index === 0 ? 'bg-yellow-500'
-                            : index === 1 ? 'bg-gray-500'
+                            : index === 1 ? 'bg-card0'
                               : index === 2 ? 'bg-orange-500'
                                 : 'bg-blue-500'
                         }`}>

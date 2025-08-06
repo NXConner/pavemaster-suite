@@ -499,7 +499,7 @@ class ComputerVisionEngine {
   }
 }
 
-export const ComputerVisionEngine: React.FC = () => {
+export const ComputerVisionEngineComponent: React.FC = () => {
   const [visionEngine] = useState(() => new ComputerVisionEngine());
   const [analyses, setAnalyses] = useState<ImageAnalysisResult[]>([]);
   const [selectedAnalysis, setSelectedAnalysis] = useState<ImageAnalysisResult | null>(null);
@@ -691,7 +691,7 @@ export const ComputerVisionEngine: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                      <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="p-4 bg-card dark:bg-gray-800 rounded-lg">
                         <h4 className="font-medium mb-2">Analysis Capabilities</h4>
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center space-x-2">
@@ -747,7 +747,7 @@ export const ComputerVisionEngine: React.FC = () => {
                           {analyses.map((analysis) => (
                             <div
                               key={analysis.id}
-                              className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                              className="p-3 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                               onClick={() => setSelectedAnalysis(analysis)}
                             >
                               <div className="flex items-center justify-between mb-2">

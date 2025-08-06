@@ -425,7 +425,7 @@ export default function AIKnowledge() {
                       <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                         <Brain className="h-4 w-4 text-white" />
                       </div>
-                      <div className="bg-white p-3 rounded-lg flex-1">
+                      <div className="bg-card p-3 rounded-lg flex-1">
                         <p className="text-sm">
                           Hello! I'm your AI Knowledge Assistant. I can help you with questions about asphalt paving,
                           sealcoating, safety regulations, and business best practices. What would you like to know?

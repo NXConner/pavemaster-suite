@@ -73,9 +73,9 @@ export function MobileCommandCenter() {
     switch (status) {
       case 'active': return 'text-green-500 bg-green-500/10 border-green-500/30';
       case 'standby': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-      case 'completed': return 'text-gray-500 bg-gray-500/10 border-gray-500/30';
+      case 'completed': return 'text-gray-500 bg-card0/10 border-gray-500/30';
       case 'alert': return 'text-red-500 bg-red-500/10 border-red-500/30';
-      default: return 'text-muted-foreground bg-muted border-border';
+              default: return 'text-muted-foreground bg-muted border';
     }
   };
 
@@ -90,9 +90,9 @@ export function MobileCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 space-y-4">
+    <div className="min-h-screen bg-card p-4 space-y-4">
       {/* Header */}
-      <Card className="border-border/50 bg-surface/90 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/90 backdrop-blur-sm">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Command className="h-5 w-5 text-primary" />
@@ -105,7 +105,7 @@ export function MobileCommandCenter() {
       </Card>
 
       {/* Mission Status */}
-      <Card className="border-border/50 bg-surface/90 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/90 backdrop-blur-sm">
         <CardHeader 
           className="pb-2 cursor-pointer"
           onClick={() => toggleSection('missions')}
@@ -173,7 +173,7 @@ export function MobileCommandCenter() {
       </Card>
 
       {/* Team Status */}
-      <Card className="border-border/50 bg-surface/90 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/90 backdrop-blur-sm">
         <CardHeader 
           className="pb-2 cursor-pointer"
           onClick={() => toggleSection('teams')}
@@ -194,11 +194,11 @@ export function MobileCommandCenter() {
           <CardContent className="pt-0">
             <div className="grid grid-cols-2 gap-3">
               {['Crew-A', 'Crew-B', 'Crew-C', 'Crew-D'].map((crew, idx) => (
-                <div key={crew} className="p-3 rounded-lg border border-border/50 bg-surface/50">
+                <div key={crew} className="p-3 rounded-lg border border/50 bg-surface/50">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-sm">{crew}</span>
                     <div className={`w-2 h-2 rounded-full ${
-                      idx < 2 ? 'bg-green-500' : idx === 2 ? 'bg-red-500' : 'bg-gray-500'
+                      idx < 2 ? 'bg-green-500' : idx === 2 ? 'bg-red-500' : 'bg-card0'
                     }`} />
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -212,7 +212,7 @@ export function MobileCommandCenter() {
       </Card>
 
       {/* Quick Actions */}
-      <Card className="border-border/50 bg-surface/90 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/90 backdrop-blur-sm">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-base">
             <Zap className="h-4 w-4 text-primary" />

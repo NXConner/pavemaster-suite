@@ -22,7 +22,7 @@ import {
   Zap,
   Brain,
   Activity,
-  Waveform,
+  AudioWaveform,
   FileAudio,
   Speaker,
   Languages,
@@ -785,7 +785,7 @@ export const AdvancedVoiceInterface: React.FC<{
                 </Card>
                 <Card>
                   <CardContent className="p-4 text-center">
-                    <Waveform className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                    <AudioWaveform className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                     <p className="text-2xl font-bold">{audioAnalysis.frequency.toFixed(0)}Hz</p>
                     <p className="text-sm text-gray-600">Frequency</p>
                   </CardContent>

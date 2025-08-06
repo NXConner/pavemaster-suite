@@ -204,7 +204,7 @@ export function ISACOSThemeEngine() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Theme Selection */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5 text-primary" />
@@ -220,7 +220,7 @@ export function ISACOSThemeEngine() {
                   p-4 rounded-lg border-2 transition-all cursor-pointer
                   ${currentTheme.id === theme.id 
                     ? 'border-primary bg-primary/10' 
-                    : 'border-border/30 bg-surface/30 hover:border-border/60'
+                    : 'border/30 bg-surface/30 hover:border/60'
                   }
                 `}
                 onClick={() => handleThemeChange(theme.id)}
@@ -240,7 +240,7 @@ export function ISACOSThemeEngine() {
                     {Object.values(theme.colors).slice(0, 4).map((color, idx) => (
                       <div
                         key={idx}
-                        className="w-4 h-4 rounded-full border border-border/50"
+                        className="w-4 h-4 rounded-full border border/50"
                         style={{ backgroundColor: color }}
                       />
                     ))}
@@ -253,7 +253,7 @@ export function ISACOSThemeEngine() {
       </Card>
 
       {/* Effect Customization */}
-      <Card className="border-border/50 bg-surface/80 backdrop-blur-sm">
+      <Card className="border/50 bg-surface/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-primary" />
@@ -320,7 +320,7 @@ export function ISACOSThemeEngine() {
           </div>
 
           {/* Preview Mode */}
-          <div className="pt-4 border-t border-border/50">
+          <div className="pt-4 border-t border/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4" />

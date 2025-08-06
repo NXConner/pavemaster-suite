@@ -613,7 +613,7 @@ class SmartRecommendationEngine {
   }
 }
 
-export const SmartRecommendationEngine: React.FC = () => {
+export const SmartRecommendationEngineComponent: React.FC = () => {
   const [engine] = useState(() => new SmartRecommendationEngine());
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [insights, setInsights] = useState<PredictiveInsight[]>([]);
@@ -786,7 +786,7 @@ export const SmartRecommendationEngine: React.FC = () => {
                             return (
                               <div
                                 key={recommendation.id}
-                                className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                                className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
                                 onClick={() => setSelectedRecommendation(recommendation)}
                               >
                                 <div className="flex items-start justify-between mb-2">
@@ -890,7 +890,7 @@ export const SmartRecommendationEngine: React.FC = () => {
                           <Label className="text-sm font-medium">Action Items</Label>
                           <div className="space-y-2 mt-2">
                             {selectedRecommendation.actions.map((action, index) => (
-                              <div key={action.id} className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
+                              <div key={action.id} className="p-2 bg-card dark:bg-gray-800 rounded text-sm">
                                 <div className="font-medium">{index + 1}. {action.action}</div>
                                 <div className="text-gray-600">{action.description}</div>
                                 {action.estimatedCost && (

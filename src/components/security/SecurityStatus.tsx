@@ -54,7 +54,7 @@ export function SecurityStatus() {
   };
 
   return (
-    <Card className="border-border/50">
+    <Card className="border/50">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <Shield className="w-4 h-4" />
@@ -91,7 +91,7 @@ export function SecurityStatus() {
           </span>
         </div>
 
-        <div className="pt-2 border-t border-border/50">
+        <div className="pt-2 border-t border/50">
           <div className="text-xs text-muted-foreground">
             Last scan: {new Date(metrics.lastScan).toLocaleTimeString()}
           </div>

@@ -105,7 +105,7 @@ export function TrackingDashboard() {
       case 'online': return 'bg-green-500';
       case 'offline': return 'bg-red-500';
       case 'idle': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-card0';
     }
   };
 

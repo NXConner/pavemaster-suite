@@ -371,13 +371,13 @@ export function VirtualTable<T extends Record<string, any>>({
             'sticky top-0 z-10 overflow-hidden border-b',
             variant === 'tactical' 
               ? 'bg-slate-900/95 border-green-400/20' 
-              : 'bg-background/95 border-border'
+              : 'bg-card/95 border'
           )}
           style={{ width: totalWidth }}
         >
           <div className="flex" style={{ width: totalWidth }}>
             {selectable && (
-              <div className="flex items-center justify-center w-12 p-3 border-r border-border">
+              <div className="flex items-center justify-center w-12 p-3 border-r border">
                 <input
                   type="checkbox"
                   checked={selectedRows.size === sortedData.length && sortedData.length > 0}
@@ -391,7 +391,7 @@ export function VirtualTable<T extends Record<string, any>>({
               <div
                 key={column.id}
                 className={cn(
-                  'flex items-center p-3 border-r border-border last:border-r-0',
+                  'flex items-center p-3 border-r border last:border-r-0',
                   column.align === 'center' && 'justify-center',
                   column.align === 'right' && 'justify-end',
                   variant === 'tactical' ? 'text-green-300' : 'text-foreground'
@@ -472,7 +472,7 @@ export function VirtualTable<T extends Record<string, any>>({
                   onClick={() => onRowClick?.(item, virtualItem.index)}
                 >
                   {selectable && (
-                    <div className="flex items-center justify-center w-12 p-3 border-r border-border">
+                    <div className="flex items-center justify-center w-12 p-3 border-r border">
                       <input
                         type="checkbox"
                         checked={isSelected}
@@ -489,7 +489,7 @@ export function VirtualTable<T extends Record<string, any>>({
                     <div
                       key={column.id}
                       className={cn(
-                        'flex items-center p-3 border-r border-border last:border-r-0 overflow-hidden',
+                        'flex items-center p-3 border-r border last:border-r-0 overflow-hidden',
                         column.align === 'center' && 'justify-center',
                         column.align === 'right' && 'justify-end',
                         variant === 'tactical' ? 'text-green-400/90' : 'text-foreground'
@@ -524,7 +524,7 @@ export function VirtualTable<T extends Record<string, any>>({
           'flex items-center justify-between p-3 border-t text-sm',
           variant === 'tactical' 
             ? 'border-green-400/20 text-green-400/70' 
-            : 'border-border text-muted-foreground'
+            : 'border text-muted-foreground'
         )}>
           <div>
             Showing {virtualizer.virtualItems.length} of {sortedData.length.toLocaleString()} records
