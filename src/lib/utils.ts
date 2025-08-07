@@ -1060,7 +1060,7 @@ export function createFocusTrap(element: HTMLElement): () => void {
 // ============================================================================
 // Performance Optimization Utilities (continued)
 // ============================================================================
-
+ 
 // RAF-based animation helper
 export function animateWithRAF(callback: (progress: number) => void, duration: number) {
   const startTime = performance.now();
@@ -1160,7 +1160,6 @@ export function prefersDarkTheme(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-// These functions are already defined above - removing duplicates
 
 // Announce to screen readers
 export function announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
@@ -1210,10 +1209,6 @@ export function checkContrast(foreground: string, background: string): number {
 // Device and Environment Detection (continued)
 // ============================================================================
 
-// Check if device is tablet
-export function isTablet(): boolean {
-  return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(navigator.userAgent);
-}
 
 // Get device orientation
 export function getOrientation(): 'portrait' | 'landscape' {
@@ -1690,5 +1685,5 @@ export class ErrorHandler {
 }
 
 // ============================================================================
-// All utility functions are exported inline above - no need for additional export block
+
 // ============================================================================
