@@ -1065,44 +1065,7 @@ export function generateId(prefix: string = 'id'): string {
 // Performance Optimization Utilities
 // ============================================================================
 
-// Debounce function for performance
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number,
-  immediate = false
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
-  
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      timeout = null;
-      if (!immediate) func(...args);
-    };
-    
-    const callNow = immediate && !timeout;
-    
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    
-    if (callNow) func(...args);
-  };
-}
-
-// Throttle function for scroll/resize events
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
-  
-  return function executedFunction(...args: Parameters<T>) {
-    if (!inThrottle) {
-      func.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
-  };
-}
+// Note: debounce and throttle functions are defined in the Performance Utilities section above
 
 // RAF-based animation helper
 export function animateWithRAF(callback: (progress: number) => void, duration: number) {
@@ -1203,43 +1166,8 @@ export function prefersDarkTheme(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-// Generate accessible ID
-export function generateId(prefix = 'element'): string {
-  return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
-}
-
-// Focus trap for modals/dialogs
-export function createFocusTrap(element: HTMLElement) {
-  const focusableElements = element.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  ) as NodeListOf<HTMLElement>;
-
-  const firstElement = focusableElements[0];
-  const lastElement = focusableElements[focusableElements.length - 1];
-
-  const handleTabKey = (e: KeyboardEvent) => {
-    if (e.key !== 'Tab') return;
-
-    if (e.shiftKey) {
-      if (document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    }
-  };
-
-  element.addEventListener('keydown', handleTabKey);
-
-  // Return cleanup function
-  return () => {
-    element.removeEventListener('keydown', handleTabKey);
-  };
-}
+// Note: generateId function is defined in the Accessibility Utilities section above
+// Note: createFocusTrap function is defined in the Accessibility Utilities section above
 
 // Announce to screen readers
 export function announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
@@ -1289,20 +1217,7 @@ export function checkContrast(foreground: string, background: string): number {
 // Device and Environment Detection
 // ============================================================================
 
-// Check if device is mobile
-export function isMobileDevice(): boolean {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
-// Check if device is tablet
-export function isTablet(): boolean {
-  return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(navigator.userAgent);
-}
-
-// Check if device supports touch
-export function isTouchDevice(): boolean {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-}
+// Note: isMobileDevice, isTablet, and isTouchDevice functions are defined in the Responsive & Device Utilities section above
 
 // Get device orientation
 export function getOrientation(): 'portrait' | 'landscape' {
@@ -1780,100 +1695,5 @@ export class ErrorHandler {
 }
 
 // ============================================================================
-// Export all utility classes and functions
+// All utility functions and classes are exported individually above
 // ============================================================================
-
-export {
-  cn,
-  translateJargon,
-  withJargon,
-  getJargonDetails,
-  formatDateWithLocale,
-  createRelativeDateFormatter,
-  getDateRange,
-  validateInput,
-  getValidationMessage,
-  debounce,
-  throttle,
-  memoizeWithTTL,
-  getNestedValue,
-  setNestedValue,
-  formatNumber,
-  calculatePercentage,
-  calculatePercentageChange,
-  roundToNearest,
-  clamp,
-  lerp,
-  mapRange,
-  chunk,
-  unique,
-  uniqueBy,
-  groupBy,
-  sortBy,
-  capitalize,
-  toTitleCase,
-  toCamelCase,
-  toKebabCase,
-  toSnakeCase,
-  truncate,
-  getInitials,
-  pluralize,
-  parseQueryString,
-  buildQueryString,
-  storage,
-  EventEmitter,
-  hexToRgb,
-  rgbToHex,
-  hexToHsl,
-  generateRandomColor,
-  adjustColorBrightness,
-  sleep,
-  retryWithBackoff,
-  withTimeout,
-  downloadAsFile,
-  fileToBase64,
-  formatFileSize,
-  isMobileDevice,
-  isTouchDevice,
-  getViewportDimensions,
-  createFocusTrap,
-  generateId,
-  debounce,
-  throttle,
-  animateWithRAF,
-  cancelAnimation,
-  scheduleWork,
-  setupLazyLoading,
-  getMemoryUsage,
-  prefersReducedMotion,
-  prefersHighContrast,
-  prefersDarkTheme,
-  createFocusTrap,
-  announce,
-  checkContrast,
-  isMobileDevice,
-  isTablet,
-  getOrientation,
-  isStandalone,
-  getNetworkInfo,
-  getBatteryInfo,
-  easing,
-  animateNumber,
-  staggerAnimation,
-  StorageManager,
-  createObjectURL,
-  downloadFile,
-  copyToClipboard,
-  getQueryParams,
-  updateURL,
-  isValidEmail,
-  isValidPhone,
-  isStrongPassword,
-  isValidURL,
-  isValidCreditCard,
-  formatRelativeTime,
-  formatDuration,
-  isToday,
-  getBusinessDays,
-  ErrorHandler,
-};
