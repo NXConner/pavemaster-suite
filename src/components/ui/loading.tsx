@@ -64,7 +64,7 @@ const LoadingPulse = ({ className, variant, size }: LoadingProps) => (
       'rounded-full animate-pulse',
       loadingVariants({ variant, size }),
       variant === 'tactical' ? 'bg-green-400/30' : 'bg-primary/30',
-      className
+      className,
     )}
   />
 );
@@ -73,15 +73,15 @@ const LoadingSkeleton = ({ className, variant }: LoadingProps) => (
   <div className={cn('space-y-3', className)}>
     <div className={cn(
       'h-4 rounded animate-shimmer',
-      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted'
+      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted',
     )} />
     <div className={cn(
       'h-4 rounded animate-shimmer w-3/4',
-      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted'
+      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted',
     )} />
     <div className={cn(
       'h-4 rounded animate-shimmer w-1/2',
-      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted'
+      variant === 'tactical' ? 'bg-green-400/20' : 'bg-muted',
     )} />
   </div>
 );
@@ -89,18 +89,18 @@ const LoadingSkeleton = ({ className, variant }: LoadingProps) => (
 const ThemedLoading = ({ className, variant, size }: LoadingProps) => {
   const icons = [Truck, Hammer, Wrench];
   const IconComponent = icons[Math.floor(Math.random() * icons.length)];
-  
+
   return (
     <div className={cn('relative', className)}>
-      <IconComponent 
+      <IconComponent
         className={cn(
-          loadingVariants({ variant, size }), 
-          'animate-bounce'
-        )} 
+          loadingVariants({ variant, size }),
+          'animate-bounce',
+        )}
       />
       <div className={cn(
         'absolute inset-0 rounded-full border-2 border-t-transparent animate-spin',
-        variant === 'tactical' ? 'border-green-400/30' : 'border-primary/30'
+        variant === 'tactical' ? 'border-green-400/30' : 'border-primary/30',
       )} />
     </div>
   );
@@ -129,7 +129,7 @@ const Loading = React.forwardRef<HTMLDivElement, LoadingProps>(
         className={cn(
           'flex flex-col items-center justify-center gap-3',
           fullScreen && 'fixed inset-0 bg-card/80 backdrop-blur-sm z-50',
-          className
+          className,
         )}
         {...props}
       >
@@ -137,7 +137,7 @@ const Loading = React.forwardRef<HTMLDivElement, LoadingProps>(
         {text && (
           <p className={cn(
             'text-sm animate-pulse',
-            variant === 'tactical' ? 'text-green-400 font-mono' : 'text-muted-foreground'
+            variant === 'tactical' ? 'text-green-400 font-mono' : 'text-muted-foreground',
           )}>
             {text}
           </p>
@@ -155,38 +155,38 @@ Loading.displayName = 'Loading';
 export const LoadingCard = ({ className, ...props }: LoadingProps) => (
   <div className={cn(
     'rounded-lg border bg-card p-6 shadow-sm animate-pulse',
-    className
+    className,
   )}>
     <Loading type="skeleton" {...props} />
   </div>
 );
 
 export const LoadingButton = ({ className, ...props }: LoadingProps) => (
-  <Loading 
-    type="spinner" 
-    size="sm" 
-    className={cn('mr-2', className)} 
-    {...props} 
+  <Loading
+    type="spinner"
+    size="sm"
+    className={cn('mr-2', className)}
+    {...props}
   />
 );
 
 export const LoadingPage = ({ text = 'Loading...', variant = 'default' }: LoadingProps) => (
-  <Loading 
-    fullScreen 
-    type="themed" 
-    text={text} 
+  <Loading
+    fullScreen
+    type="themed"
+    text={text}
     variant={variant}
     size="xl"
   />
 );
 
 export const TacticalLoading = ({ text = 'SYSTEM INITIALIZING...', ...props }: LoadingProps) => (
-  <Loading 
-    variant="tactical" 
-    type="themed" 
+  <Loading
+    variant="tactical"
+    type="themed"
     text={text}
     className="animate-tactical-scan"
-    {...props} 
+    {...props}
   />
 );
 

@@ -97,7 +97,7 @@ class ModuleIntegrationManager {
     try {
       const result = await handler(moduleAction);
       moduleAction.result = result;
-      
+
       // Notify success
       this.notify({
         id: `action_${Date.now()}`,
@@ -196,7 +196,7 @@ class ConversationAnalytics {
     mostUsedModules: string[];
   } {
     const sessions = Array.from(this.sessions.values()).filter(s => s.status === 'ended');
-    
+
     if (sessions.length === 0) {
       return {
         totalSessions: 0,
@@ -216,7 +216,7 @@ class ConversationAnalytics {
 
     const totalMessages = sessions.reduce((sum, session) => sum + session.messageCount, 0);
     const totalCommands = sessions.reduce((sum, session) => sum + session.commandCount, 0);
-    
+
     // Count module usage
     const moduleUsage = new Map<string, number>();
     sessions.forEach(session => {
@@ -451,10 +451,10 @@ export const UnifiedConversationalHub: React.FC<{
 
   const handleVoiceCommand = useCallback(async (command: VoiceCommand) => {
     analytics.recordCommand();
-    
+
     try {
       let result: any = null;
-      
+
       // Route voice commands to appropriate modules
       switch (command.action) {
         case 'navigate':
@@ -462,13 +462,13 @@ export const UnifiedConversationalHub: React.FC<{
             result = await integrationManager.executeModuleAction('projects', 'list');
           }
           break;
-          
+
         case 'create':
           if (command.phrase.toLowerCase().includes('project')) {
             result = await integrationManager.executeModuleAction('projects', 'create', command.parameters);
           }
           break;
-          
+
         case 'analyze':
           if (command.phrase.toLowerCase().includes('metric') || command.phrase.toLowerCase().includes('analytic')) {
             result = await integrationManager.executeModuleAction('analytics', 'metrics');
@@ -476,7 +476,7 @@ export const UnifiedConversationalHub: React.FC<{
             result = await integrationManager.executeModuleAction('asphalt', 'calculate', command.parameters);
           }
           break;
-          
+
         case 'query':
           if (command.phrase.toLowerCase().includes('document')) {
             result = await integrationManager.executeModuleAction('documents', 'search', command.parameters);
@@ -511,9 +511,8 @@ export const UnifiedConversationalHub: React.FC<{
         },
         insights: [],
       };
-      
+
       memoryEngine.addMemory(memory);
-      
     } catch (error) {
       console.error('Failed to process voice command:', error);
     }
@@ -529,7 +528,7 @@ export const UnifiedConversationalHub: React.FC<{
 
   useEffect(() => {
     const interval = setInterval(updateStats, 5000);
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   return (
@@ -547,7 +546,7 @@ export const UnifiedConversationalHub: React.FC<{
               </Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={isActive ? "default" : "secondary"}>
+              <Badge variant={isActive ? 'default' : 'secondary'}>
                 <Activity className="h-3 w-3 mr-1" />
                 {isActive ? 'Active' : 'Inactive'}
               </Badge>
@@ -610,10 +609,10 @@ export const UnifiedConversationalHub: React.FC<{
                     <div
                       key={notification.id}
                       className={`p-3 rounded-lg border ${
-                        notification.type === 'success' ? 'bg-green-50 border-green-200' :
-                        notification.type === 'warning' ? 'bg-yellow-50 border-yellow-200' :
-                        notification.type === 'error' ? 'bg-red-50 border-red-200' :
-                        'bg-blue-50 border-blue-200'
+                        notification.type === 'success' ? 'bg-green-50 border-green-200'
+                        : notification.type === 'warning' ? 'bg-yellow-50 border-yellow-200'
+                        : notification.type === 'error' ? 'bg-red-50 border-red-200'
+                        : 'bg-blue-50 border-blue-200'
                       }`}
                     >
                       <div className="flex items-start justify-between">
@@ -759,7 +758,7 @@ export const UnifiedConversationalHub: React.FC<{
                   </div>
                   <Badge variant="default">Active</Badge>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -767,7 +766,7 @@ export const UnifiedConversationalHub: React.FC<{
                   </div>
                   <Badge variant="default">Active</Badge>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -775,7 +774,7 @@ export const UnifiedConversationalHub: React.FC<{
                   </div>
                   <Badge variant="default">Active</Badge>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />

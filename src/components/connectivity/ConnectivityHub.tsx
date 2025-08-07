@@ -392,18 +392,18 @@ class ConnectivityHubEngine {
 
     // Update usage statistics
     endpoint.usage.totalRequests++;
-    endpoint.usage.avgResponseTime = 
-      (endpoint.usage.avgResponseTime * (endpoint.usage.totalRequests - 1) + responseTime) / 
-      endpoint.usage.totalRequests;
-    
+    endpoint.usage.avgResponseTime
+      = (endpoint.usage.avgResponseTime * (endpoint.usage.totalRequests - 1) + responseTime)
+      / endpoint.usage.totalRequests;
+
     if (success) {
-      endpoint.usage.successRate = 
-        (endpoint.usage.successRate * (endpoint.usage.totalRequests - 1) + 100) / 
-        endpoint.usage.totalRequests;
+      endpoint.usage.successRate
+        = (endpoint.usage.successRate * (endpoint.usage.totalRequests - 1) + 100)
+        / endpoint.usage.totalRequests;
     } else {
-      endpoint.usage.successRate = 
-        (endpoint.usage.successRate * (endpoint.usage.totalRequests - 1)) / 
-        endpoint.usage.totalRequests;
+      endpoint.usage.successRate
+        = (endpoint.usage.successRate * (endpoint.usage.totalRequests - 1))
+        / endpoint.usage.totalRequests;
     }
 
     endpoint.usage.lastUsed = new Date();
@@ -436,7 +436,7 @@ class ConnectivityHubEngine {
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
 
     const success = Math.random() > 0.2; // 80% success rate
-    
+
     integration.status = success ? 'connected' : 'error';
     if (success) {
       integration.lastSync = new Date();
@@ -469,10 +469,10 @@ class ConnectivityHubEngine {
     };
 
     this.syncJobs.set(job.id, job);
-    
+
     // Simulate job execution
     this.simulateSyncJob(job);
-    
+
     return job;
   }
 
@@ -490,7 +490,7 @@ class ConnectivityHubEngine {
         job.recordsProcessed = job.recordsTotal;
         job.status = Math.random() > 0.1 ? 'completed' : 'failed';
         job.completedAt = new Date();
-        
+
         if (job.status === 'failed') {
           job.error = 'Network timeout during sync operation';
         } else {
@@ -499,7 +499,7 @@ class ConnectivityHubEngine {
             integration.lastSync = new Date();
           }
         }
-        
+
         clearInterval(interval);
       }
     }, 500);
@@ -538,7 +538,7 @@ class ConnectivityHubEngine {
 
   getAPIAnalytics(): any {
     const endpoints = Array.from(this.apiEndpoints.values());
-    
+
     return {
       totalEndpoints: endpoints.length,
       totalRequests: endpoints.reduce((sum, ep) => sum + ep.usage.totalRequests, 0),
@@ -552,7 +552,7 @@ class ConnectivityHubEngine {
 
   getIntegrationAnalytics(): any {
     const integrations = Array.from(this.integrations.values());
-    
+
     return {
       totalIntegrations: integrations.length,
       connectedIntegrations: integrations.filter(i => i.status === 'connected').length,
@@ -568,7 +568,7 @@ class ConnectivityHubEngine {
   getRealtimeAnalytics(): any {
     const connections = Array.from(this.realtimeConnections.values());
     const sessions = Array.from(this.collaborationSessions.values());
-    
+
     return {
       activeConnections: connections.filter(c => c.status === 'connected').length,
       totalConnections: connections.length,
@@ -605,7 +605,7 @@ export const ConnectivityHub: React.FC = () => {
   useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 5000);
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const loadData = () => {
@@ -622,7 +622,7 @@ export const ConnectivityHub: React.FC = () => {
     try {
       const result = await engine.testAPIEndpoint(endpointId);
       loadData(); // Refresh data to show updated statistics
-      
+
       // Show result notification (in a real app, this would be a toast)
       console.log('Endpoint test result:', result);
     } catch (error) {
@@ -746,7 +746,7 @@ export const ConnectivityHub: React.FC = () => {
                             <div
                               key={endpoint.id}
                               className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedEndpoint(endpoint)}
+                              onClick={() => { setSelectedEndpoint(endpoint); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center space-x-2">
@@ -880,7 +880,7 @@ export const ConnectivityHub: React.FC = () => {
                             <div
                               key={integration.id}
                               className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedIntegration(integration)}
+                              onClick={() => { setSelectedIntegration(integration); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center space-x-2">
@@ -898,8 +898,8 @@ export const ConnectivityHub: React.FC = () => {
                               <div className="flex items-center justify-between text-xs">
                                 <span>{integration.features.length} features</span>
                                 <span>
-                                  Last sync: {integration.lastSync ? 
-                                    new Date(integration.lastSync).toLocaleString() : 'Never'}
+                                  Last sync: {integration.lastSync
+                                    ? new Date(integration.lastSync).toLocaleString() : 'Never'}
                                 </span>
                               </div>
                             </div>
@@ -932,7 +932,7 @@ export const ConnectivityHub: React.FC = () => {
                         <div>
                           <h4 className="font-semibold">{selectedIntegration.name}</h4>
                           <p className="text-sm text-gray-600 mt-1">
-                            Data Flow: {selectedIntegration.dataFlow} | 
+                            Data Flow: {selectedIntegration.dataFlow} |
                             Sync: {selectedIntegration.syncFrequency}
                           </p>
                         </div>
@@ -1061,7 +1061,7 @@ export const ConnectivityHub: React.FC = () => {
                       </div>
                       <Badge variant="default">Online</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -1069,7 +1069,7 @@ export const ConnectivityHub: React.FC = () => {
                       </div>
                       <Badge variant="default">Active</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -1077,7 +1077,7 @@ export const ConnectivityHub: React.FC = () => {
                       </div>
                       <Badge variant="default">Available</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />

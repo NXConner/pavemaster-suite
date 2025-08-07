@@ -97,9 +97,9 @@ const TouchButton: React.FC<{
       `}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
-      onMouseLeave={() => setIsPressed(false)}
+      onMouseDown={() => { setIsPressed(true); }}
+      onMouseUp={() => { setIsPressed(false); }}
+      onMouseLeave={() => { setIsPressed(false); }}
       whileTap={{ scale: 0.95 }}
       whileHover={{ scale: 1.02 }}
     >
@@ -173,7 +173,7 @@ const MobileDataTable: React.FC<{
   const handleRowPress = (index: number, row: any) => {
     setSelectedRow(index);
     onRowSelect?.(row);
-    
+
     // Haptic feedback
     if ('vibrate' in navigator) {
       navigator.vibrate([10]);
@@ -189,7 +189,7 @@ const MobileDataTable: React.FC<{
             p-4 rounded-lg border cursor-pointer min-h-[56px]
             ${selectedRow === index ? 'bg-primary/10 border-primary' : 'bg-card'}
           `}
-          onTouchEnd={() => handleRowPress(index, row)}
+          onTouchEnd={() => { handleRowPress(index, row); }}
           whileTap={{ scale: 0.98 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -235,7 +235,7 @@ const useGestureRecognition = () => {
         target: event.target as HTMLElement,
       };
       setGestures(prev => [...prev, gesture]);
-      
+
       // Haptic feedback for long press
       if ('vibrate' in navigator) {
         navigator.vibrate([30]);
@@ -244,7 +244,7 @@ const useGestureRecognition = () => {
   }, []);
 
   const handleTouchEnd = useCallback((event: TouchEvent) => {
-    if (!touchStartRef.current) return;
+    if (!touchStartRef.current) { return; }
 
     if (longPressTimeoutRef.current) {
       clearTimeout(longPressTimeoutRef.current);
@@ -267,10 +267,10 @@ const useGestureRecognition = () => {
       setGestures(prev => [...prev, gesture]);
     } else if (distance > 50) {
       // Swipe gesture
-      const direction = Math.abs(deltaX) > Math.abs(deltaY) 
+      const direction = Math.abs(deltaX) > Math.abs(deltaY)
         ? (deltaX > 0 ? 'right' : 'left')
         : (deltaY > 0 ? 'down' : 'up');
-      
+
       const gesture: TouchGesture = {
         type: 'swipe',
         direction,
@@ -294,7 +294,7 @@ const useGestureRecognition = () => {
     };
   }, [handleTouchStart, handleTouchEnd]);
 
-  return { gestures, clearGestures: () => setGestures([]) };
+  return { gestures, clearGestures: () => { setGestures([]); } };
 };
 
 // Mobile navigation with gestures
@@ -328,10 +328,10 @@ const MobileNavigation: React.FC<{
             </div>
           </TouchButton>
         ))}
-        
+
         {items.length > 4 && (
           <TouchButton
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => { setIsExpanded(!isExpanded); }}
             variant="ghost"
             size="md"
             haptic="medium"
@@ -395,7 +395,7 @@ const TouchOptimizedForm: React.FC<{
 
   const handleSubmit = () => {
     onSubmit?.(formData);
-    
+
     // Success haptic feedback
     if ('vibrate' in navigator) {
       navigator.vibrate([10, 20, 10]);
@@ -416,13 +416,13 @@ const TouchOptimizedForm: React.FC<{
             {field.label}
             {field.required && <span className="text-destructive ml-1">*</span>}
           </Label>
-          
+
           {field.type === 'text' || field.type === 'email' || field.type === 'password' || field.type === 'number' ? (
             <Input
               id={field.id}
               type={field.type}
               value={formData[field.id] || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, [field.id]: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, [field.id]: e.target.value })); }}
               className="h-12 text-base" // Larger touch target
               placeholder={field.label}
             />
@@ -430,7 +430,7 @@ const TouchOptimizedForm: React.FC<{
             <select
               id={field.id}
               value={formData[field.id] || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, [field.id]: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, [field.id]: e.target.value })); }}
               className="w-full h-12 px-3 text-base border rounded-lg"
             >
               <option value="">Select {field.label}</option>
@@ -445,7 +445,7 @@ const TouchOptimizedForm: React.FC<{
               <Switch
                 id={field.id}
                 checked={formData[field.id] || false}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, [field.id]: checked }))}
+                onCheckedChange={(checked) => { setFormData(prev => ({ ...prev, [field.id]: checked })); }}
               />
               <Label htmlFor={field.id} className="text-sm">
                 {formData[field.id] ? 'Enabled' : 'Disabled'}
@@ -455,7 +455,7 @@ const TouchOptimizedForm: React.FC<{
             <div className="space-y-2">
               <Slider
                 value={[formData[field.id] || field.min || 0]}
-                onValueChange={([value]) => setFormData(prev => ({ ...prev, [field.id]: value }))}
+                onValueChange={([value]) => { setFormData(prev => ({ ...prev, [field.id]: value })); }}
                 min={field.min}
                 max={field.max}
                 step={field.step}
@@ -468,7 +468,7 @@ const TouchOptimizedForm: React.FC<{
           ) : null}
         </motion.div>
       ))}
-      
+
       <TouchButton
         onClick={handleSubmit}
         variant="primary"
@@ -518,7 +518,7 @@ const DeviceStatusBar: React.FC = () => {
       }));
     }
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   return (
@@ -526,14 +526,14 @@ const DeviceStatusBar: React.FC = () => {
       <div className="flex items-center space-x-2">
         <span className="font-medium">{deviceInfo.time}</span>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         {deviceInfo.network === 'wifi' ? (
           <Wifi className="h-4 w-4" />
         ) : (
           <WifiOff className="h-4 w-4" />
         )}
-        
+
         <div className="flex items-center space-x-1">
           {Array.from({ length: 4 }, (_, i) => (
             <div
@@ -544,7 +544,7 @@ const DeviceStatusBar: React.FC = () => {
             />
           ))}
         </div>
-        
+
         <div className="flex items-center space-x-1">
           <Battery className="h-4 w-4" />
           <span>{deviceInfo.battery}%</span>
@@ -588,7 +588,7 @@ const TouchOptimizedDemo: React.FC = () => {
   return (
     <div className="min-h-screen bg-card">
       <DeviceStatusBar />
-      
+
       <div className="pb-20"> {/* Space for bottom navigation */}
         <div className="p-4 space-y-6">
           <Card>
@@ -613,8 +613,8 @@ const TouchOptimizedDemo: React.FC = () => {
                 <div>
                   <h3 className="font-medium mb-2">Swipeable Cards</h3>
                   <SwipeableCard
-                    onSwipeLeft={() => console.log('Swiped left')}
-                    onSwipeRight={() => console.log('Swiped right')}
+                    onSwipeLeft={() => { console.log('Swiped left'); }}
+                    onSwipeRight={() => { console.log('Swiped right'); }}
                   >
                     <CardContent className="p-4">
                       <p className="text-center">Swipe me in any direction!</p>
@@ -627,7 +627,7 @@ const TouchOptimizedDemo: React.FC = () => {
                   <MobileDataTable
                     data={sampleData}
                     columns={tableColumns}
-                    onRowSelect={(row) => console.log('Selected:', row)}
+                    onRowSelect={(row) => { console.log('Selected:', row); }}
                   />
                 </div>
 
@@ -635,7 +635,7 @@ const TouchOptimizedDemo: React.FC = () => {
                   <h3 className="font-medium mb-2">Touch-Optimized Form</h3>
                   <TouchOptimizedForm
                     fields={formFields}
-                    onSubmit={(data) => console.log('Form data:', data)}
+                    onSubmit={(data) => { console.log('Form data:', data); }}
                   />
                 </div>
 

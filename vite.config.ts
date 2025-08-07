@@ -1,14 +1,14 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
-import { componentTagger } from "lovable-tagger";
+import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  
+
   return {
     base: '/',
-    
+
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             // Core React libraries
             'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-            
+
             // UI Component libraries
             'ui-components': [
               '@radix-ui/react-dialog',
@@ -53,38 +53,38 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-progress',
               '@radix-ui/react-switch',
               '@radix-ui/react-toast',
-              '@radix-ui/react-tooltip'
+              '@radix-ui/react-tooltip',
             ],
-            
+
             // Map and visualization
             'mapping': ['mapbox-gl', '@turf/turf'],
-            
+
             // AI and ML
             'ai-ml': [
               '@tensorflow/tfjs',
               '@tensorflow/tfjs-backend-cpu',
               '@tensorflow/tfjs-backend-webgl',
-              '@tensorflow/tfjs-converter'
+              '@tensorflow/tfjs-converter',
             ],
-            
+
             // Charts and visualization
             'charts': ['recharts', 'fabric'],
-            
+
             // Form handling
             'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-            
+
             // State management and data fetching
             'state': ['zustand', '@tanstack/react-query'],
-            
+
             // Utilities
             'utils': ['date-fns', 'clsx', 'tailwind-merge', 'axios', 'uuid'],
-            
+
             // DnD and interactions
             'interactions': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-            
+
             // Supabase
             'supabase': ['@supabase/supabase-js'],
-            
+
             // Capacitor mobile
             'capacitor': [
               '@capacitor/core',
@@ -96,20 +96,20 @@ export default defineConfig(({ mode }) => {
               '@capacitor/haptics',
               '@capacitor/keyboard',
               '@capacitor/network',
-              '@capacitor/preferences'
-            ]
-          }
-        }
+              '@capacitor/preferences',
+            ],
+          },
+        },
       },
       terserOptions: {
         compress: {
           drop_console: mode === 'production',
           drop_debugger: mode === 'production',
-          pure_funcs: mode === 'production' ? ['console.log', 'console.debug'] : []
+          pure_funcs: mode === 'production' ? ['console.log', 'console.debug'] : [],
         },
         mangle: {
-          safari10: true
-        }
+          safari10: true,
+        },
       },
     },
 
@@ -130,18 +130,18 @@ export default defineConfig(({ mode }) => {
         'recharts',
         'lucide-react',
         'clsx',
-        'tailwind-merge'
+        'tailwind-merge',
       ],
       exclude: [
         '@tensorflow/tfjs-node',
-        'sharp'
+        'sharp',
       ],
     },
 
     // Performance optimizations
     esbuild: {
       logOverride: { 'this-is-undefined-in-esm': 'silent' },
-      target: 'esnext'
+      target: 'esnext',
     },
 
     // Define global constants

@@ -166,7 +166,7 @@ class NLPEngine {
   async processMessage(message: string): Promise<{intent: Intent | null, entities: Entity[]}> {
     const intent = await this.detectIntent(message);
     const entities = await this.extractEntities(message);
-    
+
     return { intent, entities };
   }
 
@@ -214,17 +214,17 @@ class NLPEngine {
 
   private calculateConfidence(message: string, pattern: RegExp): number {
     const match = message.match(pattern);
-    if (!match) return 0;
+    if (!match) { return 0; }
 
     // Simple confidence calculation based on match length and position
     const matchLength = match[0].length;
     const messageLength = message.length;
     const position = message.indexOf(match[0]);
-    
+
     let confidence = (matchLength / messageLength) * 0.6;
-    if (position === 0) confidence += 0.2; // Bonus for starting with intent
-    if (position + matchLength === messageLength) confidence += 0.2; // Bonus for ending with intent
-    
+    if (position === 0) { confidence += 0.2; } // Bonus for starting with intent
+    if (position + matchLength === messageLength) { confidence += 0.2; } // Bonus for ending with intent
+
     return Math.min(confidence, 1.0);
   }
 
@@ -234,12 +234,12 @@ class NLPEngine {
     switch (intentName) {
       case 'create_project':
         const nameMatch = message.match(/project\s+(?:called\s+|named\s+)?['""]?([^'""]+)['""]?/i);
-        if (nameMatch) parameters.name = nameMatch[1].trim();
+        if (nameMatch) { parameters.name = nameMatch[1].trim(); }
         break;
 
       case 'schedule_task':
         const taskMatch = message.match(/task\s+['""]?([^'""]+)['""]?/i);
-        if (taskMatch) parameters.task = taskMatch[1].trim();
+        if (taskMatch) { parameters.task = taskMatch[1].trim(); }
         break;
     }
 
@@ -264,7 +264,7 @@ class VoiceInterface {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       this.recognition = new SpeechRecognition();
-      
+
       this.recognition.continuous = this.settings.recognition.continuous;
       this.recognition.interimResults = this.settings.recognition.interimResults;
       this.recognition.lang = this.settings.recognition.language;
@@ -323,8 +323,8 @@ class VoiceInterface {
       utterance.pitch = this.settings.synthesis.pitch;
       utterance.volume = this.settings.synthesis.volume;
 
-      utterance.onend = () => resolve();
-      utterance.onerror = (event) => reject(new Error(`Speech synthesis error: ${event.error}`));
+      utterance.onend = () => { resolve(); };
+      utterance.onerror = (event) => { reject(new Error(`Speech synthesis error: ${event.error}`)); };
 
       this.synthesis!.speak(utterance);
     });
@@ -341,33 +341,33 @@ class ActionExecutor {
     switch (intent.name) {
       case 'create_project':
         return this.createProject(intent.parameters, entities);
-      
+
       case 'view_project':
         return this.viewProject(intent.parameters, entities);
-      
+
       case 'schedule_task':
         return this.scheduleTask(intent.parameters, entities);
-      
+
       case 'generate_report':
         return this.generateReport(intent.parameters, entities);
-      
+
       case 'view_analytics':
         return this.viewAnalytics(intent.parameters, entities);
-      
+
       case 'help':
         return this.provideHelp(intent.parameters);
-      
+
       default:
-        return "I understand you want to do something, but I'm not sure exactly what. Could you please rephrase your request?";
+        return 'I understand you want to do something, but I\'m not sure exactly what. Could you please rephrase your request?';
     }
   }
 
   private async createProject(parameters: Record<string, any>, entities: Entity[]): Promise<string> {
     const name = parameters.name || 'New Project';
-    
+
     // Simulate project creation
     const projectId = `proj_${Date.now()}`;
-    
+
     return `I've created a new project called "${name}" with ID ${projectId}. The project is now ready for you to add tasks, team members, and resources. Would you like me to help you set up the initial project details?`;
   }
 
@@ -386,7 +386,7 @@ Which project would you like to view in detail?`;
     const taskName = parameters.task || 'New Task';
     const dateEntity = entities.find(e => e.type === 'date');
     const date = dateEntity?.value || 'today';
-    
+
     return `I've scheduled the task "${taskName}" for ${date}. The task has been added to your project timeline and team members will be notified. Would you like me to set any specific requirements or assign team members?`;
   }
 
@@ -479,7 +479,7 @@ export const ConversationalInterface: React.FC = () => {
   useEffect(() => {
     nlpEngine.current = new NLPEngine(context);
     voiceInterface.current = new VoiceInterface(voiceSettings);
-    
+
     // Add welcome message
     setMessages([{
       id: '1',
@@ -501,7 +501,7 @@ export const ConversationalInterface: React.FC = () => {
   }, [messages]);
 
   const processMessage = async (text: string, isVoice = false) => {
-    if (!text.trim() || !nlpEngine.current) return;
+    if (!text.trim() || !nlpEngine.current) { return; }
 
     const userMessage: Message = {
       id: `msg_${Date.now()}`,
@@ -516,11 +516,11 @@ export const ConversationalInterface: React.FC = () => {
 
     try {
       const { intent, entities } = await nlpEngine.current.processMessage(text);
-      
+
       let response = '';
       if (intent) {
         response = await actionExecutor.current.executeAction(intent, entities, context);
-        
+
         // Update context
         setContext(prev => ({
           ...prev,
@@ -528,7 +528,7 @@ export const ConversationalInterface: React.FC = () => {
           entities: [...prev.entities, ...entities],
         }));
       } else {
-        response = "I'm not sure I understand. Could you please rephrase your request or ask for help to see what I can do?";
+        response = 'I\'m not sure I understand. Could you please rephrase your request or ask for help to see what I can do?';
       }
 
       const assistantMessage: Message = {
@@ -554,7 +554,6 @@ export const ConversationalInterface: React.FC = () => {
           setIsSpeaking(false);
         }
       }
-
     } catch (error) {
       console.error('Error processing message:', error);
       const errorMessage: Message = {
@@ -575,7 +574,7 @@ export const ConversationalInterface: React.FC = () => {
   };
 
   const handleVoiceInput = async () => {
-    if (!voiceInterface.current) return;
+    if (!voiceInterface.current) { return; }
 
     if (isListening) {
       voiceInterface.current.stopListening();
@@ -621,7 +620,7 @@ export const ConversationalInterface: React.FC = () => {
               </Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={context.preferences.voiceEnabled ? "default" : "secondary"}>
+              <Badge variant={context.preferences.voiceEnabled ? 'default' : 'secondary'}>
                 {context.preferences.voiceEnabled ? <Volume2 className="h-3 w-3 mr-1" /> : <VolumeX className="h-3 w-3 mr-1" />}
                 Voice {context.preferences.voiceEnabled ? 'On' : 'Off'}
               </Badge>
@@ -669,8 +668,8 @@ export const ConversationalInterface: React.FC = () => {
                             </AvatarFallback>
                           </Avatar>
                           <div className={`rounded-lg p-3 ${
-                            message.type === 'user' 
-                              ? 'bg-blue-600 text-white' 
+                            message.type === 'user'
+                              ? 'bg-blue-600 text-white'
                               : 'bg-gray-100 dark:bg-gray-800'
                           }`}>
                             <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -724,7 +723,7 @@ export const ConversationalInterface: React.FC = () => {
                 <div className="flex-1 relative">
                   <Input
                     value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    onChange={(e) => { setInputText(e.target.value); }}
                     placeholder="Type your message or use voice input..."
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     disabled={isProcessing}
@@ -738,7 +737,7 @@ export const ConversationalInterface: React.FC = () => {
                 </div>
                 <Button
                   onClick={handleVoiceInput}
-                  variant={isListening ? "destructive" : "outline"}
+                  variant={isListening ? 'destructive' : 'outline'}
                   size="icon"
                   disabled={isProcessing || isSpeaking}
                 >
@@ -782,10 +781,12 @@ export const ConversationalInterface: React.FC = () => {
                       <Label>Recognition Language</Label>
                       <Select
                         value={voiceSettings.recognition.language}
-                        onValueChange={(value) => setVoiceSettings(prev => ({
+                        onValueChange={(value) => {
+ setVoiceSettings(prev => ({
                           ...prev,
-                          recognition: { ...prev.recognition, language: value }
-                        }))}
+                          recognition: { ...prev.recognition, language: value },
+                        }));
+}}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -805,10 +806,12 @@ export const ConversationalInterface: React.FC = () => {
                       <Label>Response Style</Label>
                       <Select
                         value={context.preferences.responseStyle}
-                        onValueChange={(value: any) => setContext(prev => ({
+                        onValueChange={(value: any) => {
+ setContext(prev => ({
                           ...prev,
-                          preferences: { ...prev.preferences, responseStyle: value }
-                        }))}
+                          preferences: { ...prev.preferences, responseStyle: value },
+                        }));
+}}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -831,10 +834,12 @@ export const ConversationalInterface: React.FC = () => {
                         max="2"
                         step="0.1"
                         value={voiceSettings.synthesis.rate}
-                        onChange={(e) => setVoiceSettings(prev => ({
+                        onChange={(e) => {
+ setVoiceSettings(prev => ({
                           ...prev,
-                          synthesis: { ...prev.synthesis, rate: parseFloat(e.target.value) }
-                        }))}
+                          synthesis: { ...prev.synthesis, rate: parseFloat(e.target.value) },
+                        }));
+}}
                         className="w-full"
                       />
                     </div>
@@ -847,10 +852,12 @@ export const ConversationalInterface: React.FC = () => {
                         max="2"
                         step="0.1"
                         value={voiceSettings.synthesis.pitch}
-                        onChange={(e) => setVoiceSettings(prev => ({
+                        onChange={(e) => {
+ setVoiceSettings(prev => ({
                           ...prev,
-                          synthesis: { ...prev.synthesis, pitch: parseFloat(e.target.value) }
-                        }))}
+                          synthesis: { ...prev.synthesis, pitch: parseFloat(e.target.value) },
+                        }));
+}}
                         className="w-full"
                       />
                     </div>
@@ -863,10 +870,12 @@ export const ConversationalInterface: React.FC = () => {
                         max="1"
                         step="0.1"
                         value={voiceSettings.synthesis.volume}
-                        onChange={(e) => setVoiceSettings(prev => ({
+                        onChange={(e) => {
+ setVoiceSettings(prev => ({
                           ...prev,
-                          synthesis: { ...prev.synthesis, volume: parseFloat(e.target.value) }
-                        }))}
+                          synthesis: { ...prev.synthesis, volume: parseFloat(e.target.value) },
+                        }));
+}}
                         className="w-full"
                       />
                     </div>
@@ -877,10 +886,12 @@ export const ConversationalInterface: React.FC = () => {
                       type="checkbox"
                       id="voiceEnabled"
                       checked={context.preferences.voiceEnabled}
-                      onChange={(e) => setContext(prev => ({
+                      onChange={(e) => {
+ setContext(prev => ({
                         ...prev,
-                        preferences: { ...prev.preferences, voiceEnabled: e.target.checked }
-                      }))}
+                        preferences: { ...prev.preferences, voiceEnabled: e.target.checked },
+                      }));
+}}
                     />
                     <Label htmlFor="voiceEnabled">Enable voice responses</Label>
                   </div>

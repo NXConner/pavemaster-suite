@@ -62,11 +62,11 @@ class MappingService {
   constructor() {
     this.googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
     this.mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
-    
+
     if (!this.googleMapsApiKey || this.googleMapsApiKey === 'demo_key') {
       console.warn('Google Maps API key not configured. Some mapping features may be limited.');
     }
-    
+
     if (!this.mapboxAccessToken || this.mapboxAccessToken === 'demo_token') {
       console.warn('Mapbox access token not configured. Some mapping features may be limited.');
     }
@@ -82,12 +82,12 @@ class MappingService {
 
     const cacheKey = `route_${waypoints.map(w => `${w.location.lat},${w.location.lng}`).join('_')}`;
     const cached = this.getCachedData(cacheKey);
-    if (cached) return cached;
+    if (cached) { return cached; }
 
     try {
       // Try Google Maps first, fallback to Mapbox
       let route: OptimizedRoute;
-      
+
       if (this.googleMapsApiKey && this.googleMapsApiKey !== 'demo_key') {
         route = await this.calculateRouteWithGoogleMaps(waypoints);
       } else if (this.mapboxAccessToken && this.mapboxAccessToken !== 'demo_token') {
@@ -99,10 +99,9 @@ class MappingService {
 
       this.setCachedData(cacheKey, route);
       return route;
-
     } catch (error) {
       console.error('Error calculating optimal route:', error);
-      
+
       // Fallback to basic calculation
       return this.calculateRouteAlgorithmically(waypoints);
     }
@@ -114,7 +113,7 @@ class MappingService {
   async getTrafficConditions(route: OptimizedRoute): Promise<TrafficData> {
     const cacheKey = `traffic_${route.polyline}`;
     const cached = this.getCachedData(cacheKey);
-    if (cached) return cached;
+    if (cached) { return cached; }
 
     try {
       let trafficData: TrafficData;
@@ -127,7 +126,6 @@ class MappingService {
 
       this.setCachedData(cacheKey, trafficData, 2 * 60 * 1000); // 2 minute cache
       return trafficData;
-
     } catch (error) {
       console.error('Error getting traffic conditions:', error);
       return this.generateTrafficData(route);
@@ -144,7 +142,7 @@ class MappingService {
 
     const cacheKey = `geocode_${address.toLowerCase().trim()}`;
     const cached = this.getCachedData(cacheKey);
-    if (cached) return cached;
+    if (cached) { return cached; }
 
     try {
       let result: GeocodeResult;
@@ -159,7 +157,6 @@ class MappingService {
 
       this.setCachedData(cacheKey, result);
       return result;
-
     } catch (error) {
       console.error('Error geocoding address:', error);
       return this.generateGeocodeResult(address);
@@ -172,7 +169,7 @@ class MappingService {
   async reverseGeocode(coordinates: Coordinates): Promise<GeocodeResult> {
     const cacheKey = `reverse_${coordinates.lat}_${coordinates.lng}`;
     const cached = this.getCachedData(cacheKey);
-    if (cached) return cached;
+    if (cached) { return cached; }
 
     try {
       let result: GeocodeResult;
@@ -187,7 +184,6 @@ class MappingService {
 
       this.setCachedData(cacheKey, result);
       return result;
-
     } catch (error) {
       console.error('Error reverse geocoding:', error);
       return this.generateReverseGeocodeResult(coordinates);
@@ -200,17 +196,17 @@ class MappingService {
     const destination = waypoints[waypoints.length - 1];
     const intermediateWaypoints = waypoints.slice(1, -1);
 
-    const waypointsParam = intermediateWaypoints.length > 0 
+    const waypointsParam = intermediateWaypoints.length > 0
       ? `&waypoints=optimize:true|${intermediateWaypoints.map(w => `${w.location.lat},${w.location.lng}`).join('|')}`
       : '';
 
-    const url = `https://maps.googleapis.com/maps/api/directions/json?` +
-      `origin=${origin.location.lat},${origin.location.lng}` +
-      `&destination=${destination.location.lat},${destination.location.lng}` +
-      `${waypointsParam}` +
-      `&key=${this.googleMapsApiKey}` +
-      `&traffic_model=best_guess` +
-      `&departure_time=now`;
+    const url = 'https://maps.googleapis.com/maps/api/directions/json?'
+      + `origin=${origin.location.lat},${origin.location.lng}`
+      + `&destination=${destination.location.lat},${destination.location.lng}`
+      + `${waypointsParam}`
+      + `&key=${this.googleMapsApiKey}`
+      + '&traffic_model=best_guess'
+      + '&departure_time=now';
 
     const response = await fetch(url);
     const data = await response.json();
@@ -223,9 +219,9 @@ class MappingService {
   }
 
   private async geocodeWithGoogleMaps(address: string): Promise<GeocodeResult> {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?` +
-      `address=${encodeURIComponent(address)}` +
-      `&key=${this.googleMapsApiKey}`;
+    const url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+      + `address=${encodeURIComponent(address)}`
+      + `&key=${this.googleMapsApiKey}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -237,15 +233,15 @@ class MappingService {
     return this.parseGoogleMapsGeocodeResponse(data.results[0]);
   }
 
-  // Mapbox Integration  
+  // Mapbox Integration
   private async calculateRouteWithMapbox(waypoints: Waypoint[]): Promise<OptimizedRoute> {
     const coordinates = waypoints.map(w => `${w.location.lng},${w.location.lat}`).join(';');
-    
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?` +
-      `access_token=${this.mapboxAccessToken}` +
-      `&geometries=polyline` +
-      `&overview=full` +
-      `&steps=true`;
+
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?`
+      + `access_token=${this.mapboxAccessToken}`
+      + '&geometries=polyline'
+      + '&overview=full'
+      + '&steps=true';
 
     const response = await fetch(url);
     const data = await response.json();
@@ -266,7 +262,7 @@ class MappingService {
     for (let i = 0; i < waypoints.length - 1; i++) {
       const distance = this.calculateDistance(waypoints[i].location, waypoints[i + 1].location);
       const duration = this.estimateDrivingTime(distance);
-      
+
       totalDistance += distance;
       totalDuration += duration;
     }
@@ -282,7 +278,7 @@ class MappingService {
       estimatedFuelCost: this.calculateFuelCost(totalDistance),
       efficiency: this.calculateRouteEfficiency(waypoints),
       warnings: this.generateRouteWarnings(waypoints),
-      polyline: this.generatePolyline(waypoints)
+      polyline: this.generatePolyline(waypoints),
     };
   }
 
@@ -294,11 +290,11 @@ class MappingService {
     return {
       coordinates: {
         lat: baseCoords.lat + offset,
-        lng: baseCoords.lng + offset
+        lng: baseCoords.lng + offset,
       },
       formattedAddress: address,
       addressComponents: this.parseAddressComponents(address),
-      confidence: 0.75
+      confidence: 0.75,
     };
   }
 
@@ -307,11 +303,11 @@ class MappingService {
     const R = 3959; // Earth's radius in miles
     const dLat = this.toRadians(coord2.lat - coord1.lat);
     const dLng = this.toRadians(coord2.lng - coord1.lng);
-    
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.toRadians(coord1.lat)) * Math.cos(this.toRadians(coord2.lat)) *
-              Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    
+
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+              + Math.cos(this.toRadians(coord1.lat)) * Math.cos(this.toRadians(coord2.lat))
+              * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
@@ -335,9 +331,9 @@ class MappingService {
     // Simple efficiency calculation based on route optimization
     const straightLineDistance = this.calculateDistance(
       waypoints[0].location,
-      waypoints[waypoints.length - 1].location
+      waypoints[waypoints.length - 1].location,
     );
-    
+
     let actualDistance = 0;
     for (let i = 0; i < waypoints.length - 1; i++) {
       actualDistance += this.calculateDistance(waypoints[i].location, waypoints[i + 1].location);
@@ -348,20 +344,20 @@ class MappingService {
 
   private generateRouteWarnings(waypoints: Waypoint[]): string[] {
     const warnings: string[] = [];
-    
+
     if (waypoints.length > 8) {
       warnings.push('Large number of stops may impact efficiency');
     }
-    
+
     const totalDistance = waypoints.reduce((sum, _, i) => {
-      if (i === 0) return 0;
+      if (i === 0) { return 0; }
       return sum + this.calculateDistance(waypoints[i - 1].location, waypoints[i].location);
     }, 0);
-    
+
     if (totalDistance > 200) {
       warnings.push('Long route distance may require fuel stops');
     }
-    
+
     return warnings;
   }
 
@@ -379,7 +375,7 @@ class MappingService {
       city: parts[1] || '',
       state: parts[2] || '',
       zipCode: '',
-      country: 'USA'
+      country: 'USA',
     };
   }
 
@@ -396,7 +392,7 @@ class MappingService {
   private setCachedData(key: string, data: any, timeout: number = this.cacheTimeout): void {
     this.cache.set(key, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -404,7 +400,7 @@ class MappingService {
   private parseGoogleMapsResponse(data: any, waypoints: Waypoint[]): OptimizedRoute {
     const route = data.routes[0];
     const leg = route.legs[0];
-    
+
     return {
       waypoints,
       totalDistance: leg.distance.value * 0.000621371, // Convert meters to miles
@@ -412,7 +408,7 @@ class MappingService {
       estimatedFuelCost: this.calculateFuelCost(leg.distance.value * 0.000621371),
       efficiency: 85,
       warnings: [],
-      polyline: route.overview_polyline.points
+      polyline: route.overview_polyline.points,
     };
   }
 
@@ -424,7 +420,7 @@ class MappingService {
       estimatedFuelCost: this.calculateFuelCost(route.distance * 0.000621371),
       efficiency: 85,
       warnings: [],
-      polyline: route.geometry
+      polyline: route.geometry,
     };
   }
 
@@ -432,28 +428,28 @@ class MappingService {
     return {
       coordinates: {
         lat: result.geometry.location.lat,
-        lng: result.geometry.location.lng
+        lng: result.geometry.location.lng,
       },
       formattedAddress: result.formatted_address,
       addressComponents: this.parseGoogleAddressComponents(result.address_components),
       placeId: result.place_id,
-      confidence: 0.95
+      confidence: 0.95,
     };
   }
 
   private parseGoogleAddressComponents(components: any[]): any {
     const result: any = {};
-    
+
     components.forEach(component => {
       const types = component.types;
-      if (types.includes('street_number')) result.streetNumber = component.long_name;
-      if (types.includes('route')) result.street = component.long_name;
-      if (types.includes('locality')) result.city = component.long_name;
-      if (types.includes('administrative_area_level_1')) result.state = component.short_name;
-      if (types.includes('postal_code')) result.zipCode = component.long_name;
-      if (types.includes('country')) result.country = component.long_name;
+      if (types.includes('street_number')) { result.streetNumber = component.long_name; }
+      if (types.includes('route')) { result.street = component.long_name; }
+      if (types.includes('locality')) { result.city = component.long_name; }
+      if (types.includes('administrative_area_level_1')) { result.state = component.short_name; }
+      if (types.includes('postal_code')) { result.zipCode = component.long_name; }
+      if (types.includes('country')) { result.country = component.long_name; }
     });
-    
+
     return result;
   }
 
@@ -465,14 +461,14 @@ class MappingService {
   private generateTrafficData(route: OptimizedRoute): TrafficData {
     const congestionLevels = ['low', 'medium', 'high', 'severe'] as const;
     const congestionLevel = congestionLevels[Math.floor(Math.random() * congestionLevels.length)];
-    
+
     return {
       congestionLevel,
-      delayMinutes: congestionLevel === 'low' ? 0 : 
-                   congestionLevel === 'medium' ? 5 :
-                   congestionLevel === 'high' ? 15 : 30,
+      delayMinutes: congestionLevel === 'low' ? 0
+                   : congestionLevel === 'medium' ? 5
+                   : congestionLevel === 'high' ? 15 : 30,
       incidents: [],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
@@ -484,15 +480,15 @@ class MappingService {
         street: 'Unknown Street',
         city: 'Unknown City',
         state: 'Unknown State',
-        country: 'USA'
+        country: 'USA',
       },
-      confidence: 0.6
+      confidence: 0.6,
     };
   }
 
   private async geocodeWithMapbox(address: string): Promise<GeocodeResult> {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?` +
-      `access_token=${this.mapboxAccessToken}`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?`
+      + `access_token=${this.mapboxAccessToken}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -505,34 +501,34 @@ class MappingService {
     return {
       coordinates: {
         lng: feature.geometry.coordinates[0],
-        lat: feature.geometry.coordinates[1]
+        lat: feature.geometry.coordinates[1],
       },
       formattedAddress: feature.place_name,
       addressComponents: this.parseMapboxAddressComponents(feature),
-      confidence: feature.relevance || 0.8
+      confidence: feature.relevance || 0.8,
     };
   }
 
   private parseMapboxAddressComponents(feature: any): any {
     const context = feature.context || [];
     const result: any = {};
-    
+
     result.street = feature.text || '';
-    
+
     context.forEach((item: any) => {
-      if (item.id.startsWith('place')) result.city = item.text;
-      if (item.id.startsWith('region')) result.state = item.short_code?.replace('US-', '') || item.text;
-      if (item.id.startsWith('postcode')) result.zipCode = item.text;
-      if (item.id.startsWith('country')) result.country = item.text;
+      if (item.id.startsWith('place')) { result.city = item.text; }
+      if (item.id.startsWith('region')) { result.state = item.short_code?.replace('US-', '') || item.text; }
+      if (item.id.startsWith('postcode')) { result.zipCode = item.text; }
+      if (item.id.startsWith('country')) { result.country = item.text; }
     });
-    
+
     return result;
   }
 
   private async reverseGeocodeWithGoogleMaps(coordinates: Coordinates): Promise<GeocodeResult> {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?` +
-      `latlng=${coordinates.lat},${coordinates.lng}` +
-      `&key=${this.googleMapsApiKey}`;
+    const url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+      + `latlng=${coordinates.lat},${coordinates.lng}`
+      + `&key=${this.googleMapsApiKey}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -545,8 +541,8 @@ class MappingService {
   }
 
   private async reverseGeocodeWithMapbox(coordinates: Coordinates): Promise<GeocodeResult> {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?` +
-      `access_token=${this.mapboxAccessToken}`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?`
+      + `access_token=${this.mapboxAccessToken}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -560,7 +556,7 @@ class MappingService {
       coordinates,
       formattedAddress: feature.place_name,
       addressComponents: this.parseMapboxAddressComponents(feature),
-      confidence: feature.relevance || 0.8
+      confidence: feature.relevance || 0.8,
     };
   }
 }

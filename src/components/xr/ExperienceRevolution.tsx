@@ -281,7 +281,7 @@ class ExperienceRevolutionEngine {
     this.canvas = document.createElement('canvas');
     this.canvas.width = 1920;
     this.canvas.height = 1080;
-    
+
     try {
       this.context = this.canvas.getContext('webgl2') || this.canvas.getContext('webgl');
       if (this.context) {
@@ -521,33 +521,33 @@ class ExperienceRevolutionEngine {
     }
 
     scene.status = 'loading';
-    
+
     // Simulate scene loading
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-    
+
     scene.status = 'ready';
     scene.metadata.lastModified = new Date();
-    
+
     return scene;
   }
 
   startRendering(sceneId: string, canvasElement: HTMLCanvasElement): void {
     const scene = this.scenes.get(sceneId);
-    if (!scene) return;
+    if (!scene) { return; }
 
     scene.status = 'rendering';
-    
+
     // Simulate rendering loop
     const render = () => {
       if (scene.status === 'rendering') {
         // Update camera rotation for demo
         scene.camera.rotation.y += 0.005;
-        
+
         // Continue rendering
         this.animationFrame = requestAnimationFrame(render);
       }
     };
-    
+
     render();
   }
 
@@ -556,7 +556,7 @@ class ExperienceRevolutionEngine {
     if (scene) {
       scene.status = 'ready';
     }
-    
+
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
@@ -571,10 +571,10 @@ class ExperienceRevolutionEngine {
 
     session.status = 'initializing';
     session.camera.stream = true;
-    
+
     // Simulate AR initialization
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     session.status = 'tracking';
     session.tracking = {
       markerCount: 3,
@@ -583,7 +583,7 @@ class ExperienceRevolutionEngine {
       confidence: 0.88,
     };
     session.lastUpdate = new Date();
-    
+
     // Simulate tracking updates
     setInterval(() => {
       if (session.status === 'tracking') {
@@ -593,7 +593,7 @@ class ExperienceRevolutionEngine {
         session.lastUpdate = new Date();
       }
     }, 1000);
-    
+
     return session;
   }
 
@@ -604,14 +604,14 @@ class ExperienceRevolutionEngine {
     }
 
     environment.status = 'loading';
-    
+
     // Simulate VR initialization
     await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
     environment.status = 'immersed';
     environment.controllers.left.connected = true;
     environment.controllers.right.connected = true;
-    
+
     // Start session timer
     const startTime = Date.now();
     const sessionTimer = setInterval(() => {
@@ -621,7 +621,7 @@ class ExperienceRevolutionEngine {
         clearInterval(sessionTimer);
       }
     }, 1000);
-    
+
     return environment;
   }
 
@@ -692,7 +692,7 @@ class ExperienceRevolutionEngine {
 
     session.objects.push(arObject);
     session.lastUpdate = new Date();
-    
+
     return arObject;
   }
 
@@ -703,8 +703,8 @@ class ExperienceRevolutionEngine {
     }
 
     // Simulate image capture
-    const imageData = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==`;
-    
+    const imageData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
     const metadata = {
       timestamp: new Date(),
       resolution: session.camera.resolution,
@@ -768,7 +768,7 @@ export const ExperienceRevolution: React.FC = () => {
   useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 2000);
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const loadData = () => {
@@ -858,7 +858,7 @@ export const ExperienceRevolution: React.FC = () => {
               <Badge variant="secondary">Phase 4</Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={isRendering ? "default" : "outline"}>
+              <Badge variant={isRendering ? 'default' : 'outline'}>
                 {isRendering ? <Activity className="h-3 w-3 mr-1 animate-spin" /> : <Eye className="h-3 w-3 mr-1" />}
                 {isRendering ? 'Rendering' : 'Ready'}
               </Badge>
@@ -908,7 +908,7 @@ export const ExperienceRevolution: React.FC = () => {
                             <div
                               key={scene.id}
                               className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedScene(scene)}
+                              onClick={() => { setSelectedScene(scene); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center space-x-2">
@@ -1015,10 +1015,11 @@ export const ExperienceRevolution: React.FC = () => {
                           </Button>
                           {selectedScene.status === 'ready' && (
                             <Button
-                              onClick={() => 
-                                isRendering 
+                              onClick={() => {
+ isRendering
                                   ? handleStopRendering(selectedScene.id)
-                                  : handleStartRendering(selectedScene.id)
+                                  : handleStartRendering(selectedScene.id);
+}
                               }
                               variant="outline"
                               className="flex-1"
@@ -1045,12 +1046,12 @@ export const ExperienceRevolution: React.FC = () => {
                               <div key={object.id} className="p-2 bg-card dark:bg-gray-800 rounded">
                                 <div className="flex items-center justify-between mb-1">
                                   <span className="text-sm font-medium">{object.name}</span>
-                                  <Badge variant={object.visible ? "default" : "outline"} className="text-xs">
+                                  <Badge variant={object.visible ? 'default' : 'outline'} className="text-xs">
                                     {object.visible ? 'Visible' : 'Hidden'}
                                   </Badge>
                                 </div>
                                 <div className="text-xs text-gray-600">
-                                  Type: {object.type} | 
+                                  Type: {object.type} |
                                   Position: ({object.position.x}, {object.position.y}, {object.position.z})
                                 </div>
                               </div>
@@ -1082,7 +1083,7 @@ export const ExperienceRevolution: React.FC = () => {
                             <div
                               key={session.id}
                               className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedAR(session)}
+                              onClick={() => { setSelectedAR(session); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center space-x-2">
@@ -1203,7 +1204,7 @@ export const ExperienceRevolution: React.FC = () => {
                             {Object.entries(selectedAR.features).map(([feature, enabled]) => (
                               <div key={feature} className="flex items-center justify-between text-sm">
                                 <span className="capitalize">{feature.replace(/([A-Z])/g, ' $1')}</span>
-                                <Badge variant={enabled ? "default" : "outline"} className="text-xs">
+                                <Badge variant={enabled ? 'default' : 'outline'} className="text-xs">
                                   {enabled ? 'Enabled' : 'Disabled'}
                                 </Badge>
                               </div>
@@ -1264,7 +1265,7 @@ export const ExperienceRevolution: React.FC = () => {
                             <div
                               key={environment.id}
                               className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedVR(environment)}
+                              onClick={() => { setSelectedVR(environment); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center space-x-2">
@@ -1339,8 +1340,8 @@ export const ExperienceRevolution: React.FC = () => {
                             <div className="flex justify-between">
                               <span>Position:</span>
                               <span>
-                                ({selectedVR.tracking.headset.position.x.toFixed(1)}, 
-                                 {selectedVR.tracking.headset.position.y.toFixed(1)}, 
+                                ({selectedVR.tracking.headset.position.x.toFixed(1)},
+                                 {selectedVR.tracking.headset.position.y.toFixed(1)},
                                  {selectedVR.tracking.headset.position.z.toFixed(1)})
                               </span>
                             </div>
@@ -1358,7 +1359,7 @@ export const ExperienceRevolution: React.FC = () => {
                               <div key={side} className="p-2 bg-card dark:bg-gray-800 rounded">
                                 <div className="flex items-center justify-between mb-1">
                                   <span className="text-sm font-medium capitalize">{side}</span>
-                                  <Badge variant={controller.connected ? "default" : "outline"} className="text-xs">
+                                  <Badge variant={controller.connected ? 'default' : 'outline'} className="text-xs">
                                     {controller.connected ? 'Connected' : 'Disconnected'}
                                   </Badge>
                                 </div>
@@ -1379,7 +1380,7 @@ export const ExperienceRevolution: React.FC = () => {
                             {Object.entries(selectedVR.environment).map(([setting, value]) => (
                               <div key={setting} className="flex items-center justify-between text-sm">
                                 <span className="capitalize">{setting}</span>
-                                <Badge variant={typeof value === 'boolean' ? (value ? "default" : "outline") : "secondary"} className="text-xs">
+                                <Badge variant={typeof value === 'boolean' ? (value ? 'default' : 'outline') : 'secondary'} className="text-xs">
                                   {typeof value === 'boolean' ? (value ? 'On' : 'Off') : value}
                                 </Badge>
                               </div>

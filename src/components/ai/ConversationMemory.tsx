@@ -114,8 +114,8 @@ class ConversationMemoryEngine {
   }
 
   getMemoriesByTopic(topic: string): ConversationMemory[] {
-    return Array.from(this.memories.values()).filter(m => 
-      m.topic.toLowerCase().includes(topic.toLowerCase())
+    return Array.from(this.memories.values()).filter(m =>
+      m.topic.toLowerCase().includes(topic.toLowerCase()),
     );
   }
 
@@ -123,7 +123,7 @@ class ConversationMemoryEngine {
   updateEntity(entity: EntityMemory): void {
     const key = `${entity.type}:${entity.value}`;
     const existing = this.index.entities.get(key);
-    
+
     if (existing) {
       existing.frequency += 1;
       existing.lastMentioned = new Date();
@@ -162,13 +162,13 @@ class ConversationMemoryEngine {
     const hour = memory.timestamp.getHours();
     const dayOfWeek = memory.timestamp.getDay();
     const timeContext = `${dayOfWeek}-${hour}`;
-    
+
     const existingPattern = this.index.patterns.get(`time:${timeContext}`);
     if (existingPattern) {
       existingPattern.frequency += 1;
       existingPattern.lastSeen = new Date();
       return [existingPattern];
-    } else {
+    }
       const newPattern: LearningPattern = {
         pattern: `time:${timeContext}`,
         frequency: 1,
@@ -178,17 +178,16 @@ class ConversationMemoryEngine {
       };
       this.index.patterns.set(newPattern.pattern, newPattern);
       return [newPattern];
-    }
   }
 
   private detectTopicPatterns(memory: ConversationMemory): LearningPattern[] {
     const patterns: LearningPattern[] = [];
     const words = memory.topic.toLowerCase().split(' ');
-    
+
     for (let i = 0; i < words.length - 1; i++) {
       const sequence = `${words[i]} ${words[i + 1]}`;
       const patternKey = `topic:${sequence}`;
-      
+
       const existingPattern = this.index.patterns.get(patternKey);
       if (existingPattern) {
         existingPattern.frequency += 1;
@@ -206,17 +205,17 @@ class ConversationMemoryEngine {
         patterns.push(newPattern);
       }
     }
-    
+
     return patterns;
   }
 
   private detectEntityPatterns(memory: ConversationMemory): LearningPattern[] {
     const patterns: LearningPattern[] = [];
-    
+
     for (const entity of memory.entities) {
       const patternKey = `entity:${entity.type}:${entity.value}`;
       const existingPattern = this.index.patterns.get(patternKey);
-      
+
       if (existingPattern) {
         existingPattern.frequency += 1;
         existingPattern.lastSeen = new Date();
@@ -233,7 +232,7 @@ class ConversationMemoryEngine {
         patterns.push(newPattern);
       }
     }
-    
+
     return patterns;
   }
 
@@ -253,24 +252,24 @@ class ConversationMemoryEngine {
 
   private calculateRelevanceScore(memory: ConversationMemory, queryTerms: string[]): number {
     let score = 0;
-    
+
     // Topic relevance
     const topicLower = memory.topic.toLowerCase();
     queryTerms.forEach(term => {
-      if (topicLower.includes(term)) score += 2;
+      if (topicLower.includes(term)) { score += 2; }
     });
-    
+
     // Entity relevance
     memory.entities.forEach(entity => {
       queryTerms.forEach(term => {
-        if (entity.value.toLowerCase().includes(term)) score += entity.importance;
+        if (entity.value.toLowerCase().includes(term)) { score += entity.importance; }
       });
     });
-    
+
     // Recency bonus
     const daysSince = (Date.now() - memory.timestamp.getTime()) / (1000 * 60 * 60 * 24);
     score += Math.max(0, 1 - daysSince / 30);
-    
+
     return score;
   }
 
@@ -278,31 +277,31 @@ class ConversationMemoryEngine {
   generateInsights(userId: string): ConversationInsight[] {
     const userMemories = this.getMemoriesByUser(userId);
     const insights: ConversationInsight[] = [];
-    
+
     // Analyze user preferences
     const preferenceInsights = this.analyzePreferences(userMemories);
     insights.push(...preferenceInsights);
-    
+
     // Analyze conversation patterns
     const patternInsights = this.analyzeConversationPatterns(userMemories);
     insights.push(...patternInsights);
-    
+
     // Analyze topic trends
     const topicInsights = this.analyzeTopicTrends(userMemories);
     insights.push(...topicInsights);
-    
+
     return insights;
   }
 
   private analyzePreferences(memories: ConversationMemory[]): ConversationInsight[] {
     const insights: ConversationInsight[] = [];
-    
-    if (memories.length === 0) return insights;
-    
+
+    if (memories.length === 0) { return insights; }
+
     // Response style preference
     const styles = memories.map(m => m.preferences.preferredResponseStyle);
     const mostCommonStyle = this.getMostCommon(styles);
-    
+
     if (mostCommonStyle) {
       insights.push({
         id: `pref_style_${Date.now()}`,
@@ -313,11 +312,11 @@ class ConversationMemoryEngine {
         timestamp: new Date(),
       });
     }
-    
+
     // Common topics
     const topics = memories.map(m => m.topic);
     const commonTopics = this.getTopItems(topics, 3);
-    
+
     if (commonTopics.length > 0) {
       insights.push({
         id: `pref_topics_${Date.now()}`,
@@ -328,17 +327,17 @@ class ConversationMemoryEngine {
         timestamp: new Date(),
       });
     }
-    
+
     return insights;
   }
 
   private analyzeConversationPatterns(memories: ConversationMemory[]): ConversationInsight[] {
     const insights: ConversationInsight[] = [];
-    
+
     // Time patterns
     const hours = memories.map(m => m.timestamp.getHours());
     const commonHour = this.getMostCommon(hours);
-    
+
     if (commonHour !== null && hours.filter(h => h === commonHour).length > 2) {
       insights.push({
         id: `pattern_time_${Date.now()}`,
@@ -349,7 +348,7 @@ class ConversationMemoryEngine {
         timestamp: new Date(),
       });
     }
-    
+
     // Session length patterns
     const avgEntities = memories.reduce((sum, m) => sum + m.entities.length, 0) / memories.length;
     if (avgEntities > 5) {
@@ -362,22 +361,22 @@ class ConversationMemoryEngine {
         timestamp: new Date(),
       });
     }
-    
+
     return insights;
   }
 
   private analyzeTopicTrends(memories: ConversationMemory[]): ConversationInsight[] {
     const insights: ConversationInsight[] = [];
-    
+
     // Recent vs older topics
-    const recentMemories = memories.filter(m => 
-      (Date.now() - m.timestamp.getTime()) < (7 * 24 * 60 * 60 * 1000)
+    const recentMemories = memories.filter(m =>
+      (Date.now() - m.timestamp.getTime()) < (7 * 24 * 60 * 60 * 1000),
     );
-    
+
     if (recentMemories.length > 0) {
       const recentTopics = recentMemories.map(m => m.topic);
       const trendingTopic = this.getMostCommon(recentTopics);
-      
+
       if (trendingTopic) {
         insights.push({
           id: `trend_topic_${Date.now()}`,
@@ -389,7 +388,7 @@ class ConversationMemoryEngine {
         });
       }
     }
-    
+
     return insights;
   }
 
@@ -397,32 +396,32 @@ class ConversationMemoryEngine {
   private calculateImportance(entity: EntityMemory): number {
     let importance = entity.frequency * 0.3;
     importance += entity.context.length * 0.2;
-    
+
     // Recency bonus
     const daysSince = (Date.now() - entity.lastMentioned.getTime()) / (1000 * 60 * 60 * 24);
     importance += Math.max(0, 1 - daysSince / 30) * 0.5;
-    
+
     return Math.min(importance, 1.0);
   }
 
   private getMostCommon<T>(items: T[]): T | null {
-    if (items.length === 0) return null;
-    
+    if (items.length === 0) { return null; }
+
     const counts = items.reduce((acc, item) => {
       acc.set(item, (acc.get(item) || 0) + 1);
       return acc;
     }, new Map<T, number>());
-    
+
     let maxCount = 0;
     let mostCommon: T | null = null;
-    
+
     counts.forEach((count, item) => {
       if (count > maxCount) {
         maxCount = count;
         mostCommon = item;
       }
     });
-    
+
     return mostCommon;
   }
 
@@ -431,7 +430,7 @@ class ConversationMemoryEngine {
       acc.set(item, (acc.get(item) || 0) + 1);
       return acc;
     }, new Map<T, number>());
-    
+
     return Array.from(counts.entries())
       .sort(([, a], [, b]) => b - a)
       .slice(0, limit)
@@ -440,18 +439,18 @@ class ConversationMemoryEngine {
 
   private updateIndex(memory: ConversationMemory): void {
     // Update entities
-    memory.entities.forEach(entity => this.updateEntity(entity));
-    
+    memory.entities.forEach(entity => { this.updateEntity(entity); });
+
     // Update topics
     const topicCount = this.index.topics.get(memory.topic) || 0;
     this.index.topics.set(memory.topic, topicCount + 1);
-    
+
     // Update session history
     this.index.sessionHistory.push(memory);
     if (this.index.sessionHistory.length > 100) {
       this.index.sessionHistory.shift();
     }
-    
+
     // Detect and update patterns
     const patterns = this.detectPatterns(memory);
     patterns.forEach(pattern => {
@@ -461,19 +460,19 @@ class ConversationMemoryEngine {
 
   private cleanupOldMemories(): void {
     const cutoffDate = new Date(Date.now() - this.retentionDays * 24 * 60 * 60 * 1000);
-    
+
     // Remove old memories
     for (const [id, memory] of this.memories) {
       if (memory.timestamp < cutoffDate) {
         this.memories.delete(id);
       }
     }
-    
+
     // Limit total memories
     if (this.memories.size > this.maxMemories) {
       const sorted = Array.from(this.memories.entries())
         .sort(([, a], [, b]) => b.timestamp.getTime() - a.timestamp.getTime());
-      
+
       const toKeep = sorted.slice(0, this.maxMemories);
       this.memories.clear();
       toKeep.forEach(([id, memory]) => this.memories.set(id, memory));
@@ -502,7 +501,7 @@ class ConversationMemoryEngine {
       const saved = localStorage.getItem('conversationMemory');
       if (saved) {
         const data = JSON.parse(saved);
-        
+
         // Restore memories
         this.memories = new Map(data.memories.map(([id, memory]: [string, any]) => [
           id,
@@ -515,7 +514,7 @@ class ConversationMemoryEngine {
             })),
           },
         ]));
-        
+
         // Restore index
         this.index = {
           entities: new Map(data.index.entities.map(([key, entity]: [string, any]) => [
@@ -573,7 +572,7 @@ class ConversationMemoryEngine {
         patterns: new Map(),
         sessionHistory: [],
       };
-      
+
       // Restore data
       parsed.memories.forEach(([id, memory]: [string, any]) => {
         this.memories.set(id, {
@@ -585,9 +584,9 @@ class ConversationMemoryEngine {
           })),
         });
       });
-      
+
       // Rebuild index
-      this.memories.forEach(memory => this.updateIndex(memory));
+      this.memories.forEach(memory => { this.updateIndex(memory); });
       this.saveToStorage();
     } catch (error) {
       console.error('Failed to import memories:', error);
@@ -764,7 +763,7 @@ export const ConversationMemory: React.FC<{
               <div className="flex space-x-2">
                 <Input
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => { setSearchQuery(e.target.value); }}
                   placeholder="Search conversation memory..."
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
@@ -785,7 +784,7 @@ export const ConversationMemory: React.FC<{
                           <div
                             key={memory.id}
                             className="p-3 border rounded-lg mb-2 cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                            onClick={() => setSelectedMemory(memory)}
+                            onClick={() => { setSelectedMemory(memory); }}
                           >
                             <div className="flex items-center justify-between mb-1">
                               <Badge variant="outline">{memory.topic}</Badge>
@@ -860,9 +859,9 @@ export const ConversationMemory: React.FC<{
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
                             <Badge variant={
-                              insight.type === 'pattern' ? 'default' :
-                              insight.type === 'preference' ? 'secondary' :
-                              insight.type === 'need' ? 'destructive' : 'outline'
+                              insight.type === 'pattern' ? 'default'
+                              : insight.type === 'preference' ? 'secondary'
+                              : insight.type === 'need' ? 'destructive' : 'outline'
                             }>
                               {insight.type}
                             </Badge>

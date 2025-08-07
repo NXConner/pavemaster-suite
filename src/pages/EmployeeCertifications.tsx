@@ -33,7 +33,7 @@ export default function EmployeeCertifications() {
     certificate_number: '',
     issue_date: '',
     expiry_date: '',
-    status: 'active'
+    status: 'active',
   });
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function EmployeeCertifications() {
         .select('*')
         .order('expiry_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) { throw error; }
       setCertifications(data || []);
     } catch (error: any) {
       toast.error('Error fetching certifications: ' + error.message);
@@ -62,10 +62,10 @@ export default function EmployeeCertifications() {
         .from('employee_certifications')
         .insert([{
           ...newCertification,
-          employee_id: (await supabase.auth.getUser()).data.user?.id
+          employee_id: (await supabase.auth.getUser()).data.user?.id,
         }]);
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       toast.success('Certification added successfully');
       setAddDialogOpen(false);
@@ -75,7 +75,7 @@ export default function EmployeeCertifications() {
         certificate_number: '',
         issue_date: '',
         expiry_date: '',
-        status: 'active'
+        status: 'active',
       });
       fetchCertifications();
     } catch (error: any) {
@@ -84,8 +84,8 @@ export default function EmployeeCertifications() {
   };
 
   const getStatusIcon = (status: string | null, expiryDate: string | null) => {
-    if (!expiryDate) return <Clock className="h-4 w-4 text-gray-500" />;
-    
+    if (!expiryDate) { return <Clock className="h-4 w-4 text-gray-500" />; }
+
     const expiry = new Date(expiryDate);
     const now = new Date();
     const thirtyDaysFromNow = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
@@ -94,14 +94,13 @@ export default function EmployeeCertifications() {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
     } else if (expiry < thirtyDaysFromNow) {
       return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    } else {
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
   };
 
-  const getStatusBadge = (status: string | null, expiryDate: string | null): { variant: "default" | "secondary" | "destructive" | "outline", label: string } => {
-    if (!expiryDate) return { variant: 'outline', label: 'No Expiry' };
-    
+  const getStatusBadge = (status: string | null, expiryDate: string | null): { variant: 'default' | 'secondary' | 'destructive' | 'outline', label: string } => {
+    if (!expiryDate) { return { variant: 'outline', label: 'No Expiry' }; }
+
     const expiry = new Date(expiryDate);
     const now = new Date();
     const thirtyDaysFromNow = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
@@ -110,29 +109,28 @@ export default function EmployeeCertifications() {
       return { variant: 'destructive', label: 'Expired' };
     } else if (expiry < thirtyDaysFromNow) {
       return { variant: 'outline', label: 'Expiring Soon' };
-    } else {
-      return { variant: 'default', label: 'Active' };
     }
+      return { variant: 'default', label: 'Active' };
   };
 
   const getDaysUntilExpiry = (expiryDate: string | null) => {
-    if (!expiryDate) return null;
-    
+    if (!expiryDate) { return null; }
+
     const expiry = new Date(expiryDate);
     const now = new Date();
     const diffTime = expiry.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     return diffDays;
   };
 
   const filteredCertifications = certifications.filter(cert => {
-    const matchesSearch = cert.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cert.issuing_authority?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cert.certificate_number?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    if (statusFilter === 'all') return matchesSearch;
-    
+    const matchesSearch = cert.name?.toLowerCase().includes(searchTerm.toLowerCase())
+                         || cert.issuing_authority?.toLowerCase().includes(searchTerm.toLowerCase())
+                         || cert.certificate_number?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (statusFilter === 'all') { return matchesSearch; }
+
     const { label } = getStatusBadge(cert.status, cert.expiry_date);
     return matchesSearch && label.toLowerCase().includes(statusFilter);
   });
@@ -150,7 +148,7 @@ export default function EmployeeCertifications() {
     expired: certifications.filter(c => {
       const { label } = getStatusBadge(c.status, c.expiry_date);
       return label === 'Expired';
-    }).length
+    }).length,
   };
 
   if (loading) {
@@ -191,7 +189,7 @@ export default function EmployeeCertifications() {
                   <Input
                     id="name"
                     value={newCertification.name}
-                    onChange={(e) => setNewCertification(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => { setNewCertification(prev => ({ ...prev, name: e.target.value })); }}
                     placeholder="e.g., Commercial Driver's License"
                   />
                 </div>
@@ -200,7 +198,7 @@ export default function EmployeeCertifications() {
                   <Input
                     id="authority"
                     value={newCertification.issuing_authority}
-                    onChange={(e) => setNewCertification(prev => ({ ...prev, issuing_authority: e.target.value }))}
+                    onChange={(e) => { setNewCertification(prev => ({ ...prev, issuing_authority: e.target.value })); }}
                     placeholder="e.g., Virginia DMV"
                   />
                 </div>
@@ -209,7 +207,7 @@ export default function EmployeeCertifications() {
                   <Input
                     id="number"
                     value={newCertification.certificate_number}
-                    onChange={(e) => setNewCertification(prev => ({ ...prev, certificate_number: e.target.value }))}
+                    onChange={(e) => { setNewCertification(prev => ({ ...prev, certificate_number: e.target.value })); }}
                     placeholder="Certificate or license number"
                   />
                 </div>
@@ -220,7 +218,7 @@ export default function EmployeeCertifications() {
                       id="issue_date"
                       type="date"
                       value={newCertification.issue_date}
-                      onChange={(e) => setNewCertification(prev => ({ ...prev, issue_date: e.target.value }))}
+                      onChange={(e) => { setNewCertification(prev => ({ ...prev, issue_date: e.target.value })); }}
                     />
                   </div>
                   <div className="space-y-2">
@@ -229,13 +227,13 @@ export default function EmployeeCertifications() {
                       id="expiry_date"
                       type="date"
                       value={newCertification.expiry_date}
-                      onChange={(e) => setNewCertification(prev => ({ ...prev, expiry_date: e.target.value }))}
+                      onChange={(e) => { setNewCertification(prev => ({ ...prev, expiry_date: e.target.value })); }}
                     />
                   </div>
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
+                <Button variant="outline" onClick={() => { setAddDialogOpen(false); }}>
                   Cancel
                 </Button>
                 <Button onClick={addCertification}>
@@ -304,7 +302,7 @@ export default function EmployeeCertifications() {
             <Input
               placeholder="Search certifications..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); }}
               className="pl-10"
             />
           </div>
@@ -326,7 +324,7 @@ export default function EmployeeCertifications() {
           {filteredCertifications.map((cert) => {
             const statusBadge = getStatusBadge(cert.status, cert.expiry_date);
             const daysUntilExpiry = getDaysUntilExpiry(cert.expiry_date);
-            
+
             return (
               <Card key={cert.id}>
                 <CardContent className="p-6">
@@ -352,12 +350,12 @@ export default function EmployeeCertifications() {
                         </div>
                         {daysUntilExpiry !== null && (
                           <p className={`font-medium ${
-                            daysUntilExpiry < 0 ? 'text-red-600' :
-                            daysUntilExpiry < 30 ? 'text-yellow-600' : 'text-green-600'
+                            daysUntilExpiry < 0 ? 'text-red-600'
+                            : daysUntilExpiry < 30 ? 'text-yellow-600' : 'text-green-600'
                           }`}>
-                            {daysUntilExpiry < 0 
+                            {daysUntilExpiry < 0
                               ? `Expired ${Math.abs(daysUntilExpiry)} days ago`
-                              : daysUntilExpiry === 0 
+                              : daysUntilExpiry === 0
                                 ? 'Expires today'
                                 : `Expires in ${daysUntilExpiry} days`
                             }
@@ -384,7 +382,7 @@ export default function EmployeeCertifications() {
               <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No certifications found</h3>
               <p className="text-muted-foreground">
-                {searchTerm || statusFilter !== 'all' 
+                {searchTerm || statusFilter !== 'all'
                   ? 'Try adjusting your search or filter criteria'
                   : 'Add your first certification to get started'
                 }

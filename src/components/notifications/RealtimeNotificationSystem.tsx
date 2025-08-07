@@ -4,15 +4,15 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Switch } from '../ui/switch';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
-  Info, 
+import {
+  Bell,
+  AlertTriangle,
+  CheckCircle,
+  Info,
   X,
   Settings,
   Filter,
-  Archive
+  Archive,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -55,10 +55,10 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     category: 'Operations',
     actions: [
       { label: 'View Details', action: 'view-project', variant: 'default' },
-      { label: 'Acknowledge', action: 'acknowledge', variant: 'outline' }
+      { label: 'Acknowledge', action: 'acknowledge', variant: 'outline' },
     ],
     persistent: true,
-    soundAlert: true
+    soundAlert: true,
   },
   {
     id: '2',
@@ -71,10 +71,10 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     category: 'Equipment',
     actions: [
       { label: 'Dispatch Team', action: 'dispatch', variant: 'default' },
-      { label: 'View Diagnostics', action: 'diagnostics', variant: 'outline' }
+      { label: 'View Diagnostics', action: 'diagnostics', variant: 'outline' },
     ],
     persistent: true,
-    soundAlert: true
+    soundAlert: true,
   },
   {
     id: '3',
@@ -85,7 +85,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     read: true,
     priority: 'medium',
     category: 'Quality',
-    persistent: false
+    persistent: false,
   },
   {
     id: '4',
@@ -96,8 +96,8 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     read: true,
     priority: 'low',
     category: 'Weather',
-    persistent: false
-  }
+    persistent: false,
+  },
 ];
 
 export function RealtimeNotificationSystem() {
@@ -110,11 +110,11 @@ export function RealtimeNotificationSystem() {
       'Equipment': true,
       'Quality': true,
       'Weather': true,
-      'System': true
+      'System': true,
     },
     autoRead: false,
     compactView: false,
-    maxNotifications: 50
+    maxNotifications: 50,
   });
   const [filter, setFilter] = useState<string>('all');
   const [showSettings, setShowSettings] = useState(false);
@@ -133,25 +133,25 @@ export function RealtimeNotificationSystem() {
           read: false,
           priority: 'medium',
           category: 'System',
-          persistent: false
+          persistent: false,
         };
-        
+
         addNotification(newNotification);
       }
     }, 10000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [settings]);
 
   const addNotification = useCallback((notification: NotificationItem) => {
     setNotifications(prev => {
       const updated = [notification, ...prev];
-      
+
       // Limit notifications based on settings
       if (updated.length > settings.maxNotifications) {
         return updated.slice(0, settings.maxNotifications);
       }
-      
+
       return updated;
     });
 
@@ -160,7 +160,7 @@ export function RealtimeNotificationSystem() {
       const icon = getNotificationIcon(notification.type);
       toast(notification.title, {
         description: notification.message,
-        icon: icon
+        icon: icon,
       });
     }
 
@@ -173,14 +173,14 @@ export function RealtimeNotificationSystem() {
   const markAsRead = (id: string) => {
     setNotifications(prev =>
       prev.map(notif =>
-        notif.id === id ? { ...notif, read: true } : notif
-      )
+        notif.id === id ? { ...notif, read: true } : notif,
+      ),
     );
   };
 
   const markAllAsRead = () => {
     setNotifications(prev =>
-      prev.map(notif => ({ ...notif, read: true }))
+      prev.map(notif => ({ ...notif, read: true })),
     );
   };
 
@@ -222,9 +222,9 @@ export function RealtimeNotificationSystem() {
   };
 
   const filteredNotifications = notifications.filter(notif => {
-    if (filter === 'all') return true;
-    if (filter === 'unread') return !notif.read;
-    if (filter === 'critical') return notif.priority === 'critical';
+    if (filter === 'all') { return true; }
+    if (filter === 'unread') { return !notif.read; }
+    if (filter === 'critical') { return notif.priority === 'critical'; }
     return notif.category.toLowerCase() === filter.toLowerCase();
   });
 
@@ -249,7 +249,7 @@ export function RealtimeNotificationSystem() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowSettings(!showSettings)}
+                onClick={() => { setShowSettings(!showSettings); }}
               >
                 <Settings className="h-4 w-4" />
               </Button>
@@ -281,8 +281,7 @@ export function RealtimeNotificationSystem() {
                   <label className="text-sm font-medium">Sound Alerts</label>
                   <Switch
                     checked={settings.soundEnabled}
-                    onCheckedChange={(checked) =>
-                      setSettings(prev => ({ ...prev, soundEnabled: checked }))
+                    onCheckedChange={(checked) => { setSettings(prev => ({ ...prev, soundEnabled: checked })); }
                     }
                   />
                 </div>
@@ -290,8 +289,7 @@ export function RealtimeNotificationSystem() {
                   <label className="text-sm font-medium">Push Notifications</label>
                   <Switch
                     checked={settings.pushEnabled}
-                    onCheckedChange={(checked) =>
-                      setSettings(prev => ({ ...prev, pushEnabled: checked }))
+                    onCheckedChange={(checked) => { setSettings(prev => ({ ...prev, pushEnabled: checked })); }
                     }
                   />
                 </div>
@@ -299,8 +297,7 @@ export function RealtimeNotificationSystem() {
                   <label className="text-sm font-medium">Auto-mark as Read</label>
                   <Switch
                     checked={settings.autoRead}
-                    onCheckedChange={(checked) =>
-                      setSettings(prev => ({ ...prev, autoRead: checked }))
+                    onCheckedChange={(checked) => { setSettings(prev => ({ ...prev, autoRead: checked })); }
                     }
                   />
                 </div>
@@ -312,11 +309,12 @@ export function RealtimeNotificationSystem() {
                     <label className="text-sm">{category}</label>
                     <Switch
                       checked={enabled}
-                      onCheckedChange={(checked) =>
-                        setSettings(prev => ({
+                      onCheckedChange={(checked) => {
+ setSettings(prev => ({
                           ...prev,
-                          categories: { ...prev.categories, [category]: checked }
-                        }))
+                          categories: { ...prev.categories, [category]: checked },
+                        }));
+}
                       }
                     />
                   </div>
@@ -334,7 +332,7 @@ export function RealtimeNotificationSystem() {
             key={filterOption}
             variant={filter === filterOption ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setFilter(filterOption)}
+            onClick={() => { setFilter(filterOption); }}
             className="whitespace-nowrap"
           >
             <Filter className="h-3 w-3 mr-1" />
@@ -358,8 +356,8 @@ export function RealtimeNotificationSystem() {
                   key={notification.id}
                   className={`
                     p-4 rounded-lg border transition-all cursor-pointer
-                    ${notification.read 
-                      ? 'bg-surface/30 border/30' 
+                    ${notification.read
+                      ? 'bg-surface/30 border/30'
                       : 'bg-primary/5 border-primary/30 shadow-sm'
                     }
                     ${getPriorityColor(notification.priority)}
@@ -374,7 +372,7 @@ export function RealtimeNotificationSystem() {
                         <Badge variant="outline" className="text-xs">
                           {notification.category}
                         </Badge>
-                        <Badge 
+                        <Badge
                           variant={notification.priority === 'critical' ? 'destructive' : 'outline'}
                           className="text-xs"
                         >
@@ -388,7 +386,7 @@ export function RealtimeNotificationSystem() {
                       <p className="text-xs text-muted-foreground">
                         {notification.timestamp.toLocaleString()}
                       </p>
-                      
+
                       {notification.actions && (
                         <div className="flex gap-2 pt-2">
                           {notification.actions.map((action, idx) => (

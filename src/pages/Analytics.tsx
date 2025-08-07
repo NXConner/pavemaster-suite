@@ -7,14 +7,14 @@ import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   LineChart,
   Line,
@@ -22,20 +22,20 @@ import {
   Pie,
   Cell,
   AreaChart,
-  Area
+  Area,
 } from 'recharts';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Truck, 
-  Users, 
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Truck,
+  Users,
   Calendar,
   Target,
   BarChart3,
   PieChart as PieChartIcon,
   Activity,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 // Sample data - in production this would come from your API
@@ -193,14 +193,14 @@ export default function Analytics() {
                       <YAxis />
                       <Tooltip formatter={(value, name) => [
                         name === 'revenue' ? `$${value.toLocaleString()}` : value,
-                        name === 'revenue' ? 'Revenue' : 'Projects'
+                        name === 'revenue' ? 'Revenue' : 'Projects',
                       ]} />
-                      <Area 
-                        type="monotone" 
-                        dataKey="revenue" 
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
                         stackId="1"
-                        stroke="#8884d8" 
-                        fill="#8884d8" 
+                        stroke="#8884d8"
+                        fill="#8884d8"
                         fillOpacity={0.6}
                       />
                     </AreaChart>
@@ -355,17 +355,17 @@ export default function Analytics() {
                     <YAxis />
                     <Tooltip formatter={(value) => [`$${value.toLocaleString()}`, '']} />
                     <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#8884d8" 
+                    <Line
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#8884d8"
                       strokeWidth={2}
                       name="Revenue"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="profit" 
-                      stroke="#82ca9d" 
+                    <Line
+                      type="monotone"
+                      dataKey="profit"
+                      stroke="#82ca9d"
                       strokeWidth={2}
                       name="Profit"
                     />

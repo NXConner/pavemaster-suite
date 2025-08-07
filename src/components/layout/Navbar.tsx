@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
             PaveMaster Suite
           </div>
         </div>
-        
+
         <div className="hidden md:flex items-center space-x-6">
           <a href="/dashboard" className="text-sm font-medium transition-colors hover:text-primary">
             Dashboard
@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
             Analytics
           </a>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="sm">
             Settings

@@ -3,17 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Shield, 
-  Lock, 
-  Key, 
+import {
+  Shield,
+  Lock,
+  Key,
   FileCheck,
   Users,
   Clock,
   AlertTriangle,
   CheckCircle,
   Link,
-  Hash
+  Hash,
 } from 'lucide-react';
 
 interface BlockchainTransaction {
@@ -48,7 +48,7 @@ const MOCK_TRANSACTIONS: BlockchainTransaction[] = [
     amount: 15000,
     status: 'confirmed',
     timestamp: new Date(Date.now() - 3600000),
-    confirmations: 12
+    confirmations: 12,
   },
   {
     id: '2',
@@ -59,8 +59,8 @@ const MOCK_TRANSACTIONS: BlockchainTransaction[] = [
     amount: 8500,
     status: 'pending',
     timestamp: new Date(Date.now() - 1800000),
-    confirmations: 3
-  }
+    confirmations: 3,
+  },
 ];
 
 const MOCK_CONTRACTS: SmartContract[] = [
@@ -71,7 +71,7 @@ const MOCK_CONTRACTS: SmartContract[] = [
     status: 'active',
     parties: ['PaveMaster', '1st Baptist Church'],
     value: 25000,
-    completionPercentage: 75
+    completionPercentage: 75,
   },
   {
     id: '2',
@@ -80,8 +80,8 @@ const MOCK_CONTRACTS: SmartContract[] = [
     status: 'completed',
     parties: ['PaveMaster', 'SealMaster Inc'],
     value: 12000,
-    completionPercentage: 100
-  }
+    completionPercentage: 100,
+  },
 ];
 
 export function BlockchainIntegration() {
@@ -157,12 +157,12 @@ export function BlockchainIntegration() {
         {[
           { id: 'transactions', label: 'Transactions', icon: Hash },
           { id: 'contracts', label: 'Smart Contracts', icon: FileCheck },
-          { id: 'security', label: 'Security', icon: Lock }
+          { id: 'security', label: 'Security', icon: Lock },
         ].map((tab) => (
           <Button
             key={tab.id}
             variant={selectedTab === tab.id ? 'default' : 'outline'}
-            onClick={() => setSelectedTab(tab.id as any)}
+            onClick={() => { setSelectedTab(tab.id as any); }}
             className="flex items-center gap-2"
           >
             <tab.icon className="h-4 w-4" />
@@ -202,7 +202,7 @@ export function BlockchainIntegration() {
                           </Badge>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <Hash className="h-3 w-3" />
@@ -257,7 +257,7 @@ export function BlockchainIntegration() {
                     <div className="text-2xl font-bold">3</div>
                   </div>
                 </div>
-                
+
                 <div className="pt-4 border-t border/50">
                   <h4 className="font-medium mb-2">Security Features</h4>
                   <div className="space-y-2">
@@ -265,7 +265,7 @@ export function BlockchainIntegration() {
                       { name: 'Multi-signature', status: 'active' },
                       { name: 'Encryption', status: 'active' },
                       { name: 'Audit Trail', status: 'active' },
-                      { name: 'Identity Verification', status: 'active' }
+                      { name: 'Identity Verification', status: 'active' },
                     ].map((feature) => (
                       <div key={feature.name} className="flex items-center justify-between">
                         <span className="text-sm">{feature.name}</span>
@@ -307,14 +307,14 @@ export function BlockchainIntegration() {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Completion</span>
                     <span>{contract.completionPercentage}%</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
-                    <div 
+                    <div
                       className="h-2 rounded-full bg-primary transition-all duration-300"
                       style={{ width: `${contract.completionPercentage}%` }}
                     />
@@ -353,7 +353,7 @@ export function BlockchainIntegration() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Access Control</h4>
                 <div className="space-y-2">

@@ -36,7 +36,7 @@ export default function CompanySetup() {
     address: '',
     city: '',
     state: '',
-    zip_code: ''
+    zip_code: '',
   });
 
   useEffect(() => {
@@ -46,15 +46,15 @@ export default function CompanySetup() {
   }, [user]);
 
   const fetchCompany = async () => {
-    if (!user?.id) return;
-    
+    if (!user?.id) { return; }
+
     try {
       const { data, error } = await supabase
         .from('companies')
         .select('*')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       if (data) {
         setCompany(data);
@@ -71,7 +71,7 @@ export default function CompanySetup() {
   };
 
   const handleSave = async () => {
-    if (!user?.id) return;
+    if (!user?.id) { return; }
 
     setSaving(true);
     try {
@@ -82,7 +82,7 @@ export default function CompanySetup() {
         registration_number: company?.registration_number || null,
         tax_id: company?.tax_id || null,
         status: 'active',
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (company?.id) {
@@ -92,7 +92,7 @@ export default function CompanySetup() {
           .update(companyData)
           .eq('id', company.id);
 
-        if (error) throw error;
+        if (error) { throw error; }
       } else {
         // Create new company
         const { data, error } = await supabase
@@ -101,7 +101,7 @@ export default function CompanySetup() {
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) { throw error; }
         setCompany(data);
       }
 
@@ -147,12 +147,13 @@ export default function CompanySetup() {
               <Input
                 id="company_name"
                 value={company?.name || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                  setCompany(prev => prev ? { ...prev, name: e.target.value } : { 
-                    id: '', name: e.target.value, billing_info: null, business_type: null, 
-                    contact_info: null, metadata: null, registration_number: null, 
-                    settings: null, status: null, tax_id: null, created_at: null, updated_at: null 
-                  })
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+ setCompany(prev => prev ? { ...prev, name: e.target.value } : {
+                    id: '', name: e.target.value, billing_info: null, business_type: null,
+                    contact_info: null, metadata: null, registration_number: null,
+                    settings: null, status: null, tax_id: null, created_at: null, updated_at: null,
+                  });
+}
                 }
                 placeholder="Enter your company name"
               />
@@ -164,8 +165,7 @@ export default function CompanySetup() {
                 <Input
                   id="business_type"
                   value={company?.business_type || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setCompany(prev => prev ? { ...prev, business_type: e.target.value } : null)
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setCompany(prev => prev ? { ...prev, business_type: e.target.value } : null); }
                   }
                   placeholder="e.g., LLC, Corporation, Partnership"
                 />
@@ -176,8 +176,7 @@ export default function CompanySetup() {
                 <Input
                   id="registration_number"
                   value={company?.registration_number || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setCompany(prev => prev ? { ...prev, registration_number: e.target.value } : null)
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setCompany(prev => prev ? { ...prev, registration_number: e.target.value } : null); }
                   }
                   placeholder="Business registration number"
                 />
@@ -189,8 +188,7 @@ export default function CompanySetup() {
               <Input
                 id="tax_id"
                 value={company?.tax_id || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                  setCompany(prev => prev ? { ...prev, tax_id: e.target.value } : null)
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setCompany(prev => prev ? { ...prev, tax_id: e.target.value } : null); }
                 }
                 placeholder="Federal Tax ID or EIN"
               />
@@ -211,8 +209,7 @@ export default function CompanySetup() {
               <Input
                 id="address"
                 value={contactInfo.address}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                  setContactInfo(prev => ({ ...prev, address: e.target.value }))
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, address: e.target.value })); }
                 }
                 placeholder="Street address"
               />
@@ -224,8 +221,7 @@ export default function CompanySetup() {
                 <Input
                   id="city"
                   value={contactInfo.city}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setContactInfo(prev => ({ ...prev, city: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, city: e.target.value })); }
                   }
                 />
               </div>
@@ -235,8 +231,7 @@ export default function CompanySetup() {
                 <Input
                   id="state"
                   value={contactInfo.state}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setContactInfo(prev => ({ ...prev, state: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, state: e.target.value })); }
                   }
                 />
               </div>
@@ -246,8 +241,7 @@ export default function CompanySetup() {
                 <Input
                   id="zip_code"
                   value={contactInfo.zip_code}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setContactInfo(prev => ({ ...prev, zip_code: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, zip_code: e.target.value })); }
                   }
                 />
               </div>
@@ -259,8 +253,7 @@ export default function CompanySetup() {
                 <Input
                   id="phone"
                   value={contactInfo.phone}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setContactInfo(prev => ({ ...prev, phone: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, phone: e.target.value })); }
                   }
                 />
               </div>
@@ -271,8 +264,7 @@ export default function CompanySetup() {
                   id="email"
                   type="email"
                   value={contactInfo.email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setContactInfo(prev => ({ ...prev, email: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, email: e.target.value })); }
                   }
                 />
               </div>
@@ -283,8 +275,7 @@ export default function CompanySetup() {
               <Input
                 id="website"
                 value={contactInfo.website}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                  setContactInfo(prev => ({ ...prev, website: e.target.value }))
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setContactInfo(prev => ({ ...prev, website: e.target.value })); }
                 }
                 placeholder="https://yourcompany.com"
               />

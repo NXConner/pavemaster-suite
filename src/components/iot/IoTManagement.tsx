@@ -3,17 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Wifi, 
-  Thermometer, 
-  Activity, 
+import {
+  Wifi,
+  Thermometer,
+  Activity,
   Zap,
   MapPin,
   Calendar,
   AlertTriangle,
   CheckCircle,
   Radio,
-  Gauge
+  Gauge,
 } from 'lucide-react';
 
 interface IoTDevice {
@@ -44,7 +44,7 @@ const MOCK_DEVICES: IoTDevice[] = [
     lastSeen: new Date(),
     batteryLevel: 87,
     signalStrength: 85,
-    data: { temperature: 165, humidity: 45 }
+    data: { temperature: 165, humidity: 45 },
   },
   {
     id: 'gps-002',
@@ -55,7 +55,7 @@ const MOCK_DEVICES: IoTDevice[] = [
     lastSeen: new Date(Date.now() - 60000),
     batteryLevel: 92,
     signalStrength: 78,
-    data: { latitude: 37.5407, longitude: -77.4360, speed: 0 }
+    data: { latitude: 37.5407, longitude: -77.4360, speed: 0 },
   },
   {
     id: 'comp-003',
@@ -66,21 +66,21 @@ const MOCK_DEVICES: IoTDevice[] = [
     lastSeen: new Date(Date.now() - 300000),
     batteryLevel: 34,
     signalStrength: 62,
-    data: { pressure: 145, vibration: 2.3 }
-  }
+    data: { pressure: 145, vibration: 2.3 },
+  },
 ];
 
 const RECENT_DATA: IoTData[] = [
   {
     deviceId: 'temp-001',
     timestamp: new Date(),
-    readings: { temperature: 165, humidity: 45 }
+    readings: { temperature: 165, humidity: 45 },
   },
   {
     deviceId: 'gps-002',
     timestamp: new Date(Date.now() - 60000),
-    readings: { speed: 0, fuel: 78 }
-  }
+    readings: { speed: 0, fuel: 78 },
+  },
 ];
 
 export function IoTManagement() {
@@ -119,16 +119,16 @@ export function IoTManagement() {
   };
 
   const getBatteryColor = (level?: number) => {
-    if (!level) return 'bg-card0';
-    if (level > 60) return 'bg-green-500';
-    if (level > 30) return 'bg-yellow-500';
+    if (!level) { return 'bg-card0'; }
+    if (level > 60) { return 'bg-green-500'; }
+    if (level > 30) { return 'bg-yellow-500'; }
     return 'bg-red-500';
   };
 
   const getSignalStrength = (strength: number) => {
-    if (strength > 80) return { bars: 4, color: 'text-green-500' };
-    if (strength > 60) return { bars: 3, color: 'text-yellow-500' };
-    if (strength > 40) return { bars: 2, color: 'text-orange-500' };
+    if (strength > 80) { return { bars: 4, color: 'text-green-500' }; }
+    if (strength > 60) { return { bars: 3, color: 'text-yellow-500' }; }
+    if (strength > 40) { return { bars: 2, color: 'text-orange-500' }; }
     return { bars: 1, color: 'text-red-500' };
   };
 
@@ -162,16 +162,16 @@ export function IoTManagement() {
               <div className="space-y-3">
                 {devices.map((device) => {
                   const signal = getSignalStrength(device.signalStrength);
-                  
+
                   return (
                     <div
                       key={device.id}
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                        selectedDevice?.id === device.id 
-                          ? 'border-primary/50 bg-primary/5' 
+                        selectedDevice?.id === device.id
+                          ? 'border-primary/50 bg-primary/5'
                           : 'border/50 bg-surface/30 hover:border/80'
                       }`}
-                      onClick={() => setSelectedDevice(device)}
+                      onClick={() => { setSelectedDevice(device); }}
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
@@ -185,25 +185,25 @@ export function IoTManagement() {
                           </Badge>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2 text-xs text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <MapPin className="h-3 w-3" />
                           <span>{device.location}</span>
                         </div>
-                        
+
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Calendar className="h-3 w-3" />
                             <span>Last seen: {device.lastSeen.toLocaleTimeString()}</span>
                           </div>
-                          
+
                           <div className="flex items-center gap-3">
                             {/* Battery Level */}
                             {device.batteryLevel && (
                               <div className="flex items-center gap-1">
                                 <div className="w-4 h-2 border border/50 rounded-sm bg-card">
-                                  <div 
+                                  <div
                                     className={`h-full rounded-sm transition-all ${getBatteryColor(device.batteryLevel)}`}
                                     style={{ width: `${device.batteryLevel}%` }}
                                   />
@@ -211,7 +211,7 @@ export function IoTManagement() {
                                 <span className="text-xs">{device.batteryLevel}%</span>
                               </div>
                             )}
-                            
+
                             {/* Signal Strength */}
                             <div className={`flex items-center gap-0.5 ${signal.color}`}>
                               {Array.from({ length: 4 }).map((_, i) => (
@@ -253,7 +253,7 @@ export function IoTManagement() {
                     {selectedDevice.status}
                   </Badge>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <span className="text-xs text-muted-foreground">Device ID</span>
@@ -272,7 +272,7 @@ export function IoTManagement() {
                     <div className="text-sm">{selectedDevice.signalStrength}%</div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <span className="text-sm font-medium">Current Readings</span>
                   <div className="grid grid-cols-2 gap-2">
@@ -290,7 +290,7 @@ export function IoTManagement() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <span className="text-sm font-medium">Actions</span>
                   <div className="grid grid-cols-2 gap-2">
@@ -331,7 +331,7 @@ export function IoTManagement() {
           <div className="space-y-3">
             {recentData.map((data, index) => {
               const device = devices.find(d => d.id === data.deviceId);
-              
+
               return (
                 <div key={index} className="flex items-center justify-between p-3 bg-surface/50 rounded-lg">
                   <div className="flex items-center gap-3">

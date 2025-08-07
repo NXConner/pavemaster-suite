@@ -90,7 +90,7 @@ export const createMockFormData = (data: Record<string, any>) => {
 export const createMockFile = (
   name = 'test-file.jpg',
   _size = 1024, // Prefix with underscore to indicate intentionally unused
-  type = 'image/jpeg'
+  type = 'image/jpeg',
 ) => {
   return new File(['test content'], name, { type, lastModified: Date.now() });
 };
@@ -109,7 +109,7 @@ export const createMockImageData = (width = 224, height = 224) => {
 };
 
 // Wait for async operations in tests
-export const waitFor = (ms: number) => 
+export const waitFor = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
 
 // Helper to trigger and wait for useEffect

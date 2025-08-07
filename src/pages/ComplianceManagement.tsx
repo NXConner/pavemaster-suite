@@ -53,7 +53,6 @@ export default function ComplianceManagement() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  
 
   useEffect(() => {
     fetchData();
@@ -64,12 +63,12 @@ export default function ComplianceManagement() {
       const [rulesRes, violationsRes, scoresRes] = await Promise.all([
         supabase.from('compliance_rules').select('*').order('name'),
         supabase.from('employee_violations').select('*').order('violation_date', { ascending: false }),
-        supabase.from('employee_compliance_scores').select('*').order('period_start', { ascending: false })
+        supabase.from('employee_compliance_scores').select('*').order('period_start', { ascending: false }),
       ]);
 
-      if (rulesRes.error) throw rulesRes.error;
-      if (violationsRes.error) throw violationsRes.error;
-      if (scoresRes.error) throw scoresRes.error;
+      if (rulesRes.error) { throw rulesRes.error; }
+      if (violationsRes.error) { throw violationsRes.error; }
+      if (scoresRes.error) { throw scoresRes.error; }
 
       setRules(rulesRes.data || []);
       setViolations(violationsRes.data || []);
@@ -85,22 +84,22 @@ export default function ComplianceManagement() {
     try {
       const { error } = await supabase
         .from('employee_violations')
-        .update({ 
-          resolved: true, 
-          resolved_at: new Date().toISOString() 
+        .update({
+          resolved: true,
+          resolved_at: new Date().toISOString(),
         })
         .eq('id', violationId);
 
-      if (error) throw error;
+      if (error) { throw error; }
 
-      setViolations(prev => 
-        prev.map(v => 
-          v.id === violationId 
+      setViolations(prev =>
+        prev.map(v =>
+          v.id === violationId
             ? { ...v, resolved: true, resolved_at: new Date().toISOString() }
-            : v
-        )
+            : v,
+        ),
       );
-      
+
       toast.success('Violation resolved successfully');
     } catch (error: any) {
       toast.error('Error resolving violation: ' + error.message);
@@ -108,16 +107,16 @@ export default function ComplianceManagement() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 80) return 'text-yellow-600';
-    if (score >= 70) return 'text-orange-600';
+    if (score >= 90) { return 'text-green-600'; }
+    if (score >= 80) { return 'text-yellow-600'; }
+    if (score >= 70) { return 'text-orange-600'; }
     return 'text-red-600';
   };
 
-  const getScoreBadgeVariant = (score: number): "default" | "secondary" | "destructive" | "outline" => {
-    if (score >= 90) return 'default';
-    if (score >= 80) return 'secondary';
-    if (score >= 70) return 'outline';
+  const getScoreBadgeVariant = (score: number): 'default' | 'secondary' | 'destructive' | 'outline' => {
+    if (score >= 90) { return 'default'; }
+    if (score >= 80) { return 'secondary'; }
+    if (score >= 70) { return 'outline'; }
     return 'destructive';
   };
 
@@ -135,8 +134,8 @@ export default function ComplianceManagement() {
   };
 
   const filteredRules = rules.filter(rule => {
-    const matchesSearch = rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         rule.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = rule.name.toLowerCase().includes(searchTerm.toLowerCase())
+                         || rule.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || rule.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -147,7 +146,7 @@ export default function ComplianceManagement() {
     totalRules: rules.length,
     activeViolations: violations.filter(v => !v.resolved).length,
     totalViolations: violations.length,
-    averageScore: scores.length > 0 ? Math.round(scores.reduce((sum, s) => sum + s.score, 0) / scores.length) : 0
+    averageScore: scores.length > 0 ? Math.round(scores.reduce((sum, s) => sum + s.score, 0) / scores.length) : 0,
   };
 
   if (loading) {
@@ -241,7 +240,7 @@ export default function ComplianceManagement() {
                 <Input
                   placeholder="Search rules..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => { setSearchTerm(e.target.value); }}
                   className="pl-10"
                 />
               </div>

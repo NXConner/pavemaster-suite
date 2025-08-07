@@ -58,7 +58,7 @@ export default tseslint.config(
       "no-var": "error",
       "eqeqeq": ["error", "always"],
       "no-trailing-spaces": "error",
-      "indent": ["error", 2, { "SwitchCase": 1 }],
+      // "indent": ["error", 2, { "SwitchCase": 1 }], // Disabled due to ESLint stack overflow on large files
       "quotes": ["error", "single"],
       "semi": ["error", "always"],
       "comma-dangle": ["error", "always-multiline"],

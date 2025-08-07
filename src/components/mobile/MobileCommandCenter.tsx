@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { 
-  Command, 
-  Map, 
-  Users, 
+import {
+  Command,
+  Map,
+  Users,
   Truck,
   Activity,
   Shield,
   Zap,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
 } from 'lucide-react';
 
 interface MissionStatus {
@@ -32,7 +32,7 @@ const MOCK_MISSIONS: MissionStatus[] = [
     progress: 75,
     team: 'Crew-A',
     location: '1st Baptist Church',
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: '2',
@@ -41,7 +41,7 @@ const MOCK_MISSIONS: MissionStatus[] = [
     progress: 0,
     team: 'Crew-B',
     location: 'Grace Methodist',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: '3',
@@ -50,8 +50,8 @@ const MOCK_MISSIONS: MissionStatus[] = [
     progress: 45,
     team: 'Crew-C',
     location: 'Trinity Lutheran',
-    priority: 'critical'
-  }
+    priority: 'critical',
+  },
 ];
 
 export function MobileCommandCenter() {
@@ -59,13 +59,13 @@ export function MobileCommandCenter() {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     missions: true,
     teams: false,
-    alerts: false
+    alerts: false,
   });
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }));
   };
 
@@ -106,27 +106,27 @@ export function MobileCommandCenter() {
 
       {/* Mission Status */}
       <Card className="border/50 bg-surface/90 backdrop-blur-sm">
-        <CardHeader 
+        <CardHeader
           className="pb-2 cursor-pointer"
-          onClick={() => toggleSection('missions')}
+          onClick={() => { toggleSection('missions'); }}
         >
           <CardTitle className="flex items-center justify-between text-base">
             <div className="flex items-center gap-2">
               <Activity className="h-4 w-4 text-primary" />
               Mission Status
             </div>
-            {expandedSections.missions ? 
-              <ChevronUp className="h-4 w-4" /> : 
-              <ChevronDown className="h-4 w-4" />
+            {expandedSections.missions
+              ? <ChevronUp className="h-4 w-4" />
+              : <ChevronDown className="h-4 w-4" />
             }
           </CardTitle>
         </CardHeader>
-        
+
         {expandedSections.missions && (
           <CardContent className="pt-0">
             <div className="space-y-3">
               {missions.map((mission) => (
-                <div 
+                <div
                   key={mission.id}
                   className={`p-3 rounded-lg border transition-all ${getStatusColor(mission.status)}`}
                 >
@@ -142,20 +142,20 @@ export function MobileCommandCenter() {
                       <span className="text-xs text-muted-foreground">{mission.team}</span>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span>Progress</span>
                       <span>{mission.progress}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div 
+                      <div
                         className="h-2 rounded-full bg-primary transition-all duration-300"
                         style={{ width: `${mission.progress}%` }}
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2 mt-3">
                     <Button size="sm" variant="outline" className="flex-1 text-xs">
                       <Map className="h-3 w-3 mr-1" />
@@ -174,22 +174,22 @@ export function MobileCommandCenter() {
 
       {/* Team Status */}
       <Card className="border/50 bg-surface/90 backdrop-blur-sm">
-        <CardHeader 
+        <CardHeader
           className="pb-2 cursor-pointer"
-          onClick={() => toggleSection('teams')}
+          onClick={() => { toggleSection('teams'); }}
         >
           <CardTitle className="flex items-center justify-between text-base">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
               Team Status
             </div>
-            {expandedSections.teams ? 
-              <ChevronUp className="h-4 w-4" /> : 
-              <ChevronDown className="h-4 w-4" />
+            {expandedSections.teams
+              ? <ChevronUp className="h-4 w-4" />
+              : <ChevronDown className="h-4 w-4" />
             }
           </CardTitle>
         </CardHeader>
-        
+
         {expandedSections.teams && (
           <CardContent className="pt-0">
             <div className="grid grid-cols-2 gap-3">

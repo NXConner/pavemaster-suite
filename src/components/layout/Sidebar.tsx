@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button } from '../ui/button';
-import { 
-  Home, 
-  Settings, 
-  Users, 
-  BarChart3, 
+import {
+  Home,
+  Settings,
+  Users,
+  BarChart3,
   FileText,
   Map,
   Wrench,
-  Shield
+  Shield,
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -43,7 +43,7 @@ export const Sidebar: React.FC = () => {
             ))}
           </nav>
         </div>
-        
+
         <div className="p-4 border-t border">
           <Button variant="outline" className="w-full" size="sm">
             Help & Support

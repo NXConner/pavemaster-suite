@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Shield, 
-  Users, 
-  Building, 
+import {
+  Shield,
+  Users,
+  Building,
   Settings,
   Crown,
   Key,
@@ -17,7 +17,7 @@ import {
   UserCheck,
   Activity,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
 } from 'lucide-react';
 
 interface EnterpriseFeature {
@@ -45,7 +45,7 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'Granular permissions and role hierarchies with custom access policies',
     category: 'security',
     status: 'configured',
-    tier: 'enterprise'
+    tier: 'enterprise',
   },
   {
     id: '2',
@@ -53,7 +53,7 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'SAML and OAuth integration with enterprise identity providers',
     category: 'security',
     status: 'available',
-    tier: 'enterprise'
+    tier: 'enterprise',
   },
   {
     id: '3',
@@ -61,7 +61,7 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'Comprehensive audit trails and compliance reporting for SOX, GDPR',
     category: 'compliance',
     status: 'configured',
-    tier: 'professional'
+    tier: 'professional',
   },
   {
     id: '4',
@@ -69,7 +69,7 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'Isolated tenant environments with shared infrastructure',
     category: 'scalability',
     status: 'configured',
-    tier: 'ultimate'
+    tier: 'ultimate',
   },
   {
     id: '5',
@@ -77,7 +77,7 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'Rate limiting, authentication, and monitoring for external integrations',
     category: 'integration',
     status: 'pending',
-    tier: 'enterprise'
+    tier: 'enterprise',
   },
   {
     id: '6',
@@ -85,8 +85,8 @@ const ENTERPRISE_FEATURES: EnterpriseFeature[] = [
     description: 'Custom dashboards, data warehousing, and predictive analytics',
     category: 'analytics',
     status: 'available',
-    tier: 'ultimate'
-  }
+    tier: 'ultimate',
+  },
 ];
 
 const ORGANIZATION_UNITS: OrganizationUnit[] = [
@@ -96,7 +96,7 @@ const ORGANIZATION_UNITS: OrganizationUnit[] = [
     type: 'department',
     members: 12,
     permissions: ['project_management', 'equipment_access', 'scheduling'],
-    status: 'active'
+    status: 'active',
   },
   {
     id: '2',
@@ -104,7 +104,7 @@ const ORGANIZATION_UNITS: OrganizationUnit[] = [
     type: 'team',
     members: 4,
     permissions: ['mobile_access', 'data_collection', 'safety_reports'],
-    status: 'active'
+    status: 'active',
   },
   {
     id: '3',
@@ -112,8 +112,8 @@ const ORGANIZATION_UNITS: OrganizationUnit[] = [
     type: 'project',
     members: 8,
     permissions: ['project_specific', 'client_communication', 'progress_reporting'],
-    status: 'active'
-  }
+    status: 'active',
+  },
 ];
 
 export function EnterpriseManagement() {
@@ -179,8 +179,8 @@ export function EnterpriseManagement() {
     }
   };
 
-  const filteredFeatures = selectedCategory === 'all' 
-    ? features 
+  const filteredFeatures = selectedCategory === 'all'
+    ? features
     : features.filter(f => f.category === selectedCategory);
 
   return (
@@ -213,7 +213,7 @@ export function EnterpriseManagement() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -227,7 +227,7 @@ export function EnterpriseManagement() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -241,7 +241,7 @@ export function EnterpriseManagement() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -264,7 +264,7 @@ export function EnterpriseManagement() {
             key={category}
             variant={selectedCategory === category ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => { setSelectedCategory(category); }}
             className="whitespace-nowrap"
           >
             {category !== 'all' && getCategoryIcon(category)}
@@ -303,11 +303,11 @@ export function EnterpriseManagement() {
                         </Badge>
                       </div>
                     </div>
-                    
+
                     <p className="text-xs text-muted-foreground mb-3">
                       {feature.description}
                     </p>
-                    
+
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         {getTierIcon(feature.tier)}
@@ -357,7 +357,7 @@ export function EnterpriseManagement() {
                       {unit.status}
                     </Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                     <div className="flex items-center gap-1">
                       <Users className="h-3 w-3" />
@@ -368,7 +368,7 @@ export function EnterpriseManagement() {
                       <span>{unit.permissions.length} permissions</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-1 mb-3">
                     {unit.permissions.slice(0, 3).map((permission) => (
                       <Badge key={permission} variant="outline" className="text-xs">
@@ -381,7 +381,7 @@ export function EnterpriseManagement() {
                       </Badge>
                     )}
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" className="flex-1">
                       <UserCheck className="h-3 w-3 mr-1" />
@@ -395,7 +395,7 @@ export function EnterpriseManagement() {
                 </div>
               ))}
             </div>
-            
+
             <Button className="w-full" variant="outline">
               <Building className="h-4 w-4 mr-2" />
               Add Organization Unit
@@ -421,7 +421,7 @@ export function EnterpriseManagement() {
                   { name: 'Password Policy', score: 95, status: 'good' },
                   { name: 'Access Control', score: 88, status: 'good' },
                   { name: 'Data Encryption', score: 100, status: 'good' },
-                  { name: 'Audit Coverage', score: 92, status: 'good' }
+                  { name: 'Audit Coverage', score: 92, status: 'good' },
                 ].map((metric) => (
                   <div key={metric.name} className="space-y-1">
                     <div className="flex justify-between text-sm">
@@ -429,10 +429,10 @@ export function EnterpriseManagement() {
                       <span>{metric.score}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div 
+                      <div
                         className={`h-2 rounded-full transition-all duration-300 ${
-                          metric.score > 90 ? 'bg-green-500' :
-                          metric.score > 75 ? 'bg-yellow-500' : 'bg-red-500'
+                          metric.score > 90 ? 'bg-green-500'
+                          : metric.score > 75 ? 'bg-yellow-500' : 'bg-red-500'
                         }`}
                         style={{ width: `${metric.score}%` }}
                       />
@@ -441,7 +441,7 @@ export function EnterpriseManagement() {
                 ))}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h4 className="font-medium">Compliance Status</h4>
               <div className="space-y-2">
@@ -449,7 +449,7 @@ export function EnterpriseManagement() {
                   { standard: 'GDPR', status: 'compliant', lastAudit: '2024-10-15' },
                   { standard: 'SOX', status: 'compliant', lastAudit: '2024-09-30' },
                   { standard: 'ISO 27001', status: 'in-progress', lastAudit: '2024-11-01' },
-                  { standard: 'HIPAA', status: 'not-applicable', lastAudit: 'N/A' }
+                  { standard: 'HIPAA', status: 'not-applicable', lastAudit: 'N/A' },
                 ].map((item) => (
                   <div key={item.standard} className="flex items-center justify-between p-2 bg-muted rounded-lg">
                     <div>
@@ -458,10 +458,10 @@ export function EnterpriseManagement() {
                         Last audit: {item.lastAudit}
                       </div>
                     </div>
-                    <Badge 
+                    <Badge
                       variant={
-                        item.status === 'compliant' ? 'default' :
-                        item.status === 'in-progress' ? 'secondary' : 'outline'
+                        item.status === 'compliant' ? 'default'
+                        : item.status === 'in-progress' ? 'secondary' : 'outline'
                       }
                       className="text-xs"
                     >
@@ -471,7 +471,7 @@ export function EnterpriseManagement() {
                 ))}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h4 className="font-medium">Recent Activity</h4>
               <div className="space-y-2">
@@ -479,12 +479,12 @@ export function EnterpriseManagement() {
                   { action: 'User role updated', time: '2 hours ago', type: 'info' },
                   { action: 'Security scan completed', time: '4 hours ago', type: 'success' },
                   { action: 'Failed login attempt', time: '6 hours ago', type: 'warning' },
-                  { action: 'Data backup completed', time: '1 day ago', type: 'info' }
+                  { action: 'Data backup completed', time: '1 day ago', type: 'info' },
                 ].map((activity, index) => (
                   <div key={index} className="flex items-start gap-2 p-2 bg-muted rounded-lg">
                     <div className={`w-2 h-2 rounded-full mt-2 ${
-                      activity.type === 'success' ? 'bg-green-500' :
-                      activity.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+                      activity.type === 'success' ? 'bg-green-500'
+                      : activity.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
                     }`} />
                     <div className="flex-1">
                       <div className="text-sm">{activity.action}</div>

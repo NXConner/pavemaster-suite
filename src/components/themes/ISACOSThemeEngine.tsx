@@ -4,15 +4,15 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Switch } from '../ui/switch';
 import { Slider } from '../ui/slider';
-import { 
-  Palette, 
-  Monitor, 
-  Zap, 
-  Settings, 
+import {
+  Palette,
+  Monitor,
+  Zap,
+  Settings,
   Eye,
   Cpu,
   Shield,
-  Target
+  Target,
 } from 'lucide-react';
 
 interface ISACThemeConfig {
@@ -53,17 +53,17 @@ const ISAC_THEMES: ISACThemeConfig[] = [
       background: 'hsl(0, 0%, 8%)',
       surface: 'hsl(0, 0%, 12%)',
       text: 'hsl(0, 0%, 95%)',
-      border: 'hsl(25, 70%, 35%)'
+      border: 'hsl(25, 70%, 35%)',
     },
     effects: {
       glowIntensity: 80,
       animationSpeed: 75,
       transparencyLevel: 15,
       scanlineEffect: true,
-      holographicOverlay: true
+      holographicOverlay: true,
     },
     wallpaper: '/wallpapers/tactical-grid-4k.jpg',
-    soundProfile: 'tactical'
+    soundProfile: 'tactical',
   },
   {
     id: 'stealth-blue',
@@ -77,17 +77,17 @@ const ISAC_THEMES: ISACThemeConfig[] = [
       background: 'hsl(220, 20%, 6%)',
       surface: 'hsl(220, 15%, 10%)',
       text: 'hsl(210, 30%, 85%)',
-      border: 'hsl(210, 50%, 25%)'
+      border: 'hsl(210, 50%, 25%)',
     },
     effects: {
       glowIntensity: 40,
       animationSpeed: 50,
       transparencyLevel: 25,
       scanlineEffect: false,
-      holographicOverlay: false
+      holographicOverlay: false,
     },
     wallpaper: '/wallpapers/urban-blueprint.jpg',
-    soundProfile: 'stealth'
+    soundProfile: 'stealth',
   },
   {
     id: 'command-red',
@@ -101,18 +101,18 @@ const ISAC_THEMES: ISACThemeConfig[] = [
       background: 'hsl(0, 10%, 5%)',
       surface: 'hsl(0, 15%, 8%)',
       text: 'hsl(0, 5%, 92%)',
-      border: 'hsl(0, 60%, 30%)'
+      border: 'hsl(0, 60%, 30%)',
     },
     effects: {
       glowIntensity: 90,
       animationSpeed: 85,
       transparencyLevel: 10,
       scanlineEffect: true,
-      holographicOverlay: true
+      holographicOverlay: true,
     },
     wallpaper: '/wallpapers/steel-structure.jpg',
-    soundProfile: 'command'
-  }
+    soundProfile: 'command',
+  },
 ];
 
 export function ISACOSThemeEngine() {
@@ -134,7 +134,7 @@ export function ISACOSThemeEngine() {
     root.style.setProperty('--isac-glow-intensity', `${finalEffects.glowIntensity}%`);
     root.style.setProperty('--isac-animation-speed', `${finalEffects.animationSpeed}%`);
     root.style.setProperty('--isac-transparency', `${finalEffects.transparencyLevel}%`);
-    
+
     // Apply wallpaper
     root.style.setProperty('--isac-wallpaper', `url('${theme.wallpaper}')`);
 
@@ -146,7 +146,7 @@ export function ISACOSThemeEngine() {
     // Save to localStorage
     localStorage.setItem('isac-theme', JSON.stringify({
       theme: theme.id,
-      customEffects: finalEffects
+      customEffects: finalEffects,
     }));
   };
 
@@ -218,12 +218,12 @@ export function ISACOSThemeEngine() {
                 key={theme.id}
                 className={`
                   p-4 rounded-lg border-2 transition-all cursor-pointer
-                  ${currentTheme.id === theme.id 
-                    ? 'border-primary bg-primary/10' 
+                  ${currentTheme.id === theme.id
+                    ? 'border-primary bg-primary/10'
                     : 'border/30 bg-surface/30 hover:border/60'
                   }
                 `}
-                onClick={() => handleThemeChange(theme.id)}
+                onClick={() => { handleThemeChange(theme.id); }}
               >
                 <div className="flex items-center gap-3">
                   {getCategoryIcon(theme.category)}
@@ -269,7 +269,7 @@ export function ISACOSThemeEngine() {
             </div>
             <Slider
               value={[customEffects.glowIntensity]}
-              onValueChange={([value]) => handleEffectChange('glowIntensity', value)}
+              onValueChange={([value]) => { handleEffectChange('glowIntensity', value); }}
               className="w-full"
             />
           </div>
@@ -282,7 +282,7 @@ export function ISACOSThemeEngine() {
             </div>
             <Slider
               value={[customEffects.animationSpeed]}
-              onValueChange={([value]) => handleEffectChange('animationSpeed', value)}
+              onValueChange={([value]) => { handleEffectChange('animationSpeed', value); }}
               className="w-full"
             />
           </div>
@@ -295,7 +295,7 @@ export function ISACOSThemeEngine() {
             </div>
             <Slider
               value={[customEffects.transparencyLevel]}
-              onValueChange={([value]) => handleEffectChange('transparencyLevel', value)}
+              onValueChange={([value]) => { handleEffectChange('transparencyLevel', value); }}
               className="w-full"
             />
           </div>
@@ -306,7 +306,7 @@ export function ISACOSThemeEngine() {
               <label className="text-sm font-medium">Scanline Effect</label>
               <Switch
                 checked={customEffects.scanlineEffect}
-                onCheckedChange={(checked) => handleEffectChange('scanlineEffect', checked)}
+                onCheckedChange={(checked) => { handleEffectChange('scanlineEffect', checked); }}
               />
             </div>
 
@@ -314,7 +314,7 @@ export function ISACOSThemeEngine() {
               <label className="text-sm font-medium">Holographic Overlay</label>
               <Switch
                 checked={customEffects.holographicOverlay}
-                onCheckedChange={(checked) => handleEffectChange('holographicOverlay', checked)}
+                onCheckedChange={(checked) => { handleEffectChange('holographicOverlay', checked); }}
               />
             </div>
           </div>
@@ -333,14 +333,14 @@ export function ISACOSThemeEngine() {
             </div>
             {previewMode && (
               <div className="mt-3 flex gap-2">
-                <Button 
-                  size="sm" 
-                  onClick={() => applyTheme(currentTheme, customEffects)}
+                <Button
+                  size="sm"
+                  onClick={() => { applyTheme(currentTheme, customEffects); }}
                 >
                   Apply
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => {
                     setCustomEffects(currentTheme.effects);

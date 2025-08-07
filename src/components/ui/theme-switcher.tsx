@@ -218,7 +218,7 @@ export function ThemeSwitcher() {
     setCurrentTheme(savedTheme);
     setCurrentWallpaper(savedWallpaper);
     setDarkMode(savedDarkMode);
-    
+
     if (savedEffects) {
       setEffectSettings(JSON.parse(savedEffects));
     }
@@ -241,7 +241,7 @@ export function ThemeSwitcher() {
     const selectedTheme = THEME_CONFIGURATIONS.find(t => t.id === themeId);
     if (selectedTheme) {
       body.classList.add(selectedTheme.class);
-      
+
       // Apply theme colors
       Object.entries(selectedTheme.colors).forEach(([key, value]) => {
         root.style.setProperty(`--${key}`, value);
@@ -255,7 +255,7 @@ export function ThemeSwitcher() {
     body.classList.toggle('reduced-motion', effects.reducedMotion);
     body.classList.toggle('high-contrast', effects.highContrast);
     body.classList.toggle('large-text', effects.largeText);
-    
+
     // Apply color blind mode
     body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
     if (effects.colorBlindMode !== 'none') {
@@ -320,7 +320,7 @@ export function ThemeSwitcher() {
     if (theme) {
       applyTheme(themeId, theme.wallpaper, darkMode, effectSettings);
     }
-    
+
     // Reset preview after 3 seconds
     setTimeout(() => {
       setPreviewMode(false);
@@ -381,7 +381,7 @@ export function ThemeSwitcher() {
                 tilt
                 className={cn(
                   'relative overflow-hidden transition-all duration-300',
-                  currentTheme === theme.id && 'ring-2 ring-primary'
+                  currentTheme === theme.id && 'ring-2 ring-primary',
                 )}
               >
                 <CardHeader className="pb-3">
@@ -400,7 +400,7 @@ export function ThemeSwitcher() {
                     {theme.description}
                   </p>
                 </CardHeader>
-                
+
                 <CardContent className="pt-0">
                   {/* Color Preview */}
                   <div className="flex gap-1 mb-3">
@@ -425,7 +425,7 @@ export function ThemeSwitcher() {
                     <Button
                       size="sm"
                       variant={currentTheme === theme.id ? 'default' : 'outline'}
-                      onClick={() => handleThemeChange(theme.id)}
+                      onClick={() => { handleThemeChange(theme.id); }}
                       className="flex-1"
                     >
                       {currentTheme === theme.id ? 'Active' : 'Apply'}
@@ -433,7 +433,7 @@ export function ThemeSwitcher() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => startPreview(theme.id)}
+                      onClick={() => { startPreview(theme.id); }}
                       disabled={currentTheme === theme.id}
                     >
                       <Eye className="w-4 h-4" />
@@ -459,10 +459,10 @@ export function ThemeSwitcher() {
                 key={wallpaper.id}
                 interactive
                 variant={currentWallpaper === wallpaper.id ? 'neon' : 'default'}
-                onClick={() => handleWallpaperChange(wallpaper.id)}
+                onClick={() => { handleWallpaperChange(wallpaper.id); }}
                 className={cn(
                   'aspect-video relative overflow-hidden',
-                  currentWallpaper === wallpaper.id && 'ring-2 ring-primary'
+                  currentWallpaper === wallpaper.id && 'ring-2 ring-primary',
                 )}
               >
                 {wallpaper.file ? (
@@ -501,7 +501,7 @@ export function ThemeSwitcher() {
                   <label className="text-sm font-medium">Animation Speed</label>
                   <Slider
                     value={[effectSettings.animationSpeed]}
-                    onValueChange={([value]) => handleEffectSettingChange('animationSpeed', value)}
+                    onValueChange={([value]) => { handleEffectSettingChange('animationSpeed', value); }}
                     max={200}
                     min={0}
                     step={10}
@@ -516,7 +516,7 @@ export function ThemeSwitcher() {
                   <label className="text-sm font-medium">Glow Intensity</label>
                   <Slider
                     value={[effectSettings.glowIntensity]}
-                    onValueChange={([value]) => handleEffectSettingChange('glowIntensity', value)}
+                    onValueChange={([value]) => { handleEffectSettingChange('glowIntensity', value); }}
                     max={100}
                     min={0}
                     step={5}
@@ -528,7 +528,7 @@ export function ThemeSwitcher() {
                   <label className="text-sm font-medium">Blur Amount</label>
                   <Slider
                     value={[effectSettings.blurAmount]}
-                    onValueChange={([value]) => handleEffectSettingChange('blurAmount', value)}
+                    onValueChange={([value]) => { handleEffectSettingChange('blurAmount', value); }}
                     max={20}
                     min={0}
                     step={1}
@@ -550,7 +550,7 @@ export function ThemeSwitcher() {
                   <label className="text-sm font-medium">Particle Count</label>
                   <Slider
                     value={[effectSettings.particleCount]}
-                    onValueChange={([value]) => handleEffectSettingChange('particleCount', value)}
+                    onValueChange={([value]) => { handleEffectSettingChange('particleCount', value); }}
                     max={100}
                     min={0}
                     step={10}
@@ -566,8 +566,8 @@ export function ThemeSwitcher() {
                   />
                 </div>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={resetToDefaults}
                   className="w-full"
                 >
@@ -594,7 +594,7 @@ export function ThemeSwitcher() {
                 </div>
                 <Switch
                   checked={effectSettings.reducedMotion}
-                  onCheckedChange={(checked) => handleEffectSettingChange('reducedMotion', checked)}
+                  onCheckedChange={(checked) => { handleEffectSettingChange('reducedMotion', checked); }}
                 />
               </div>
 
@@ -607,7 +607,7 @@ export function ThemeSwitcher() {
                 </div>
                 <Switch
                   checked={effectSettings.highContrast}
-                  onCheckedChange={(checked) => handleEffectSettingChange('highContrast', checked)}
+                  onCheckedChange={(checked) => { handleEffectSettingChange('highContrast', checked); }}
                 />
               </div>
 
@@ -620,7 +620,7 @@ export function ThemeSwitcher() {
                 </div>
                 <Switch
                   checked={effectSettings.largeText}
-                  onCheckedChange={(checked) => handleEffectSettingChange('largeText', checked)}
+                  onCheckedChange={(checked) => { handleEffectSettingChange('largeText', checked); }}
                 />
               </div>
 
@@ -628,7 +628,7 @@ export function ThemeSwitcher() {
                 <label className="text-sm font-medium">Color Blind Support</label>
                 <Select
                   value={effectSettings.colorBlindMode}
-                  onValueChange={(value) => handleEffectSettingChange('colorBlindMode', value)}
+                  onValueChange={(value) => { handleEffectSettingChange('colorBlindMode', value); }}
                 >
                   <SelectTrigger>
                     <SelectValue />

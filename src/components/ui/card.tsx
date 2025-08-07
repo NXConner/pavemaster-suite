@@ -65,12 +65,12 @@ export interface CardProps
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    interactive, 
-    animation, 
+  ({
+    className,
+    variant,
+    size,
+    interactive,
+    animation,
     parallax = 'none',
     tilt = false,
     glow = false,
@@ -80,7 +80,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     onMouseLeave,
     onMouseMove,
     children,
-    ...props 
+    ...props
   }, ref) => {
     const [isHovered, setIsHovered] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -100,15 +100,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     };
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!cardRef.current || (!tilt && parallax === 'none')) return;
+      if (!cardRef.current || (!tilt && parallax === 'none')) { return; }
 
       const rect = cardRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       const rotateX = (y - centerY) / (parallax === 'strong' ? 10 : 20);
       const rotateY = (centerX - x) / (parallax === 'strong' ? 10 : 20);
 
@@ -147,7 +147,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
         {/* Interactive Light Effect */}
         {(tilt || parallax !== 'none') && (
-          <div 
+          <div
             className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none"
             style={{
               background: `radial-gradient(circle at ${50 + mousePosition.y * 2}% ${50 - mousePosition.x * 2}%, rgba(255,255,255,0.1) 0%, transparent 50%)`,
@@ -181,7 +181,7 @@ const CardHeader = React.forwardRef<
     className={cn(
       'flex flex-col space-y-1.5 p-6',
       gradient && 'bg-gradient-to-r from-primary/5 to-secondary/5 rounded-t-lg',
-      className
+      className,
     )}
     {...props}
   >
@@ -192,7 +192,7 @@ CardHeader.displayName = 'CardHeader';
 
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement> & { 
+  React.HTMLAttributes<HTMLHeadingElement> & {
     gradient?: boolean;
     glow?: boolean;
   }
@@ -226,17 +226,17 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }
 >(({ className, padding = true, ...props }, ref) => (
-  <div 
-    ref={ref} 
-    className={cn(padding ? 'p-6 pt-0' : '', 'transition-all duration-300', className)} 
-    {...props} 
+  <div
+    ref={ref}
+    className={cn(padding ? 'p-6 pt-0' : '', 'transition-all duration-300', className)}
+    {...props}
   />
 ));
 CardContent.displayName = 'CardContent';
 
 const CardFooter = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { 
+  React.HTMLAttributes<HTMLDivElement> & {
     gradient?: boolean;
     glassmorphism?: boolean;
   }
@@ -247,7 +247,7 @@ const CardFooter = React.forwardRef<
       'flex items-center p-6 pt-0 transition-all duration-300',
       gradient && 'bg-gradient-to-r from-primary/5 to-secondary/5 rounded-b-lg mt-6 pt-6',
       glassmorphism && 'glass-morphism mt-6 pt-6 rounded-b-lg',
-      className
+      className,
     )}
     {...props}
   />
@@ -295,14 +295,14 @@ const AnimatedCardContainer = React.forwardRef<
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); };
   }, []);
 
   return (
@@ -316,9 +316,9 @@ const AnimatedCardContainer = React.forwardRef<
           key={index}
           className={cn(
             'transition-all duration-500 ease-out',
-            isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-8'
+            isVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8',
           )}
           style={{
             transitionDelay: isVisible ? `${index * staggerDelay}ms` : '0ms',
@@ -332,12 +332,12 @@ const AnimatedCardContainer = React.forwardRef<
 });
 AnimatedCardContainer.displayName = 'AnimatedCardContainer';
 
-export { 
-  Card, 
-  CardHeader, 
-  CardFooter, 
-  CardTitle, 
-  CardDescription, 
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
   CardContent,
   LoadingCard,
   AnimatedCardContainer,

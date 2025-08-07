@@ -48,16 +48,16 @@ const LogoIcon = ({ className }: { className?: string }) => (
   >
     {/* Road/Asphalt base */}
     <rect x="4" y="28" width="32" height="8" rx="2" className="opacity-80" />
-    
+
     {/* Construction elements */}
     <rect x="8" y="20" width="6" height="8" rx="1" className="opacity-90" />
     <rect x="16" y="18" width="8" height="10" rx="1" />
     <rect x="26" y="22" width="6" height="6" rx="1" className="opacity-90" />
-    
+
     {/* Top accent - represents quality/precision */}
     <rect x="12" y="8" width="16" height="2" rx="1" className="opacity-60" />
     <rect x="14" y="12" width="12" height="2" rx="1" className="opacity-70" />
-    
+
     {/* Center diamond - premium quality indicator */}
     <polygon points="20,4 24,8 20,12 16,8" className="animate-pulse" />
   </svg>
@@ -77,7 +77,7 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
             size === 'default' && 'w-8 h-8',
             size === 'lg' && 'w-10 h-10',
             size === 'xl' && 'w-12 h-12',
-            size === '2xl' && 'w-16 h-16'
+            size === '2xl' && 'w-16 h-16',
           )} />
         )}
         {showText && (
@@ -116,11 +116,11 @@ export const GradientLogo = ({ className, ...props }: Omit<LogoProps, 'variant'>
 );
 
 export const CompactLogo = ({ className, ...props }: LogoProps) => (
-  <Logo 
-    size="sm" 
-    showText={false} 
-    className={cn('w-fit', className)} 
-    {...props} 
+  <Logo
+    size="sm"
+    showText={false}
+    className={cn('w-fit', className)}
+    {...props}
   />
 );
 

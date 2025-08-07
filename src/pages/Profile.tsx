@@ -38,8 +38,8 @@ export default function Profile() {
   }, [user]);
 
   const fetchProfile = async () => {
-    if (!user?.id) return;
-    
+    if (!user?.id) { return; }
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -47,7 +47,7 @@ export default function Profile() {
         .eq('id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       if (data) {
         setProfile(data);
@@ -66,12 +66,12 @@ export default function Profile() {
           emergency_contact_phone: null,
           emergency_contact_relationship: null,
         };
-        
+
         const { error: insertError } = await supabase
           .from('profiles')
           .insert([newProfile]);
-          
-        if (insertError) throw insertError;
+
+        if (insertError) { throw insertError; }
         setProfile({ ...newProfile, created_at: new Date().toISOString() });
       }
     } catch (error: any) {
@@ -82,7 +82,7 @@ export default function Profile() {
   };
 
   const handleAvatarUpload = async (file: File) => {
-    if (!user?.id) return;
+    if (!user?.id) { return; }
 
     setUploading(true);
     try {
@@ -94,7 +94,7 @@ export default function Profile() {
         .from('avatars')
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) { throw uploadError; }
 
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
@@ -110,7 +110,7 @@ export default function Profile() {
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
-    if (!user?.id) return;
+    if (!user?.id) { return; }
 
     try {
       const { error } = await supabase
@@ -118,8 +118,8 @@ export default function Profile() {
         .update(updates)
         .eq('id', user.id);
 
-      if (error) throw error;
-      
+      if (error) { throw error; }
+
       setProfile(prev => prev ? { ...prev, ...updates } : null);
     } catch (error: any) {
       throw error;
@@ -127,7 +127,7 @@ export default function Profile() {
   };
 
   const handleSave = async () => {
-    if (!profile || !user?.id) return;
+    if (!profile || !user?.id) { return; }
 
     setSaving(true);
     try {
@@ -198,7 +198,7 @@ export default function Profile() {
                   accept="image/*"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files?.[0];
-                    if (file) handleAvatarUpload(file);
+                    if (file) { handleAvatarUpload(file); }
                   }}
                   disabled={uploading}
                   className="mt-2"
@@ -213,7 +213,7 @@ export default function Profile() {
                 <Input
                   id="first_name"
                   value={profile.first_name || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, first_name: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, first_name: e.target.value } : null); }}
                 />
               </div>
 
@@ -222,7 +222,7 @@ export default function Profile() {
                 <Input
                   id="last_name"
                   value={profile.last_name || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, last_name: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, last_name: e.target.value } : null); }}
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export default function Profile() {
                 <Input
                   id="phone"
                   value={profile.phone || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, phone: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, phone: e.target.value } : null); }}
                 />
               </div>
             </div>
@@ -255,7 +255,7 @@ export default function Profile() {
                 <Input
                   id="username"
                   value={profile.username || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, username: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, username: e.target.value } : null); }}
                 />
               </div>
 
@@ -285,7 +285,7 @@ export default function Profile() {
               <Input
                 id="emergency_name"
                 value={profile.emergency_contact_name || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, emergency_contact_name: e.target.value } : null)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, emergency_contact_name: e.target.value } : null); }}
               />
             </div>
 
@@ -295,7 +295,7 @@ export default function Profile() {
                 <Input
                   id="emergency_phone"
                   value={profile.emergency_contact_phone || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, emergency_contact_phone: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, emergency_contact_phone: e.target.value } : null); }}
                 />
               </div>
 
@@ -304,7 +304,7 @@ export default function Profile() {
                 <Input
                   id="emergency_relationship"
                   value={profile.emergency_contact_relationship || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProfile(prev => prev ? { ...prev, emergency_contact_relationship: e.target.value } : null)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProfile(prev => prev ? { ...prev, emergency_contact_relationship: e.target.value } : null); }}
                   placeholder="e.g., Spouse, Parent, Sibling"
                 />
               </div>

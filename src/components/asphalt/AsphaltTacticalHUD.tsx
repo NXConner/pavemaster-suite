@@ -82,7 +82,7 @@ export function AsphaltTacticalHUD() {
         <Button
           size="sm"
           variant="outline"
-          onClick={() => setIsMinimized(false)}
+          onClick={() => { setIsMinimized(false); }}
           className="bg-black/80 backdrop-blur-sm border-orange-500/30 text-orange-500 hover:bg-orange-500/20"
         >
           <Maximize2 className="h-4 w-4 mr-1" />
@@ -109,7 +109,7 @@ export function AsphaltTacticalHUD() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setIsMinimized(true)}
+                onClick={() => { setIsMinimized(true); }}
                 className="text-orange-500 hover:bg-orange-500/20 pointer-events-auto h-6 w-6 p-0"
               >
                 <Minimize2 className="h-3 w-3" />

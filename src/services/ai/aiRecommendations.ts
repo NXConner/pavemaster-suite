@@ -283,7 +283,7 @@ export class AIRecommendations {
    */
   async suggestMaterialQuantities(
     projectArea: number,
-    context: RecommendationContext
+    context: RecommendationContext,
   ): Promise<MaterialSuggestions> {
     if (!this.initialized) {
       throw new Error('AI Recommendations engine not initialized');
@@ -294,7 +294,7 @@ export class AIRecommendations {
       const optimizedRecommendations = await this.optimizeMaterialSelection(baseRequirements, context);
       const supplierRecommendations = await this.recommendSuppliers(optimizedRecommendations, context);
       const alternatives = this.generateAlternatives(optimizedRecommendations, context);
-      
+
       return {
         projectId: context.projectType + '_' + Date.now(),
         projectArea,
@@ -316,7 +316,7 @@ export class AIRecommendations {
    * Create intelligent maintenance schedules based on equipment history
    */
   async recommendMaintenanceSchedule(
-    equipmentData: EquipmentMetrics
+    equipmentData: EquipmentMetrics,
   ): Promise<MaintenanceSchedule> {
     if (!this.initialized) {
       throw new Error('AI Recommendations engine not initialized');
@@ -325,11 +325,11 @@ export class AIRecommendations {
     try {
       // Get failure risk analysis from predictive analytics
       const failureRisk = await predictiveAnalytics.predictEquipmentFailure(equipmentData);
-      
+
       // Generate optimized maintenance schedule
       const schedule = this.generateOptimizedSchedule(equipmentData, failureRisk);
       const costBenefit = this.analyzeCostBenefit(schedule, failureRisk);
-      
+
       return {
         equipmentId: equipmentData.id,
         schedule,
@@ -357,10 +357,10 @@ export class AIRecommendations {
     try {
       const routes = await this.generateOptimalRoutes(jobSites);
       const alternatives = this.generateAlternativeRoutes(jobSites, routes);
-      
+
       const totalDistance = routes.reduce((sum, route) => sum + route.totalDistance, 0);
       const totalTime = routes.reduce((sum, route) => sum + route.estimatedTime, 0);
-      
+
       return {
         routes,
         totalDistance,
@@ -381,10 +381,10 @@ export class AIRecommendations {
 
   private calculateBaseRequirements(
     projectArea: number,
-    context: RecommendationContext
+    context: RecommendationContext,
   ): MaterialRecommendation[] {
     const requirements: MaterialRecommendation[] = [];
-    
+
     // Asphalt calculation (standard: 110 lbs per sq inch per sq yard)
     const asphaltTons = (projectArea / 9) * 4 * 110 / 2000; // 4-inch standard thickness
     requirements.push({
@@ -407,7 +407,7 @@ export class AIRecommendations {
       confidence: 0.9,
       reasoning: ['Standard mix for typical traffic loads', 'Climate-appropriate binder grade'],
     });
-    
+
     // Aggregate base calculation
     const aggregateCubicYards = (projectArea / 9) * (6 / 12); // 6-inch base
     requirements.push({
@@ -430,13 +430,13 @@ export class AIRecommendations {
       confidence: 0.85,
       reasoning: ['Provides stable foundation', 'Local material availability'],
     });
-    
+
     return requirements;
   }
 
   private async optimizeMaterialSelection(
     baseRequirements: MaterialRecommendation[],
-    context: RecommendationContext
+    context: RecommendationContext,
   ): Promise<MaterialRecommendation[]> {
     // AI-powered optimization based on context and historical performance
     return baseRequirements.map(req => {
@@ -447,7 +447,7 @@ export class AIRecommendations {
         budget: context.budget,
         quality: context.qualityRequirements,
       });
-      
+
       // Adjust recommendations based on AI insights
       if (optimizationFactor > 0.7) {
         req.quality = 'premium';
@@ -455,14 +455,14 @@ export class AIRecommendations {
         req.totalCost = req.quantity * req.costPerUnit;
         req.reasoning.push('AI recommends premium grade for optimal performance');
       }
-      
+
       return req;
     });
   }
 
   private async recommendSuppliers(
     materials: MaterialRecommendation[],
-    context: RecommendationContext
+    context: RecommendationContext,
   ): Promise<SupplierRecommendation[]> {
     // Generate supplier recommendations based on materials and location
     const suppliers: SupplierRecommendation[] = [
@@ -493,13 +493,13 @@ export class AIRecommendations {
         priceRange: { low: 22, high: 28 },
       },
     ];
-    
+
     return suppliers.sort((a, b) => b.overallScore - a.overallScore);
   }
 
   private generateAlternatives(
     recommendations: MaterialRecommendation[],
-    context: RecommendationContext
+    context: RecommendationContext,
   ): AlternativeMaterial[] {
     return [
       {
@@ -527,12 +527,12 @@ export class AIRecommendations {
     // Calculate expected waste percentage based on material types and project size
     const wasteFactors = { asphalt: 0.05, concrete: 0.08, aggregate: 0.03 };
     let totalWaste = 0;
-    
+
     recommendations.forEach(rec => {
       const wasteFactor = wasteFactors[rec.type] || 0.05;
       totalWaste += rec.totalCost * wasteFactor;
     });
-    
+
     return totalWaste;
   }
 
@@ -542,7 +542,7 @@ export class AIRecommendations {
       return sum + (qualityWeights[rec.quality] * rec.totalCost);
     }, 0);
     const totalCost = recommendations.reduce((sum, rec) => sum + rec.totalCost, 0);
-    
+
     return weightedSum / totalCost;
   }
 
@@ -552,7 +552,7 @@ export class AIRecommendations {
       const carbonFactors = { asphalt: 0.25, concrete: 0.4, aggregate: 0.1 };
       return sum + (rec.quantity * (carbonFactors[rec.type] || 0.2) * 1000);
     }, 0);
-    
+
     return {
       carbonFootprint: totalCarbonFootprint,
       recyclableContent: 25,
@@ -565,11 +565,11 @@ export class AIRecommendations {
 
   private generateOptimizedSchedule(
     equipment: EquipmentMetrics,
-    failureRisk: any
+    failureRisk: any,
   ): MaintenanceTask[] {
     const tasks: MaintenanceTask[] = [];
     const currentDate = new Date();
-    
+
     // Generate preventive maintenance tasks based on AI analysis
     failureRisk.criticalComponents.forEach((component: any, index: number) => {
       const task: MaintenanceTask = {
@@ -588,14 +588,14 @@ export class AIRecommendations {
       };
       tasks.push(task);
     });
-    
+
     return tasks.sort((a, b) => a.scheduledDate.getTime() - b.scheduledDate.getTime());
   }
 
   private mapRiskToPriority(riskScore: number): 'critical' | 'high' | 'medium' | 'low' {
-    if (riskScore > 80) return 'critical';
-    if (riskScore > 60) return 'high';
-    if (riskScore > 40) return 'medium';
+    if (riskScore > 80) { return 'critical'; }
+    if (riskScore > 60) { return 'high'; }
+    if (riskScore > 40) { return 'medium'; }
     return 'low';
   }
 
@@ -620,7 +620,7 @@ export class AIRecommendations {
       tracks: ['Track Systems', 'Undercarriage'],
       electricals: ['Electronics', 'Wiring Systems'],
     };
-    
+
     return skillMap[component as keyof typeof skillMap] || ['General Maintenance'];
   }
 
@@ -629,7 +629,7 @@ export class AIRecommendations {
     const avoidedRepairCosts = failureRisk.costImpact.emergencyRepairCost;
     const avoidedDowntime = failureRisk.costImpact.lostProductivity;
     const productivityGains = avoidedDowntime * 0.5;
-    
+
     return {
       preventiveCosts,
       avoidedRepairCosts,
@@ -645,10 +645,10 @@ export class AIRecommendations {
     // AI-powered route optimization algorithm
     const routes: RouteOptimization[] = [];
     const availableVehicles = ['VEH_001', 'VEH_002', 'VEH_003'];
-    
+
     // Simple clustering and optimization (in production, would use advanced algorithms)
     const clusteredSites = this.clusterJobSites(jobSites);
-    
+
     clusteredSites.forEach((cluster, index) => {
       const route: RouteOptimization = {
         routeId: `route_${index + 1}`,
@@ -668,7 +668,7 @@ export class AIRecommendations {
       };
       routes.push(route);
     });
-    
+
     return routes;
   }
 
@@ -676,11 +676,11 @@ export class AIRecommendations {
     // Simple geographical clustering
     const clusters: JobSite[][] = [];
     const maxClusterSize = 3;
-    
+
     for (let i = 0; i < jobSites.length; i += maxClusterSize) {
       clusters.push(jobSites.slice(i, i + maxClusterSize));
     }
-    
+
     return clusters;
   }
 
@@ -706,7 +706,7 @@ export class AIRecommendations {
         jobSites[i].location.lat,
         jobSites[i].location.lng,
         jobSites[i + 1].location.lat,
-        jobSites[i + 1].location.lng
+        jobSites[i + 1].location.lng,
       );
     }
     return totalDistance;
@@ -716,16 +716,16 @@ export class AIRecommendations {
     const R = 3959; // Earth's radius in miles
     const dLat = this.deg2rad(lat2 - lat1);
     const dLng = this.deg2rad(lng2 - lng1);
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
-      Math.sin(dLng/2) * Math.sin(dLng/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const a
+      = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+      + Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2))
+      * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
 
   private deg2rad(deg: number): number {
-    return deg * (Math.PI/180);
+    return deg * (Math.PI / 180);
   }
 
   private calculateRouteTime(jobSites: JobSite[]): number {

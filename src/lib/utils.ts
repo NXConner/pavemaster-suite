@@ -1057,31 +1057,25 @@ export function createFocusTrap(element: HTMLElement): () => void {
 }
 
 // Generate unique ID for accessibility
-export function generateId(prefix: string = 'id'): string {
-  return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
-}
-
 // ============================================================================
-// Performance Optimization Utilities
+// Performance Optimization Utilities (continued)
 // ============================================================================
-
-// Note: debounce and throttle functions are defined in the Performance Utilities section above
-
+ 
 // RAF-based animation helper
 export function animateWithRAF(callback: (progress: number) => void, duration: number) {
   const startTime = performance.now();
-  
+
   const animate = (currentTime: number) => {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    
+
     callback(progress);
-    
+
     if (progress < 1) {
       requestAnimationFrame(animate);
     }
   };
-  
+
   requestAnimationFrame(animate);
 }
 
@@ -1128,10 +1122,10 @@ export function setupLazyLoading(images: HTMLImageElement[] | NodeListOf<HTMLIma
     });
   }, {
     rootMargin: '50px 0px',
-    threshold: 0.01
+    threshold: 0.01,
   });
 
-  Array.from(images).forEach(img => imageObserver.observe(img));
+  Array.from(images).forEach(img => { imageObserver.observe(img); });
 }
 
 // Memory usage monitoring
@@ -1166,8 +1160,6 @@ export function prefersDarkTheme(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-// Note: generateId function is defined in the Accessibility Utilities section above
-// Note: createFocusTrap function is defined in the Accessibility Utilities section above
 
 // Announce to screen readers
 export function announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
@@ -1214,10 +1206,9 @@ export function checkContrast(foreground: string, background: string): number {
 }
 
 // ============================================================================
-// Device and Environment Detection
+// Device and Environment Detection (continued)
 // ============================================================================
 
-// Note: isMobileDevice, isTablet, and isTouchDevice functions are defined in the Responsive & Device Utilities section above
 
 // Get device orientation
 export function getOrientation(): 'portrait' | 'landscape' {
@@ -1226,14 +1217,14 @@ export function getOrientation(): 'portrait' | 'landscape' {
 
 // Check if device is in standalone mode (PWA)
 export function isStandalone(): boolean {
-  return window.matchMedia('(display-mode: standalone)').matches ||
-         (window.navigator as any).standalone === true;
+  return window.matchMedia('(display-mode: standalone)').matches
+         || (window.navigator as any).standalone === true;
 }
 
 // Get network information
 export function getNetworkInfo() {
   const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-  
+
   if (connection) {
     return {
       effectiveType: connection.effectiveType,
@@ -1242,7 +1233,7 @@ export function getNetworkInfo() {
       saveData: connection.saveData,
     };
   }
-  
+
   return null;
 }
 
@@ -1281,9 +1272,9 @@ export const easing = {
   easeOutQuart: (t: number) => 1 - (--t) * t * t * t,
   easeInOutQuart: (t: number) => t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
   bounce: (t: number) => {
-    if (t < 1 / 2.75) return 7.5625 * t * t;
-    if (t < 2 / 2.75) return 7.5625 * (t -= 1.5 / 2.75) * t + 0.75;
-    if (t < 2.5 / 2.75) return 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375;
+    if (t < 1 / 2.75) { return 7.5625 * t * t; }
+    if (t < 2 / 2.75) { return 7.5625 * (t -= 1.5 / 2.75) * t + 0.75; }
+    if (t < 2.5 / 2.75) { return 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375; }
     return 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
   },
 };
@@ -1294,7 +1285,7 @@ export function animateNumber(
   to: number,
   duration: number,
   callback: (value: number) => void,
-  easing: (t: number) => number = easing.easeOutQuad
+  easing: (t: number) => number = easing.easeOutQuad,
 ) {
   const startTime = performance.now();
   const difference = to - from;
@@ -1320,12 +1311,12 @@ export function staggerAnimation(
   elements: Element[],
   animationClass: string,
   delay = 100,
-  cleanup = true
+  cleanup = true,
 ) {
   elements.forEach((element, index) => {
     setTimeout(() => {
       element.classList.add(animationClass);
-      
+
       if (cleanup) {
         // Remove animation class after animation completes
         const duration = parseFloat(getComputedStyle(element).animationDuration) * 1000;
@@ -1357,8 +1348,8 @@ export class StorageManager {
 
   static setItem<T>(key: string, value: T, useSession = false): boolean {
     const storage = useSession ? 'sessionStorage' : 'localStorage';
-    
-    if (!this.isStorageAvailable(storage)) return false;
+
+    if (!this.isStorageAvailable(storage)) { return false; }
 
     try {
       window[storage].setItem(key, JSON.stringify(value));
@@ -1371,8 +1362,8 @@ export class StorageManager {
 
   static getItem<T>(key: string, defaultValue: T, useSession = false): T {
     const storage = useSession ? 'sessionStorage' : 'localStorage';
-    
-    if (!this.isStorageAvailable(storage)) return defaultValue;
+
+    if (!this.isStorageAvailable(storage)) { return defaultValue; }
 
     try {
       const item = window[storage].getItem(key);
@@ -1385,8 +1376,8 @@ export class StorageManager {
 
   static removeItem(key: string, useSession = false): boolean {
     const storage = useSession ? 'sessionStorage' : 'localStorage';
-    
-    if (!this.isStorageAvailable(storage)) return false;
+
+    if (!this.isStorageAvailable(storage)) { return false; }
 
     try {
       window[storage].removeItem(key);
@@ -1399,8 +1390,8 @@ export class StorageManager {
 
   static clear(useSession = false): boolean {
     const storage = useSession ? 'sessionStorage' : 'localStorage';
-    
-    if (!this.isStorageAvailable(storage)) return false;
+
+    if (!this.isStorageAvailable(storage)) { return false; }
 
     try {
       window[storage].clear();
@@ -1419,10 +1410,10 @@ export class StorageManager {
 // Create object URL with cleanup
 export function createObjectURL(blob: Blob): { url: string; cleanup: () => void } {
   const url = URL.createObjectURL(blob);
-  
+
   return {
     url,
-    cleanup: () => URL.revokeObjectURL(url),
+    cleanup: () => { URL.revokeObjectURL(url); },
   };
 }
 
@@ -1430,15 +1421,15 @@ export function createObjectURL(blob: Blob): { url: string; cleanup: () => void 
 export function downloadFile(blob: Blob, filename: string) {
   const { url, cleanup } = createObjectURL(blob);
   const link = document.createElement('a');
-  
+
   link.href = url;
   link.download = filename;
   link.style.display = 'none';
-  
+
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
+
   // Cleanup after a short delay to ensure download starts
   setTimeout(cleanup, 100);
 }
@@ -1480,7 +1471,7 @@ export function getQueryParams(): Record<string, string> {
 // Update URL without page reload
 export function updateURL(params: Record<string, string | null>, replace = false) {
   const url = new URL(window.location.href);
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value === null) {
       url.searchParams.delete(key);
@@ -1516,7 +1507,7 @@ export function isStrongPassword(password: string): boolean {
   const hasLower = /[a-z]/.test(password);
   const hasNumber = /\d/.test(password);
   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  
+
   return minLength && hasUpper && hasLower && hasNumber && hasSpecial;
 }
 
@@ -1533,24 +1524,24 @@ export function isValidURL(url: string): boolean {
 // Credit card validation (Luhn algorithm)
 export function isValidCreditCard(cardNumber: string): boolean {
   const cleanNumber = cardNumber.replace(/\s+/g, '');
-  
-  if (!/^\d+$/.test(cleanNumber)) return false;
-  
+
+  if (!/^\d+$/.test(cleanNumber)) { return false; }
+
   let sum = 0;
   let isEven = false;
-  
+
   for (let i = cleanNumber.length - 1; i >= 0; i--) {
     let digit = parseInt(cleanNumber[i], 10);
-    
+
     if (isEven) {
       digit *= 2;
-      if (digit > 9) digit -= 9;
+      if (digit > 9) { digit -= 9; }
     }
-    
+
     sum += digit;
     isEven = !isEven;
   }
-  
+
   return sum % 10 === 0;
 }
 
@@ -1562,7 +1553,7 @@ export function isValidCreditCard(cardNumber: string): boolean {
 export function formatRelativeTime(date: Date): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+
   const intervals = {
     year: 31536000,
     month: 2592000,
@@ -1572,15 +1563,15 @@ export function formatRelativeTime(date: Date): string {
     minute: 60,
     second: 1,
   };
-  
+
   for (const [unit, seconds] of Object.entries(intervals)) {
     const interval = Math.floor(diffInSeconds / seconds);
-    
+
     if (interval >= 1) {
       return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
     }
   }
-  
+
   return 'just now';
 }
 
@@ -1589,14 +1580,13 @@ export function formatDuration(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
-  
+
   if (hours > 0) {
     return `${hours}h ${minutes}m ${remainingSeconds}s`;
   } else if (minutes > 0) {
     return `${minutes}m ${remainingSeconds}s`;
-  } else {
-    return `${remainingSeconds}s`;
   }
+    return `${remainingSeconds}s`;
 }
 
 // Check if date is today
@@ -1609,7 +1599,7 @@ export function isToday(date: Date): boolean {
 export function getBusinessDays(start: Date, end: Date): number {
   let count = 0;
   const current = new Date(start);
-  
+
   while (current <= end) {
     const dayOfWeek = current.getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday or Saturday
@@ -1617,7 +1607,7 @@ export function getBusinessDays(start: Date, end: Date): number {
     }
     current.setDate(current.getDate() + 1);
   }
-  
+
   return count;
 }
 
@@ -1639,7 +1629,7 @@ export class ErrorHandler {
     };
 
     this.errorQueue.push(errorEntry);
-    
+
     // Keep queue size manageable
     if (this.errorQueue.length > this.maxQueueSize) {
       this.errorQueue.shift();
@@ -1678,10 +1668,10 @@ export class ErrorHandler {
   }
 
   // Create error boundary wrapper
-  static withErrorBoundary<T extends (...args: any[]) => any>(
+  static withErrorBoundary<T extends(...args: any[]) => any>(
     fn: T,
     context: string,
-    fallback?: () => ReturnType<T>
+    fallback?: () => ReturnType<T>,
   ): (...args: Parameters<T>) => ReturnType<T> | undefined {
     return (...args: Parameters<T>) => {
       try {
@@ -1695,5 +1685,5 @@ export class ErrorHandler {
 }
 
 // ============================================================================
-// All utility functions and classes are exported individually above
+
 // ============================================================================

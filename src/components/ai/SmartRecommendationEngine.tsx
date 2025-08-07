@@ -144,7 +144,7 @@ class SmartRecommendationEngine {
   private loadHistoricalData() {
     // Simulate loading historical project data
     const sampleProjects = ['proj_1', 'proj_2', 'proj_3'];
-    
+
     sampleProjects.forEach((projectId, index) => {
       this.projectAnalytics.set(projectId, {
         projectId,
@@ -189,28 +189,28 @@ class SmartRecommendationEngine {
 
   generateRecommendations(context: any): Recommendation[] {
     const recommendations: Recommendation[] = [];
-    
+
     // Generate different types of recommendations
     recommendations.push(...this.generateOptimizationRecommendations(context));
     recommendations.push(...this.generateMaintenanceRecommendations(context));
     recommendations.push(...this.generateResourceRecommendations(context));
     recommendations.push(...this.generateSafetyRecommendations(context));
     recommendations.push(...this.generateCostRecommendations(context));
-    
+
     // Sort by priority and confidence
     return recommendations.sort((a, b) => {
       const priorityWeight = { critical: 4, high: 3, medium: 2, low: 1 };
       const aPriority = priorityWeight[a.priority];
       const bPriority = priorityWeight[b.priority];
-      
-      if (aPriority !== bPriority) return bPriority - aPriority;
+
+      if (aPriority !== bPriority) { return bPriority - aPriority; }
       return b.confidence - a.confidence;
     });
   }
 
   private generateOptimizationRecommendations(context: any): Recommendation[] {
     const recommendations: Recommendation[] = [];
-    
+
     // Workflow optimization
     recommendations.push({
       id: `opt_${Date.now()}_1`,
@@ -459,11 +459,11 @@ class SmartRecommendationEngine {
     // Analyze interactions to update patterns
     interactions.forEach(interaction => {
       existingPattern.analytics.totalRecommendations++;
-      
+
       if (interaction.action === 'accepted') {
-        existingPattern.analytics.acceptanceRate = 
-          (existingPattern.analytics.acceptanceRate * (existingPattern.analytics.totalRecommendations - 1) + 1) / 
-          existingPattern.analytics.totalRecommendations;
+        existingPattern.analytics.acceptanceRate
+          = (existingPattern.analytics.acceptanceRate * (existingPattern.analytics.totalRecommendations - 1) + 1)
+          / existingPattern.analytics.totalRecommendations;
       }
     });
 
@@ -567,14 +567,14 @@ class SmartRecommendationEngine {
   getPersonalizedRecommendations(userId: string, context: any): Recommendation[] {
     const userPattern = this.userPatterns.get(userId);
     const allRecommendations = this.generateRecommendations(context);
-    
-    if (!userPattern) return allRecommendations;
+
+    if (!userPattern) { return allRecommendations; }
 
     // Personalize recommendations based on user behavior
     return allRecommendations.map(rec => {
       // Adjust confidence based on user's historical preferences
       let adjustedConfidence = rec.confidence;
-      
+
       if (userPattern.patterns.riskTolerance === 'low' && rec.priority === 'critical') {
         adjustedConfidence *= 1.1;
       } else if (userPattern.patterns.riskTolerance === 'high' && rec.category === 'long_term') {
@@ -590,7 +590,7 @@ class SmartRecommendationEngine {
 
   getRecommendationAnalytics(): any {
     const allRecommendations = Array.from(this.recommendations.values());
-    
+
     const analytics = {
       total: allRecommendations.length,
       byType: this.groupBy(allRecommendations, 'type'),
@@ -633,13 +633,13 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
     try {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       const context = {
         userId: 'user_1',
         projectIds: ['proj_1', 'proj_2', 'proj_3'],
         currentDate: new Date(),
       };
-      
+
       const newRecommendations = engine.generateRecommendations(context);
       setRecommendations(newRecommendations);
       setAnalytics(engine.getRecommendationAnalytics());
@@ -654,16 +654,16 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
   };
 
   const handleRecommendationAction = (recommendationId: string, action: 'accept' | 'reject' | 'implement') => {
-    setRecommendations(prev => prev.map(rec => 
-      rec.id === recommendationId 
+    setRecommendations(prev => prev.map(rec =>
+      rec.id === recommendationId
         ? { ...rec, status: action === 'accept' ? 'accepted' : action === 'reject' ? 'rejected' : 'implemented' }
-        : rec
+        : rec,
     ));
   };
 
   const filteredRecommendations = recommendations.filter(rec => {
-    if (filterType !== 'all' && rec.type !== filterType) return false;
-    if (filterPriority !== 'all' && rec.priority !== filterPriority) return false;
+    if (filterType !== 'all' && rec.type !== filterType) { return false; }
+    if (filterPriority !== 'all' && rec.priority !== filterPriority) { return false; }
     return true;
   });
 
@@ -701,7 +701,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
               <Badge variant="secondary">Phase 2.4</Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={isGenerating ? "default" : "secondary"}>
+              <Badge variant={isGenerating ? 'default' : 'secondary'}>
                 {isGenerating ? <Activity className="h-3 w-3 mr-1 animate-spin" /> : <Brain className="h-3 w-3 mr-1" />}
                 {isGenerating ? 'Analyzing' : 'Ready'}
               </Badge>
@@ -744,7 +744,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                     </div>
                     <select
                       value={filterType}
-                      onChange={(e) => setFilterType(e.target.value)}
+                      onChange={(e) => { setFilterType(e.target.value); }}
                       className="p-2 border rounded text-sm"
                     >
                       <option value="all">All Types</option>
@@ -756,7 +756,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                     </select>
                     <select
                       value={filterPriority}
-                      onChange={(e) => setFilterPriority(e.target.value)}
+                      onChange={(e) => { setFilterPriority(e.target.value); }}
                       className="p-2 border rounded text-sm"
                     >
                       <option value="all">All Priorities</option>
@@ -787,7 +787,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                               <div
                                 key={recommendation.id}
                                 className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                                onClick={() => setSelectedRecommendation(recommendation)}
+                                onClick={() => { setSelectedRecommendation(recommendation); }}
                               >
                                 <div className="flex items-start justify-between mb-2">
                                   <div className="flex items-center space-x-2">
@@ -895,7 +895,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                                 <div className="text-gray-600">{action.description}</div>
                                 {action.estimatedCost && (
                                   <div className="text-xs mt-1">
-                                    Cost: ${action.estimatedCost.toLocaleString()} | 
+                                    Cost: ${action.estimatedCost.toLocaleString()} |
                                     Time: {action.estimatedTime} hours
                                   </div>
                                 )}
@@ -906,24 +906,24 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
 
                         {selectedRecommendation.status === 'new' && (
                           <div className="flex space-x-2">
-                            <Button 
-                              size="sm" 
-                              onClick={() => handleRecommendationAction(selectedRecommendation.id, 'accept')}
+                            <Button
+                              size="sm"
+                              onClick={() => { handleRecommendationAction(selectedRecommendation.id, 'accept'); }}
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Accept
                             </Button>
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="outline"
-                              onClick={() => handleRecommendationAction(selectedRecommendation.id, 'reject')}
+                              onClick={() => { handleRecommendationAction(selectedRecommendation.id, 'reject'); }}
                             >
                               Reject
                             </Button>
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="secondary"
-                              onClick={() => handleRecommendationAction(selectedRecommendation.id, 'implement')}
+                              onClick={() => { handleRecommendationAction(selectedRecommendation.id, 'implement'); }}
                             >
                               <Zap className="h-4 w-4 mr-1" />
                               Implement
@@ -949,16 +949,16 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-2">
                           <Badge variant={
-                            insight.type === 'risk' ? 'destructive' :
-                            insight.type === 'opportunity' ? 'default' :
-                            insight.type === 'forecast' ? 'secondary' : 'outline'
+                            insight.type === 'risk' ? 'destructive'
+                            : insight.type === 'opportunity' ? 'default'
+                            : insight.type === 'forecast' ? 'secondary' : 'outline'
                           }>
                             {insight.type}
                           </Badge>
                           <Badge variant={
-                            insight.impact === 'critical' ? 'destructive' :
-                            insight.impact === 'high' ? 'default' :
-                            insight.impact === 'medium' ? 'secondary' : 'outline'
+                            insight.impact === 'critical' ? 'destructive'
+                            : insight.impact === 'high' ? 'default'
+                            : insight.impact === 'medium' ? 'secondary' : 'outline'
                           }>
                             {insight.impact} impact
                           </Badge>
@@ -968,10 +968,10 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                           <div>{insight.timeframe}</div>
                         </div>
                       </div>
-                      
+
                       <h4 className="font-semibold mb-2">{insight.subject}</h4>
                       <p className="text-sm mb-3">{insight.prediction}</p>
-                      
+
                       <div className="mb-3">
                         <Label className="text-xs font-medium text-gray-600">Evidence:</Label>
                         <ul className="text-xs mt-1 space-y-1">
@@ -983,7 +983,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                           ))}
                         </ul>
                       </div>
-                      
+
                       <div>
                         <Label className="text-xs font-medium text-gray-600">Recommendations:</Label>
                         <ul className="text-xs mt-1 space-y-1">
@@ -1057,7 +1057,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">Active</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -1065,7 +1065,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">Learning</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -1073,7 +1073,7 @@ export const SmartRecommendationEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">Advanced</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />

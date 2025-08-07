@@ -58,7 +58,7 @@ const CameraIntegration: React.FC<{
         video: { facingMode: 'environment' }, // Use back camera
         audio: true,
       });
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         streamRef.current = stream;
@@ -71,27 +71,27 @@ const CameraIntegration: React.FC<{
 
   const stopCamera = () => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach(track => { track.stop(); });
       streamRef.current = null;
       setIsActive(false);
     }
   };
 
   const takePhoto = async () => {
-    if (!videoRef.current || !canvasRef.current) return;
+    if (!videoRef.current || !canvasRef.current) { return; }
 
     const canvas = canvasRef.current;
     const video = videoRef.current;
     const context = canvas.getContext('2d');
 
-    if (!context) return;
+    if (!context) { return; }
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0);
 
     canvas.toBlob(async (blob) => {
-      if (!blob) return;
+      if (!blob) { return; }
 
       const capture: CameraCapture = {
         id: Date.now().toString(),
@@ -127,7 +127,7 @@ const CameraIntegration: React.FC<{
   };
 
   const startVideoRecording = async () => {
-    if (!streamRef.current) return;
+    if (!streamRef.current) { return; }
 
     try {
       const mediaRecorder = new MediaRecorder(streamRef.current, {
@@ -144,7 +144,7 @@ const CameraIntegration: React.FC<{
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
-        
+
         const capture: CameraCapture = {
           id: Date.now().toString(),
           type: 'video',
@@ -216,7 +216,7 @@ const CameraIntegration: React.FC<{
                 <ImageIcon className="h-4 w-4 mr-2" />
                 Photo
               </Button>
-              
+
               {!isRecording ? (
                 <Button onClick={startVideoRecording} variant="secondary" className="flex-1">
                   <Video className="h-4 w-4 mr-2" />
@@ -228,7 +228,7 @@ const CameraIntegration: React.FC<{
                   Stop
                 </Button>
               )}
-              
+
               <Button onClick={stopCamera} variant="outline">
                 <XCircle className="h-4 w-4" />
               </Button>
@@ -353,7 +353,7 @@ const GPSIntegration: React.FC<{
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
-      }
+      },
     );
 
     watchIdRef.current = watchId;
@@ -388,7 +388,7 @@ const GPSIntegration: React.FC<{
             <Navigation className="h-4 w-4 mr-2" />
             Get Location
           </Button>
-          
+
           {!isTracking ? (
             <Button onClick={startTracking} variant="default" className="flex-1">
               <Compass className="h-4 w-4 mr-2" />
@@ -492,8 +492,8 @@ const OfflineSynchronization: React.FC = () => {
 
   // Monitor online status
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const handleOnline = () => { setIsOnline(true); };
+    const handleOffline = () => { setIsOnline(false); };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -542,23 +542,23 @@ const OfflineSynchronization: React.FC = () => {
   }, []);
 
   const syncData = async () => {
-    if (!isOnline || isSyncing || syncQueue.length === 0) return;
+    if (!isOnline || isSyncing || syncQueue.length === 0) { return; }
 
     setIsSyncing(true);
     setSyncProgress(0);
 
     const unsyncedItems = syncQueue.filter(item => !item.synced);
-    
+
     for (let i = 0; i < unsyncedItems.length; i++) {
       const item = unsyncedItems[i];
-      
+
       try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Mark as synced
-        setSyncQueue(prev => prev.map(queueItem => 
-          queueItem.id === item.id ? { ...queueItem, synced: true } : queueItem
+        setSyncQueue(prev => prev.map(queueItem =>
+          queueItem.id === item.id ? { ...queueItem, synced: true } : queueItem,
         ));
 
         setSyncProgress(((i + 1) / unsyncedItems.length) * 100);
@@ -643,7 +643,7 @@ const OfflineSynchronization: React.FC = () => {
             <Sync className="h-4 w-4 mr-2" />
             Sync Now
           </Button>
-          
+
           <Button onClick={clearSyncedItems} variant="outline" size="sm">
             Clear
           </Button>

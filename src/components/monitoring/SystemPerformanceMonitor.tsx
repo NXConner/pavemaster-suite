@@ -4,10 +4,10 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Activity, 
-  Cpu, 
-  MemoryStick, 
+import {
+  Activity,
+  Cpu,
+  MemoryStick,
   HardDrive,
   Wifi,
   Database,
@@ -17,7 +17,7 @@ import {
   TrendingUp,
   TrendingDown,
   RefreshCw,
-  Download
+  Download,
 } from 'lucide-react';
 
 interface SystemMetric {
@@ -45,7 +45,7 @@ const MOCK_METRICS: SystemMetric[] = [
     unit: '%',
     status: 'good',
     trend: 'stable',
-    threshold: { warning: 70, critical: 85 }
+    threshold: { warning: 70, critical: 85 },
   },
   {
     id: 'memory',
@@ -54,7 +54,7 @@ const MOCK_METRICS: SystemMetric[] = [
     unit: '%',
     status: 'warning',
     trend: 'up',
-    threshold: { warning: 65, critical: 80 }
+    threshold: { warning: 65, critical: 80 },
   },
   {
     id: 'disk',
@@ -63,7 +63,7 @@ const MOCK_METRICS: SystemMetric[] = [
     unit: '%',
     status: 'good',
     trend: 'stable',
-    threshold: { warning: 75, critical: 90 }
+    threshold: { warning: 75, critical: 90 },
   },
   {
     id: 'network',
@@ -72,8 +72,8 @@ const MOCK_METRICS: SystemMetric[] = [
     unit: 'ms',
     status: 'good',
     trend: 'down',
-    threshold: { warning: 100, critical: 200 }
-  }
+    threshold: { warning: 100, critical: 200 },
+  },
 ];
 
 const MOCK_LOGS: PerformanceLog[] = [
@@ -81,20 +81,20 @@ const MOCK_LOGS: PerformanceLog[] = [
     timestamp: new Date(),
     type: 'info',
     message: 'System performance optimal',
-    details: { responseTime: '127ms', throughput: '1250 req/min' }
+    details: { responseTime: '127ms', throughput: '1250 req/min' },
   },
   {
     timestamp: new Date(Date.now() - 120000),
     type: 'warning',
     message: 'Memory usage approaching threshold',
-    details: { usage: '67%', threshold: '65%' }
+    details: { usage: '67%', threshold: '65%' },
   },
   {
     timestamp: new Date(Date.now() - 300000),
     type: 'info',
     message: 'Database connection pool optimized',
-    details: { connections: 25, maxConnections: 100 }
-  }
+    details: { connections: 25, maxConnections: 100 },
+  },
 ];
 
 export function SystemPerformanceMonitor() {
@@ -109,12 +109,12 @@ export function SystemPerformanceMonitor() {
       setMetrics(prev => prev.map(metric => ({
         ...metric,
         value: Math.max(0, Math.min(100, metric.value + (Math.random() - 0.5) * 10)),
-        status: metric.value > metric.threshold.critical ? 'critical' :
-                metric.value > metric.threshold.warning ? 'warning' : 'good'
+        status: metric.value > metric.threshold.critical ? 'critical'
+                : metric.value > metric.threshold.warning ? 'warning' : 'good',
       })));
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const handleRefresh = async () => {
@@ -158,7 +158,6 @@ export function SystemPerformanceMonitor() {
       default: return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
   };
-
 
   return (
     <div className="space-y-6">
@@ -207,21 +206,21 @@ export function SystemPerformanceMonitor() {
                   {getTrendIcon(metric.trend)}
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold">
                     {Math.round(metric.value)}{metric.unit}
                   </span>
-                  <Badge 
-                    variant={metric.status === 'critical' ? 'destructive' : 
-                            metric.status === 'warning' ? 'secondary' : 'default'}
+                  <Badge
+                    variant={metric.status === 'critical' ? 'destructive'
+                            : metric.status === 'warning' ? 'secondary' : 'default'}
                     className="text-xs"
                   >
                     {metric.status}
                   </Badge>
                 </div>
-                
+
                 <div className="space-y-1">
                   <Progress value={metric.value} className="h-2" />
                   <div className="flex justify-between text-xs text-muted-foreground">
@@ -252,10 +251,10 @@ export function SystemPerformanceMonitor() {
                   const value = Math.random() * 80 + 10;
                   return (
                     <div key={index} className="flex-1 bg-muted rounded-t-md relative">
-                      <div 
+                      <div
                         className={`rounded-t-md transition-all duration-500 ${
-                          value > 70 ? 'bg-red-500' : 
-                          value > 50 ? 'bg-yellow-500' : 'bg-green-500'
+                          value > 70 ? 'bg-red-500'
+                          : value > 50 ? 'bg-yellow-500' : 'bg-green-500'
                         }`}
                         style={{ height: `${value}%` }}
                       />
@@ -289,7 +288,7 @@ export function SystemPerformanceMonitor() {
                 { name: 'Cache Layer', status: 'online', response: '3ms' },
                 { name: 'File Storage', status: 'warning', response: '234ms' },
                 { name: 'Auth Service', status: 'online', response: '67ms' },
-                { name: 'Notification Service', status: 'online', response: '89ms' }
+                { name: 'Notification Service', status: 'online', response: '89ms' },
               ].map((service, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-surface/50 rounded-lg">
                   <div className="flex items-center gap-3">
@@ -300,7 +299,7 @@ export function SystemPerformanceMonitor() {
                     <Badge variant="outline" className="text-xs">
                       {service.response}
                     </Badge>
-                    <Badge 
+                    <Badge
                       variant={service.status === 'online' ? 'default' : 'secondary'}
                       className="text-xs"
                     >

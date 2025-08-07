@@ -83,11 +83,11 @@ class AdvancedVoiceEngine {
   private analyser: AnalyserNode | null = null;
   private microphone: MediaStreamAudioSourceNode | null = null;
   private stream: MediaStream | null = null;
-  
+
   private profile: VoiceProfile;
   private onCommandCallback?: (command: VoiceCommand) => void;
   private onAudioAnalysisCallback?: (analysis: AudioAnalysis) => void;
-  
+
   private isInitialized = false;
   private animationFrameId: number | null = null;
 
@@ -102,12 +102,12 @@ class AdvancedVoiceEngine {
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
         this.recognition = new SpeechRecognition();
-        
+
         this.recognition.continuous = true;
         this.recognition.interimResults = true;
         this.recognition.lang = this.profile.language;
         this.recognition.maxAlternatives = 3;
-        
+
         this.setupRecognitionHandlers();
       }
 
@@ -131,7 +131,7 @@ class AdvancedVoiceEngine {
   }
 
   private setupRecognitionHandlers(): void {
-    if (!this.recognition) return;
+    if (!this.recognition) { return; }
 
     this.recognition.onstart = () => {
       console.log('Voice recognition started');
@@ -147,7 +147,7 @@ class AdvancedVoiceEngine {
 
         if (event.results[i].isFinal) {
           finalTranscript += transcript;
-          
+
           // Process as command if confidence is high enough
           if (confidence >= this.profile.commandSensitivity) {
             this.processVoiceCommand(transcript, confidence);
@@ -184,57 +184,57 @@ class AdvancedVoiceEngine {
 
   private extractAction(transcript: string): string {
     const text = transcript.toLowerCase();
-    
+
     // Navigation commands
     if (text.includes('open') || text.includes('show') || text.includes('go to')) {
       return 'navigate';
     }
-    
+
     // Creation commands
     if (text.includes('create') || text.includes('new') || text.includes('add')) {
       return 'create';
     }
-    
+
     // Information commands
     if (text.includes('what') || text.includes('how') || text.includes('when') || text.includes('where')) {
       return 'query';
     }
-    
+
     // Control commands
     if (text.includes('stop') || text.includes('pause') || text.includes('start') || text.includes('resume')) {
       return 'control';
     }
-    
+
     // Analysis commands
     if (text.includes('analyze') || text.includes('calculate') || text.includes('estimate')) {
       return 'analyze';
     }
-    
+
     return 'unknown';
   }
 
   private extractParameters(transcript: string): Record<string, any> {
     const parameters: Record<string, any> = {};
     const text = transcript.toLowerCase();
-    
+
     // Extract project names
     const projectMatch = text.match(/project\s+([a-zA-Z0-9\s]+)/);
     if (projectMatch) {
       parameters.project = projectMatch[1].trim();
     }
-    
+
     // Extract dates
     const dateMatch = text.match(/\b\d{1,2}\/\d{1,2}\/\d{4}\b|today|tomorrow|yesterday|next\s+week|last\s+week/);
     if (dateMatch) {
       parameters.date = dateMatch[0];
     }
-    
+
     // Extract numbers
     const numberMatch = text.match(/\b\d+(?:\.\d+)?\b/);
     if (numberMatch) {
       parameters.number = parseFloat(numberMatch[0]);
     }
-    
+
     return parameters;
   }
 
@@ -246,7 +246,7 @@ class AdvancedVoiceEngine {
     try {
       // Start audio analysis
       await this.startAudioAnalysis();
-      
+
       // Start speech recognition
       this.recognition.start();
     } catch (error) {
@@ -263,13 +263,13 @@ class AdvancedVoiceEngine {
   }
 
   private async startAudioAnalysis(): Promise<void> {
-    if (!this.audioContext || !this.analyser) return;
+    if (!this.audioContext || !this.analyser) { return; }
 
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       this.microphone = this.audioContext.createMediaStreamSource(this.stream);
       this.microphone.connect(this.analyser);
-      
+
       this.analyzeAudio();
     } catch (error) {
       console.error('Failed to start audio analysis:', error);
@@ -281,29 +281,29 @@ class AdvancedVoiceEngine {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
-    
+
     if (this.microphone) {
       this.microphone.disconnect();
       this.microphone = null;
     }
-    
+
     if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop());
+      this.stream.getTracks().forEach(track => { track.stop(); });
       this.stream = null;
     }
   }
 
   private analyzeAudio(): void {
-    if (!this.analyser) return;
+    if (!this.analyser) { return; }
 
     const bufferLength = this.analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     const freqArray = new Uint8Array(bufferLength);
-    
+
     const analyze = () => {
       this.analyser!.getByteTimeDomainData(dataArray);
       this.analyser!.getByteFrequencyData(freqArray);
-      
+
       // Calculate volume (RMS)
       let sum = 0;
       for (let i = 0; i < bufferLength; i++) {
@@ -311,7 +311,7 @@ class AdvancedVoiceEngine {
         sum += value * value;
       }
       const volume = Math.sqrt(sum / bufferLength);
-      
+
       // Calculate dominant frequency
       let maxValue = 0;
       let maxIndex = 0;
@@ -322,7 +322,7 @@ class AdvancedVoiceEngine {
         }
       }
       const frequency = (maxIndex * this.audioContext!.sampleRate) / (2 * freqArray.length);
-      
+
       // Calculate clarity (spectral centroid)
       let weightedSum = 0;
       let totalMagnitude = 0;
@@ -331,7 +331,7 @@ class AdvancedVoiceEngine {
         totalMagnitude += freqArray[i];
       }
       const clarity = totalMagnitude > 0 ? weightedSum / totalMagnitude / freqArray.length : 0;
-      
+
       // Speech detection (energy in vocal frequency range)
       const vocalStart = Math.floor((85 * freqArray.length * 2) / this.audioContext!.sampleRate);
       const vocalEnd = Math.floor((255 * freqArray.length * 2) / this.audioContext!.sampleRate);
@@ -340,7 +340,7 @@ class AdvancedVoiceEngine {
         vocalEnergy += freqArray[i];
       }
       const speechDetected = vocalEnergy > this.profile.noiseThreshold * 1000;
-      
+
       const analysis: AudioAnalysis = {
         volume: volume * 100,
         frequency,
@@ -348,14 +348,14 @@ class AdvancedVoiceEngine {
         noiseLevel: Math.max(...freqArray) / 255,
         speechDetected,
       };
-      
+
       if (this.onAudioAnalysisCallback) {
         this.onAudioAnalysisCallback(analysis);
       }
-      
+
       this.animationFrameId = requestAnimationFrame(analyze);
     };
-    
+
     analyze();
   }
 
@@ -366,26 +366,26 @@ class AdvancedVoiceEngine {
 
     return new Promise((resolve, reject) => {
       const utterance = new SpeechSynthesisUtterance(text);
-      
+
       // Apply voice profile
       const voices = this.synthesis!.getVoices();
       const selectedVoice = voices.find(v => v.name === this.profile.preferredVoice);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
       }
-      
+
       utterance.rate = this.profile.speechRate;
       utterance.pitch = this.profile.pitch;
       utterance.volume = this.profile.volume;
-      
-      utterance.onend = () => resolve();
-      utterance.onerror = (event) => reject(new Error(`Speech synthesis error: ${event.error}`));
-      
+
+      utterance.onend = () => { resolve(); };
+      utterance.onerror = (event) => { reject(new Error(`Speech synthesis error: ${event.error}`)); };
+
       // Handle priority
       if (priority === 'high') {
         this.synthesis!.cancel(); // Clear queue for high priority
       }
-      
+
       this.synthesis!.speak(utterance);
     });
   }
@@ -396,7 +396,7 @@ class AdvancedVoiceEngine {
 
   updateProfile(profile: Partial<VoiceProfile>): void {
     this.profile = { ...this.profile, ...profile };
-    
+
     if (this.recognition && profile.language) {
       this.recognition.lang = profile.language;
     }
@@ -417,7 +417,7 @@ class AdvancedVoiceEngine {
       timestamp: new Date(),
       confidence: 1.0,
     };
-    
+
     this.profile.customCommands.push(newCommand);
   }
 
@@ -431,23 +431,23 @@ class AdvancedVoiceEngine {
     }
 
     await this.startAudioAnalysis();
-    
+
     return new Promise((resolve) => {
       const samples: number[] = [];
       const sampleCount = 100;
       let count = 0;
-      
+
       const collectSample = () => {
-        if (!this.analyser) return;
-        
+        if (!this.analyser) { return; }
+
         const bufferLength = this.analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         this.analyser.getByteFrequencyData(dataArray);
-        
+
         const avgNoise = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength;
         samples.push(avgNoise);
         count++;
-        
+
         if (count < sampleCount) {
           setTimeout(collectSample, 50);
         } else {
@@ -457,7 +457,7 @@ class AdvancedVoiceEngine {
           resolve(noiseLevel);
         }
       };
-      
+
       collectSample();
     });
   }
@@ -503,16 +503,16 @@ export const AdvancedVoiceInterface: React.FC<{
 
   useEffect(() => {
     const engine = new AdvancedVoiceEngine(profile);
-    
+
     engine.setCommandCallback((command) => {
       setRecentCommands(prev => [command, ...prev.slice(0, 9)]);
-      if (onCommand) onCommand(command);
+      if (onCommand) { onCommand(command); }
     });
-    
+
     engine.setAudioAnalysisCallback(setAudioAnalysis);
-    
+
     setVoiceEngine(engine);
-    
+
     // Load available voices
     const loadVoices = () => {
       const voices = engine.getAvailableVoices();
@@ -521,20 +521,20 @@ export const AdvancedVoiceInterface: React.FC<{
         setProfile(prev => ({ ...prev, preferredVoice: voices[0].name }));
       }
     };
-    
+
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = loadVoices;
     }
     loadVoices();
-    
+
     return () => {
       engine.stopListening();
     };
   }, [profile.language, profile.commandSensitivity, profile.noiseThreshold]);
 
   const handleStartListening = async () => {
-    if (!voiceEngine) return;
-    
+    if (!voiceEngine) { return; }
+
     try {
       setRecognitionState(prev => ({ ...prev, isListening: true }));
       await voiceEngine.startListening();
@@ -545,15 +545,15 @@ export const AdvancedVoiceInterface: React.FC<{
   };
 
   const handleStopListening = () => {
-    if (!voiceEngine) return;
-    
+    if (!voiceEngine) { return; }
+
     voiceEngine.stopListening();
     setRecognitionState(prev => ({ ...prev, isListening: false }));
   };
 
   const handleSpeak = async (text: string, priority: 'low' | 'normal' | 'high' = 'normal') => {
-    if (!voiceEngine) return;
-    
+    if (!voiceEngine) { return; }
+
     try {
       setSynthesisState(prev => ({ ...prev, isSpeaking: true, currentText: text }));
       await voiceEngine.speak(text, priority);
@@ -573,8 +573,8 @@ export const AdvancedVoiceInterface: React.FC<{
   };
 
   const handleCalibrateNoise = async () => {
-    if (!voiceEngine) return;
-    
+    if (!voiceEngine) { return; }
+
     setIsCalibrating(true);
     try {
       const noiseLevel = await voiceEngine.calibrateNoiseLevel();
@@ -587,7 +587,7 @@ export const AdvancedVoiceInterface: React.FC<{
   };
 
   const handleTestVoice = () => {
-    handleSpeak("Hello! This is a test of the voice synthesis system. How do I sound?");
+    handleSpeak('Hello! This is a test of the voice synthesis system. How do I sound?');
   };
 
   return (
@@ -604,11 +604,11 @@ export const AdvancedVoiceInterface: React.FC<{
               </Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={recognitionState.isListening ? "default" : "secondary"}>
+              <Badge variant={recognitionState.isListening ? 'default' : 'secondary'}>
                 {recognitionState.isListening ? <Mic className="h-3 w-3 mr-1" /> : <MicOff className="h-3 w-3 mr-1" />}
                 {recognitionState.isListening ? 'Listening' : 'Inactive'}
               </Badge>
-              <Badge variant={synthesisState.isSpeaking ? "default" : "secondary"}>
+              <Badge variant={synthesisState.isSpeaking ? 'default' : 'secondary'}>
                 {synthesisState.isSpeaking ? <Speaker className="h-3 w-3 mr-1" /> : <VolumeX className="h-3 w-3 mr-1" />}
                 {synthesisState.isSpeaking ? 'Speaking' : 'Silent'}
               </Badge>
@@ -667,7 +667,7 @@ export const AdvancedVoiceInterface: React.FC<{
                           <Activity className="h-4 w-4 text-green-500" />
                           <span className="text-sm">Listening for commands...</span>
                         </div>
-                        
+
                         {audioAnalysis.speechDetected && (
                           <div className="p-2 bg-green-50 dark:bg-green-900 rounded border border-green-200 dark:border-green-800">
                             <p className="text-sm text-green-700 dark:text-green-300">
@@ -702,7 +702,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         }}
                       />
                       <div className="flex space-x-2">
-                        <Button 
+                        <Button
                           onClick={handleTestVoice}
                           variant="outline"
                           className="flex-1"
@@ -744,28 +744,28 @@ export const AdvancedVoiceInterface: React.FC<{
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleSpeak("Welcome to PaveMaster Suite")}
+                      onClick={() => handleSpeak('Welcome to PaveMaster Suite')}
                     >
                       Welcome Message
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleSpeak("Current time is " + new Date().toLocaleTimeString())}
+                      onClick={() => handleSpeak('Current time is ' + new Date().toLocaleTimeString())}
                     >
                       Current Time
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleSpeak("Voice system is ready for commands")}
+                      onClick={() => handleSpeak('Voice system is ready for commands')}
                     >
                       System Status
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleSpeak("Thank you for using PaveMaster Suite")}
+                      onClick={() => handleSpeak('Thank you for using PaveMaster Suite')}
                     >
                       Thank You
                     </Button>
@@ -817,20 +817,20 @@ export const AdvancedVoiceInterface: React.FC<{
                       <Progress value={audioAnalysis.volume} className="flex-1 mx-4" />
                       <span className="text-sm w-12">{audioAnalysis.volume.toFixed(1)}%</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Noise Level</span>
-                      <Progress 
-                        value={audioAnalysis.noiseLevel * 100} 
+                      <Progress
+                        value={audioAnalysis.noiseLevel * 100}
                         className="flex-1 mx-4"
                       />
                       <span className="text-sm w-12">{(audioAnalysis.noiseLevel * 100).toFixed(1)}%</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Speech Detection</span>
-                      <Badge variant={audioAnalysis.speechDetected ? "default" : "secondary"}>
-                        {audioAnalysis.speechDetected ? "Detected" : "None"}
+                      <Badge variant={audioAnalysis.speechDetected ? 'default' : 'secondary'}>
+                        {audioAnalysis.speechDetected ? 'Detected' : 'None'}
                       </Badge>
                     </div>
                   </div>
@@ -920,7 +920,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         <p>• "Navigate to projects" / "Display dashboard"</p>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-2">Creation</h4>
                       <div className="space-y-1 text-sm text-gray-600">
@@ -928,7 +928,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         <p>• "New report" / "Start calculation"</p>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-2">Information</h4>
                       <div className="space-y-1 text-sm text-gray-600">
@@ -936,7 +936,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         <p>• "When is [deadline]?" / "Where is [location]?"</p>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-2">Control</h4>
                       <div className="space-y-1 text-sm text-gray-600">
@@ -960,7 +960,7 @@ export const AdvancedVoiceInterface: React.FC<{
                       <Label>Language</Label>
                       <Select
                         value={profile.language}
-                        onValueChange={(value) => handleProfileUpdate({ language: value })}
+                        onValueChange={(value) => { handleProfileUpdate({ language: value }); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -984,7 +984,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         max="1"
                         step="0.1"
                         value={profile.commandSensitivity}
-                        onChange={(e) => handleProfileUpdate({ commandSensitivity: parseFloat(e.target.value) })}
+                        onChange={(e) => { handleProfileUpdate({ commandSensitivity: parseFloat(e.target.value) }); }}
                         className="w-full"
                       />
                       <p className="text-xs text-gray-500">
@@ -1000,7 +1000,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         max="200"
                         step="5"
                         value={profile.noiseThreshold}
-                        onChange={(e) => handleProfileUpdate({ noiseThreshold: parseFloat(e.target.value) })}
+                        onChange={(e) => { handleProfileUpdate({ noiseThreshold: parseFloat(e.target.value) }); }}
                         className="w-full"
                       />
                       <p className="text-xs text-gray-500">
@@ -1019,7 +1019,7 @@ export const AdvancedVoiceInterface: React.FC<{
                       <Label>Voice</Label>
                       <Select
                         value={profile.preferredVoice}
-                        onValueChange={(value) => handleProfileUpdate({ preferredVoice: value })}
+                        onValueChange={(value) => { handleProfileUpdate({ preferredVoice: value }); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -1042,7 +1042,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         max="2"
                         step="0.1"
                         value={profile.speechRate}
-                        onChange={(e) => handleProfileUpdate({ speechRate: parseFloat(e.target.value) })}
+                        onChange={(e) => { handleProfileUpdate({ speechRate: parseFloat(e.target.value) }); }}
                         className="w-full"
                       />
                     </div>
@@ -1055,7 +1055,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         max="2"
                         step="0.1"
                         value={profile.pitch}
-                        onChange={(e) => handleProfileUpdate({ pitch: parseFloat(e.target.value) })}
+                        onChange={(e) => { handleProfileUpdate({ pitch: parseFloat(e.target.value) }); }}
                         className="w-full"
                       />
                     </div>
@@ -1068,7 +1068,7 @@ export const AdvancedVoiceInterface: React.FC<{
                         max="1"
                         step="0.1"
                         value={profile.volume}
-                        onChange={(e) => handleProfileUpdate({ volume: parseFloat(e.target.value) })}
+                        onChange={(e) => { handleProfileUpdate({ volume: parseFloat(e.target.value) }); }}
                         className="w-full"
                       />
                     </div>

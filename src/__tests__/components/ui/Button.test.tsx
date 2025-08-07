@@ -5,7 +5,7 @@ import { Button } from '../../../components/ui/button';
 describe('Button Component', () => {
   it('renders correctly with default props', () => {
     render(<Button>Click me</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent('Click me');
@@ -48,10 +48,10 @@ describe('Button Component', () => {
   it('handles click events', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -60,19 +60,19 @@ describe('Button Component', () => {
     render(
       <Button disabled onClick={handleClick}>
         Disabled Button
-      </Button>
+      </Button>,
     );
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    
+
     fireEvent.click(button);
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   it('applies custom className', () => {
     render(<Button className="custom-class">Custom</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-class');
   });
@@ -80,7 +80,7 @@ describe('Button Component', () => {
   it('forwards ref correctly', () => {
     const ref = vi.fn();
     render(<Button ref={ref}>Ref Button</Button>);
-    
+
     expect(ref).toHaveBeenCalledWith(expect.any(HTMLButtonElement));
   });
 
@@ -88,9 +88,9 @@ describe('Button Component', () => {
     render(
       <Button asChild>
         <a href="/test">Link Button</a>
-      </Button>
+      </Button>,
     );
-    
+
     const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/test');
@@ -99,7 +99,7 @@ describe('Button Component', () => {
   it('applies loading state correctly', () => {
     // This test assumes a loading prop exists - adjust based on actual implementation
     render(<Button disabled>Loading...</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
     expect(button).toHaveTextContent('Loading...');
@@ -110,9 +110,9 @@ describe('Button Component', () => {
       <Button>
         <span data-testid="icon">🚀</span>
         Button with Icon
-      </Button>
+      </Button>,
     );
-    
+
     expect(screen.getByTestId('icon')).toBeInTheDocument();
     expect(screen.getByText('Button with Icon')).toBeInTheDocument();
   });
@@ -120,10 +120,10 @@ describe('Button Component', () => {
   it('supports keyboard navigation', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Keyboard Button</Button>);
-    
+
     const button = screen.getByRole('button');
     button.focus();
-    
+
     fireEvent.keyDown(button, { key: 'Enter', code: 'Enter' });
     expect(handleClick).toHaveBeenCalledTimes(1);
 

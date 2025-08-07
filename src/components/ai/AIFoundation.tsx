@@ -103,9 +103,9 @@ class SimpleMLEngine {
   linearRegression(X: number[][], y: number[]): { weights: number[]; bias: number } {
     const n = X.length;
     const features = X[0].length;
-    
+
     // Initialize weights and bias
-    let weights = new Array(features).fill(0);
+    const weights = new Array(features).fill(0);
     let bias = 0;
     const learningRate = 0.01;
     const epochs = 1000;
@@ -113,27 +113,27 @@ class SimpleMLEngine {
     // Training loop
     for (let epoch = 0; epoch < epochs; epoch++) {
       let totalLoss = 0;
-      
+
       for (let i = 0; i < n; i++) {
         // Forward pass
         let prediction = bias;
         for (let j = 0; j < features; j++) {
           prediction += weights[j] * X[i][j];
         }
-        
+
         // Calculate loss
         const error = prediction - y[i];
         totalLoss += error * error;
-        
+
         // Backward pass (gradient descent)
         bias -= learningRate * error;
         for (let j = 0; j < features; j++) {
           weights[j] -= learningRate * error * X[i][j];
         }
       }
-      
+
       // Early stopping for demo
-      if (totalLoss / n < 0.001) break;
+      if (totalLoss / n < 0.001) { break; }
     }
 
     return { weights, bias };
@@ -143,8 +143,8 @@ class SimpleMLEngine {
   logisticRegression(X: number[][], y: number[]): { weights: number[]; bias: number } {
     const n = X.length;
     const features = X[0].length;
-    
-    let weights = new Array(features).fill(0);
+
+    const weights = new Array(features).fill(0);
     let bias = 0;
     const learningRate = 0.1;
     const epochs = 1000;
@@ -157,10 +157,10 @@ class SimpleMLEngine {
         for (let j = 0; j < features; j++) {
           z += weights[j] * X[i][j];
         }
-        
+
         const prediction = sigmoid(z);
         const error = prediction - y[i];
-        
+
         bias -= learningRate * error;
         for (let j = 0; j < features; j++) {
           weights[j] -= learningRate * error * X[i][j];
@@ -175,42 +175,42 @@ class SimpleMLEngine {
   kMeansClustering(X: number[][], k: number): { centroids: number[][]; labels: number[] } {
     const n = X.length;
     const features = X[0].length;
-    
+
     // Initialize centroids randomly
     const centroids: number[][] = [];
     for (let i = 0; i < k; i++) {
       centroids.push(X[Math.floor(Math.random() * n)].slice());
     }
-    
+
     let labels = new Array(n).fill(0);
     const maxIterations = 100;
-    
+
     for (let iter = 0; iter < maxIterations; iter++) {
       // Assign points to nearest centroid
       const newLabels = new Array(n);
       for (let i = 0; i < n; i++) {
         let minDistance = Infinity;
         let closestCentroid = 0;
-        
+
         for (let j = 0; j < k; j++) {
           let distance = 0;
           for (let f = 0; f < features; f++) {
             distance += (X[i][f] - centroids[j][f]) ** 2;
           }
-          
+
           if (distance < minDistance) {
             minDistance = distance;
             closestCentroid = j;
           }
         }
-        
+
         newLabels[i] = closestCentroid;
       }
-      
+
       // Update centroids
       const newCentroids: number[][] = new Array(k).fill(null).map(() => new Array(features).fill(0));
       const counts = new Array(k).fill(0);
-      
+
       for (let i = 0; i < n; i++) {
         const label = newLabels[i];
         counts[label]++;
@@ -218,7 +218,7 @@ class SimpleMLEngine {
           newCentroids[label][f] += X[i][f];
         }
       }
-      
+
       for (let j = 0; j < k; j++) {
         if (counts[j] > 0) {
           for (let f = 0; f < features; f++) {
@@ -226,7 +226,7 @@ class SimpleMLEngine {
           }
         }
       }
-      
+
       // Check for convergence
       let converged = true;
       for (let i = 0; i < n; i++) {
@@ -235,13 +235,13 @@ class SimpleMLEngine {
           break;
         }
       }
-      
+
       labels = newLabels;
       centroids.splice(0, k, ...newCentroids);
-      
-      if (converged) break;
+
+      if (converged) { break; }
     }
-    
+
     return { centroids, labels };
   }
 
@@ -307,41 +307,41 @@ const MLModelManager: React.FC = () => {
 
   const trainModel = async (modelId: string) => {
     setIsTraining(true);
-    
+
     // Update model status
-    setModels(prev => prev.map(model => 
-      model.id === modelId 
+    setModels(prev => prev.map(model =>
+      model.id === modelId
         ? { ...model, status: 'training' as const, trainingProgress: 0 }
-        : model
+        : model,
     ));
 
     // Simulate training progress
     for (let progress = 0; progress <= 100; progress += 10) {
       await new Promise(resolve => setTimeout(resolve, 200));
-      setModels(prev => prev.map(model => 
-        model.id === modelId 
+      setModels(prev => prev.map(model =>
+        model.id === modelId
           ? { ...model, trainingProgress: progress }
-          : model
+          : model,
       ));
     }
 
     // Complete training
-    setModels(prev => prev.map(model => 
-      model.id === modelId 
-        ? { 
-            ...model, 
-            status: 'ready' as const, 
+    setModels(prev => prev.map(model =>
+      model.id === modelId
+        ? {
+            ...model,
+            status: 'ready' as const,
             accuracy: 0.85 + Math.random() * 0.1,
             lastTrained: new Date(),
           }
-        : model
+        : model,
     ));
 
     setIsTraining(false);
   };
 
   const createModel = () => {
-    if (!newModel.name.trim()) return;
+    if (!newModel.name.trim()) { return; }
 
     const model: MLModel = {
       id: `model-${Date.now()}`,
@@ -356,7 +356,7 @@ const MLModelManager: React.FC = () => {
 
     setModels(prev => [...prev, model]);
     trainModel(model.id);
-    
+
     setNewModel({ name: '', type: 'regression', trainingData: '' });
   };
 
@@ -455,16 +455,16 @@ const MLModelManager: React.FC = () => {
                 <Input
                   id="model-name"
                   value={newModel.name}
-                  onChange={(e) => setNewModel(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => { setNewModel(prev => ({ ...prev, name: e.target.value })); }}
                   placeholder="Project Duration Predictor"
                 />
               </div>
 
               <div>
                 <Label htmlFor="model-type">Model Type</Label>
-                <Select 
-                  value={newModel.type} 
-                  onValueChange={(value: MLModel['type']) => setNewModel(prev => ({ ...prev, type: value }))}
+                <Select
+                  value={newModel.type}
+                  onValueChange={(value: MLModel['type']) => { setNewModel(prev => ({ ...prev, type: value })); }}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -483,7 +483,7 @@ const MLModelManager: React.FC = () => {
                 <Textarea
                   id="training-data"
                   value={newModel.trainingData}
-                  onChange={(e) => setNewModel(prev => ({ ...prev, trainingData: e.target.value }))}
+                  onChange={(e) => { setNewModel(prev => ({ ...prev, trainingData: e.target.value })); }}
                   placeholder="feature1,feature2,target&#10;1.0,2.0,3.0&#10;2.0,3.0,5.0"
                   rows={4}
                 />
@@ -530,10 +530,10 @@ const PredictiveAnalytics: React.FC = () => {
 
   const generatePredictions = async () => {
     setIsGenerating(true);
-    
+
     // Simulate prediction generation
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     const newPrediction: PredictionResult = {
       id: `pred-${Date.now()}`,
       modelId: 'model-1',
@@ -602,7 +602,7 @@ const PredictiveAnalytics: React.FC = () => {
                       {(prediction.confidence * 100).toFixed(1)}% confidence
                     </Badge>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <div className="text-muted-foreground mb-1">Input</div>
@@ -627,7 +627,7 @@ const PredictiveAnalytics: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="text-xs text-muted-foreground mt-2">
                     Execution time: {prediction.executionTime}ms
                   </div>
@@ -717,27 +717,27 @@ const SmartAutomation: React.FC = () => {
     setRules(prev => prev.map(rule =>
       rule.id === ruleId
         ? { ...rule, isActive: !rule.isActive }
-        : rule
+        : rule,
     ));
   };
 
   const executeRule = async (ruleId: string) => {
     // Simulate rule execution
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     setRules(prev => prev.map(rule =>
       rule.id === ruleId
-        ? { 
-            ...rule, 
+        ? {
+            ...rule,
             lastExecuted: new Date(),
             executionCount: rule.executionCount + 1,
           }
-        : rule
+        : rule,
     ));
   };
 
   const createRule = () => {
-    if (!newRule.name.trim()) return;
+    if (!newRule.name.trim()) { return; }
 
     const rule: AutomationRule = {
       id: `rule-${Date.now()}`,
@@ -799,7 +799,7 @@ const SmartAutomation: React.FC = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => toggleRule(rule.id)}
+                        onClick={() => { toggleRule(rule.id); }}
                       >
                         {rule.isActive ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                       </Button>
@@ -873,7 +873,7 @@ const SmartAutomation: React.FC = () => {
                 <Input
                   id="rule-name"
                   value={newRule.name}
-                  onChange={(e) => setNewRule(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => { setNewRule(prev => ({ ...prev, name: e.target.value })); }}
                   placeholder="High Risk Alert"
                 />
               </div>
@@ -883,7 +883,7 @@ const SmartAutomation: React.FC = () => {
                 <Textarea
                   id="rule-description"
                   value={newRule.description}
-                  onChange={(e) => setNewRule(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) => { setNewRule(prev => ({ ...prev, description: e.target.value })); }}
                   placeholder="Send notification when project risk exceeds threshold"
                   rows={2}
                 />
@@ -891,10 +891,9 @@ const SmartAutomation: React.FC = () => {
 
               <div>
                 <Label htmlFor="trigger-type">Trigger Type</Label>
-                <Select 
-                  value={newRule.triggerType} 
-                  onValueChange={(value: AutomationRule['trigger']['type']) => 
-                    setNewRule(prev => ({ ...prev, triggerType: value }))
+                <Select
+                  value={newRule.triggerType}
+                  onValueChange={(value: AutomationRule['trigger']['type']) => { setNewRule(prev => ({ ...prev, triggerType: value })); }
                   }
                 >
                   <SelectTrigger>
@@ -914,7 +913,7 @@ const SmartAutomation: React.FC = () => {
                 <Input
                   id="condition"
                   value={newRule.condition}
-                  onChange={(e) => setNewRule(prev => ({ ...prev, condition: e.target.value }))}
+                  onChange={(e) => { setNewRule(prev => ({ ...prev, condition: e.target.value })); }}
                   placeholder="risk_probability > 0.8"
                 />
               </div>
@@ -925,7 +924,7 @@ const SmartAutomation: React.FC = () => {
                   id="threshold"
                   type="number"
                   value={newRule.threshold}
-                  onChange={(e) => setNewRule(prev => ({ ...prev, threshold: parseFloat(e.target.value) }))}
+                  onChange={(e) => { setNewRule(prev => ({ ...prev, threshold: parseFloat(e.target.value) })); }}
                   placeholder="0.8"
                   step="0.1"
                 />

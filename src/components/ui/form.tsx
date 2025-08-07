@@ -5,14 +5,14 @@ import { Input } from './input';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from './card';
 import { Icon } from './icon';
 import { Progress } from './progress';
-import { 
-  CheckCircle2, 
-  AlertCircle, 
-  ChevronLeft, 
-  ChevronRight, 
-  Save, 
-  Eye, 
-  EyeOff 
+import {
+  CheckCircle2,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 // Form Context
@@ -68,7 +68,7 @@ export function FormProvider({
   initialValues = {},
   validationRules = {},
   onSubmit,
-  variant = 'default'
+  variant = 'default',
 }: FormProviderProps) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -77,7 +77,7 @@ export function FormProvider({
 
   const validateField = (name: string, value: any): string | null => {
     const rules = validationRules[name];
-    if (!rules) return null;
+    if (!rules) { return null; }
 
     if (rules.required && (!value || value.toString().trim() === '')) {
       return 'This field is required';
@@ -106,7 +106,7 @@ export function FormProvider({
 
     if (rules.number && value !== undefined && value !== '') {
       const num = Number(value);
-      if (isNaN(num)) return 'Must be a number';
+      if (isNaN(num)) { return 'Must be a number'; }
       if (rules.min !== undefined && num < rules.min) {
         return `Minimum value is ${rules.min}`;
       }
@@ -124,7 +124,7 @@ export function FormProvider({
 
   const setValue = (name: string, value: any) => {
     setValues(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -149,7 +149,7 @@ export function FormProvider({
 
   const setTouched = (name: string, touched: boolean) => {
     setTouchedState(prev => ({ ...prev, [name]: touched }));
-    
+
     // Validate field when it's touched
     if (touched) {
       const error = validateField(name, values[name]);
@@ -194,10 +194,10 @@ export function FormProvider({
   };
 
   const handleSubmit = async () => {
-    if (!onSubmit) return;
+    if (!onSubmit) { return; }
 
     const isValid = validate();
-    if (!isValid) return;
+    if (!isValid) { return; }
 
     setIsSubmitting(true);
     try {
@@ -219,7 +219,7 @@ export function FormProvider({
     clearError,
     setTouched,
     validate,
-    reset
+    reset,
   };
 
   return (
@@ -253,10 +253,10 @@ export function FormField({
   placeholder,
   options,
   className,
-  inputClassName
+  inputClassName,
 }: FormFieldProps) {
   const { values, errors, touched, setValue, setTouched } = useForm();
-  
+
   const value = values[name] || '';
   const error = errors[name];
   const isTouched = touched[name];
@@ -278,7 +278,7 @@ export function FormField({
           {required && <span className="text-destructive ml-1">*</span>}
         </label>
       )}
-      
+
       {type === 'select' && options ? (
         <select
           value={value}
@@ -287,7 +287,7 @@ export function FormField({
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-card px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
             hasError && 'border-destructive focus-visible:ring-destructive',
-            inputClassName
+            inputClassName,
           )}
         >
           <option value="">{placeholder || 'Select an option'}</option>
@@ -307,7 +307,7 @@ export function FormField({
           className={cn(
             'flex min-h-[80px] w-full rounded-md border border-input bg-card px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
             hasError && 'border-destructive focus-visible:ring-destructive',
-            inputClassName
+            inputClassName,
           )}
         />
       ) : (
@@ -354,7 +354,7 @@ export function MultiStepForm({
   onStepChange,
   onComplete,
   variant = 'default',
-  className
+  className,
 }: MultiStepFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const { validate, values, isSubmitting } = useForm();
@@ -398,24 +398,24 @@ export function MultiStepForm({
             </CardTitle>
             <span className={cn(
               'text-sm',
-              variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground'
+              variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground',
             )}>
               Step {currentStep + 1} of {steps.length}
             </span>
           </div>
-          
-          <Progress 
-            value={progress} 
+
+          <Progress
+            value={progress}
             className={cn(
               'h-2',
-              variant === 'tactical' && 'bg-green-400/20'
+              variant === 'tactical' && 'bg-green-400/20',
             )}
           />
-          
+
           {steps[currentStep]?.description && (
             <p className={cn(
               'text-sm',
-              variant === 'tactical' ? 'text-green-400/80' : 'text-muted-foreground'
+              variant === 'tactical' ? 'text-green-400/80' : 'text-muted-foreground',
             )}>
               {steps[currentStep].description}
             </p>
@@ -482,7 +482,7 @@ export function FormActions({
   onCancel,
   showCancel = true,
   className,
-  variant = 'default'
+  variant = 'default',
 }: FormActionsProps) {
   const { isSubmitting, validate } = useForm();
 
@@ -497,9 +497,9 @@ export function FormActions({
           {cancelText}
         </Button>
       )}
-      
+
       {children}
-      
+
       <Button
         onClick={handleSubmit}
         loading={isSubmitting}

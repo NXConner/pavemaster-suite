@@ -185,7 +185,7 @@ Object.defineProperty(navigator, 'geolocation', {
           longitude: -122.4194,
           accuracy: 10,
         },
-      })
+      }),
     ),
     watchPosition: vi.fn(),
     clearWatch: vi.fn(),

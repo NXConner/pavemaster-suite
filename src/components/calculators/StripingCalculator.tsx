@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Calculator, Save, Download, Info, TrendingUp, Plus, Minus } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Calculator, Save, Download, Info, TrendingUp, Plus, Minus } from 'lucide-react';
 
 interface StripingLine {
   id: string
@@ -23,20 +23,20 @@ export const StripingCalculator = () => {
     projectName: '',
     location: '',
     temperature: '70',
-    humidity: '50'
-  })
+    humidity: '50',
+  });
 
   const [lines, setLines] = useState<StripingLine[]>([
-    { id: '1', type: 'solid', width: 4, length: 1000, color: 'white' }
-  ])
+    { id: '1', type: 'solid', width: 4, length: 1000, color: 'white' },
+  ]);
 
   const [materialCosts, setMaterialCosts] = useState({
     whitePaint: 65, // per gallon
     yellowPaint: 68, // per gallon
     glassBeads: 120, // per 50lb bag
     primer: 45, // per gallon
-    laborRate: 95 // per hour
-  })
+    laborRate: 95, // per hour
+  });
 
   const [results, setResults] = useState({
     totalLength: 0,
@@ -45,53 +45,53 @@ export const StripingCalculator = () => {
     glassBeads: 0,
     primer: 0,
     totalCost: 0,
-    paintCoverage: 0
-  })
+    paintCoverage: 0,
+  });
 
   // Paint coverage rates (linear feet per gallon by width)
   const getCoverageRate = (width: number, type: string) => {
-    const baseRate = type === 'dashed' ? 1.8 : 1.0 // Dashed lines use less paint
-    const widthFactor = 4 / width // 4-inch standard
-    return Math.round(320 * widthFactor * baseRate) // Base coverage for 4" solid line
-  }
+    const baseRate = type === 'dashed' ? 1.8 : 1.0; // Dashed lines use less paint
+    const widthFactor = 4 / width; // 4-inch standard
+    return Math.round(320 * widthFactor * baseRate); // Base coverage for 4" solid line
+  };
 
   const calculateResults = () => {
-    let totalLength = 0
-    let whitePaintNeeded = 0
-    let yellowPaintNeeded = 0
-    let totalLinearFeet = 0
+    let totalLength = 0;
+    let whitePaintNeeded = 0;
+    let yellowPaintNeeded = 0;
+    let totalLinearFeet = 0;
 
     lines.forEach(line => {
-      const lineLength = line.length
-      totalLength += lineLength
-      totalLinearFeet += lineLength
+      const lineLength = line.length;
+      totalLength += lineLength;
+      totalLinearFeet += lineLength;
 
-      const coverage = getCoverageRate(line.width, line.type)
-      const paintNeeded = lineLength / coverage
+      const coverage = getCoverageRate(line.width, line.type);
+      const paintNeeded = lineLength / coverage;
 
       if (line.color === 'white') {
-        whitePaintNeeded += paintNeeded
+        whitePaintNeeded += paintNeeded;
       } else {
-        yellowPaintNeeded += paintNeeded
+        yellowPaintNeeded += paintNeeded;
       }
-    })
+    });
 
     // Glass beads: approximately 6 lbs per gallon of paint
-    const totalPaint = whitePaintNeeded + yellowPaintNeeded
-    const glassBeadsNeeded = Math.ceil((totalPaint * 6) / 50) // 50lb bags
+    const totalPaint = whitePaintNeeded + yellowPaintNeeded;
+    const glassBeadsNeeded = Math.ceil((totalPaint * 6) / 50); // 50lb bags
 
     // Primer for new asphalt (10% of paint needed)
-    const primerNeeded = totalPaint * 0.1
+    const primerNeeded = totalPaint * 0.1;
 
     // Cost calculation
-    const paintCost = (whitePaintNeeded * materialCosts.whitePaint) + 
-                     (yellowPaintNeeded * materialCosts.yellowPaint)
-    const beadsCost = glassBeadsNeeded * materialCosts.glassBeads
-    const primerCost = primerNeeded * materialCosts.primer
-    
+    const paintCost = (whitePaintNeeded * materialCosts.whitePaint)
+                     + (yellowPaintNeeded * materialCosts.yellowPaint);
+    const beadsCost = glassBeadsNeeded * materialCosts.glassBeads;
+    const primerCost = primerNeeded * materialCosts.primer;
+
     // Labor: approximately 100-150 linear feet per hour depending on complexity
-    const laborHours = totalLinearFeet / 125
-    const laborCost = laborHours * materialCosts.laborRate
+    const laborHours = totalLinearFeet / 125;
+    const laborCost = laborHours * materialCosts.laborRate;
 
     setResults({
       totalLength,
@@ -100,43 +100,43 @@ export const StripingCalculator = () => {
       glassBeads: glassBeadsNeeded,
       primer: primerNeeded,
       totalCost: paintCost + beadsCost + primerCost + laborCost,
-      paintCoverage: totalLinearFeet / (totalPaint || 1)
-    })
-  }
+      paintCoverage: totalLinearFeet / (totalPaint || 1),
+    });
+  };
 
   useEffect(() => {
-    calculateResults()
-  }, [lines, materialCosts])
+    calculateResults();
+  }, [lines, materialCosts]);
 
   const addLine = () => {
-    const newId = (Math.max(...lines.map(l => parseInt(l.id))) + 1).toString()
+    const newId = (Math.max(...lines.map(l => parseInt(l.id))) + 1).toString();
     setLines([...lines, {
       id: newId,
       type: 'solid',
       width: 4,
       length: 100,
-      color: 'white'
-    }])
-  }
+      color: 'white',
+    }]);
+  };
 
   const removeLine = (id: string) => {
     if (lines.length > 1) {
-      setLines(lines.filter(line => line.id !== id))
+      setLines(lines.filter(line => line.id !== id));
     }
-  }
+  };
 
   const updateLine = (id: string, field: keyof StripingLine, value: any) => {
-    setLines(lines.map(line => 
-      line.id === id ? { ...line, [field]: value } : line
-    ))
-  }
+    setLines(lines.map(line =>
+      line.id === id ? { ...line, [field]: value } : line,
+    ));
+  };
 
   const handleCostChange = (field: string, value: string) => {
     setMaterialCosts(prev => ({
       ...prev,
-      [field]: parseFloat(value) || 0
-    }))
-  }
+      [field]: parseFloat(value) || 0,
+    }));
+  };
 
   const saveCalculation = () => {
     const calculation = {
@@ -144,15 +144,15 @@ export const StripingCalculator = () => {
       lines,
       results,
       timestamp: new Date().toISOString(),
-      type: 'striping'
-    }
-    
-    const saved = JSON.parse(localStorage.getItem('striping-calculations') || '[]')
-    saved.push(calculation)
-    localStorage.setItem('striping-calculations', JSON.stringify(saved))
-    
-    alert('Calculation saved successfully!')
-  }
+      type: 'striping',
+    };
+
+    const saved = JSON.parse(localStorage.getItem('striping-calculations') || '[]');
+    saved.push(calculation);
+    localStorage.setItem('striping-calculations', JSON.stringify(saved));
+
+    alert('Calculation saved successfully!');
+  };
 
   const exportResults = () => {
     const content = `
@@ -178,16 +178,16 @@ Material Requirements:
 
 Total Cost Estimate: $${results.totalCost.toFixed(2)}
 Total Length: ${results.totalLength.toLocaleString()} linear feet
-    `.trim()
+    `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `striping-calculation-${Date.now()}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `striping-calculation-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -231,7 +231,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="projectName"
                     placeholder="Highway 101 Striping"
                     value={projectDetails.projectName}
-                    onChange={(e) => setProjectDetails(prev => ({ ...prev, projectName: e.target.value }))}
+                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, projectName: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -240,7 +240,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="location"
                     placeholder="San Francisco, CA"
                     value={projectDetails.location}
-                    onChange={(e) => setProjectDetails(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, location: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -251,7 +251,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="temperature"
                     type="number"
                     value={projectDetails.temperature}
-                    onChange={(e) => setProjectDetails(prev => ({ ...prev, temperature: e.target.value }))}
+                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, temperature: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -260,7 +260,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="humidity"
                     type="number"
                     value={projectDetails.humidity}
-                    onChange={(e) => setProjectDetails(prev => ({ ...prev, humidity: e.target.value }))}
+                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, humidity: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -287,7 +287,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     <h4 className="font-medium">Line {index + 1}</h4>
                     {lines.length > 1 && (
                       <Button
-                        onClick={() => removeLine(line.id)}
+                        onClick={() => { removeLine(line.id); }}
                         variant="outline"
                         size="sm"
                       >
@@ -295,13 +295,13 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                       </Button>
                     )}
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="space-y-2">
                       <Label>Type</Label>
-                      <Select 
-                        value={line.type} 
-                        onValueChange={(value: 'solid' | 'dashed' | 'double') => updateLine(line.id, 'type', value)}
+                      <Select
+                        value={line.type}
+                        onValueChange={(value: 'solid' | 'dashed' | 'double') => { updateLine(line.id, 'type', value); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -313,12 +313,12 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Width (inches)</Label>
-                      <Select 
-                        value={line.width.toString()} 
-                        onValueChange={(value) => updateLine(line.id, 'width', parseInt(value))}
+                      <Select
+                        value={line.width.toString()}
+                        onValueChange={(value) => { updateLine(line.id, 'width', parseInt(value)); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -331,21 +331,21 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Length (feet)</Label>
                       <Input
                         type="number"
                         value={line.length}
-                        onChange={(e) => updateLine(line.id, 'length', parseInt(e.target.value) || 0)}
+                        onChange={(e) => { updateLine(line.id, 'length', parseInt(e.target.value) || 0); }}
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Color</Label>
-                      <Select 
-                        value={line.color} 
-                        onValueChange={(value: 'white' | 'yellow') => updateLine(line.id, 'color', value)}
+                      <Select
+                        value={line.color}
+                        onValueChange={(value: 'white' | 'yellow') => { updateLine(line.id, 'color', value); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -357,7 +357,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                       </Select>
                     </div>
                   </div>
-                  
+
                   <div className="text-sm text-muted-foreground">
                     Estimated coverage: {getCoverageRate(line.width, line.type)} ft/gallon
                   </div>
@@ -382,7 +382,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.whitePaint}
-                    onChange={(e) => handleCostChange('whitePaint', e.target.value)}
+                    onChange={(e) => { handleCostChange('whitePaint', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -392,7 +392,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.yellowPaint}
-                    onChange={(e) => handleCostChange('yellowPaint', e.target.value)}
+                    onChange={(e) => { handleCostChange('yellowPaint', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -402,7 +402,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.glassBeads}
-                    onChange={(e) => handleCostChange('glassBeads', e.target.value)}
+                    onChange={(e) => { handleCostChange('glassBeads', e.target.value); }}
                   />
                 </div>
               </div>
@@ -414,7 +414,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.primer}
-                    onChange={(e) => handleCostChange('primer', e.target.value)}
+                    onChange={(e) => { handleCostChange('primer', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -424,7 +424,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.laborRate}
-                    onChange={(e) => handleCostChange('laborRate', e.target.value)}
+                    onChange={(e) => { handleCostChange('laborRate', e.target.value); }}
                   />
                 </div>
               </div>
@@ -654,5 +654,5 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};
