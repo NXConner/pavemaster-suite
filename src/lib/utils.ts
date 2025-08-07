@@ -1061,7 +1061,729 @@ export function generateId(prefix: string = 'id'): string {
   return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-export default {
+// ============================================================================
+// Performance Optimization Utilities
+// ============================================================================
+
+// Debounce function for performance
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+  immediate = false
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null;
+  
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      timeout = null;
+      if (!immediate) func(...args);
+    };
+    
+    const callNow = immediate && !timeout;
+    
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    
+    if (callNow) func(...args);
+  };
+}
+
+// Throttle function for scroll/resize events
+export function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean;
+  
+  return function executedFunction(...args: Parameters<T>) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+}
+
+// RAF-based animation helper
+export function animateWithRAF(callback: (progress: number) => void, duration: number) {
+  const startTime = performance.now();
+  
+  const animate = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    callback(progress);
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+  
+  requestAnimationFrame(animate);
+}
+
+// Cancel any running animations
+export function cancelAnimation() {
+  if (typeof cancelAnimationFrame === 'function') {
+    cancelAnimationFrame(requestAnimationFrame.id);
+  }
+}
+
+// Schedule low-priority work
+export function scheduleWork(callback: () => void, timeout = 5000) {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(callback, { timeout });
+  } else {
+    // Fallback for browsers without requestIdleCallback
+    setTimeout(callback, 0);
+  }
+}
+
+// Image lazy loading with intersection observer
+export function setupLazyLoading(images: HTMLImageElement[] | NodeListOf<HTMLImageElement>) {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: load all images immediately
+    Array.from(images).forEach(img => {
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+      }
+    });
+    return;
+  }
+
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.classList.remove('lazy');
+          img.classList.add('loaded');
+        }
+        observer.unobserve(img);
+      }
+    });
+  }, {
+    rootMargin: '50px 0px',
+    threshold: 0.01
+  });
+
+  Array.from(images).forEach(img => imageObserver.observe(img));
+}
+
+// Memory usage monitoring
+export function getMemoryUsage() {
+  if ('memory' in performance) {
+    const memory = (performance as any).memory;
+    return {
+      used: Math.round(memory.usedJSHeapSize / 1048576), // MB
+      total: Math.round(memory.totalJSHeapSize / 1048576), // MB
+      limit: Math.round(memory.jsHeapSizeLimit / 1048576), // MB
+    };
+  }
+  return null;
+}
+
+// ============================================================================
+// Accessibility Utilities
+// ============================================================================
+
+// Check if user prefers reduced motion
+export function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// Check if user prefers high contrast
+export function prefersHighContrast(): boolean {
+  return window.matchMedia('(prefers-contrast: high)').matches;
+}
+
+// Check if user prefers dark theme
+export function prefersDarkTheme(): boolean {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+// Generate accessible ID
+export function generateId(prefix = 'element'): string {
+  return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+// Focus trap for modals/dialogs
+export function createFocusTrap(element: HTMLElement) {
+  const focusableElements = element.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  ) as NodeListOf<HTMLElement>;
+
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  const handleTabKey = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  };
+
+  element.addEventListener('keydown', handleTabKey);
+
+  // Return cleanup function
+  return () => {
+    element.removeEventListener('keydown', handleTabKey);
+  };
+}
+
+// Announce to screen readers
+export function announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
+  const announcer = document.createElement('div');
+  announcer.setAttribute('aria-live', priority);
+  announcer.setAttribute('aria-atomic', 'true');
+  announcer.className = 'sr-only';
+  announcer.textContent = message;
+
+  document.body.appendChild(announcer);
+
+  setTimeout(() => {
+    document.body.removeChild(announcer);
+  }, 1000);
+}
+
+// Color contrast checker
+export function checkContrast(foreground: string, background: string): number {
+  // Convert hex to RGB
+  const getRGB = (color: string) => {
+    const hex = color.replace('#', '');
+    return {
+      r: parseInt(hex.substr(0, 2), 16),
+      g: parseInt(hex.substr(2, 2), 16),
+      b: parseInt(hex.substr(4, 2), 16),
+    };
+  };
+
+  // Calculate relative luminance
+  const getLuminance = (rgb: { r: number; g: number; b: number }) => {
+    const { r, g, b } = rgb;
+    const [rs, gs, bs] = [r, g, b].map(c => {
+      c = c / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+  };
+
+  const fgLum = getLuminance(getRGB(foreground));
+  const bgLum = getLuminance(getRGB(background));
+  const ratio = (Math.max(fgLum, bgLum) + 0.05) / (Math.min(fgLum, bgLum) + 0.05);
+
+  return Math.round(ratio * 100) / 100;
+}
+
+// ============================================================================
+// Device and Environment Detection
+// ============================================================================
+
+// Check if device is mobile
+export function isMobileDevice(): boolean {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Check if device is tablet
+export function isTablet(): boolean {
+  return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(navigator.userAgent);
+}
+
+// Check if device supports touch
+export function isTouchDevice(): boolean {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
+// Get device orientation
+export function getOrientation(): 'portrait' | 'landscape' {
+  return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+}
+
+// Check if device is in standalone mode (PWA)
+export function isStandalone(): boolean {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         (window.navigator as any).standalone === true;
+}
+
+// Get network information
+export function getNetworkInfo() {
+  const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+  
+  if (connection) {
+    return {
+      effectiveType: connection.effectiveType,
+      downlink: connection.downlink,
+      rtt: connection.rtt,
+      saveData: connection.saveData,
+    };
+  }
+  
+  return null;
+}
+
+// Battery API
+export async function getBatteryInfo() {
+  if ('getBattery' in navigator) {
+    try {
+      const battery = await (navigator as any).getBattery();
+      return {
+        charging: battery.charging,
+        level: Math.round(battery.level * 100),
+        chargingTime: battery.chargingTime,
+        dischargingTime: battery.dischargingTime,
+      };
+    } catch (error) {
+      console.warn('Battery API not supported');
+    }
+  }
+  return null;
+}
+
+// ============================================================================
+// Animation Utilities
+// ============================================================================
+
+// Easing functions
+export const easing = {
+  linear: (t: number) => t,
+  easeInQuad: (t: number) => t * t,
+  easeOutQuad: (t: number) => t * (2 - t),
+  easeInOutQuad: (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+  easeInCubic: (t: number) => t * t * t,
+  easeOutCubic: (t: number) => (--t) * t * t + 1,
+  easeInOutCubic: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+  easeInQuart: (t: number) => t * t * t * t,
+  easeOutQuart: (t: number) => 1 - (--t) * t * t * t,
+  easeInOutQuart: (t: number) => t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
+  bounce: (t: number) => {
+    if (t < 1 / 2.75) return 7.5625 * t * t;
+    if (t < 2 / 2.75) return 7.5625 * (t -= 1.5 / 2.75) * t + 0.75;
+    if (t < 2.5 / 2.75) return 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375;
+    return 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
+  },
+};
+
+// Animate number
+export function animateNumber(
+  from: number,
+  to: number,
+  duration: number,
+  callback: (value: number) => void,
+  easing: (t: number) => number = easing.easeOutQuad
+) {
+  const startTime = performance.now();
+  const difference = to - from;
+
+  const animate = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easedProgress = easing(progress);
+    const currentValue = from + difference * easedProgress;
+
+    callback(currentValue);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+
+  requestAnimationFrame(animate);
+}
+
+// Create staggered animations
+export function staggerAnimation(
+  elements: Element[],
+  animationClass: string,
+  delay = 100,
+  cleanup = true
+) {
+  elements.forEach((element, index) => {
+    setTimeout(() => {
+      element.classList.add(animationClass);
+      
+      if (cleanup) {
+        // Remove animation class after animation completes
+        const duration = parseFloat(getComputedStyle(element).animationDuration) * 1000;
+        setTimeout(() => {
+          element.classList.remove(animationClass);
+        }, duration);
+      }
+    }, index * delay);
+  });
+}
+
+// ============================================================================
+// Local Storage Utilities with type safety
+// ============================================================================
+
+// Safe localStorage with JSON support
+export class StorageManager {
+  private static isStorageAvailable(type: 'localStorage' | 'sessionStorage'): boolean {
+    try {
+      const storage = window[type];
+      const test = '__storage_test__';
+      storage.setItem(test, test);
+      storage.removeItem(test);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  static setItem<T>(key: string, value: T, useSession = false): boolean {
+    const storage = useSession ? 'sessionStorage' : 'localStorage';
+    
+    if (!this.isStorageAvailable(storage)) return false;
+
+    try {
+      window[storage].setItem(key, JSON.stringify(value));
+      return true;
+    } catch (error) {
+      console.warn(`Failed to save to ${storage}:`, error);
+      return false;
+    }
+  }
+
+  static getItem<T>(key: string, defaultValue: T, useSession = false): T {
+    const storage = useSession ? 'sessionStorage' : 'localStorage';
+    
+    if (!this.isStorageAvailable(storage)) return defaultValue;
+
+    try {
+      const item = window[storage].getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (error) {
+      console.warn(`Failed to read from ${storage}:`, error);
+      return defaultValue;
+    }
+  }
+
+  static removeItem(key: string, useSession = false): boolean {
+    const storage = useSession ? 'sessionStorage' : 'localStorage';
+    
+    if (!this.isStorageAvailable(storage)) return false;
+
+    try {
+      window[storage].removeItem(key);
+      return true;
+    } catch (error) {
+      console.warn(`Failed to remove from ${storage}:`, error);
+      return false;
+    }
+  }
+
+  static clear(useSession = false): boolean {
+    const storage = useSession ? 'sessionStorage' : 'localStorage';
+    
+    if (!this.isStorageAvailable(storage)) return false;
+
+    try {
+      window[storage].clear();
+      return true;
+    } catch (error) {
+      console.warn(`Failed to clear ${storage}:`, error);
+      return false;
+    }
+  }
+}
+
+// ============================================================================
+// URL and File Utilities
+// ============================================================================
+
+// Create object URL with cleanup
+export function createObjectURL(blob: Blob): { url: string; cleanup: () => void } {
+  const url = URL.createObjectURL(blob);
+  
+  return {
+    url,
+    cleanup: () => URL.revokeObjectURL(url),
+  };
+}
+
+// Download file from blob
+export function downloadFile(blob: Blob, filename: string) {
+  const { url, cleanup } = createObjectURL(blob);
+  const link = document.createElement('a');
+  
+  link.href = url;
+  link.download = filename;
+  link.style.display = 'none';
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  // Cleanup after a short delay to ensure download starts
+  setTimeout(cleanup, 100);
+}
+
+// Copy text to clipboard
+export async function copyToClipboard(text: string): Promise<boolean> {
+  if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      console.warn('Failed to copy to clipboard:', error);
+    }
+  }
+
+  // Fallback method
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    const success = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    return success;
+  } catch (error) {
+    console.warn('Fallback clipboard copy failed:', error);
+    return false;
+  }
+}
+
+// Get query parameters
+export function getQueryParams(): Record<string, string> {
+  return Object.fromEntries(new URLSearchParams(window.location.search));
+}
+
+// Update URL without page reload
+export function updateURL(params: Record<string, string | null>, replace = false) {
+  const url = new URL(window.location.href);
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === null) {
+      url.searchParams.delete(key);
+    } else {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  const method = replace ? 'replaceState' : 'pushState';
+  window.history[method]({}, '', url.toString());
+}
+
+// ============================================================================
+// Form Validation Utilities
+// ============================================================================
+
+// Email validation
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Phone validation (US format)
+export function isValidPhone(phone: string): boolean {
+  const phoneRegex = /^\+?1?[-.\s]?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$/;
+  return phoneRegex.test(phone);
+}
+
+// Strong password validation
+export function isStrongPassword(password: string): boolean {
+  const minLength = password.length >= 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+  return minLength && hasUpper && hasLower && hasNumber && hasSpecial;
+}
+
+// URL validation
+export function isValidURL(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Credit card validation (Luhn algorithm)
+export function isValidCreditCard(cardNumber: string): boolean {
+  const cleanNumber = cardNumber.replace(/\s+/g, '');
+  
+  if (!/^\d+$/.test(cleanNumber)) return false;
+  
+  let sum = 0;
+  let isEven = false;
+  
+  for (let i = cleanNumber.length - 1; i >= 0; i--) {
+    let digit = parseInt(cleanNumber[i], 10);
+    
+    if (isEven) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    
+    sum += digit;
+    isEven = !isEven;
+  }
+  
+  return sum % 10 === 0;
+}
+
+// ============================================================================
+// Date and Time Utilities
+// ============================================================================
+
+// Format date with relative time
+export function formatRelativeTime(date: Date): string {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+    second: 1,
+  };
+  
+  for (const [unit, seconds] of Object.entries(intervals)) {
+    const interval = Math.floor(diffInSeconds / seconds);
+    
+    if (interval >= 1) {
+      return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+    }
+  }
+  
+  return 'just now';
+}
+
+// Format duration in human-readable format
+export function formatDuration(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${remainingSeconds}s`;
+  } else if (minutes > 0) {
+    return `${minutes}m ${remainingSeconds}s`;
+  } else {
+    return `${remainingSeconds}s`;
+  }
+}
+
+// Check if date is today
+export function isToday(date: Date): boolean {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+}
+
+// Get business days between dates
+export function getBusinessDays(start: Date, end: Date): number {
+  let count = 0;
+  const current = new Date(start);
+  
+  while (current <= end) {
+    const dayOfWeek = current.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday or Saturday
+      count++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  
+  return count;
+}
+
+// ============================================================================
+// Error Handling Utilities
+// ============================================================================
+
+// Error Handler
+export class ErrorHandler {
+  private static errorQueue: Array<{ error: Error; context: string; timestamp: Date }> = [];
+  private static maxQueueSize = 50;
+
+  // Log error with context
+  static logError(error: Error, context = 'Unknown', notify = false) {
+    const errorEntry = {
+      error,
+      context,
+      timestamp: new Date(),
+    };
+
+    this.errorQueue.push(errorEntry);
+    
+    // Keep queue size manageable
+    if (this.errorQueue.length > this.maxQueueSize) {
+      this.errorQueue.shift();
+    }
+
+    // Console log for development
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`[${context}]`, error);
+    }
+
+    // Notify user if requested
+    if (notify && typeof window !== 'undefined') {
+      announce('An error occurred. Please try again.', 'assertive');
+    }
+
+    // Send to error reporting service (implement as needed)
+    this.sendToErrorService(errorEntry);
+  }
+
+  private static sendToErrorService(errorEntry: typeof this.errorQueue[0]) {
+    // Implement error reporting to your service of choice
+    // Example: Sentry, LogRocket, custom endpoint, etc.
+    if (process.env.NODE_ENV === 'production') {
+      // Production error reporting would go here
+    }
+  }
+
+  // Get recent errors for debugging
+  static getRecentErrors(limit = 10) {
+    return this.errorQueue.slice(-limit);
+  }
+
+  // Clear error queue
+  static clearErrors() {
+    this.errorQueue.length = 0;
+  }
+
+  // Create error boundary wrapper
+  static withErrorBoundary<T extends (...args: any[]) => any>(
+    fn: T,
+    context: string,
+    fallback?: () => ReturnType<T>
+  ): (...args: Parameters<T>) => ReturnType<T> | undefined {
+    return (...args: Parameters<T>) => {
+      try {
+        return fn(...args);
+      } catch (error) {
+        this.logError(error as Error, context, true);
+        return fallback ? fallback() : undefined;
+      }
+    };
+  }
+}
+
+// ============================================================================
+// Export all utility classes and functions
+// ============================================================================
+
+export {
   cn,
   translateJargon,
   withJargon,
@@ -1116,4 +1838,42 @@ export default {
   getViewportDimensions,
   createFocusTrap,
   generateId,
+  debounce,
+  throttle,
+  animateWithRAF,
+  cancelAnimation,
+  scheduleWork,
+  setupLazyLoading,
+  getMemoryUsage,
+  prefersReducedMotion,
+  prefersHighContrast,
+  prefersDarkTheme,
+  createFocusTrap,
+  announce,
+  checkContrast,
+  isMobileDevice,
+  isTablet,
+  getOrientation,
+  isStandalone,
+  getNetworkInfo,
+  getBatteryInfo,
+  easing,
+  animateNumber,
+  staggerAnimation,
+  StorageManager,
+  createObjectURL,
+  downloadFile,
+  copyToClipboard,
+  getQueryParams,
+  updateURL,
+  isValidEmail,
+  isValidPhone,
+  isStrongPassword,
+  isValidURL,
+  isValidCreditCard,
+  formatRelativeTime,
+  formatDuration,
+  isToday,
+  getBusinessDays,
+  ErrorHandler,
 };
