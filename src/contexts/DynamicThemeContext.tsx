@@ -49,7 +49,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
   const [historyIndex, setHistoryIndex] = useState(0);
 
   // Get current theme configuration
-  const currentTheme = previewThemeId 
+  const currentTheme = previewThemeId
     ? themes[previewThemeId] || themes[currentThemeId]
     : themes[currentThemeId];
 
@@ -68,9 +68,8 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
       return 'default'; // Light theme for day
     } else if (hour >= 18 && hour < 22) {
       return 'sunset'; // Warm theme for evening
-    } else {
-      return 'midnight'; // Dark theme for night
     }
+      return 'midnight'; // Dark theme for night
   }, []);
 
   // Detect ambient light (if available)
@@ -101,7 +100,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
   // Apply theme to DOM
   const applyTheme = useCallback((theme: ThemeConfig) => {
     const root = document.documentElement;
-    
+
     // Apply CSS custom properties
     Object.entries(theme.colors).forEach(([key, value]) => {
       root.style.setProperty(`--${key}`, value);
@@ -142,7 +141,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
       root.style.setProperty('--brand-accent', customBrand.accentColor);
       root.style.setProperty('--brand-font-primary', customBrand.fonts.primary);
       root.style.setProperty('--brand-font-secondary', customBrand.fonts.secondary);
-      
+
       if (customBrand.customCss) {
         let styleElement = document.getElementById('custom-brand-styles');
         if (!styleElement) {
@@ -168,7 +167,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
       newHistory.push(themeId);
       setThemeHistory(newHistory);
       setHistoryIndex(newHistory.length - 1);
-      
+
       setCurrentThemeId(themeId);
       setPreviewThemeId(null);
     }
@@ -204,7 +203,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
 
   // Auto theme adaptation
   useEffect(() => {
-    if (!autoMode) return;
+    if (!autoMode) { return; }
 
     let selectedTheme = currentThemeId;
 
@@ -222,7 +221,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
 
   // System theme change listener
   useEffect(() => {
-    if (!autoMode || timeBasedTheme) return;
+    if (!autoMode || timeBasedTheme) { return; }
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
@@ -233,12 +232,12 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     };
 
     mediaQuery.addListener(handleChange);
-    return () => mediaQuery.removeListener(handleChange);
+    return () => { mediaQuery.removeListener(handleChange); };
   }, [autoMode, timeBasedTheme]);
 
   // Time-based theme updates
   useEffect(() => {
-    if (!autoMode || !timeBasedTheme) return;
+    if (!autoMode || !timeBasedTheme) { return; }
 
     const interval = setInterval(() => {
       const newTheme = getTimeBasedTheme();
@@ -247,13 +246,13 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
       }
     }, 60000); // Check every minute
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [autoMode, timeBasedTheme, currentThemeId, getTimeBasedTheme]);
 
   // Ambient light sensor setup
   useEffect(() => {
     let sensor: any;
-    
+
     if (adaptiveContrast) {
       detectAmbientLight().then(s => {
         sensor = s;
@@ -277,7 +276,7 @@ export const DynamicThemeProvider: React.FC<DynamicThemeProviderProps> = ({
     const savedTheme = localStorage.getItem('theme-preference');
     const savedAutoMode = localStorage.getItem('auto-mode') === 'true';
     const savedTimeBasedTheme = localStorage.getItem('time-based-theme') === 'true';
-    
+
     if (savedTheme && themes[savedTheme]) {
       setCurrentThemeId(savedTheme);
     }

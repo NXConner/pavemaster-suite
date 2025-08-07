@@ -151,8 +151,8 @@ export default function Index() {
   const dashboardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => setSystemTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const timer = setInterval(() => { setSystemTime(new Date()); }, 1000);
+    return () => { clearInterval(timer); };
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -174,8 +174,8 @@ export default function Index() {
     }
   };
 
-  const filteredItems = selectedCategory === 'all' 
-    ? QUICK_ACCESS_ITEMS 
+  const filteredItems = selectedCategory === 'all'
+    ? QUICK_ACCESS_ITEMS
     : QUICK_ACCESS_ITEMS.filter(item => item.category === selectedCategory);
 
   const renderActiveSection = () => {
@@ -223,7 +223,7 @@ export default function Index() {
               </Badge>
             </div>
           </div>
-          
+
           {/* System Status Display */}
           <div className="flex items-center gap-6">
             <div className="text-right">
@@ -255,7 +255,7 @@ export default function Index() {
             key={id}
             variant={selectedCategory === id ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setSelectedCategory(id)}
+            onClick={() => { setSelectedCategory(id); }}
             className="flex items-center gap-2 whitespace-nowrap"
             animation={selectedCategory === id ? 'glow' : 'none'}
           >
@@ -276,9 +276,9 @@ export default function Index() {
               tilt
               glow={item.priority === 'high'}
               className={`group cursor-pointer transition-all duration-300 ${getPriorityIndicator(item.priority)}`}
-              onClick={() => setActiveSection(item.id)}
-              onHover={() => setHoveredCard(item.id)}
-              onLeave={() => setHoveredCard(null)}
+              onClick={() => { setActiveSection(item.id); }}
+              onHover={() => { setHoveredCard(item.id); }}
+              onLeave={() => { setHoveredCard(null); }}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -295,16 +295,16 @@ export default function Index() {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   {/* Status Indicator */}
                   <div className={`w-3 h-3 rounded-full ${
-                    item.status === 'active' ? 'bg-green-500 animate-pulse' :
-                    item.status === 'ready' ? 'bg-blue-500' :
-                    item.status === 'pending' ? 'bg-yellow-500 animate-pulse' :
-                    'bg-red-500'
+                    item.status === 'active' ? 'bg-green-500 animate-pulse'
+                    : item.status === 'ready' ? 'bg-blue-500'
+                    : item.status === 'pending' ? 'bg-yellow-500 animate-pulse'
+                    : 'bg-red-500'
                   }`} />
                 </div>
-                
+
                 <CardDescription className="text-xs mt-2">
                   {item.description}
                 </CardDescription>
@@ -320,9 +320,9 @@ export default function Index() {
                       </span>
                       {item.metrics.trend && (
                         <div className={`flex items-center gap-1 text-xs ${
-                          item.metrics.trend === 'up' ? 'text-green-500' :
-                          item.metrics.trend === 'down' ? 'text-red-500' :
-                          'text-muted-foreground'
+                          item.metrics.trend === 'up' ? 'text-green-500'
+                          : item.metrics.trend === 'down' ? 'text-red-500'
+                          : 'text-muted-foreground'
                         }`}>
                           {item.metrics.trend === 'up' && <TrendingUp className="w-3 h-3" />}
                           {item.metrics.trend === 'down' && <TrendingUp className="w-3 h-3 rotate-180" />}
@@ -330,17 +330,17 @@ export default function Index() {
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Progress Bar for Active Items */}
                     {item.status === 'active' && (
                       <div className="w-full bg-muted rounded-full h-1.5">
-                        <div 
+                        <div
                           className="bg-primary h-1.5 rounded-full transition-all duration-1000 ease-out"
-                          style={{ 
-                            width: `${Math.min(100, (typeof item.metrics.value === 'string' 
-                              ? parseFloat(item.metrics.value) 
+                          style={{
+                            width: `${Math.min(100, (typeof item.metrics.value === 'string'
+                              ? parseFloat(item.metrics.value)
                               : item.metrics.value
-                            ))}%` 
+                            ))}%`,
                           }}
                         />
                       </div>
@@ -454,12 +454,12 @@ export default function Index() {
                       <span className="font-mono">{metric.value}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div 
+                      <div
                         className={`h-2 rounded-full transition-all duration-1000 ${
-                          metric.status === 'excellent' ? 'bg-green-500' :
-                          metric.status === 'good' ? 'bg-blue-500' :
-                          metric.status === 'warning' ? 'bg-yellow-500' :
-                          'bg-red-500'
+                          metric.status === 'excellent' ? 'bg-green-500'
+                          : metric.status === 'good' ? 'bg-blue-500'
+                          : metric.status === 'warning' ? 'bg-yellow-500'
+                          : 'bg-red-500'
                         }`}
                         style={{ width: `${metric.value}%` }}
                       />
@@ -482,10 +482,10 @@ export default function Index() {
               <Card key={index} variant="outline" className="p-4">
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full ${
-                    alert.type === 'success' ? 'bg-green-500' :
-                    alert.type === 'warning' ? 'bg-yellow-500' :
-                    alert.type === 'error' ? 'bg-red-500' :
-                    'bg-blue-500'
+                    alert.type === 'success' ? 'bg-green-500'
+                    : alert.type === 'warning' ? 'bg-yellow-500'
+                    : alert.type === 'error' ? 'bg-red-500'
+                    : 'bg-blue-500'
                   }`} />
                   <div className="flex-1">
                     <p className="text-sm">{alert.message}</p>

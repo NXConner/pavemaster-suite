@@ -20,7 +20,7 @@ export function PWAInstallPrompt() {
         setIsInstalled(true);
         return;
       }
-      
+
       if ((window.navigator as any).standalone === true) {
         setIsInstalled(true);
         return;
@@ -33,7 +33,7 @@ export function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show prompt after a delay if not already installed
       if (!isInstalled) {
         setTimeout(() => {
@@ -62,18 +62,18 @@ export function PWAInstallPrompt() {
   }, [isInstalled]);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) { return; }
 
     try {
       await deferredPrompt.prompt();
       const choiceResult = await deferredPrompt.userChoice;
-      
+
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');
       } else {
         console.log('User dismissed the install prompt');
       }
-      
+
       setDeferredPrompt(null);
       setShowPrompt(false);
     } catch (error) {
@@ -99,25 +99,25 @@ export function PWAInstallPrompt() {
             <div className="p-2 rounded-lg bg-primary/10">
               <Smartphone className="h-5 w-5 text-primary" />
             </div>
-            
+
             <div className="flex-1 space-y-2">
               <h3 className="font-semibold text-sm">Install PaveMaster Suite</h3>
               <p className="text-xs text-muted-foreground">
                 Get the full app experience with offline access, push notifications, and faster loading.
               </p>
-              
+
               <div className="flex gap-2">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={handleInstallClick}
                   className="flex-1"
                 >
                   <Download className="h-3 w-3 mr-1" />
                   Install App
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  size="sm"
+                  variant="outline"
                   onClick={handleDismiss}
                 >
                   <X className="h-3 w-3" />

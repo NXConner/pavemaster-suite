@@ -22,7 +22,7 @@ const MOCK_NOTIFICATIONS: TacticalNotification[] = [
     message: 'System entering enhanced operational mode',
     timestamp: new Date(),
     priority: 'high',
-    persistent: true
+    persistent: true,
   },
   {
     id: '2',
@@ -31,8 +31,8 @@ const MOCK_NOTIFICATIONS: TacticalNotification[] = [
     message: 'All units operating within normal parameters',
     timestamp: new Date(Date.now() - 60000),
     priority: 'medium',
-    persistent: false
-  }
+    persistent: false,
+  },
 ];
 
 export function TacticalOverrideNotifications() {
@@ -43,14 +43,14 @@ export function TacticalOverrideNotifications() {
   useEffect(() => {
     // Auto-remove non-persistent notifications after 10 seconds
     const interval = setInterval(() => {
-      setNotifications(prev => 
-        prev.filter(notif => 
-          notif.persistent || (Date.now() - notif.timestamp.getTime()) < 10000
-        )
+      setNotifications(prev =>
+        prev.filter(notif =>
+          notif.persistent || (Date.now() - notif.timestamp.getTime()) < 10000,
+        ),
       );
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const removeNotification = (id: string) => {
@@ -97,7 +97,7 @@ export function TacticalOverrideNotifications() {
 
       {/* Notifications */}
       {notifications.map((notification) => (
-        <Card 
+        <Card
           key={notification.id}
           className={`bg-black/80 backdrop-blur-sm ${getPriorityColor(notification.priority)} pointer-events-auto`}
         >
@@ -113,7 +113,7 @@ export function TacticalOverrideNotifications() {
                 <Button
                   size="sm"
                   variant="ghost"
-                  onClick={() => setIsMinimized(true)}
+                  onClick={() => { setIsMinimized(true); }}
                   className="text-orange-500 hover:bg-orange-500/20 h-6 w-6 p-0"
                 >
                   <X className="h-3 w-3" />
@@ -122,7 +122,7 @@ export function TacticalOverrideNotifications() {
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => removeNotification(notification.id)}
+                    onClick={() => { removeNotification(notification.id); }}
                     className="text-orange-500 hover:bg-orange-500/20 h-6 w-6 p-0"
                   >
                     <X className="h-3 w-3" />
@@ -130,11 +130,11 @@ export function TacticalOverrideNotifications() {
                 )}
               </div>
             </div>
-            
+
             <p className="text-xs text-orange-300/80 font-mono mb-2">
               {notification.message}
             </p>
-            
+
             <div className="flex items-center gap-2 text-xs text-orange-400/60 font-mono">
               <Clock className="h-3 w-3" />
               {notification.timestamp.toLocaleTimeString()}

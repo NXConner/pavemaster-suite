@@ -40,13 +40,13 @@ export class DynamicImportManager {
       retry?: boolean;
       timeout?: number;
       fallback?: () => T;
-    } = {}
+    } = {},
   ): Promise<T> {
     const {
       preload = false,
       retry = true,
       timeout = 30000,
-      fallback
+      fallback,
     } = options;
 
     // Return cached import if available
@@ -54,7 +54,7 @@ export class DynamicImportManager {
       try {
         return await this.importCache.get(moduleId)!;
       } catch (error) {
-        if (!retry) throw error;
+        if (!retry) { throw error; }
         this.importCache.delete(moduleId);
       }
     }
@@ -89,7 +89,7 @@ export class DynamicImportManager {
     factory: () => Promise<T>,
     timeout: number,
     retry: boolean,
-    fallback?: () => T
+    fallback?: () => T,
   ): Promise<T> {
     const attempts = this.retryAttempts.get(moduleId) || 0;
 
@@ -97,17 +97,17 @@ export class DynamicImportManager {
       return await Promise.race([
         factory(),
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error(`Import timeout: ${moduleId}`)), timeout)
-        )
+          setTimeout(() => { reject(new Error(`Import timeout: ${moduleId}`)); }, timeout),
+        ),
       ]);
     } catch (error) {
       if (retry && attempts < this.maxRetries) {
         this.retryAttempts.set(moduleId, attempts + 1);
-        
+
         // Exponential backoff
         const delay = Math.pow(2, attempts) * 1000;
         await new Promise(resolve => setTimeout(resolve, delay));
-        
+
         return this.executeImport(moduleId, factory, timeout, retry, fallback);
       }
 
@@ -177,7 +177,7 @@ export class CodeSplitter {
   registerChunk(
     chunkId: string,
     dependencies: string[] = [],
-    factory: () => Promise<any>
+    factory: () => Promise<any>,
   ): void {
     this.dependencyGraph.set(chunkId, new Set(dependencies));
     this.chunkRegistry.set(chunkId, factory());
@@ -186,11 +186,11 @@ export class CodeSplitter {
   // Load chunk with dependencies
   async loadChunk(chunkId: string): Promise<any> {
     const dependencies = this.dependencyGraph.get(chunkId) || new Set();
-    
+
     // Load dependencies first
     if (dependencies.size > 0) {
       await Promise.all(
-        Array.from(dependencies).map(dep => this.loadChunk(dep))
+        Array.from(dependencies).map(dep => this.loadChunk(dep)),
       );
     }
 
@@ -226,7 +226,7 @@ export class CodeSplitter {
     for (const [chunkId] of this.chunkRegistry) {
       const size = await this.getChunkSize(chunkId);
       const dependencies = Array.from(this.dependencyGraph.get(chunkId) || []);
-      
+
       chunks.push({ id: chunkId, size, dependencies });
       totalSize += size;
       dependencyTree[chunkId] = dependencies;
@@ -257,10 +257,10 @@ export class ImageOptimizer {
       maxHeight?: number;
       quality?: number;
       format?: 'webp' | 'jpeg' | 'png';
-    } = {}
+    } = {},
   ): Promise<string> {
     const cacheKey = `${imageUrl}-${JSON.stringify(options)}`;
-    
+
     if (this.optimizedCache.has(cacheKey)) {
       return this.optimizedCache.get(cacheKey)!;
     }
@@ -283,7 +283,7 @@ export class ImageOptimizer {
       maxHeight?: number;
       quality?: number;
       format?: 'webp' | 'jpeg' | 'png';
-    }
+    },
   ): Promise<string> {
     if (!this.canvas || !this.ctx) {
       throw new Error('Canvas not available');
@@ -293,18 +293,18 @@ export class ImageOptimizer {
       maxWidth = 1920,
       maxHeight = 1080,
       quality = this.config.imageQuality / 100,
-      format = 'webp'
+      format = 'webp',
     } = options;
 
     // Load image
     const image = await this.loadImage(imageUrl);
-    
+
     // Calculate new dimensions
     const { width, height } = this.calculateDimensions(
       image.naturalWidth,
       image.naturalHeight,
       maxWidth,
-      maxHeight
+      maxHeight,
     );
 
     // Resize canvas
@@ -328,12 +328,11 @@ export class ImageOptimizer {
             }
           },
           mimeType,
-          quality
+          quality,
         );
       });
-    } else {
-      return this.canvas.toDataURL(mimeType, quality);
     }
+      return this.canvas.toDataURL(mimeType, quality);
   }
 
   // Load image promise
@@ -341,7 +340,7 @@ export class ImageOptimizer {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
+      img.onload = () => { resolve(img); };
       img.onerror = reject;
       img.src = src;
     });
@@ -352,7 +351,7 @@ export class ImageOptimizer {
     originalWidth: number,
     originalHeight: number,
     maxWidth: number,
-    maxHeight: number
+    maxHeight: number,
   ): { width: number; height: number } {
     const aspectRatio = originalWidth / originalHeight;
 
@@ -371,18 +370,18 @@ export class ImageOptimizer {
 
     return {
       width: Math.round(width),
-      height: Math.round(height)
+      height: Math.round(height),
     };
   }
 
   // Check format support
   private isFormatSupported(format: string): boolean {
-    if (!this.canvas) return false;
-    
+    if (!this.canvas) { return false; }
+
     const testCanvas = document.createElement('canvas');
     testCanvas.width = 1;
     testCanvas.height = 1;
-    
+
     try {
       const dataUrl = testCanvas.toDataURL(`image/${format}`);
       return dataUrl.indexOf(`data:image/${format}`) === 0;
@@ -394,7 +393,7 @@ export class ImageOptimizer {
   // Batch optimize images
   async optimizeBatch(
     images: Array<{ url: string; options?: any }>,
-    concurrency: number = 3
+    concurrency: number = 3,
   ): Promise<Array<{ original: string; optimized: string; savings: number }>> {
     const results = [];
     const chunks = this.chunkArray(images, concurrency);
@@ -410,14 +409,14 @@ export class ImageOptimizer {
           return {
             original: url,
             optimized,
-            savings
+            savings,
           };
-        })
+        }),
       );
 
       results.push(...chunkResults
         .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
-        .map(result => result.value)
+        .map(result => result.value),
       );
     }
 
@@ -465,7 +464,7 @@ export class BundleAnalyzer {
           } else if (entry.entryType === 'resource') {
             const resourceEntry = entry as PerformanceResourceTiming;
             this.recordLoadTime(resourceEntry.name, resourceEntry.responseEnd - resourceEntry.startTime);
-            
+
             if (resourceEntry.transferSize) {
               this.recordBundleSize(resourceEntry.name, resourceEntry.transferSize);
             }
@@ -571,7 +570,7 @@ export class TreeShakingAnalyzer {
     if (!this.usageMap.has(moduleName)) {
       this.usageMap.set(moduleName, new Set());
     }
-    
+
     const usage = this.usageMap.get(moduleName)!;
     importedItems.forEach(item => usage.add(item));
   }
@@ -581,7 +580,7 @@ export class TreeShakingAnalyzer {
     if (!this.exportMap.has(moduleName)) {
       this.exportMap.set(moduleName, new Set());
     }
-    
+
     const exports = this.exportMap.get(moduleName)!;
     exportedItems.forEach(item => exports.add(item));
   }
@@ -593,7 +592,7 @@ export class TreeShakingAnalyzer {
     for (const [moduleName, exports] of this.exportMap) {
       const usage = this.usageMap.get(moduleName) || new Set();
       const unusedExports = Array.from(exports).filter(exp => !usage.has(exp));
-      
+
       if (unusedExports.length > 0) {
         unused[moduleName] = unusedExports;
       }
@@ -672,7 +671,7 @@ export class BundleOptimizer {
     private importManager = dynamicImportManager,
     private splitter = codeSplitter,
     private imageOpt = imageOptimizer,
-    private analyzer = bundleAnalyzer
+    private analyzer = bundleAnalyzer,
   ) {}
 
   // Initialize optimization
@@ -733,7 +732,7 @@ export class BundleOptimizer {
     if (imageUrls.length > 0) {
       const optimizationPromises = imageUrls.map(url => ({
         url,
-        options: { quality: this.config.imageQuality }
+        options: { quality: this.config.imageQuality },
       }));
 
       try {

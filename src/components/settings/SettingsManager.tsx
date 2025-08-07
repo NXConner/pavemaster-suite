@@ -117,9 +117,9 @@ export function SettingsManager() {
 
   const exportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
     const exportFileDefaultName = 'pavemaster-settings.json';
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -214,66 +214,66 @@ export function SettingsManager() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input 
+                  <Input
                     id="firstName"
-                    value={settings.firstName} 
-                    onChange={(e) => updateSetting('firstName', e.target.value)}
+                    value={settings.firstName}
+                    onChange={(e) => { updateSetting('firstName', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input 
+                  <Input
                     id="lastName"
-                    value={settings.lastName} 
-                    onChange={(e) => updateSetting('lastName', e.target.value)}
+                    value={settings.lastName}
+                    onChange={(e) => { updateSetting('lastName', e.target.value); }}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input 
+                <Input
                   id="email"
                   type="email"
-                  value={settings.email} 
-                  onChange={(e) => updateSetting('email', e.target.value)}
+                  value={settings.email}
+                  onChange={(e) => { updateSetting('email', e.target.value); }}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input 
+                  <Input
                     id="phone"
-                    value={settings.phone} 
-                    onChange={(e) => updateSetting('phone', e.target.value)}
+                    value={settings.phone}
+                    onChange={(e) => { updateSetting('phone', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="position">Position</Label>
-                  <Input 
+                  <Input
                     id="position"
-                    value={settings.position} 
-                    onChange={(e) => updateSetting('position', e.target.value)}
+                    value={settings.position}
+                    onChange={(e) => { updateSetting('position', e.target.value); }}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="company">Company</Label>
-                <Input 
+                <Input
                   id="company"
-                  value={settings.company} 
-                  onChange={(e) => updateSetting('company', e.target.value)}
+                  value={settings.company}
+                  onChange={(e) => { updateSetting('company', e.target.value); }}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
-                <Textarea 
+                <Textarea
                   id="bio"
-                  value={settings.bio} 
-                  onChange={(e) => updateSetting('bio', e.target.value)}
+                  value={settings.bio}
+                  onChange={(e) => { updateSetting('bio', e.target.value); }}
                   placeholder="Tell us about yourself..."
                   rows={3}
                 />
@@ -292,7 +292,7 @@ export function SettingsManager() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Language</Label>
-                  <Select value={settings.language} onValueChange={(value) => updateSetting('language', value)}>
+                  <Select value={settings.language} onValueChange={(value) => { updateSetting('language', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -306,7 +306,7 @@ export function SettingsManager() {
 
                 <div className="space-y-2">
                   <Label>Timezone</Label>
-                  <Select value={settings.timezone} onValueChange={(value) => updateSetting('timezone', value)}>
+                  <Select value={settings.timezone} onValueChange={(value) => { updateSetting('timezone', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -322,7 +322,7 @@ export function SettingsManager() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Date Format</Label>
-                    <Select value={settings.dateFormat} onValueChange={(value) => updateSetting('dateFormat', value)}>
+                    <Select value={settings.dateFormat} onValueChange={(value) => { updateSetting('dateFormat', value); }}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -336,7 +336,7 @@ export function SettingsManager() {
 
                   <div className="space-y-2">
                     <Label>Time Format</Label>
-                    <Select value={settings.timeFormat} onValueChange={(value) => updateSetting('timeFormat', value)}>
+                    <Select value={settings.timeFormat} onValueChange={(value) => { updateSetting('timeFormat', value); }}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -350,7 +350,7 @@ export function SettingsManager() {
 
                 <div className="space-y-2">
                   <Label>Currency</Label>
-                  <Select value={settings.currency} onValueChange={(value) => updateSetting('currency', value)}>
+                  <Select value={settings.currency} onValueChange={(value) => { updateSetting('currency', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -377,9 +377,9 @@ export function SettingsManager() {
                       Automatically save changes as you work
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.autoSave} 
-                    onCheckedChange={(checked) => updateSetting('autoSave', checked)}
+                  <Switch
+                    checked={settings.autoSave}
+                    onCheckedChange={(checked) => { updateSetting('autoSave', checked); }}
                   />
                 </div>
 
@@ -390,9 +390,9 @@ export function SettingsManager() {
                       Refresh data automatically
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.autoRefresh} 
-                    onCheckedChange={(checked) => updateSetting('autoRefresh', checked)}
+                  <Switch
+                    checked={settings.autoRefresh}
+                    onCheckedChange={(checked) => { updateSetting('autoRefresh', checked); }}
                   />
                 </div>
 
@@ -401,7 +401,7 @@ export function SettingsManager() {
                     <Label>Refresh Interval (seconds)</Label>
                     <Slider
                       value={[settings.refreshInterval]}
-                      onValueChange={([value]) => updateSetting('refreshInterval', value)}
+                      onValueChange={([value]) => { updateSetting('refreshInterval', value); }}
                       className="w-full"
                     />
                     <p className="text-sm text-muted-foreground">
@@ -443,7 +443,7 @@ export function SettingsManager() {
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Notification Channels</h3>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Mail className="h-4 w-4" />
@@ -454,9 +454,9 @@ export function SettingsManager() {
                       </p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={settings.emailNotifications} 
-                    onCheckedChange={(checked) => updateSetting('emailNotifications', checked)}
+                  <Switch
+                    checked={settings.emailNotifications}
+                    onCheckedChange={(checked) => { updateSetting('emailNotifications', checked); }}
                   />
                 </div>
 
@@ -470,9 +470,9 @@ export function SettingsManager() {
                       </p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={settings.pushNotifications} 
-                    onCheckedChange={(checked) => updateSetting('pushNotifications', checked)}
+                  <Switch
+                    checked={settings.pushNotifications}
+                    onCheckedChange={(checked) => { updateSetting('pushNotifications', checked); }}
                   />
                 </div>
 
@@ -486,9 +486,9 @@ export function SettingsManager() {
                       </p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={settings.smsNotifications} 
-                    onCheckedChange={(checked) => updateSetting('smsNotifications', checked)}
+                  <Switch
+                    checked={settings.smsNotifications}
+                    onCheckedChange={(checked) => { updateSetting('smsNotifications', checked); }}
                   />
                 </div>
 
@@ -502,9 +502,9 @@ export function SettingsManager() {
                       </p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={settings.soundAlerts} 
-                    onCheckedChange={(checked) => updateSetting('soundAlerts', checked)}
+                  <Switch
+                    checked={settings.soundAlerts}
+                    onCheckedChange={(checked) => { updateSetting('soundAlerts', checked); }}
                   />
                 </div>
               </div>
@@ -513,7 +513,7 @@ export function SettingsManager() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Notification Types</h3>
-                
+
                 {[
                   { key: 'notifyProjectUpdates', label: 'Project Updates', icon: Users },
                   { key: 'notifyEquipmentAlerts', label: 'Equipment Alerts', icon: AlertCircle },
@@ -526,9 +526,9 @@ export function SettingsManager() {
                       <Icon className="h-4 w-4" />
                       <Label>{label}</Label>
                     </div>
-                    <Switch 
-                      checked={settings[key as keyof typeof settings] as boolean} 
-                      onCheckedChange={(checked) => updateSetting(key, checked)}
+                    <Switch
+                      checked={settings[key as keyof typeof settings] as boolean}
+                      onCheckedChange={(checked) => { updateSetting(key, checked); }}
                     />
                   </div>
                 ))}
@@ -552,9 +552,9 @@ export function SettingsManager() {
                       Add an extra layer of security
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.twoFactorAuth} 
-                    onCheckedChange={(checked) => updateSetting('twoFactorAuth', checked)}
+                  <Switch
+                    checked={settings.twoFactorAuth}
+                    onCheckedChange={(checked) => { updateSetting('twoFactorAuth', checked); }}
                   />
                 </div>
 
@@ -562,7 +562,7 @@ export function SettingsManager() {
                   <Label>Session Timeout (minutes)</Label>
                   <Slider
                     value={[settings.sessionTimeout]}
-                    onValueChange={([value]) => updateSetting('sessionTimeout', value)}
+                    onValueChange={([value]) => { updateSetting('sessionTimeout', value); }}
                     className="w-full"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -572,7 +572,7 @@ export function SettingsManager() {
 
                 <div className="space-y-2">
                   <Label>Password Strength</Label>
-                  <Select value={settings.passwordStrength} onValueChange={(value) => updateSetting('passwordStrength', value)}>
+                  <Select value={settings.passwordStrength} onValueChange={(value) => { updateSetting('passwordStrength', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -586,10 +586,10 @@ export function SettingsManager() {
 
                 <div className="space-y-2">
                   <Label>Maximum Login Attempts</Label>
-                  <Input 
+                  <Input
                     type="number"
-                    value={settings.loginAttempts} 
-                    onChange={(e) => updateSetting('loginAttempts', parseInt(e.target.value))}
+                    value={settings.loginAttempts}
+                    onChange={(e) => { updateSetting('loginAttempts', parseInt(e.target.value)); }}
                     min={1}
                     max={10}
                   />
@@ -610,9 +610,9 @@ export function SettingsManager() {
                       Track all system activities
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.auditLogs} 
-                    onCheckedChange={(checked) => updateSetting('auditLogs', checked)}
+                  <Switch
+                    checked={settings.auditLogs}
+                    onCheckedChange={(checked) => { updateSetting('auditLogs', checked); }}
                   />
                 </div>
 
@@ -623,9 +623,9 @@ export function SettingsManager() {
                       Encrypt sensitive data at rest
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.encryption} 
-                    onCheckedChange={(checked) => updateSetting('encryption', checked)}
+                  <Switch
+                    checked={settings.encryption}
+                    onCheckedChange={(checked) => { updateSetting('encryption', checked); }}
                   />
                 </div>
 
@@ -636,9 +636,9 @@ export function SettingsManager() {
                       Require HTTPS for all connections
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.secureConnection} 
-                    onCheckedChange={(checked) => updateSetting('secureConnection', checked)}
+                  <Switch
+                    checked={settings.secureConnection}
+                    onCheckedChange={(checked) => { updateSetting('secureConnection', checked); }}
                   />
                 </div>
 
@@ -674,16 +674,16 @@ export function SettingsManager() {
                       Automatically backup your data
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.autoBackup} 
-                    onCheckedChange={(checked) => updateSetting('autoBackup', checked)}
+                  <Switch
+                    checked={settings.autoBackup}
+                    onCheckedChange={(checked) => { updateSetting('autoBackup', checked); }}
                   />
                 </div>
 
                 {settings.autoBackup && (
                   <div className="space-y-2">
                     <Label>Backup Frequency</Label>
-                    <Select value={settings.backupFrequency} onValueChange={(value) => updateSetting('backupFrequency', value)}>
+                    <Select value={settings.backupFrequency} onValueChange={(value) => { updateSetting('backupFrequency', value); }}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -701,7 +701,7 @@ export function SettingsManager() {
                   <Label>Data Retention (days)</Label>
                   <Slider
                     value={[settings.dataRetention]}
-                    onValueChange={([value]) => updateSetting('dataRetention', value)}
+                    onValueChange={([value]) => { updateSetting('dataRetention', value); }}
                     className="w-full"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -719,7 +719,7 @@ export function SettingsManager() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Performance Mode</Label>
-                  <Select value={settings.performanceMode} onValueChange={(value) => updateSetting('performanceMode', value)}>
+                  <Select value={settings.performanceMode} onValueChange={(value) => { updateSetting('performanceMode', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -738,9 +738,9 @@ export function SettingsManager() {
                       Collect usage analytics
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.analyticsEnabled} 
-                    onCheckedChange={(checked) => updateSetting('analyticsEnabled', checked)}
+                  <Switch
+                    checked={settings.analyticsEnabled}
+                    onCheckedChange={(checked) => { updateSetting('analyticsEnabled', checked); }}
                   />
                 </div>
 
@@ -751,9 +751,9 @@ export function SettingsManager() {
                       Send crash reports automatically
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.crashReporting} 
-                    onCheckedChange={(checked) => updateSetting('crashReporting', checked)}
+                  <Switch
+                    checked={settings.crashReporting}
+                    onCheckedChange={(checked) => { updateSetting('crashReporting', checked); }}
                   />
                 </div>
 
@@ -764,9 +764,9 @@ export function SettingsManager() {
                       Enable debug information
                     </p>
                   </div>
-                  <Switch 
-                    checked={settings.debugMode} 
-                    onCheckedChange={(checked) => updateSetting('debugMode', checked)}
+                  <Switch
+                    checked={settings.debugMode}
+                    onCheckedChange={(checked) => { updateSetting('debugMode', checked); }}
                   />
                 </div>
               </CardContent>
@@ -798,9 +798,9 @@ export function SettingsManager() {
                     Start with sidebar collapsed
                   </p>
                 </div>
-                <Switch 
-                  checked={settings.sidebarCollapsed} 
-                  onCheckedChange={(checked) => updateSetting('sidebarCollapsed', checked)}
+                <Switch
+                  checked={settings.sidebarCollapsed}
+                  onCheckedChange={(checked) => { updateSetting('sidebarCollapsed', checked); }}
                 />
               </div>
 
@@ -811,9 +811,9 @@ export function SettingsManager() {
                     Display helpful tooltips
                   </p>
                 </div>
-                <Switch 
-                  checked={settings.showTooltips} 
-                  onCheckedChange={(checked) => updateSetting('showTooltips', checked)}
+                <Switch
+                  checked={settings.showTooltips}
+                  onCheckedChange={(checked) => { updateSetting('showTooltips', checked); }}
                 />
               </div>
 
@@ -824,9 +824,9 @@ export function SettingsManager() {
                     Enable UI animations and transitions
                   </p>
                 </div>
-                <Switch 
-                  checked={settings.animationsEnabled} 
-                  onCheckedChange={(checked) => updateSetting('animationsEnabled', checked)}
+                <Switch
+                  checked={settings.animationsEnabled}
+                  onCheckedChange={(checked) => { updateSetting('animationsEnabled', checked); }}
                 />
               </div>
 
@@ -837,9 +837,9 @@ export function SettingsManager() {
                     Use more compact interface
                   </p>
                 </div>
-                <Switch 
-                  checked={settings.compactMode} 
-                  onCheckedChange={(checked) => updateSetting('compactMode', checked)}
+                <Switch
+                  checked={settings.compactMode}
+                  onCheckedChange={(checked) => { updateSetting('compactMode', checked); }}
                 />
               </div>
 
@@ -850,9 +850,9 @@ export function SettingsManager() {
                     Display navigation minimap
                   </p>
                 </div>
-                <Switch 
-                  checked={settings.showMinimap} 
-                  onCheckedChange={(checked) => updateSetting('showMinimap', checked)}
+                <Switch
+                  checked={settings.showMinimap}
+                  onCheckedChange={(checked) => { updateSetting('showMinimap', checked); }}
                 />
               </div>
             </CardContent>

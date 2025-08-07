@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Activity,
   Users,
   DollarSign,
   AlertTriangle,
@@ -14,7 +14,7 @@ import {
   Clock,
   BarChart3,
   PieChart,
-  LineChart
+  LineChart,
 } from 'lucide-react';
 
 interface AnalyticsMetric {
@@ -39,7 +39,7 @@ const MOCK_METRICS: AnalyticsMetric[] = [
     value: '$45,250',
     change: 12.5,
     trend: 'up',
-    status: 'good'
+    status: 'good',
   },
   {
     id: 'projects',
@@ -47,7 +47,7 @@ const MOCK_METRICS: AnalyticsMetric[] = [
     value: '8',
     change: -2.3,
     trend: 'down',
-    status: 'warning'
+    status: 'warning',
   },
   {
     id: 'efficiency',
@@ -55,7 +55,7 @@ const MOCK_METRICS: AnalyticsMetric[] = [
     value: '87%',
     change: 5.2,
     trend: 'up',
-    status: 'good'
+    status: 'good',
   },
   {
     id: 'costs',
@@ -63,14 +63,14 @@ const MOCK_METRICS: AnalyticsMetric[] = [
     value: '$28,100',
     change: -8.7,
     trend: 'down',
-    status: 'good'
-  }
+    status: 'good',
+  },
 ];
 
 const CHART_DATA: ChartData[] = [
   { name: 'Completed', value: 65, color: 'hsl(var(--primary))' },
   { name: 'In Progress', value: 25, color: 'hsl(var(--secondary))' },
-  { name: 'Planned', value: 10, color: 'hsl(var(--muted))' }
+  { name: 'Planned', value: 10, color: 'hsl(var(--muted))' },
 ];
 
 export function AdvancedAnalyticsDashboard() {
@@ -95,8 +95,8 @@ export function AdvancedAnalyticsDashboard() {
   };
 
   const getChangeColor = (change: number) => {
-    if (change > 0) return 'text-green-500';
-    if (change < 0) return 'text-red-500';
+    if (change > 0) { return 'text-green-500'; }
+    if (change < 0) { return 'text-red-500'; }
     return 'text-muted-foreground';
   };
 
@@ -116,7 +116,7 @@ export function AdvancedAnalyticsDashboard() {
                   key={range}
                   variant={timeRange === range ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setTimeRange(range)}
+                  onClick={() => { setTimeRange(range); }}
                 >
                   {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
                 </Button>
@@ -168,7 +168,7 @@ export function AdvancedAnalyticsDashboard() {
               {CHART_DATA.map((item) => (
                 <div key={item.name} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: item.color }}
                     />
@@ -177,11 +177,11 @@ export function AdvancedAnalyticsDashboard() {
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">{item.value}%</span>
                     <div className="w-20 h-2 bg-muted rounded-full">
-                      <div 
+                      <div
                         className="h-2 rounded-full transition-all duration-300"
-                        style={{ 
+                        style={{
                           width: `${item.value}%`,
-                          backgroundColor: item.color
+                          backgroundColor: item.color,
                         }}
                       />
                     </div>
@@ -205,7 +205,7 @@ export function AdvancedAnalyticsDashboard() {
               <div className="h-40 flex items-end justify-between gap-2">
                 {[65, 72, 68, 85, 91, 78, 89].map((value, idx) => (
                   <div key={idx} className="flex-1 bg-muted rounded-t-md relative">
-                    <div 
+                    <div
                       className="bg-primary rounded-t-md transition-all duration-500"
                       style={{ height: `${value}%` }}
                     />
@@ -239,7 +239,7 @@ export function AdvancedAnalyticsDashboard() {
                 { name: 'Crew A', utilization: 95, status: 'high' },
                 { name: 'Crew B', utilization: 78, status: 'medium' },
                 { name: 'Crew C', utilization: 45, status: 'low' },
-                { name: 'Equipment', utilization: 82, status: 'medium' }
+                { name: 'Equipment', utilization: 82, status: 'medium' },
               ].map((item) => (
                 <div key={item.name} className="space-y-2">
                   <div className="flex justify-between text-sm">
@@ -247,10 +247,10 @@ export function AdvancedAnalyticsDashboard() {
                     <span className="text-muted-foreground">{item.utilization}%</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
-                    <div 
+                    <div
                       className={`h-2 rounded-full transition-all duration-300 ${
-                        item.status === 'high' ? 'bg-red-500' :
-                        item.status === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                        item.status === 'high' ? 'bg-red-500'
+                        : item.status === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
                       }`}
                       style={{ width: `${item.utilization}%` }}
                     />
@@ -275,7 +275,7 @@ export function AdvancedAnalyticsDashboard() {
                 { category: 'Materials', amount: 15750, percentage: 45 },
                 { category: 'Labor', amount: 12200, percentage: 35 },
                 { category: 'Equipment', amount: 5250, percentage: 15 },
-                { category: 'Overhead', amount: 1750, percentage: 5 }
+                { category: 'Overhead', amount: 1750, percentage: 5 },
               ].map((item) => (
                 <div key={item.category} className="flex items-center justify-between">
                   <div className="space-y-1">
@@ -308,16 +308,16 @@ export function AdvancedAnalyticsDashboard() {
                   { time: '12:15', event: 'Material delivery arrived', status: 'completed' },
                   { time: '14:00', event: 'Weather alert issued', status: 'warning' },
                   { time: '15:30', event: 'Phase 2 initiated', status: 'active' },
-                  { time: '16:45', event: 'Equipment maintenance due', status: 'pending' }
+                  { time: '16:45', event: 'Equipment maintenance due', status: 'pending' },
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <div className="text-xs text-muted-foreground mt-1 w-12">
                       {item.time}
                     </div>
                     <div className={`w-2 h-2 rounded-full mt-2 ${
-                      item.status === 'completed' ? 'bg-green-500' :
-                      item.status === 'warning' ? 'bg-yellow-500' :
-                      item.status === 'active' ? 'bg-blue-500' : 'bg-muted'
+                      item.status === 'completed' ? 'bg-green-500'
+                      : item.status === 'warning' ? 'bg-yellow-500'
+                      : item.status === 'active' ? 'bg-blue-500' : 'bg-muted'
                     }`} />
                     <div className="flex-1">
                       <p className="text-sm">{item.event}</p>

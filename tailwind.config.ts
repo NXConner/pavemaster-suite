@@ -122,7 +122,7 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
           to: { height: '0', opacity: '0' },
         },
-        
+
         // Enhanced Fade Animations
         'fade-in': {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
@@ -188,11 +188,11 @@ export default {
           '100%': { transform: 'rotate(360deg)' },
         },
         'pulse-glow': {
-          '0%, 100%': { 
+          '0%, 100%': {
             boxShadow: '0 0 0 0 hsl(var(--primary) / 0.4)',
             transform: 'scale(1)',
           },
-          '50%': { 
+          '50%': {
             boxShadow: '0 0 0 10px hsl(var(--primary) / 0)',
             transform: 'scale(1.05)',
           },
@@ -268,7 +268,7 @@ export default {
         // Existing animations
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        
+
         // Enhanced fade animations
         'fade-in': 'fade-in 0.5s ease-out',
         'fade-out': 'fade-out 0.3s ease-in',
@@ -311,9 +311,9 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'grid-pattern': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0 32V.5h32' fill='none' stroke='hsl(var(--border))' stroke-width='.5'/%3E%3C/svg%3E")`,
-        'dots-pattern': `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='hsl(var(--muted))' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
-        'tactical-grid': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='hsl(var(--primary) / 0.1)' stroke-width='1'%3E%3Cpath d='m0 40 40-40M0 0h40v40H0z'/%3E%3C/g%3E%3C/svg%3E")`,
+        'grid-pattern': 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\'%3E%3Cpath d=\'M0 32V.5h32\' fill=\'none\' stroke=\'hsl(var(--border))\' stroke-width=\'.5\'/%3E%3C/svg%3E")',
+        'dots-pattern': 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'hsl(var(--muted))\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")',
+        'tactical-grid': 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 40 40\'%3E%3Cg fill=\'none\' stroke=\'hsl(var(--primary) / 0.1)\' stroke-width=\'1\'%3E%3Cpath d=\'m0 40 40-40M0 0h40v40H0z\'/%3E%3C/g%3E%3C/svg%3E")',
       },
       boxShadow: {
         'glow': '0 0 20px rgba(var(--primary), 0.5)',
@@ -364,7 +364,7 @@ export default {
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
         },
-        
+
         // Tactical effects
         '.tactical-glow': {
           boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)',
@@ -375,7 +375,7 @@ export default {
           textShadow: '0 0 10px rgba(34, 197, 94, 0.5)',
           fontFamily: theme('fontFamily.mono'),
         },
-        
+
         // Interactive effects
         '.hover-lift': {
           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
@@ -390,7 +390,7 @@ export default {
             boxShadow: '0 0 20px rgba(var(--primary), 0.4)',
           },
         },
-        
+
         // Text effects
         '.text-gradient': {
           background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)))',
@@ -404,7 +404,7 @@ export default {
         '.text-shadow-lg': {
           textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
         },
-        
+
         // Loading states
         '.loading-skeleton': {
           background: `linear-gradient(90deg, 
@@ -415,7 +415,7 @@ export default {
           backgroundSize: '200% 100%',
           animation: 'shimmer 1.5s infinite',
         },
-        
+
         // Focus states
         '.focus-ring': {
           '&:focus': {
@@ -429,12 +429,12 @@ export default {
             boxShadow: '0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring))',
           },
         },
-        
+
         // Smooth scrolling
         '.smooth-scroll': {
           scrollBehavior: 'smooth',
         },
-        
+
         // Custom scrollbars
         '.scrollbar-thin': {
           scrollbarWidth: 'thin',
@@ -453,7 +453,7 @@ export default {
             backgroundColor: 'hsl(var(--foreground))',
           },
         },
-        
+
         // Performance optimizations
         '.transform-gpu': {
           transform: 'translateZ(0)',
@@ -491,7 +491,7 @@ export default {
             left: '100%',
           },
         },
-        
+
         // Enhanced card components
         '.card-hover': {
           transition: 'all 0.3s ease',

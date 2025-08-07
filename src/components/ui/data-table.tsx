@@ -20,7 +20,7 @@ import {
   Eye,
   Edit,
   Trash2,
-  ArrowUpDown
+  ArrowUpDown,
 } from 'lucide-react';
 
 export interface ColumnDef<T> {
@@ -75,7 +75,7 @@ export function DataTable<T extends Record<string, any>>({
   className,
   variant = 'default',
   emptyStateMessage = 'No data available',
-  emptyStateAction
+  emptyStateAction,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{
@@ -95,8 +95,8 @@ export function DataTable<T extends Record<string, any>>({
     if (searchTerm) {
       filtered = filtered.filter((row) =>
         Object.values(row).some((value) =>
-          String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
+          String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
       );
     }
 
@@ -108,7 +108,7 @@ export function DataTable<T extends Record<string, any>>({
           filtered = filtered.filter((row) =>
             String(row[column.accessorKey])
               .toLowerCase()
-              .includes(filterValue.toLowerCase())
+              .includes(filterValue.toLowerCase()),
           );
         }
       }
@@ -119,21 +119,21 @@ export function DataTable<T extends Record<string, any>>({
 
   // Sort data
   const sortedData = useMemo(() => {
-    if (!sortConfig.key) return filteredData;
+    if (!sortConfig.key) { return filteredData; }
 
     return [...filteredData].sort((a, b) => {
       const aVal = a[sortConfig.key!];
       const bVal = b[sortConfig.key!];
 
-      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      if (aVal < bVal) { return sortConfig.direction === 'asc' ? -1 : 1; }
+      if (aVal > bVal) { return sortConfig.direction === 'asc' ? 1 : -1; }
       return 0;
     });
   }, [filteredData, sortConfig]);
 
   // Paginate data
   const paginatedData = useMemo(() => {
-    if (!pagination) return sortedData;
+    if (!pagination) { return sortedData; }
 
     const startIndex = (currentPage - 1) * pageSize;
     return sortedData.slice(startIndex, startIndex + pageSize);
@@ -181,19 +181,19 @@ export function DataTable<T extends Record<string, any>>({
               <Input
                 placeholder="Search..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => { setSearchTerm(e.target.value); }}
                 leftIcon={<Search className="h-4 w-4" />}
                 className="w-64"
                 variant={variant === 'tactical' ? 'tactical' : 'default'}
               />
             </div>
           )}
-          
+
           {filterable && (
             <Button
               variant={showFilters ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={() => { setShowFilters(!showFilters); }}
               leftIcon={<Filter className="h-4 w-4" />}
             >
               Filters
@@ -205,11 +205,11 @@ export function DataTable<T extends Record<string, any>>({
           <Button variant="outline" size="sm" leftIcon={<Download className="h-4 w-4" />}>
             Export
           </Button>
-          
+
           {selectedRows.size > 0 && (
             <span className={cn(
               'text-sm',
-              variant === 'tactical' ? 'text-green-400' : 'text-muted-foreground'
+              variant === 'tactical' ? 'text-green-400' : 'text-muted-foreground',
             )}>
               {selectedRows.size} selected
             </span>
@@ -227,18 +227,19 @@ export function DataTable<T extends Record<string, any>>({
                 <div key={column.id}>
                   <label className={cn(
                     'text-sm font-medium',
-                    variant === 'tactical' ? 'text-green-400' : 'text-foreground'
+                    variant === 'tactical' ? 'text-green-400' : 'text-foreground',
                   )}>
                     {column.header}
                   </label>
                   <Input
                     placeholder={`Filter ${column.header.toLowerCase()}...`}
                     value={columnFilters[column.id] || ''}
-                    onChange={(e) =>
-                      setColumnFilters(prev => ({
+                    onChange={(e) => {
+ setColumnFilters(prev => ({
                         ...prev,
-                        [column.id]: e.target.value
-                      }))
+                        [column.id]: e.target.value,
+                      }));
+}
                     }
                     size="sm"
                     variant={variant === 'tactical' ? 'tactical' : 'default'}
@@ -256,14 +257,14 @@ export function DataTable<T extends Record<string, any>>({
             <thead>
               <tr className={cn(
                 'border-b',
-                variant === 'tactical' ? 'border-green-400/20' : 'border'
+                variant === 'tactical' ? 'border-green-400/20' : 'border',
               )}>
                 {selectable && (
                   <th className="w-12 p-3">
                     <input
                       type="checkbox"
                       checked={selectedRows.size === paginatedData.length && paginatedData.length > 0}
-                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      onChange={(e) => { handleSelectAll(e.target.checked); }}
                       className="rounded"
                     />
                   </th>
@@ -276,17 +277,17 @@ export function DataTable<T extends Record<string, any>>({
                       column.width,
                       column.align === 'center' && 'text-center',
                       column.align === 'right' && 'text-right',
-                      variant === 'tactical' ? 'text-green-300' : 'text-foreground'
+                      variant === 'tactical' ? 'text-green-300' : 'text-foreground',
                     )}
                   >
                     {column.sortable !== false ? (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleSort(column.accessorKey)}
+                        onClick={() => { handleSort(column.accessorKey); }}
                         className={cn(
                           'h-auto p-0 font-medium hover:bg-transparent',
-                          variant === 'tactical' && 'text-green-300 hover:text-green-200'
+                          variant === 'tactical' && 'text-green-300 hover:text-green-200',
                         )}
                         rightIcon={
                           sortConfig.key === column.accessorKey ? (
@@ -313,14 +314,14 @@ export function DataTable<T extends Record<string, any>>({
             <tbody>
               {paginatedData.length === 0 ? (
                 <tr>
-                  <td 
+                  <td
                     colSpan={columns.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}
                     className="p-8 text-center"
                   >
                     <div className="flex flex-col items-center gap-4">
                       <p className={cn(
                         'text-muted-foreground',
-                        variant === 'tactical' && 'text-green-400/60'
+                        variant === 'tactical' && 'text-green-400/60',
                       )}>
                         {emptyStateMessage}
                       </p>
@@ -337,10 +338,10 @@ export function DataTable<T extends Record<string, any>>({
                       variant === 'tactical' && 'border-green-400/10 hover:bg-green-400/5',
                       onRowClick && 'cursor-pointer',
                       selectedRows.has(index) && (
-                        variant === 'tactical' 
-                          ? 'bg-green-400/10' 
+                        variant === 'tactical'
+                          ? 'bg-green-400/10'
                           : 'bg-muted'
-                      )
+                      ),
                     )}
                     onClick={() => onRowClick?.(row)}
                   >
@@ -364,7 +365,7 @@ export function DataTable<T extends Record<string, any>>({
                           'p-3',
                           column.align === 'center' && 'text-center',
                           column.align === 'right' && 'text-right',
-                          variant === 'tactical' ? 'text-green-400/90' : 'text-foreground'
+                          variant === 'tactical' ? 'text-green-400/90' : 'text-foreground',
                         )}
                       >
                         {column.cell
@@ -442,18 +443,18 @@ export function DataTable<T extends Record<string, any>>({
         <div className="flex items-center justify-between">
           <div className={cn(
             'text-sm',
-            variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground'
+            variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground',
           )}>
             Showing {((currentPage - 1) * pageSize) + 1} to{' '}
             {Math.min(currentPage * pageSize, sortedData.length)} of{' '}
             {sortedData.length} results
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(1)}
+              onClick={() => { setCurrentPage(1); }}
               disabled={currentPage === 1}
             >
               <Icon icon={ChevronsLeft} size="sm" />
@@ -461,23 +462,23 @@ export function DataTable<T extends Record<string, any>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(currentPage - 1)}
+              onClick={() => { setCurrentPage(currentPage - 1); }}
               disabled={currentPage === 1}
             >
               <Icon icon={ChevronLeft} size="sm" />
             </Button>
-            
+
             <span className={cn(
               'px-3 py-1 text-sm',
-              variant === 'tactical' ? 'text-green-300' : 'text-foreground'
+              variant === 'tactical' ? 'text-green-300' : 'text-foreground',
             )}>
               Page {currentPage} of {totalPages}
             </span>
-            
+
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(currentPage + 1)}
+              onClick={() => { setCurrentPage(currentPage + 1); }}
               disabled={currentPage === totalPages}
             >
               <Icon icon={ChevronRight} size="sm" />
@@ -485,7 +486,7 @@ export function DataTable<T extends Record<string, any>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(totalPages)}
+              onClick={() => { setCurrentPage(totalPages); }}
               disabled={currentPage === totalPages}
             >
               <Icon icon={ChevronsRight} size="sm" />

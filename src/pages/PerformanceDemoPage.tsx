@@ -26,7 +26,7 @@ import {
   Timer,
   Cpu,
   Memory,
-  Network
+  Network,
 } from 'lucide-react';
 
 interface ProjectData {
@@ -63,14 +63,14 @@ export default function PerformanceDemoPage() {
   const generateData = useCallback(async (size: number) => {
     setLoading(true);
     const startTime = performance.now();
-    
+
     try {
       // Simulate async data generation
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const newData = generateLargeDataset(size);
       setData(newData);
-      
+
       const endTime = performance.now();
       setPerformanceMetrics(prev => ({
         ...prev,
@@ -78,10 +78,9 @@ export default function PerformanceDemoPage() {
         totalRows: size,
         virtualizedRows: Math.min(size, 50), // Estimate visible rows
       }));
-      
+
       // Cache the generated data
       await cacheManager.set(`project-data-${size}`, newData, 1000 * 60 * 10); // 10 minutes
-      
     } catch (error) {
       console.error('Data generation failed:', error);
     } finally {
@@ -93,7 +92,7 @@ export default function PerformanceDemoPage() {
   const loadData = useCallback(async (size: number) => {
     const cacheKey = `project-data-${size}`;
     const cached = await cacheManager.get<ProjectData[]>(cacheKey);
-    
+
     if (cached) {
       setData(cached);
       setPerformanceMetrics(prev => ({
@@ -124,7 +123,7 @@ export default function PerformanceDemoPage() {
     const interval = setInterval(() => {
       updateCacheStats();
       updateBundleMetrics();
-      
+
       // Update memory usage if available
       if ('memory' in performance) {
         const memInfo = (performance as any).memory;
@@ -135,7 +134,7 @@ export default function PerformanceDemoPage() {
       }
     }, 2000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [updateCacheStats, updateBundleMetrics]);
 
   // Load initial data
@@ -187,10 +186,10 @@ export default function PerformanceDemoPage() {
       filterable: true,
       cell: (value) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'Active' ? 'bg-green-100 text-green-800' :
-          value === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-          value === 'Completed' ? 'bg-blue-100 text-blue-800' :
-          'bg-gray-100 text-gray-800'
+          value === 'Active' ? 'bg-green-100 text-green-800'
+          : value === 'Pending' ? 'bg-yellow-100 text-yellow-800'
+          : value === 'Completed' ? 'bg-blue-100 text-blue-800'
+          : 'bg-gray-100 text-gray-800'
         }`}>
           {value}
         </span>
@@ -269,9 +268,9 @@ export default function PerformanceDemoPage() {
       filterable: true,
       cell: (value) => (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
-          value === 'High' ? 'bg-red-100 text-red-800' :
-          value === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-          'bg-green-100 text-green-800'
+          value === 'High' ? 'bg-red-100 text-red-800'
+          : value === 'Medium' ? 'bg-yellow-100 text-yellow-800'
+          : 'bg-green-100 text-green-800'
         }`}>
           {value}
         </span>
@@ -299,21 +298,21 @@ export default function PerformanceDemoPage() {
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => handleRowAction('view', row)}
+        onClick={() => { handleRowAction('view', row); }}
       >
         <Icon icon={Eye} size="sm" />
       </Button>
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => handleRowAction('edit', row)}
+        onClick={() => { handleRowAction('edit', row); }}
       >
         <Icon icon={Edit} size="sm" />
       </Button>
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => handleRowAction('delete', row)}
+        onClick={() => { handleRowAction('delete', row); }}
       >
         <Icon icon={Trash2} size="sm" />
       </Button>
@@ -322,7 +321,7 @@ export default function PerformanceDemoPage() {
 
   // Format memory usage
   const formatMemory = (bytes: number): string => {
-    if (bytes === 0) return '0 MB';
+    if (bytes === 0) { return '0 MB'; }
     const mb = bytes / (1024 * 1024);
     return `${mb.toFixed(1)} MB`;
   };
@@ -339,21 +338,21 @@ export default function PerformanceDemoPage() {
       variant={selectedVariant}
       breadcrumbs={[
         { label: 'Dashboard', href: '/' },
-        { label: 'Performance Demo' }
+        { label: 'Performance Demo' },
       ]}
       actions={
         <div className="flex items-center gap-2">
           <Button
             variant={selectedVariant === 'default' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setSelectedVariant('default')}
+            onClick={() => { setSelectedVariant('default'); }}
           >
             Default Theme
           </Button>
           <Button
             variant={selectedVariant === 'tactical' ? 'tactical' : 'outline'}
             size="sm"
-            onClick={() => setSelectedVariant('tactical')}
+            onClick={() => { setSelectedVariant('tactical'); }}
           >
             Tactical Theme
           </Button>
@@ -370,7 +369,7 @@ export default function PerformanceDemoPage() {
             icon={<Icon icon={Timer} size="lg" variant={selectedVariant === 'tactical' ? 'tactical' : 'primary'} />}
             trend={{ value: 95, isPositive: true }}
           />
-          
+
           <StatCard
             title="Memory Usage"
             value={formatMemory(performanceMetrics.memoryUsage)}
@@ -378,7 +377,7 @@ export default function PerformanceDemoPage() {
             icon={<Icon icon={Memory} size="lg" variant={selectedVariant === 'tactical' ? 'tactical' : 'primary'} />}
             trend={{ value: 12, isPositive: false }}
           />
-          
+
           <StatCard
             title="Cache Hit Rate"
             value={formatPercentage(cacheStats.hitRate || 0)}
@@ -386,7 +385,7 @@ export default function PerformanceDemoPage() {
             icon={<Icon icon={Database} size="lg" variant={selectedVariant === 'tactical' ? 'tactical' : 'primary'} />}
             trend={{ value: 23, isPositive: true }}
           />
-          
+
           <StatCard
             title="Virtualized Rows"
             value={`${performanceMetrics.virtualizedRows}/${performanceMetrics.totalRows.toLocaleString()}`}
@@ -412,7 +411,7 @@ export default function PerformanceDemoPage() {
                   <Input
                     type="number"
                     value={dataSize}
-                    onChange={(e) => setDataSize(Number(e.target.value))}
+                    onChange={(e) => { setDataSize(Number(e.target.value)); }}
                     min={1000}
                     max={1000000}
                     step={1000}
@@ -466,7 +465,7 @@ export default function PerformanceDemoPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => bundleOptimizer.cleanup()}
+                    onClick={() => { bundleOptimizer.cleanup(); }}
                     leftIcon={<Icon icon={HardDrive} size="sm" />}
                   >
                     Cleanup
@@ -512,8 +511,8 @@ export default function PerformanceDemoPage() {
                   <div className="flex justify-between font-medium">
                     <span>Hit Rate:</span>
                     <span className={`font-mono ${
-                      (cacheStats.hitRate || 0) > 80 ? 'text-green-600' :
-                      (cacheStats.hitRate || 0) > 60 ? 'text-yellow-600' : 'text-red-600'
+                      (cacheStats.hitRate || 0) > 80 ? 'text-green-600'
+                      : (cacheStats.hitRate || 0) > 60 ? 'text-yellow-600' : 'text-red-600'
                     }`}>
                       {formatPercentage(cacheStats.hitRate || 0)}
                     </span>
@@ -597,8 +596,8 @@ export default function PerformanceDemoPage() {
                 sortable={true}
                 selectable={true}
                 variant={selectedVariant}
-                onRowClick={(row) => console.log('Row clicked:', row)}
-                onRowsSelect={(rows) => console.log('Rows selected:', rows.length)}
+                onRowClick={(row) => { console.log('Row clicked:', row); }}
+                onRowsSelect={(rows) => { console.log('Rows selected:', rows.length); }}
                 renderActions={renderActions}
                 enableVirtualization={true}
               />
@@ -625,7 +624,7 @@ export default function PerformanceDemoPage() {
                   Only renders visible rows, handles 1M+ records smoothly with constant performance.
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon={Database} size="sm" variant="info" />
@@ -635,7 +634,7 @@ export default function PerformanceDemoPage() {
                   Multi-layer caching with memory, IndexedDB, and service worker for instant data access.
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon={Network} size="sm" variant="warning" />

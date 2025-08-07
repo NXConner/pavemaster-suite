@@ -383,8 +383,8 @@ class ComputerVisionEngine {
           width: 200 + Math.random() * 150,
           height: 30,
         },
-        type: sampleTexts[i].includes('DATE') ? 'date' : 
-              sampleTexts[i].includes('APPROVED') ? 'stamp' : 'text',
+        type: sampleTexts[i].includes('DATE') ? 'date'
+              : sampleTexts[i].includes('APPROVED') ? 'stamp' : 'text',
       });
     }
 
@@ -473,7 +473,7 @@ class ComputerVisionEngine {
   }
 
   getBatchAnalytics(results: ImageAnalysisResult[]): any {
-    if (results.length === 0) return null;
+    if (results.length === 0) { return null; }
 
     const totalDefects = results.reduce((sum, r) => sum + (r.results.defects?.length || 0), 0);
     const avgConfidence = results.reduce((sum, r) => sum + r.results.confidence, 0) / results.length;
@@ -551,12 +551,12 @@ export const ComputerVisionEngineComponent: React.FC = () => {
   const renderDetectionOverlay = (analysis: ImageAnalysisResult) => {
     return (
       <div className="relative">
-        <img 
-          src={analysis.imageUrl} 
+        <img
+          src={analysis.imageUrl}
           alt="Analysis result"
           className="max-w-full h-auto"
         />
-        <svg 
+        <svg
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
           style={{ aspectRatio: `${analysis.metadata.imageSize.width}/${analysis.metadata.imageSize.height}` }}
         >
@@ -599,7 +599,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
               <Badge variant="secondary">Phase 2.3</Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={isProcessing ? "default" : "secondary"}>
+              <Badge variant={isProcessing ? 'default' : 'secondary'}>
                 {isProcessing ? <Activity className="h-3 w-3 mr-1 animate-spin" /> : <Eye className="h-3 w-3 mr-1" />}
                 {isProcessing ? 'Processing' : 'Ready'}
               </Badge>
@@ -639,7 +639,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                         <Label>Analysis Type</Label>
                         <select
                           value={analysisType}
-                          onChange={(e) => setAnalysisType(e.target.value)}
+                          onChange={(e) => { setAnalysisType(e.target.value); }}
                           className="w-full p-2 border rounded-md"
                         >
                           <option value="defect">Defect Detection</option>
@@ -748,7 +748,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                             <div
                               key={analysis.id}
                               className="p-3 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                              onClick={() => setSelectedAnalysis(analysis)}
+                              onClick={() => { setSelectedAnalysis(analysis); }}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <Badge variant="outline">{analysis.analysisType}</Badge>
@@ -785,7 +785,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                         <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
                           {renderDetectionOverlay(selectedAnalysis)}
                         </div>
-                        
+
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-sm">Type:</span>
@@ -915,7 +915,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">v2.1.0 (94% accuracy)</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -923,7 +923,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">v1.8.0 (91% accuracy)</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />
@@ -931,7 +931,7 @@ export const ComputerVisionEngineComponent: React.FC = () => {
                       </div>
                       <Badge variant="default">v3.0.0 (96% accuracy)</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-green-600" />

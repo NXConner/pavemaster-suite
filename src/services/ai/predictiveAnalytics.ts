@@ -268,12 +268,12 @@ export class PredictiveAnalytics {
   private async initializeModels(): Promise<void> {
     try {
       await tf.ready();
-      
+
       // Initialize predictive models
       this.equipmentModel = await this.createEquipmentFailureModel();
       this.costModel = await this.createCostPredictionModel();
       this.scheduleModel = await this.createScheduleOptimizationModel();
-      
+
       this.isInitialized = true;
       console.log('Predictive Analytics models initialized successfully');
     } catch (error) {
@@ -359,11 +359,11 @@ export class PredictiveAnalytics {
     try {
       // Prepare input features
       const features = this.prepareEquipmentFeatures(equipmentData);
-      
+
       // Run prediction
       const prediction = this.equipmentModel.predict(features) as tf.Tensor;
       const failureProbability = (await prediction.data())[0];
-      
+
       // Generate comprehensive failure analysis
       return this.generateFailureRisk(equipmentData, failureProbability);
     } catch (error) {
@@ -383,11 +383,11 @@ export class PredictiveAnalytics {
     try {
       // Prepare input features
       const features = this.prepareProjectFeatures(projectSpecs);
-      
+
       // Run cost prediction
       const prediction = this.costModel.predict(features) as tf.Tensor;
       const predictedCost = (await prediction.data())[0];
-      
+
       // Generate comprehensive cost forecast
       return this.generateCostForecast(projectSpecs, predictedCost);
     } catch (error) {
@@ -407,11 +407,11 @@ export class PredictiveAnalytics {
     try {
       // Prepare constraint features
       const features = this.prepareSchedulingFeatures(constraints);
-      
+
       // Run optimization
       const prediction = this.scheduleModel.predict(features) as tf.Tensor;
       const optimizationScores = await prediction.data();
-      
+
       // Generate optimal schedule
       return this.generateOptimalSchedule(constraints, optimizationScores);
     } catch (error) {
@@ -425,8 +425,8 @@ export class PredictiveAnalytics {
     const features = [
       equipment.operatingHours / 10000, // Normalized operating hours
       equipment.maintenanceHistory.length / 50, // Maintenance frequency
-      equipment.performanceData.length > 0 ? 
-        equipment.performanceData[equipment.performanceData.length - 1].efficiency / 100 : 0.8,
+      equipment.performanceData.length > 0
+        ? equipment.performanceData[equipment.performanceData.length - 1].efficiency / 100 : 0.8,
       equipment.currentCondition.overall / 100,
       equipment.currentCondition.engine / 100,
       equipment.currentCondition.hydraulics / 100,
@@ -476,21 +476,21 @@ export class PredictiveAnalytics {
       constraints.resourceLimitations.length / 10,
       constraints.dependencies.length / 20,
       // Average equipment efficiency
-      constraints.availableEquipment.reduce((sum, eq) => sum + eq.efficiency, 0) / 
-        constraints.availableEquipment.length / 100,
+      constraints.availableEquipment.reduce((sum, eq) => sum + eq.efficiency, 0)
+        / constraints.availableEquipment.length / 100,
       // Average crew efficiency
-      constraints.crewAvailability.reduce((sum, crew) => sum + crew.efficiency, 0) / 
-        constraints.crewAvailability.length / 100,
+      constraints.crewAvailability.reduce((sum, crew) => sum + crew.efficiency, 0)
+        / constraints.crewAvailability.length / 100,
       // Priority distribution
-      constraints.projectDeadlines.filter(p => p.priority === 'critical').length / 
-        constraints.projectDeadlines.length,
+      constraints.projectDeadlines.filter(p => p.priority === 'critical').length
+        / constraints.projectDeadlines.length,
       // Weather impact
-      constraints.weatherConstraints.reduce((sum, w) => sum + w.severity, 0) / 
-        constraints.weatherConstraints.length / 10,
+      constraints.weatherConstraints.reduce((sum, w) => sum + w.severity, 0)
+        / constraints.weatherConstraints.length / 10,
       // Resource availability
-      constraints.resourceLimitations.reduce((sum, r) => 
-        sum + (r.availableQuantity / r.requiredQuantity), 0) / 
-        constraints.resourceLimitations.length,
+      constraints.resourceLimitations.reduce((sum, r) =>
+        sum + (r.availableQuantity / r.requiredQuantity), 0)
+        / constraints.resourceLimitations.length,
       ...Array(9).fill(0).map(() => Math.random()), // Additional features
     ];
 
@@ -498,13 +498,13 @@ export class PredictiveAnalytics {
   }
 
   private generateFailureRisk(
-    equipment: EquipmentMetrics, 
-    failureProbability: number
+    equipment: EquipmentMetrics,
+    failureProbability: number,
   ): FailureRisk {
     const riskScore = failureProbability * 100;
     const timeToFailure = this.calculateTimeToFailure(equipment, failureProbability);
     const criticalComponents = this.identifyCriticalComponents(equipment, failureProbability);
-    
+
     return {
       equipmentId: equipment.id,
       overallRiskScore: riskScore,
@@ -522,20 +522,20 @@ export class PredictiveAnalytics {
     const baseTime = 365; // One year baseline
     const conditionFactor = equipment.currentCondition.overall / 100;
     const ageFactor = Math.max(0.1, 1 - (equipment.operatingHours / 15000));
-    
+
     return Math.max(1, baseTime * conditionFactor * ageFactor * (1 - probability));
   }
 
   private identifyCriticalComponents(
-    equipment: EquipmentMetrics, 
-    baseProbability: number
+    equipment: EquipmentMetrics,
+    baseProbability: number,
   ): ComponentRisk[] {
     const components = ['engine', 'hydraulics', 'transmission', 'tracks', 'electricals'];
-    
+
     return components.map(component => ({
       component,
-      riskScore: (equipment.currentCondition[component as keyof EquipmentCondition] || 70) * 
-        baseProbability,
+      riskScore: (equipment.currentCondition[component as keyof EquipmentCondition] || 70)
+        * baseProbability,
       timeToFailure: this.calculateComponentTimeToFailure(component, equipment),
       replacementCost: this.getComponentReplacementCost(component, equipment.type),
       failureMode: this.getCommonFailureMode(component),
@@ -556,7 +556,7 @@ export class PredictiveAnalytics {
       tracks: { paver: 8000, roller: 10000, truck: 5000, grader: 12000, excavator: 15000 },
       electricals: { paver: 5000, roller: 4000, truck: 3000, grader: 6000, excavator: 7000 },
     };
-    
+
     return costs[component as keyof typeof costs]?.[equipmentType as keyof typeof costs.engine] || 10000;
   }
 
@@ -568,16 +568,16 @@ export class PredictiveAnalytics {
       tracks: 'Rubber deterioration and track loosening',
       electricals: 'Wire corrosion and sensor failure',
     };
-    
+
     return failureModes[component as keyof typeof failureModes] || 'General wear';
   }
 
   private generateMaintenanceActions(
-    equipment: EquipmentMetrics, 
-    riskScore: number
+    equipment: EquipmentMetrics,
+    riskScore: number,
   ): MaintenanceAction[] {
     const actions: MaintenanceAction[] = [];
-    
+
     if (riskScore > 80) {
       actions.push({
         priority: 'immediate',
@@ -588,7 +588,7 @@ export class PredictiveAnalytics {
         riskReduction: 60,
       });
     }
-    
+
     if (riskScore > 60) {
       actions.push({
         priority: 'high',
@@ -599,7 +599,7 @@ export class PredictiveAnalytics {
         riskReduction: 45,
       });
     }
-    
+
     actions.push({
       priority: 'medium',
       action: 'Increase monitoring frequency and preventive maintenance',
@@ -608,7 +608,7 @@ export class PredictiveAnalytics {
       preventedDowntime: 24,
       riskReduction: 25,
     });
-    
+
     return actions;
   }
 
@@ -616,7 +616,7 @@ export class PredictiveAnalytics {
     const preventiveCost = 5000 * (1 + probability);
     const emergencyRepairCost = 25000 * (1 + probability * 2);
     const lostProductivity = 15000 * probability;
-    
+
     return {
       preventiveCost,
       emergencyRepairCost,
@@ -628,7 +628,7 @@ export class PredictiveAnalytics {
   private generateCostForecast(project: ProjectSpecs, baseCost: number): CostForecast {
     // Adjust base cost with realistic factors
     const adjustedCost = Math.max(10000, baseCost * 50000); // Scale to realistic range
-    
+
     const costBreakdown: CostBreakdown = {
       materials: adjustedCost * 0.45,
       labor: adjustedCost * 0.30,
@@ -637,7 +637,7 @@ export class PredictiveAnalytics {
       overhead: adjustedCost * 0.05,
       contingency: adjustedCost * 0.02,
     };
-    
+
     return {
       projectId: project.id,
       totalEstimatedCost: adjustedCost,
@@ -717,11 +717,11 @@ export class PredictiveAnalytics {
 
   private generateOptimalSchedule(
     constraints: SchedulingConstraints,
-    scores: Float32Array
+    scores: Float32Array,
   ): OptimalSchedule {
     // Generate optimized schedule based on ML predictions
     const schedule = this.createOptimizedTasks(constraints, scores);
-    
+
     return {
       schedule,
       efficiency: 85 + Math.random() * 10,
@@ -735,7 +735,7 @@ export class PredictiveAnalytics {
 
   private createOptimizedTasks(
     constraints: SchedulingConstraints,
-    scores: Float32Array
+    scores: Float32Array,
   ): ScheduledTask[] {
     // Mock optimized task creation - in real implementation,
     // this would use the ML scores to create an optimal schedule
@@ -752,17 +752,17 @@ export class PredictiveAnalytics {
   }
 
   private calculateTotalDuration(schedule: ScheduledTask[]): number {
-    if (schedule.length === 0) return 0;
-    
+    if (schedule.length === 0) { return 0; }
+
     const earliestStart = Math.min(...schedule.map(task => task.startTime.getTime()));
     const latestEnd = Math.max(...schedule.map(task => task.endTime.getTime()));
-    
+
     return (latestEnd - earliestStart) / (24 * 60 * 60 * 1000); // Convert to days
   }
 
   private calculateResourceUtilization(
     constraints: SchedulingConstraints,
-    schedule: ScheduledTask[]
+    schedule: ScheduledTask[],
   ): ResourceUtilization[] {
     return constraints.availableEquipment.map(equipment => ({
       resource: equipment.equipmentId,
@@ -805,7 +805,7 @@ export class PredictiveAnalytics {
 
   private calculateSchedulePerformance(
     schedule: ScheduledTask[],
-    constraints: SchedulingConstraints
+    constraints: SchedulingConstraints,
   ): SchedulePerformance {
     return {
       onTimeDelivery: 92,

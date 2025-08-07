@@ -288,23 +288,22 @@ export class WeatherService {
     try {
       const cacheKey = `current_${lat}_${lng}`;
       const cached = this.getCachedData(cacheKey);
-      if (cached) return cached;
+      if (cached) { return cached; }
 
       // Always try real API first, fallback to mock only on error
 
       const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Weather API error: ${response.status}`);
       }
 
       const data = await response.json();
       const weatherData = this.parseCurrentWeatherData(data, lat, lng);
-      
+
       this.setCachedData(cacheKey, weatherData);
       return weatherData;
-
     } catch (error) {
       console.error('Error fetching current weather:', error);
       return this.getMockCurrentWeather(lat, lng);
@@ -318,23 +317,22 @@ export class WeatherService {
     try {
       const cacheKey = `forecast_${lat}_${lng}_${days}`;
       const cached = this.getCachedData(cacheKey);
-      if (cached) return cached;
+      if (cached) { return cached; }
 
       // Always try real API first, fallback to mock only on error
 
       const url = `${this.oneCallUrl}?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial&exclude=minutely`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Weather API error: ${response.status}`);
       }
 
       const data = await response.json();
       const forecast = this.parseForecastData(data, lat, lng, days);
-      
+
       this.setCachedData(cacheKey, forecast);
       return forecast;
-
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
       return this.getMockForecast(lat, lng, days);
@@ -392,14 +390,13 @@ export class WeatherService {
       // Note: Weather alerts are included in the One Call API
       const url = `${this.oneCallUrl}?lat=${lat}&lon=${lng}&appid=${this.apiKey}&units=imperial`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Weather API error: ${response.status}`);
       }
 
       const data = await response.json();
       return this.parseWeatherAlerts(data.alerts || []);
-
     } catch (error) {
       console.error('Error fetching weather alerts:', error);
       return this.getMockAlerts();
@@ -442,7 +439,7 @@ export class WeatherService {
   private parsePrecipitationData(data: any): PrecipitationData {
     const hasRain = data.rain && Object.keys(data.rain).length > 0;
     const hasSnow = data.snow && Object.keys(data.snow).length > 0;
-    
+
     let type: PrecipitationData['type'] = 'none';
     let amount = 0;
 
@@ -458,9 +455,7 @@ export class WeatherService {
     amount = amount * 0.0393701;
 
     let intensity: PrecipitationData['intensity'] = 'light';
-    if (amount > 0.3) intensity = 'extreme';
-    else if (amount > 0.15) intensity = 'heavy';
-    else if (amount > 0.05) intensity = 'moderate';
+    if (amount > 0.3) { intensity = 'extreme'; } else if (amount > 0.15) { intensity = 'heavy'; } else if (amount > 0.05) { intensity = 'moderate'; }
 
     return {
       type,
@@ -512,8 +507,8 @@ export class WeatherService {
 
     const daily: DailyForecast[] = (data.daily || []).slice(0, days).map((day: any) => {
       const date = new Date(day.dt * 1000);
-      const workableHours = this.calculateWorkableHours(day, hourly.filter(h => 
-        h.timestamp.getDate() === date.getDate()
+      const workableHours = this.calculateWorkableHours(day, hourly.filter(h =>
+        h.timestamp.getDate() === date.getDate(),
       ));
 
       return {
@@ -720,10 +715,10 @@ export class WeatherService {
   }
 
   private getWorkabilityRecommendation(score: number): 'excellent' | 'good' | 'fair' | 'poor' | 'not_recommended' {
-    if (score >= 90) return 'excellent';
-    if (score >= 75) return 'good';
-    if (score >= 60) return 'fair';
-    if (score >= 40) return 'poor';
+    if (score >= 90) { return 'excellent'; }
+    if (score >= 75) { return 'good'; }
+    if (score >= 60) { return 'fair'; }
+    if (score >= 40) { return 'poor'; }
     return 'not_recommended';
   }
 
@@ -758,7 +753,7 @@ export class WeatherService {
 
   private getRecommendedAction(factor: WorkabilityFactor): string {
     const actions = {
-      temperature: factor.currentValue < (factor.threshold.min || 0) 
+      temperature: factor.currentValue < (factor.threshold.min || 0)
         ? 'Wait for temperature to rise above minimum threshold'
         : 'Wait for temperature to cool below maximum threshold',
       precipitation: 'Wait for precipitation to stop and surfaces to dry',
@@ -773,7 +768,7 @@ export class WeatherService {
   private generateOptimizedSchedule(weather: CurrentWeather, factors: WorkabilityFactor[]): OptimizedWorkSchedule {
     const workable = factors.every(f => f.score >= 40);
     const currentHour = new Date().getHours();
-    
+
     return {
       todayRecommendation: {
         workable,
@@ -787,9 +782,9 @@ export class WeatherService {
   }
 
   private getPrecipitationIntensity(amount: number): PrecipitationData['intensity'] {
-    if (amount > 0.3) return 'extreme';
-    if (amount > 0.15) return 'heavy';
-    if (amount > 0.05) return 'moderate';
+    if (amount > 0.3) { return 'extreme'; }
+    if (amount > 0.15) { return 'heavy'; }
+    if (amount > 0.05) { return 'moderate'; }
     return 'light';
   }
 
@@ -800,7 +795,7 @@ export class WeatherService {
   private findBestWorkWindow(date: Date, hourlyData: HourlyForecast[]): { start: Date; end: Date; conditions: string } {
     const dayHours = hourlyData.filter(h => h.timestamp.getDate() === date.getDate());
     const workableHours = dayHours.filter(h => h.workable);
-    
+
     if (workableHours.length === 0) {
       return {
         start: date,
@@ -884,9 +879,9 @@ export class WeatherService {
   }
 
   private mapAlertType(event: string): WeatherAlert['type'] {
-    if (event.includes('Warning')) return 'warning';
-    if (event.includes('Watch')) return 'watch';
-    if (event.includes('Emergency')) return 'emergency';
+    if (event.includes('Warning')) { return 'warning'; }
+    if (event.includes('Watch')) { return 'watch'; }
+    if (event.includes('Emergency')) { return 'emergency'; }
     return 'advisory';
   }
 
@@ -926,9 +921,9 @@ export class WeatherService {
   }
 
   private calculateProductivityImpact(event: string): number {
-    if (event.includes('Tornado') || event.includes('Hurricane')) return 100;
-    if (event.includes('Thunderstorm') || event.includes('High Wind')) return 80;
-    if (event.includes('Rain') || event.includes('Snow')) return 60;
+    if (event.includes('Tornado') || event.includes('Hurricane')) { return 100; }
+    if (event.includes('Thunderstorm') || event.includes('High Wind')) { return 80; }
+    if (event.includes('Rain') || event.includes('Snow')) { return 60; }
     return 25;
   }
 

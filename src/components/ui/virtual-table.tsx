@@ -5,14 +5,14 @@ import { Input } from './input';
 import { Button } from './button';
 import { Icon } from './icon';
 import { Loading } from './loading';
-import { 
-  Search, 
-  Filter, 
-  ArrowUpDown, 
-  ChevronUp, 
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
+  ChevronUp,
   ChevronDown,
   Download,
-  MoreHorizontal
+  MoreHorizontal,
 } from 'lucide-react';
 
 export interface VirtualColumnDef<T> {
@@ -73,7 +73,7 @@ function useVirtualizer({
   scrollTop: number;
 }) {
   return useMemo(() => {
-    if (count === 0) return { virtualItems: [], totalSize: 0 };
+    if (count === 0) { return { virtualItems: [], totalSize: 0 }; }
 
     const items: VirtualItem[] = [];
     let totalSize = 0;
@@ -83,14 +83,14 @@ function useVirtualizer({
       const size = getItemSize(i);
       const start = totalSize;
       const end = start + size;
-      
+
       items.push({
         index: i,
         start,
         size,
         end,
       });
-      
+
       totalSize += size;
     }
 
@@ -160,7 +160,7 @@ export function VirtualTable<T extends Record<string, any>>({
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const [scrollTop, setScrollTop] = useState(0);
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
-  
+
   const scrollElementRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -184,7 +184,7 @@ export function VirtualTable<T extends Record<string, any>>({
         columns.some(col => {
           const value = item[col.accessorKey];
           return String(value).toLowerCase().includes(searchLower);
-        })
+        }),
       );
     }
 
@@ -207,25 +207,25 @@ export function VirtualTable<T extends Record<string, any>>({
 
   // Sort data
   const sortedData = useMemo(() => {
-    if (!sortConfig.key) return filteredData;
+    if (!sortConfig.key) { return filteredData; }
 
     return [...filteredData].sort((a, b) => {
       const aVal = a[sortConfig.key!];
       const bVal = b[sortConfig.key!];
 
-      if (aVal === bVal) return 0;
+      if (aVal === bVal) { return 0; }
 
       const isAsc = sortConfig.direction === 'asc';
-      
+
       if (typeof aVal === 'number' && typeof bVal === 'number') {
         return isAsc ? aVal - bVal : bVal - aVal;
       }
 
       const aStr = String(aVal).toLowerCase();
       const bStr = String(bVal).toLowerCase();
-      
-      if (aStr < bStr) return isAsc ? -1 : 1;
-      if (aStr > bStr) return isAsc ? 1 : -1;
+
+      if (aStr < bStr) { return isAsc ? -1 : 1; }
+      if (aStr > bStr) { return isAsc ? 1 : -1; }
       return 0;
     });
   }, [filteredData, sortConfig]);
@@ -247,7 +247,7 @@ export function VirtualTable<T extends Record<string, any>>({
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const scrollTop = e.currentTarget.scrollTop;
     setScrollTop(scrollTop);
-    
+
     // Sync header scroll
     if (headerRef.current) {
       headerRef.current.scrollLeft = e.currentTarget.scrollLeft;
@@ -271,12 +271,12 @@ export function VirtualTable<T extends Record<string, any>>({
       } else {
         newSet.delete(index);
       }
-      
+
       if (onRowsSelect) {
         const selectedData = Array.from(newSet).map(i => sortedData[i]);
         onRowsSelect(selectedData);
       }
-      
+
       return newSet;
     });
   }, [sortedData, onRowsSelect]);
@@ -319,13 +319,13 @@ export function VirtualTable<T extends Record<string, any>>({
             <Input
               placeholder="Search records..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); }}
               leftIcon={<Search className="h-4 w-4" />}
               className="w-80"
               variant={variant === 'tactical' ? 'tactical' : 'default'}
             />
           )}
-          
+
           {filterable && (
             <Button
               variant="outline"
@@ -345,13 +345,13 @@ export function VirtualTable<T extends Record<string, any>>({
           >
             Export ({sortedData.length.toLocaleString()})
           </Button>
-          
+
           {selectedRows.size > 0 && (
             <span className={cn(
               'text-sm px-3 py-1 rounded-md',
-              variant === 'tactical' 
-                ? 'bg-green-400/20 text-green-300' 
-                : 'bg-primary/10 text-primary'
+              variant === 'tactical'
+                ? 'bg-green-400/20 text-green-300'
+                : 'bg-primary/10 text-primary',
             )}>
               {selectedRows.size.toLocaleString()} selected
             </span>
@@ -360,8 +360,8 @@ export function VirtualTable<T extends Record<string, any>>({
       </div>
 
       {/* Virtual Table */}
-      <Card 
-        variant={variant === 'tactical' ? 'tactical' : 'elevated'} 
+      <Card
+        variant={variant === 'tactical' ? 'tactical' : 'elevated'}
         className="overflow-hidden"
       >
         {/* Header */}
@@ -369,9 +369,9 @@ export function VirtualTable<T extends Record<string, any>>({
           ref={headerRef}
           className={cn(
             'sticky top-0 z-10 overflow-hidden border-b',
-            variant === 'tactical' 
-              ? 'bg-slate-900/95 border-green-400/20' 
-              : 'bg-card/95 border'
+            variant === 'tactical'
+              ? 'bg-slate-900/95 border-green-400/20'
+              : 'bg-card/95 border',
           )}
           style={{ width: totalWidth }}
         >
@@ -381,12 +381,12 @@ export function VirtualTable<T extends Record<string, any>>({
                 <input
                   type="checkbox"
                   checked={selectedRows.size === sortedData.length && sortedData.length > 0}
-                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  onChange={(e) => { handleSelectAll(e.target.checked); }}
                   className="rounded"
                 />
               </div>
             )}
-            
+
             {columns.map((column) => (
               <div
                 key={column.id}
@@ -394,9 +394,9 @@ export function VirtualTable<T extends Record<string, any>>({
                   'flex items-center p-3 border-r border last:border-r-0',
                   column.align === 'center' && 'justify-center',
                   column.align === 'right' && 'justify-end',
-                  variant === 'tactical' ? 'text-green-300' : 'text-foreground'
+                  variant === 'tactical' ? 'text-green-300' : 'text-foreground',
                 )}
-                style={{ 
+                style={{
                   width: columnWidths[column.id] || column.width,
                   minWidth: column.minWidth,
                   maxWidth: column.maxWidth,
@@ -406,10 +406,10 @@ export function VirtualTable<T extends Record<string, any>>({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleSort(column.accessorKey)}
+                    onClick={() => { handleSort(column.accessorKey); }}
                     className={cn(
                       'h-auto p-0 font-medium hover:bg-transparent',
-                      variant === 'tactical' && 'text-green-300 hover:text-green-200'
+                      variant === 'tactical' && 'text-green-300 hover:text-green-200',
                     )}
                     rightIcon={
                       sortConfig.key === column.accessorKey ? (
@@ -430,7 +430,7 @@ export function VirtualTable<T extends Record<string, any>>({
                 )}
               </div>
             ))}
-            
+
             {renderActions && (
               <div className="flex items-center justify-center w-20 p-3">
                 <span className="font-medium">Actions</span>
@@ -450,7 +450,7 @@ export function VirtualTable<T extends Record<string, any>>({
             {virtualizer.virtualItems.map((virtualItem) => {
               const item = sortedData[virtualItem.index];
               const isSelected = selectedRows.has(virtualItem.index);
-              
+
               return (
                 <div
                   key={virtualItem.index}
@@ -459,10 +459,10 @@ export function VirtualTable<T extends Record<string, any>>({
                     variant === 'tactical' && 'border-green-400/10 hover:bg-green-400/5',
                     onRowClick && 'cursor-pointer',
                     isSelected && (
-                      variant === 'tactical' 
-                        ? 'bg-green-400/10' 
+                      variant === 'tactical'
+                        ? 'bg-green-400/10'
                         : 'bg-muted'
-                    )
+                    ),
                   )}
                   style={{
                     top: virtualItem.start,
@@ -484,7 +484,7 @@ export function VirtualTable<T extends Record<string, any>>({
                       />
                     </div>
                   )}
-                  
+
                   {columns.map((column) => (
                     <div
                       key={column.id}
@@ -492,9 +492,9 @@ export function VirtualTable<T extends Record<string, any>>({
                         'flex items-center p-3 border-r border last:border-r-0 overflow-hidden',
                         column.align === 'center' && 'justify-center',
                         column.align === 'right' && 'justify-end',
-                        variant === 'tactical' ? 'text-green-400/90' : 'text-foreground'
+                        variant === 'tactical' ? 'text-green-400/90' : 'text-foreground',
                       )}
-                      style={{ 
+                      style={{
                         width: columnWidths[column.id] || column.width,
                         minWidth: column.minWidth,
                         maxWidth: column.maxWidth,
@@ -507,7 +507,7 @@ export function VirtualTable<T extends Record<string, any>>({
                       </div>
                     </div>
                   ))}
-                  
+
                   {renderActions && (
                     <div className="flex items-center justify-center w-20 p-3">
                       {renderActions(item, virtualItem.index)}
@@ -522,9 +522,9 @@ export function VirtualTable<T extends Record<string, any>>({
         {/* Footer with stats */}
         <div className={cn(
           'flex items-center justify-between p-3 border-t text-sm',
-          variant === 'tactical' 
-            ? 'border-green-400/20 text-green-400/70' 
-            : 'border text-muted-foreground'
+          variant === 'tactical'
+            ? 'border-green-400/20 text-green-400/70'
+            : 'border text-muted-foreground',
         )}>
           <div>
             Showing {virtualizer.virtualItems.length} of {sortedData.length.toLocaleString()} records
@@ -532,7 +532,7 @@ export function VirtualTable<T extends Record<string, any>>({
               <span> (filtered from {data.length.toLocaleString()})</span>
             )}
           </div>
-          
+
           <div className="flex items-center gap-4">
             <span>
               Performance: {virtualizer.virtualItems.length} rendered
@@ -560,7 +560,7 @@ export function generateLargeDataset(count: number = 100000): any[] {
   const statuses = ['Active', 'Pending', 'Completed', 'Cancelled'];
   const companies = ['ABC Construction', 'XYZ Builders', 'Quality Paving', 'Elite Roads'];
   const locations = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
-  
+
   return Array.from({ length: count }, (_, index) => ({
     id: `PROJ-${String(index + 1).padStart(6, '0')}`,
     name: `Project ${index + 1}`,

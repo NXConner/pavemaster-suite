@@ -41,7 +41,7 @@ export class CacheManager {
 
   constructor(
     config: Partial<CacheConfig> = {},
-    prefetchConfig: Partial<PrefetchConfig> = {}
+    prefetchConfig: Partial<PrefetchConfig> = {},
   ) {
     this.config = {
       maxAge: 1000 * 60 * 30, // 30 minutes
@@ -61,9 +61,9 @@ export class CacheManager {
 
     // Initialize service worker if supported
     this.initializeServiceWorker();
-    
+
     // Set up cleanup interval
-    setInterval(() => this.cleanup(), 1000 * 60 * 5); // Every 5 minutes
+    setInterval(() => { this.cleanup(); }, 1000 * 60 * 5); // Every 5 minutes
   }
 
   // Service Worker Registration
@@ -72,7 +72,7 @@ export class CacheManager {
       try {
         const registration = await navigator.serviceWorker.register('/sw.js');
         console.log('ServiceWorker registration successful:', registration.scope);
-        
+
         // Listen for messages from service worker
         navigator.serviceWorker.addEventListener('message', (event) => {
           this.handleServiceWorkerMessage(event.data);
@@ -133,9 +133,9 @@ export class CacheManager {
 
   // Set item in cache
   async set<T>(
-    key: string, 
-    data: T, 
-    ttl: number = this.config.maxAge
+    key: string,
+    data: T,
+    ttl: number = this.config.maxAge,
   ): Promise<void> {
     const entry: CacheEntry<T> = {
       data,
@@ -166,7 +166,7 @@ export class CacheManager {
   // Set in memory cache with size management
   private setInMemory<T>(key: string, data: T, ttl: number): void {
     const size = this.estimateSize(data);
-    
+
     // Check if we need to make space
     while (this.currentMemorySize + size > this.config.maxSize) {
       this.evictLeastUsed();
@@ -215,7 +215,7 @@ export class CacheManager {
       const transaction = db.transaction(['cache'], 'readonly');
       const store = transaction.objectStore('cache');
       const result = await this.promisifyRequest(store.get(key));
-      
+
       return result || null;
     } catch (error) {
       console.warn('Storage get error:', error);
@@ -239,7 +239,7 @@ export class CacheManager {
   private async getFromServiceWorker<T>(key: string): Promise<T | null> {
     return new Promise((resolve) => {
       const channel = new MessageChannel();
-      
+
       channel.port1.onmessage = (event) => {
         resolve(event.data.data || null);
       };
@@ -254,7 +254,7 @@ export class CacheManager {
       }
 
       // Timeout after 1 second
-      setTimeout(() => resolve(null), 1000);
+      setTimeout(() => { resolve(null); }, 1000);
     });
   }
 
@@ -262,10 +262,10 @@ export class CacheManager {
   private openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('PaveMasterCache', 1);
-      
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-      
+
+      request.onerror = () => { reject(request.error); };
+      request.onsuccess = () => { resolve(request.result); };
+
       request.onupgradeneeded = () => {
         const db = request.result;
         if (!db.objectStoreNames.contains('cache')) {
@@ -280,8 +280,8 @@ export class CacheManager {
   // Promisify IndexedDB request
   private promisifyRequest(request: IDBRequest): Promise<any> {
     return new Promise((resolve, reject) => {
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
+      request.onsuccess = () => { resolve(request.result); };
+      request.onerror = () => { reject(request.error); };
     });
   }
 
@@ -300,7 +300,7 @@ export class CacheManager {
   // Cleanup expired entries
   private cleanup(): void {
     const now = Date.now();
-    
+
     // Clean memory cache
     for (const [key, entry] of this.memoryCache.entries()) {
       if (!this.isValid(entry)) {
@@ -320,10 +320,10 @@ export class CacheManager {
       const transaction = db.transaction(['cache'], 'readwrite');
       const store = transaction.objectStore('cache');
       const index = store.index('timestamp');
-      
+
       const cutoff = Date.now() - this.config.maxAge;
       const range = IDBKeyRange.upperBound(cutoff);
-      
+
       await this.promisifyRequest(index.openCursor(range));
     } catch (error) {
       console.warn('Storage cleanup error:', error);
@@ -332,7 +332,7 @@ export class CacheManager {
 
   // Intelligent prefetching
   async prefetch(urls: string[]): Promise<void> {
-    if (!this.prefetchConfig.enabled) return;
+    if (!this.prefetchConfig.enabled) { return; }
 
     for (const url of urls) {
       if (this.prefetchQueue.size >= this.prefetchConfig.maxConcurrent) {
@@ -345,7 +345,7 @@ export class CacheManager {
 
       if (!this.prefetchQueue.has(url)) {
         this.prefetchQueue.add(url);
-        
+
         setTimeout(async () => {
           try {
             await this.prefetchResource(url);
@@ -374,7 +374,7 @@ export class CacheManager {
   // Get cache analytics
   getAnalytics() {
     const hitRate = this.analytics.hits / (this.analytics.hits + this.analytics.misses) || 0;
-    
+
     return {
       ...this.analytics,
       hitRate: Math.round(hitRate * 100),
@@ -447,13 +447,13 @@ export class HTTPCache {
 
   // Enhanced fetch with caching
   async fetch(
-    url: string, 
-    options: RequestInit = {}, 
+    url: string,
+    options: RequestInit = {},
     cacheOptions: {
       ttl?: number;
       strategy?: 'cache-first' | 'network-first' | 'stale-while-revalidate';
       key?: string;
-    } = {}
+    } = {},
   ): Promise<Response> {
     const cacheKey = cacheOptions.key || `http:${url}:${JSON.stringify(options)}`;
     const strategy = cacheOptions.strategy || 'stale-while-revalidate';
@@ -461,10 +461,10 @@ export class HTTPCache {
     switch (strategy) {
       case 'cache-first':
         return this.cacheFirstStrategy(url, options, cacheKey, cacheOptions.ttl);
-      
+
       case 'network-first':
         return this.networkFirstStrategy(url, options, cacheKey, cacheOptions.ttl);
-      
+
       case 'stale-while-revalidate':
       default:
         return this.staleWhileRevalidateStrategy(url, options, cacheKey, cacheOptions.ttl);
@@ -473,10 +473,10 @@ export class HTTPCache {
 
   // Cache first strategy
   private async cacheFirstStrategy(
-    url: string, 
-    options: RequestInit, 
-    cacheKey: string, 
-    ttl?: number
+    url: string,
+    options: RequestInit,
+    cacheKey: string,
+    ttl?: number,
   ): Promise<Response> {
     const cached = await this.cacheManager.get<{
       data: any;
@@ -506,10 +506,10 @@ export class HTTPCache {
 
   // Network first strategy
   private async networkFirstStrategy(
-    url: string, 
-    options: RequestInit, 
-    cacheKey: string, 
-    ttl?: number
+    url: string,
+    options: RequestInit,
+    cacheKey: string,
+    ttl?: number,
   ): Promise<Response> {
     try {
       const response = await fetch(url, options);
@@ -542,10 +542,10 @@ export class HTTPCache {
 
   // Stale while revalidate strategy
   private async staleWhileRevalidateStrategy(
-    url: string, 
-    options: RequestInit, 
-    cacheKey: string, 
-    ttl?: number
+    url: string,
+    options: RequestInit,
+    cacheKey: string,
+    ttl?: number,
   ): Promise<Response> {
     const cached = await this.cacheManager.get<{
       data: any;
@@ -570,7 +570,7 @@ export class HTTPCache {
     if (cached) {
       // Don't await network request - let it complete in background
       networkPromise.catch(console.warn);
-      
+
       return new Response(JSON.stringify(cached.data), {
         status: cached.status,
         headers: cached.headers,
@@ -612,7 +612,7 @@ export class ResourcePreloader {
             }
           });
         },
-        { rootMargin: '50px' }
+        { rootMargin: '50px' },
       );
     }
   }
@@ -630,10 +630,10 @@ export class ResourcePreloader {
 
   // Preload single resource
   private async preloadResource(url: string): Promise<void> {
-    if (this.loadQueue.has(url)) return;
-    
+    if (this.loadQueue.has(url)) { return; }
+
     this.loadQueue.add(url);
-    
+
     try {
       const response = await fetch(url);
       if (response.ok) {

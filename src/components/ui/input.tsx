@@ -12,24 +12,24 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ 
-    className, 
-    type, 
-    error, 
-    success, 
-    leftIcon, 
-    rightIcon, 
+  ({
+    className,
+    type,
+    error,
+    success,
+    leftIcon,
+    rightIcon,
     variant = 'default',
     inputSize = 'default',
     disabled,
-    ...props 
+    ...props
   }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
     const [isFocused, setIsFocused] = React.useState(false);
-    
+
     const isPassword = type === 'password';
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
-    
+
     const getVariantStyles = () => {
       switch (variant) {
         case 'ghost':
@@ -40,7 +40,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           return 'border-input bg-card';
       }
     };
-    
+
     const getSizeStyles = () => {
       switch (inputSize) {
         case 'sm':
@@ -51,10 +51,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           return 'h-10 px-3';
       }
     };
-    
+
     const getStateStyles = () => {
-      if (error) return 'border-destructive focus:border-destructive';
-      if (success) return 'border-green-500 focus:border-green-500';
+      if (error) { return 'border-destructive focus:border-destructive'; }
+      if (success) { return 'border-green-500 focus:border-green-500'; }
       return 'focus:border-primary';
     };
 
@@ -66,7 +66,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               {leftIcon}
             </div>
           )}
-          
+
           <input
             type={inputType}
             className={cn(
@@ -77,7 +77,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               leftIcon && 'pl-10',
               (rightIcon || isPassword || error || success) && 'pr-10',
               isFocused && 'ring-2 ring-ring ring-offset-2 transform scale-[1.01]',
-              className
+              className,
             )}
             ref={ref}
             disabled={disabled}
@@ -91,7 +91,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             }}
             {...props}
           />
-          
+
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
             {error && (
               <AlertCircle className="h-4 w-4 text-destructive" />
@@ -102,7 +102,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {isPassword && (
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => { setShowPassword(!showPassword); }}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 tabIndex={-1}
               >
@@ -120,7 +120,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           </div>
         </div>
-        
+
         {error && (
           <p className="mt-1 text-sm text-destructive animate-in slide-in-from-top-1">
             {error}
@@ -128,7 +128,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

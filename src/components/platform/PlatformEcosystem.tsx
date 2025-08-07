@@ -639,10 +639,10 @@ class MLAnalyzer:
     // Text search
     if (query) {
       const lowerQuery = query.toLowerCase();
-      results = results.filter(ext => 
-        ext.name.toLowerCase().includes(lowerQuery) ||
-        ext.description.toLowerCase().includes(lowerQuery) ||
-        ext.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+      results = results.filter(ext =>
+        ext.name.toLowerCase().includes(lowerQuery)
+        || ext.description.toLowerCase().includes(lowerQuery)
+        || ext.tags.some(tag => tag.toLowerCase().includes(lowerQuery)),
       );
     }
 
@@ -658,8 +658,8 @@ class MLAnalyzer:
         results = results.filter(ext => ext.stats.rating >= filters.rating);
       }
       if (filters.tags && filters.tags.length > 0) {
-        results = results.filter(ext => 
-          filters.tags!.some(tag => ext.tags.includes(tag))
+        results = results.filter(ext =>
+          filters.tags!.some(tag => ext.tags.includes(tag)),
         );
       }
     }
@@ -696,10 +696,10 @@ class MLAnalyzer:
     };
 
     this.installations.set(installation.id, installation);
-    
+
     // Update download count
     extension.stats.downloads++;
-    
+
     return installation;
   }
 
@@ -741,10 +741,10 @@ class MLAnalyzer:
     const extensions = Array.from(this.extensions.values());
     const published = extensions.filter(ext => ext.status === 'published');
 
-    const categoryCounts = published.reduce((acc, ext) => {
+    const categoryCounts = published.reduce<Record<string, number>>((acc, ext) => {
       acc[ext.category] = (acc[ext.category] || 0) + 1;
       return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     return {
       totalExtensions: published.length,
@@ -766,7 +766,7 @@ class MLAnalyzer:
 
   getDeveloperAnalytics(developerId: string): any {
     const developer = this.developers.get(developerId);
-    if (!developer) return null;
+    if (!developer) { return null; }
 
     const developerExtensions = Array.from(this.extensions.values())
       .filter(ext => ext.author.name === developer.name);
@@ -828,8 +828,8 @@ export const PlatformEcosystem: React.FC = () => {
 
   const searchExtensions = async () => {
     const filters: any = {};
-    if (selectedCategory !== 'all') filters.category = selectedCategory;
-    if (selectedPricing !== 'all') filters.pricing = selectedPricing;
+    if (selectedCategory !== 'all') { filters.category = selectedCategory; }
+    if (selectedPricing !== 'all') { filters.pricing = selectedPricing; }
 
     const results = await engine.searchExtensions(searchQuery, filters);
     setExtensions(results);
@@ -849,8 +849,8 @@ export const PlatformEcosystem: React.FC = () => {
   };
 
   const formatPrice = (extension: Extension) => {
-    if (extension.pricing.type === 'free') return 'Free';
-    if (extension.pricing.type === 'freemium') return 'Freemium';
+    if (extension.pricing.type === 'free') { return 'Free'; }
+    if (extension.pricing.type === 'freemium') { return 'Freemium'; }
     if (extension.pricing.price) {
       return `$${extension.pricing.price}${extension.pricing.type === 'subscription' ? '/mo' : ''}`;
     }
@@ -939,7 +939,7 @@ export const PlatformEcosystem: React.FC = () => {
                         <Input
                           placeholder="Search extensions..."
                           value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onChange={(e) => { setSearchQuery(e.target.value); }}
                           className="pl-10"
                         />
                       </div>
@@ -947,7 +947,7 @@ export const PlatformEcosystem: React.FC = () => {
                     <div className="flex gap-2">
                       <select
                         value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        onChange={(e) => { setSelectedCategory(e.target.value); }}
                         className="px-3 py-2 border rounded-md text-sm"
                       >
                         <option value="all">All Categories</option>
@@ -962,7 +962,7 @@ export const PlatformEcosystem: React.FC = () => {
                       </select>
                       <select
                         value={selectedPricing}
-                        onChange={(e) => setSelectedPricing(e.target.value)}
+                        onChange={(e) => { setSelectedPricing(e.target.value); }}
                         className="px-3 py-2 border rounded-md text-sm"
                       >
                         <option value="all">All Pricing</option>
@@ -991,7 +991,7 @@ export const PlatformEcosystem: React.FC = () => {
                               <div
                                 key={extension.id}
                                 className="p-4 border rounded-lg cursor-pointer hover:bg-card dark:hover:bg-gray-800"
-                                onClick={() => setSelectedExtension(extension)}
+                                onClick={() => { setSelectedExtension(extension); }}
                               >
                                 <div className="flex items-start justify-between mb-2">
                                   <div className="flex items-center space-x-3">
@@ -1050,7 +1050,7 @@ export const PlatformEcosystem: React.FC = () => {
                       <div className="space-y-4">
                         <div className="flex items-start space-x-3">
                           <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                            {React.createElement(getCategoryIcon(selectedExtension.category), { className: "h-6 w-6" })}
+                            {React.createElement(getCategoryIcon(selectedExtension.category), { className: 'h-6 w-6' })}
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">
@@ -1195,7 +1195,7 @@ export const PlatformEcosystem: React.FC = () => {
                           Ready to build extensions for PaveMaster? Check out our SDK and documentation to get started.
                         </p>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label className="text-sm font-medium">Quick Stats</Label>
                         <div className="grid grid-cols-2 gap-2 text-sm">
@@ -1235,7 +1235,7 @@ export const PlatformEcosystem: React.FC = () => {
                             <p className="text-xs text-gray-600">Follow our coding standards and best practices</p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-start space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
                           <div>
@@ -1243,7 +1243,7 @@ export const PlatformEcosystem: React.FC = () => {
                             <p className="text-xs text-gray-600">All extensions undergo security screening</p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-start space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
                           <div>
@@ -1251,7 +1251,7 @@ export const PlatformEcosystem: React.FC = () => {
                             <p className="text-xs text-gray-600">Respect user data and privacy requirements</p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-start space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
                           <div>
@@ -1345,9 +1345,9 @@ export const PlatformEcosystem: React.FC = () => {
                                 <span className="capitalize">{category}</span>
                                 <span>{count}</span>
                               </div>
-                              <Progress 
-                                value={(count / marketplaceStats.totalExtensions) * 100} 
-                                className="h-2" 
+                              <Progress
+                                value={(count / marketplaceStats.totalExtensions) * 100}
+                                className="h-2"
                               />
                             </div>
                           ))}

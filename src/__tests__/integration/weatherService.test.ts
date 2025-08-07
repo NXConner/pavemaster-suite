@@ -18,12 +18,12 @@ describe('WeatherService Integration Tests', () => {
         main: { temp: 72, humidity: 45, pressure: 1013 },
         wind: { speed: 5, deg: 180 },
         visibility: 10000,
-        dt: Date.now() / 1000
+        dt: Date.now() / 1000,
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
@@ -52,12 +52,12 @@ describe('WeatherService Integration Tests', () => {
         main: { temp: 45, humidity: 85, pressure: 1005 },
         wind: { speed: 25, deg: 180 },
         visibility: 2000,
-        dt: Date.now() / 1000
+        dt: Date.now() / 1000,
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
@@ -78,14 +78,14 @@ describe('WeatherService Integration Tests', () => {
             weather: [{ main: 'Clear', description: 'clear sky' }],
             humidity: 40,
             wind_speed: 5,
-            pop: 0
-          }
-        ]
+            pop: 0,
+          },
+        ],
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getWeatherForecast(40.7128, -74.0060, 5);
@@ -104,13 +104,13 @@ describe('WeatherService Integration Tests', () => {
           weather: [{ main: i < 3 ? 'Clear' : 'Rain', description: 'weather' }],
           humidity: 40 + (i * 5),
           wind_speed: 5 + i,
-          pop: i < 3 ? 0 : 0.8
-        }))
+          pop: i < 3 ? 0 : 0.8,
+        })),
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getWeatherForecast(40.7128, -74.0060, 7);
@@ -129,14 +129,14 @@ describe('WeatherService Integration Tests', () => {
             event: 'Severe Thunderstorm Warning',
             description: 'Severe thunderstorms expected',
             start: Date.now() / 1000,
-            end: (Date.now() / 1000) + 7200
-          }
-        ]
+            end: (Date.now() / 1000) + 7200,
+          },
+        ],
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getWeatherAlerts(40.7128, -74.0060);
@@ -169,16 +169,16 @@ describe('WeatherService Integration Tests', () => {
           main: { temp: testCase.temp, humidity: testCase.humidity, pressure: 1013 },
           wind: { speed: testCase.wind, deg: 180 },
           visibility: 10000,
-          dt: Date.now() / 1000
+          dt: Date.now() / 1000,
         };
 
         (fetch as any).mockResolvedValue({
           ok: true,
-          json: () => Promise.resolve(mockResponse)
+          json: () => Promise.resolve(mockResponse),
         });
 
         const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
-        
+
         expect(result.workability.score).toBeCloseTo(testCase.expectedScore, -1);
       }
     });
@@ -191,12 +191,12 @@ describe('WeatherService Integration Tests', () => {
         main: { temp: 72, humidity: 45, pressure: 1013 },
         wind: { speed: 5, deg: 180 },
         visibility: 10000,
-        dt: Date.now() / 1000
+        dt: Date.now() / 1000,
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       // First call
@@ -220,24 +220,24 @@ describe('WeatherService Integration Tests', () => {
       (fetch as any).mockResolvedValue({
         ok: false,
         status: 429,
-        json: () => Promise.resolve({ message: 'Rate limit exceeded' })
+        json: () => Promise.resolve({ message: 'Rate limit exceeded' }),
       });
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
-      
+
       // Should fallback to mock data
       expect(result).toBeDefined();
     });
 
     it('should handle network timeouts', async () => {
-      (fetch as any).mockImplementation(() => 
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Timeout')), 1000)
-        )
+      (fetch as any).mockImplementation(() =>
+        new Promise((_, reject) =>
+          setTimeout(() => { reject(new Error('Timeout')); }, 1000),
+        ),
       );
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
-      
+
       // Should fallback to mock data
       expect(result).toBeDefined();
     });
@@ -250,12 +250,12 @@ describe('WeatherService Integration Tests', () => {
         main: { temp: 55, humidity: 45, pressure: 1013 }, // Borderline temperature
         wind: { speed: 5, deg: 180 },
         visibility: 10000,
-        dt: Date.now() / 1000
+        dt: Date.now() / 1000,
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
@@ -271,12 +271,12 @@ describe('WeatherService Integration Tests', () => {
         main: { temp: 30, humidity: 45, pressure: 1013 }, // Too cold for most work
         wind: { speed: 5, deg: 180 },
         visibility: 10000,
-        dt: Date.now() / 1000
+        dt: Date.now() / 1000,
       };
 
       (fetch as any).mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockResponse),
       });
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);

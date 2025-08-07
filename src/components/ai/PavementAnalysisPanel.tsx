@@ -66,7 +66,7 @@ const PavementAnalysisPanel: React.FC = () => {
 
   const analyzeImage = async (file: File) => {
     setIsLoading(true);
-    
+
     try {
       const formData = new FormData();
       formData.append('image', file);
@@ -81,14 +81,14 @@ const PavementAnalysisPanel: React.FC = () => {
       }
 
       const data = await response.json();
-      
+
       if (data.success) {
         setResult(data.result);
-        
+
         // Create image URL for display
         const imageUrl = URL.createObjectURL(file);
         setSelectedImage(imageUrl);
-        
+
         // Add to history
         const historyItem: AnalysisHistory = {
           id: Date.now().toString(),
@@ -96,11 +96,11 @@ const PavementAnalysisPanel: React.FC = () => {
           result: data.result,
           created_at: new Date().toISOString(),
         };
-        
+
         setHistory(prev => [historyItem, ...prev]);
-        
+
         toast({
-          title: "Analysis Complete",
+          title: 'Analysis Complete',
           description: `Pavement condition: ${data.result.predicted_class} (${(data.result.confidence * 100).toFixed(1)}% confidence)`,
         });
       } else {
@@ -109,9 +109,9 @@ const PavementAnalysisPanel: React.FC = () => {
     } catch (error) {
       console.error('Analysis error:', error);
       toast({
-        title: "Analysis Failed",
-        description: "Failed to analyze the image. Please try again.",
-        variant: "destructive",
+        title: 'Analysis Failed',
+        description: 'Failed to analyze the image. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -121,7 +121,7 @@ const PavementAnalysisPanel: React.FC = () => {
   const analyzeBatch = async (files: FileList) => {
     setIsLoading(true);
     setBatchResults([]);
-    
+
     try {
       const formData = new FormData();
       Array.from(files).forEach((file, index) => {
@@ -138,12 +138,12 @@ const PavementAnalysisPanel: React.FC = () => {
       }
 
       const data = await response.json();
-      
+
       if (data.success) {
         setBatchResults(data.results);
-        
+
         toast({
-          title: "Batch Analysis Complete",
+          title: 'Batch Analysis Complete',
           description: `Analyzed ${data.results.length} images successfully`,
         });
       } else {
@@ -152,9 +152,9 @@ const PavementAnalysisPanel: React.FC = () => {
     } catch (error) {
       console.error('Batch analysis error:', error);
       toast({
-        title: "Batch Analysis Failed",
-        description: "Failed to analyze the images. Please try again.",
-        variant: "destructive",
+        title: 'Batch Analysis Failed',
+        description: 'Failed to analyze the images. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -163,7 +163,7 @@ const PavementAnalysisPanel: React.FC = () => {
 
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files) return;
+    if (!files) { return; }
 
     if (batchMode) {
       analyzeBatch(files);
@@ -192,7 +192,7 @@ const PavementAnalysisPanel: React.FC = () => {
   const exportResults = () => {
     const dataToExport = batchMode ? batchResults : [result];
     const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
-      type: 'application/json'
+      type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -237,7 +237,7 @@ const PavementAnalysisPanel: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={batchMode}
-                  onChange={(e) => setBatchMode(e.target.checked)}
+                  onChange={(e) => { setBatchMode(e.target.checked); }}
                   className="rounded border-gray-300"
                 />
                 Batch Mode (Multiple Images)
@@ -254,7 +254,7 @@ const PavementAnalysisPanel: React.FC = () => {
                 <Upload className="h-4 w-4" />
                 {batchMode ? 'Select Images' : 'Upload Image'}
               </Button>
-              
+
               <Button
                 variant="outline"
                 onClick={triggerCameraCapture}
@@ -357,14 +357,14 @@ const PavementAnalysisPanel: React.FC = () => {
                         {result.predicted_class}
                       </Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Confidence:</span>
                       <span className="text-sm">{(result.confidence * 100).toFixed(1)}%</span>
                     </div>
-                    
+
                     <Progress value={result.confidence * 100} className="h-2" />
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Urgency:</span>
                       <Badge className={getUrgencyColor(result.maintenance_urgency)}>
@@ -484,7 +484,7 @@ const PavementAnalysisPanel: React.FC = () => {
                 {['excellent', 'good', 'fair', 'poor', 'failed'].map(condition => {
                   const count = batchResults.filter(r => r.predicted_class === condition).length;
                   const percentage = (count / batchResults.length * 100).toFixed(1);
-                  
+
                   return (
                     <div key={condition} className="text-center p-3 bg-card rounded-lg">
                       <div className="text-2xl font-bold text-gray-900">{count}</div>
@@ -571,7 +571,7 @@ const PavementAnalysisPanel: React.FC = () => {
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600">
-                      {new Date(item.created_at).toLocaleString()} • 
+                      {new Date(item.created_at).toLocaleString()} •
                       {(item.result.confidence * 100).toFixed(1)}% confidence
                     </div>
                   </div>

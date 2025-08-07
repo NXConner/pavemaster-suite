@@ -750,11 +750,11 @@ class FutureTechnologiesEngine {
       // Simulate quantum coherence fluctuations
       processor.coherenceTime += (Math.random() - 0.5) * 2;
       processor.coherenceTime = Math.max(5, Math.min(100, processor.coherenceTime));
-      
+
       // Simulate temperature variations
       processor.temperature += (Math.random() - 0.5) * 1;
       processor.temperature = Math.max(4, Math.min(20, processor.temperature));
-      
+
       // Simulate job completions
       if (Math.random() < 0.1) {
         processor.usage.totalJobs++;
@@ -768,13 +768,13 @@ class FutureTechnologiesEngine {
       // Simulate new transactions
       const newTxs = Math.floor(Math.random() * 10);
       network.transactions.pending += newTxs;
-      
+
       // Confirm some pending transactions
       const confirmed = Math.min(network.transactions.pending, Math.floor(Math.random() * 8));
       network.transactions.pending -= confirmed;
       network.transactions.confirmed += confirmed;
       network.transactions.total += confirmed;
-      
+
       // Update performance metrics
       network.performance.tps = 2800 + Math.random() * 400;
       network.performance.latency = 180 + Math.random() * 40;
@@ -791,20 +791,20 @@ class FutureTechnologiesEngine {
       } else if (device.data.type === 'image_quality') {
         device.data.value = 3.5 + Math.random() * 1.5;
       }
-      
+
       device.data.timestamp = new Date();
-      
+
       // Update battery levels
       if (device.status === 'online') {
         device.battery.level = Math.max(0, device.battery.level - 0.1);
         device.battery.estimatedLife = Math.max(0, device.battery.estimatedLife - 1);
       }
-      
+
       // Update signal strength
-      device.connectivity.signalStrength = Math.max(0, Math.min(100, 
-        device.connectivity.signalStrength + (Math.random() - 0.5) * 10
+      device.connectivity.signalStrength = Math.max(0, Math.min(100,
+        device.connectivity.signalStrength + (Math.random() - 0.5) * 10,
       ));
-      
+
       device.connectivity.lastSeen = new Date();
     });
   }
@@ -814,17 +814,17 @@ class FutureTechnologiesEngine {
       if (system.status === 'active' && system.mission.status === 'active') {
         // Update mission progress
         system.mission.progress = Math.min(100, system.mission.progress + Math.random() * 2);
-        
+
         // Update location (simulate movement)
         const waypoint = system.mission.waypoints[Math.floor(system.mission.progress / 100 * system.mission.waypoints.length)];
         if (waypoint) {
           system.location.lat += (waypoint.lat - system.location.lat) * 0.1;
           system.location.lng += (waypoint.lng - system.location.lng) * 0.1;
         }
-        
+
         // Update AI confidence
         system.ai.confidence = 0.85 + Math.random() * 0.15;
-        
+
         // Complete mission if progress reaches 100%
         if (system.mission.progress >= 100) {
           system.mission.status = 'completed';
@@ -837,23 +837,23 @@ class FutureTechnologiesEngine {
   private updateEdgeComputing() {
     this.edgeNodes.forEach(node => {
       // Update resource usage
-      node.compute.cpu.usage = Math.max(10, Math.min(95, 
-        node.compute.cpu.usage + (Math.random() - 0.5) * 10
+      node.compute.cpu.usage = Math.max(10, Math.min(95,
+        node.compute.cpu.usage + (Math.random() - 0.5) * 10,
       ));
-      
+
       node.compute.memory.used = Math.max(10, Math.min(node.compute.memory.total - 5,
-        node.compute.memory.used + (Math.random() - 0.5) * 5
+        node.compute.memory.used + (Math.random() - 0.5) * 5,
       ));
       node.compute.memory.available = node.compute.memory.total - node.compute.memory.used;
-      
+
       // Update service performance
       node.services.forEach(service => {
         service.performance.requests += Math.floor(Math.random() * 100);
         service.performance.latency = Math.max(5, Math.min(50,
-          service.performance.latency + (Math.random() - 0.5) * 5
+          service.performance.latency + (Math.random() - 0.5) * 5,
         ));
       });
-      
+
       // Update ML metrics
       node.ml.inferences += Math.floor(Math.random() * 1000);
       node.ml.accuracy = 0.88 + Math.random() * 0.12;
@@ -873,7 +873,7 @@ class FutureTechnologiesEngine {
 
     // Simulate quantum computation
     const executionTime = algorithm.estimatedTime + (Math.random() - 0.5) * 20;
-    
+
     return new Promise((resolve) => {
       setTimeout(() => {
         const result = {
@@ -884,13 +884,13 @@ class FutureTechnologiesEngine {
           result: `Quantum optimization completed with ${Math.round(algorithm.accuracy * 100)}% accuracy`,
           timestamp: new Date(),
         };
-        
+
         processor.usage.totalJobs++;
         processor.usage.lastUsed = new Date();
-        processor.usage.avgExecutionTime = 
-          (processor.usage.avgExecutionTime * (processor.usage.totalJobs - 1) + executionTime) / 
-          processor.usage.totalJobs;
-        
+        processor.usage.avgExecutionTime
+          = (processor.usage.avgExecutionTime * (processor.usage.totalJobs - 1) + executionTime)
+          / processor.usage.totalJobs;
+
         resolve(result);
       }, Math.min(executionTime * 10, 3000)); // Scale down for demo
     });
@@ -973,7 +973,7 @@ export const FutureTechnologies: React.FC = () => {
   useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 2000);
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, []);
 
   const loadData = () => {
@@ -1243,7 +1243,7 @@ export const FutureTechnologies: React.FC = () => {
                               <span>{Math.round(network.performance.tps)}</span>
                             </div>
                           </div>
-                          
+
                           <div className="space-y-2">
                             <div>
                               <div className="flex justify-between text-xs mb-1">
@@ -1251,9 +1251,9 @@ export const FutureTechnologies: React.FC = () => {
                                 <span>{network.transactions.total.toLocaleString()}</span>
                               </div>
                               <div className="flex space-x-1">
-                                <div className="bg-green-500 h-2 rounded" style={{width: '85%'}}></div>
-                                <div className="bg-yellow-500 h-2 rounded" style={{width: '10%'}}></div>
-                                <div className="bg-red-500 h-2 rounded" style={{width: '5%'}}></div>
+                                <div className="bg-green-500 h-2 rounded" style={{ width: '85%' }}></div>
+                                <div className="bg-yellow-500 h-2 rounded" style={{ width: '10%' }}></div>
+                                <div className="bg-red-500 h-2 rounded" style={{ width: '5%' }}></div>
                               </div>
                               <div className="flex justify-between text-xs mt-1 text-gray-500">
                                 <span>Confirmed: {network.transactions.confirmed.toLocaleString()}</span>
@@ -1351,7 +1351,7 @@ export const FutureTechnologies: React.FC = () => {
                                 {device.status}
                               </Badge>
                             </div>
-                            
+
                             <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                               <div className="flex justify-between">
                                 <span>Type:</span>
@@ -1461,7 +1461,7 @@ export const FutureTechnologies: React.FC = () => {
                                 {system.status}
                               </Badge>
                             </div>
-                            
+
                             <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                               <div className="flex justify-between">
                                 <span>Type:</span>
@@ -1568,7 +1568,7 @@ export const FutureTechnologies: React.FC = () => {
                               {node.status}
                             </Badge>
                           </div>
-                          
+
                           <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                             <div className="flex justify-between">
                               <span>Type:</span>

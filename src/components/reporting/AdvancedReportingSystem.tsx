@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  FileText, 
-  Calendar, 
-  Download, 
+import {
+  FileText,
+  Calendar,
+  Download,
   Filter,
   TrendingUp,
   DollarSign,
@@ -15,7 +15,7 @@ import {
   PieChart,
   Activity,
   Target,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 
 interface ReportTemplate {
@@ -46,7 +46,7 @@ const MOCK_TEMPLATES: ReportTemplate[] = [
     category: 'financial',
     frequency: 'monthly',
     lastGenerated: new Date(Date.now() - 86400000 * 5),
-    status: 'active'
+    status: 'active',
   },
   {
     id: '2',
@@ -55,7 +55,7 @@ const MOCK_TEMPLATES: ReportTemplate[] = [
     category: 'operational',
     frequency: 'weekly',
     lastGenerated: new Date(Date.now() - 86400000 * 2),
-    status: 'active'
+    status: 'active',
   },
   {
     id: '3',
@@ -64,7 +64,7 @@ const MOCK_TEMPLATES: ReportTemplate[] = [
     category: 'compliance',
     frequency: 'monthly',
     lastGenerated: new Date(Date.now() - 86400000 * 15),
-    status: 'active'
+    status: 'active',
   },
   {
     id: '4',
@@ -73,8 +73,8 @@ const MOCK_TEMPLATES: ReportTemplate[] = [
     category: 'analytics',
     frequency: 'quarterly',
     lastGenerated: new Date(Date.now() - 86400000 * 30),
-    status: 'active'
-  }
+    status: 'active',
+  },
 ];
 
 const MOCK_REPORTS: GeneratedReport[] = [
@@ -85,7 +85,7 @@ const MOCK_REPORTS: GeneratedReport[] = [
     generatedAt: new Date(Date.now() - 86400000 * 2),
     format: 'pdf',
     size: '2.4 MB',
-    downloadCount: 12
+    downloadCount: 12,
   },
   {
     id: '2',
@@ -94,7 +94,7 @@ const MOCK_REPORTS: GeneratedReport[] = [
     generatedAt: new Date(Date.now() - 86400000 * 1),
     format: 'excel',
     size: '1.8 MB',
-    downloadCount: 8
+    downloadCount: 8,
   },
   {
     id: '3',
@@ -103,8 +103,8 @@ const MOCK_REPORTS: GeneratedReport[] = [
     generatedAt: new Date(Date.now() - 86400000 * 15),
     format: 'pdf',
     size: '3.1 MB',
-    downloadCount: 5
-  }
+    downloadCount: 5,
+  },
 ];
 
 export function AdvancedReportingSystem() {
@@ -148,8 +148,8 @@ export function AdvancedReportingSystem() {
     setIsGenerating(null);
   };
 
-  const filteredTemplates = selectedCategory === 'all' 
-    ? templates 
+  const filteredTemplates = selectedCategory === 'all'
+    ? templates
     : templates.filter(t => t.category === selectedCategory);
 
   return (
@@ -182,7 +182,7 @@ export function AdvancedReportingSystem() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -196,7 +196,7 @@ export function AdvancedReportingSystem() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -212,7 +212,7 @@ export function AdvancedReportingSystem() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border/50 bg-surface/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export function AdvancedReportingSystem() {
             key={category}
             variant={selectedCategory === category ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => { setSelectedCategory(category); }}
             className="whitespace-nowrap"
           >
             <Filter className="h-3 w-3 mr-1" />
@@ -270,11 +270,11 @@ export function AdvancedReportingSystem() {
                         {template.status}
                       </Badge>
                     </div>
-                    
+
                     <p className="text-xs text-muted-foreground mb-3">
                       {template.description}
                     </p>
-                    
+
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
@@ -285,7 +285,7 @@ export function AdvancedReportingSystem() {
                         <span>Last: {template.lastGenerated.toLocaleDateString()}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -318,7 +318,6 @@ export function AdvancedReportingSystem() {
             <ScrollArea className="h-96">
               <div className="space-y-3">
                 {reports.map((report) => {
-                  
                   return (
                     <div
                       key={report.id}
@@ -333,12 +332,12 @@ export function AdvancedReportingSystem() {
                           {report.format.toUpperCase()}
                         </Badge>
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                         <span>Generated: {report.generatedAt.toLocaleString()}</span>
                         <span>Size: {report.size}</span>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Download className="h-3 w-3" />
@@ -388,7 +387,7 @@ export function AdvancedReportingSystem() {
                 ))}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h4 className="font-medium">Download Trends</h4>
               <div className="h-32 flex items-end justify-between gap-1">
@@ -396,7 +395,7 @@ export function AdvancedReportingSystem() {
                   const height = Math.random() * 80 + 20;
                   return (
                     <div key={index} className="flex-1 bg-muted rounded-t-sm relative">
-                      <div 
+                      <div
                         className="bg-primary rounded-t-sm transition-all duration-300"
                         style={{ height: `${height}%` }}
                       />
@@ -408,14 +407,14 @@ export function AdvancedReportingSystem() {
                 Last 7 days
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h4 className="font-medium">Format Distribution</h4>
               <div className="space-y-2">
                 {[
                   { format: 'PDF', percentage: 65, color: 'bg-red-500' },
                   { format: 'Excel', percentage: 25, color: 'bg-green-500' },
-                  { format: 'CSV', percentage: 10, color: 'bg-blue-500' }
+                  { format: 'CSV', percentage: 10, color: 'bg-blue-500' },
                 ].map((item) => (
                   <div key={item.format} className="space-y-1">
                     <div className="flex justify-between text-sm">
@@ -423,7 +422,7 @@ export function AdvancedReportingSystem() {
                       <span>{item.percentage}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div 
+                      <div
                         className={`h-2 rounded-full ${item.color} transition-all duration-300`}
                         style={{ width: `${item.percentage}%` }}
                       />

@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Calculator, Save, Download, Info, TrendingUp, Truck, Package } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Calculator, Save, Download, Info, TrendingUp, Truck, Package } from 'lucide-react';
 
 interface ProjectZone {
   id: string
@@ -25,20 +25,20 @@ export const MaterialEstimator = () => {
     projectName: '',
     location: '',
     startDate: '',
-    contractor: ''
-  })
+    contractor: '',
+  });
 
   const [zones, setZones] = useState<ProjectZone[]>([
-    { 
-      id: '1', 
+    {
+      id: '1',
       name: 'Main Area',
-      length: 1000, 
-      width: 24, 
+      length: 1000,
+      width: 24,
       thickness: 3,
       surfaceType: 'new',
-      mixType: 'standard'
-    }
-  ])
+      mixType: 'standard',
+    },
+  ]);
 
   const [materialCosts, setMaterialCosts] = useState({
     standardMix: 85, // per ton
@@ -48,8 +48,8 @@ export const MaterialEstimator = () => {
     bindingAgent: 450, // per ton
     fuelSurcharge: 15, // per ton
     deliveryRate: 125, // per hour
-    laborRate: 95 // per hour
-  })
+    laborRate: 95, // per hour
+  });
 
   const [results, setResults] = useState({
     totalArea: 0,
@@ -59,68 +59,68 @@ export const MaterialEstimator = () => {
     bindingAgent: 0,
     totalCost: 0,
     deliveryTrips: 0,
-    laborHours: 0
-  })
+    laborHours: 0,
+  });
 
   // Asphalt density: approximately 145 lbs per cubic foot = 0.0725 tons per cubic foot
-  const ASPHALT_DENSITY = 0.0725
+  const ASPHALT_DENSITY = 0.0725;
 
   // Mix ratios
   const mixCompositions = {
     standard: { asphalt: 0.94, aggregate: 0.06, binding: 0.05 },
     premium: { asphalt: 0.92, aggregate: 0.08, binding: 0.06 },
-    recycled: { asphalt: 0.70, aggregate: 0.25, binding: 0.04, recycled: 0.30 }
-  }
+    recycled: { asphalt: 0.70, aggregate: 0.25, binding: 0.04, recycled: 0.30 },
+  };
 
   const calculateResults = () => {
-    let totalArea = 0
-    let totalVolume = 0
-    let totalAsphaltTons = 0
-    let totalAggregateTons = 0
-    let totalBindingAgent = 0
+    let totalArea = 0;
+    let totalVolume = 0;
+    let totalAsphaltTons = 0;
+    let totalAggregateTons = 0;
+    let totalBindingAgent = 0;
 
     zones.forEach(zone => {
-      const area = zone.length * zone.width
-      const volume = area * (zone.thickness / 12) // Convert inches to feet
-      const tons = volume * ASPHALT_DENSITY
+      const area = zone.length * zone.width;
+      const volume = area * (zone.thickness / 12); // Convert inches to feet
+      const tons = volume * ASPHALT_DENSITY;
 
-      totalArea += area
-      totalVolume += volume
+      totalArea += area;
+      totalVolume += volume;
 
-      const composition = mixCompositions[zone.mixType as keyof typeof mixCompositions]
-      
-      totalAsphaltTons += tons * composition.asphalt
-      totalAggregateTons += tons * composition.aggregate
-      totalBindingAgent += tons * composition.binding
-    })
+      const composition = mixCompositions[zone.mixType as keyof typeof mixCompositions];
+
+      totalAsphaltTons += tons * composition.asphalt;
+      totalAggregateTons += tons * composition.aggregate;
+      totalBindingAgent += tons * composition.binding;
+    });
 
     // Calculate costs
-    let materialCost = 0
+    let materialCost = 0;
     zones.forEach(zone => {
-      const area = zone.length * zone.width
-      const volume = area * (zone.thickness / 12)
-      const tons = volume * ASPHALT_DENSITY
-      
-      let mixPrice = materialCosts.standardMix
-      if (zone.mixType === 'premium') mixPrice = materialCosts.premiumMix
-      if (zone.mixType === 'recycled') mixPrice = materialCosts.recycledMix
-      
-      materialCost += tons * mixPrice
-    })
+      const area = zone.length * zone.width;
+      const volume = area * (zone.thickness / 12);
+      const tons = volume * ASPHALT_DENSITY;
 
-    const aggregateCost = totalAggregateTons * materialCosts.aggregate
-    const bindingCost = totalBindingAgent * materialCosts.bindingAgent
-    const fuelCost = totalAsphaltTons * materialCosts.fuelSurcharge
+      let mixPrice = materialCosts.standardMix;
+      if (zone.mixType === 'premium') { mixPrice = materialCosts.premiumMix; }
+      if (zone.mixType === 'recycled') { mixPrice = materialCosts.recycledMix; }
+
+      materialCost += tons * mixPrice;
+    });
+
+    const aggregateCost = totalAggregateTons * materialCosts.aggregate;
+    const bindingCost = totalBindingAgent * materialCosts.bindingAgent;
+    const fuelCost = totalAsphaltTons * materialCosts.fuelSurcharge;
 
     // Delivery calculations (assume 25 tons per truck)
-    const deliveryTrips = Math.ceil(totalAsphaltTons / 25)
-    const deliveryCost = deliveryTrips * materialCosts.deliveryRate
+    const deliveryTrips = Math.ceil(totalAsphaltTons / 25);
+    const deliveryCost = deliveryTrips * materialCosts.deliveryRate;
 
     // Labor calculations (estimate 2 tons per hour per crew)
-    const laborHours = totalAsphaltTons / 2
-    const laborCost = laborHours * materialCosts.laborRate
+    const laborHours = totalAsphaltTons / 2;
+    const laborCost = laborHours * materialCosts.laborRate;
 
-    const totalCost = materialCost + aggregateCost + bindingCost + fuelCost + deliveryCost + laborCost
+    const totalCost = materialCost + aggregateCost + bindingCost + fuelCost + deliveryCost + laborCost;
 
     setResults({
       totalArea,
@@ -130,16 +130,16 @@ export const MaterialEstimator = () => {
       bindingAgent: totalBindingAgent,
       totalCost,
       deliveryTrips,
-      laborHours
-    })
-  }
+      laborHours,
+    });
+  };
 
   useEffect(() => {
-    calculateResults()
-  }, [zones, materialCosts])
+    calculateResults();
+  }, [zones, materialCosts]);
 
   const addZone = () => {
-    const newId = (Math.max(...zones.map(z => parseInt(z.id))) + 1).toString()
+    const newId = (Math.max(...zones.map(z => parseInt(z.id))) + 1).toString();
     setZones([...zones, {
       id: newId,
       name: `Zone ${newId}`,
@@ -147,28 +147,28 @@ export const MaterialEstimator = () => {
       width: 24,
       thickness: 3,
       surfaceType: 'new',
-      mixType: 'standard'
-    }])
-  }
+      mixType: 'standard',
+    }]);
+  };
 
   const removeZone = (id: string) => {
     if (zones.length > 1) {
-      setZones(zones.filter(zone => zone.id !== id))
+      setZones(zones.filter(zone => zone.id !== id));
     }
-  }
+  };
 
   const updateZone = (id: string, field: keyof ProjectZone, value: any) => {
-    setZones(zones.map(zone => 
-      zone.id === id ? { ...zone, [field]: value } : zone
-    ))
-  }
+    setZones(zones.map(zone =>
+      zone.id === id ? { ...zone, [field]: value } : zone,
+    ));
+  };
 
   const handleCostChange = (field: string, value: string) => {
     setMaterialCosts(prev => ({
       ...prev,
-      [field]: parseFloat(value) || 0
-    }))
-  }
+      [field]: parseFloat(value) || 0,
+    }));
+  };
 
   const saveCalculation = () => {
     const calculation = {
@@ -176,15 +176,15 @@ export const MaterialEstimator = () => {
       zones,
       results,
       timestamp: new Date().toISOString(),
-      type: 'material-estimate'
-    }
-    
-    const saved = JSON.parse(localStorage.getItem('material-calculations') || '[]')
-    saved.push(calculation)
-    localStorage.setItem('material-calculations', JSON.stringify(saved))
-    
-    alert('Calculation saved successfully!')
-  }
+      type: 'material-estimate',
+    };
+
+    const saved = JSON.parse(localStorage.getItem('material-calculations') || '[]');
+    saved.push(calculation);
+    localStorage.setItem('material-calculations', JSON.stringify(saved));
+
+    alert('Calculation saved successfully!');
+  };
 
   const exportResults = () => {
     const content = `
@@ -217,16 +217,16 @@ Logistics:
 
 Total Cost Estimate: $${results.totalCost.toFixed(2)}
 Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
-    `.trim()
+    `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `material-estimate-${Date.now()}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `material-estimate-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -270,7 +270,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="projectName"
                     placeholder="Highway 101 Paving"
                     value={projectInfo.projectName}
-                    onChange={(e) => setProjectInfo(prev => ({ ...prev, projectName: e.target.value }))}
+                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, projectName: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -279,7 +279,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="location"
                     placeholder="San Francisco, CA"
                     value={projectInfo.location}
-                    onChange={(e) => setProjectInfo(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, location: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -290,7 +290,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="startDate"
                     type="date"
                     value={projectInfo.startDate}
-                    onChange={(e) => setProjectInfo(prev => ({ ...prev, startDate: e.target.value }))}
+                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, startDate: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -299,7 +299,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="contractor"
                     placeholder="ABC Paving Company"
                     value={projectInfo.contractor}
-                    onChange={(e) => setProjectInfo(prev => ({ ...prev, contractor: e.target.value }))}
+                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, contractor: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -327,13 +327,13 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Label>Zone Name</Label>
                       <Input
                         value={zone.name}
-                        onChange={(e) => updateZone(zone.id, 'name', e.target.value)}
+                        onChange={(e) => { updateZone(zone.id, 'name', e.target.value); }}
                         placeholder={`Zone ${index + 1}`}
                       />
                     </div>
                     {zones.length > 1 && (
                       <Button
-                        onClick={() => removeZone(zone.id)}
+                        onClick={() => { removeZone(zone.id); }}
                         variant="outline"
                         size="sm"
                       >
@@ -341,14 +341,14 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       </Button>
                     )}
                   </div>
-                  
+
                   <div className="grid grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label>Length (feet)</Label>
                       <Input
                         type="number"
                         value={zone.length}
-                        onChange={(e) => updateZone(zone.id, 'length', parseInt(e.target.value) || 0)}
+                        onChange={(e) => { updateZone(zone.id, 'length', parseInt(e.target.value) || 0); }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -356,14 +356,14 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Input
                         type="number"
                         value={zone.width}
-                        onChange={(e) => updateZone(zone.id, 'width', parseInt(e.target.value) || 0)}
+                        onChange={(e) => { updateZone(zone.id, 'width', parseInt(e.target.value) || 0); }}
                       />
                     </div>
                     <div className="space-y-2">
                       <Label>Thickness (inches)</Label>
-                      <Select 
-                        value={zone.thickness.toString()} 
-                        onValueChange={(value) => updateZone(zone.id, 'thickness', parseInt(value))}
+                      <Select
+                        value={zone.thickness.toString()}
+                        onValueChange={(value) => { updateZone(zone.id, 'thickness', parseInt(value)); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -382,9 +382,9 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Surface Type</Label>
-                      <Select 
-                        value={zone.surfaceType} 
-                        onValueChange={(value: 'new' | 'overlay' | 'patch') => updateZone(zone.id, 'surfaceType', value)}
+                      <Select
+                        value={zone.surfaceType}
+                        onValueChange={(value: 'new' | 'overlay' | 'patch') => { updateZone(zone.id, 'surfaceType', value); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -398,9 +398,9 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     </div>
                     <div className="space-y-2">
                       <Label>Mix Type</Label>
-                      <Select 
-                        value={zone.mixType} 
-                        onValueChange={(value: 'standard' | 'premium' | 'recycled') => updateZone(zone.id, 'mixType', value)}
+                      <Select
+                        value={zone.mixType}
+                        onValueChange={(value: 'standard' | 'premium' | 'recycled') => { updateZone(zone.id, 'mixType', value); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -415,7 +415,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                   </div>
 
                   <div className="p-3 bg-card rounded text-sm">
-                    <strong>Zone Summary:</strong> {(zone.length * zone.width).toLocaleString()} sq ft, 
+                    <strong>Zone Summary:</strong> {(zone.length * zone.width).toLocaleString()} sq ft,
                     {((zone.length * zone.width * zone.thickness / 12) * ASPHALT_DENSITY).toFixed(1)} tons estimated
                   </div>
                 </div>
@@ -439,7 +439,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.standardMix}
-                    onChange={(e) => handleCostChange('standardMix', e.target.value)}
+                    onChange={(e) => { handleCostChange('standardMix', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -449,7 +449,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.premiumMix}
-                    onChange={(e) => handleCostChange('premiumMix', e.target.value)}
+                    onChange={(e) => { handleCostChange('premiumMix', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -459,7 +459,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.recycledMix}
-                    onChange={(e) => handleCostChange('recycledMix', e.target.value)}
+                    onChange={(e) => { handleCostChange('recycledMix', e.target.value); }}
                   />
                 </div>
               </div>
@@ -471,7 +471,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.aggregate}
-                    onChange={(e) => handleCostChange('aggregate', e.target.value)}
+                    onChange={(e) => { handleCostChange('aggregate', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -481,7 +481,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.bindingAgent}
-                    onChange={(e) => handleCostChange('bindingAgent', e.target.value)}
+                    onChange={(e) => { handleCostChange('bindingAgent', e.target.value); }}
                   />
                 </div>
               </div>
@@ -493,7 +493,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.fuelSurcharge}
-                    onChange={(e) => handleCostChange('fuelSurcharge', e.target.value)}
+                    onChange={(e) => { handleCostChange('fuelSurcharge', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -503,7 +503,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.deliveryRate}
-                    onChange={(e) => handleCostChange('deliveryRate', e.target.value)}
+                    onChange={(e) => { handleCostChange('deliveryRate', e.target.value); }}
                   />
                 </div>
               </div>
@@ -731,5 +731,5 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};

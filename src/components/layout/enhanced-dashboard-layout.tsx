@@ -4,13 +4,13 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Logo, CompactLogo } from '../ui/logo';
 import { Icon } from '../ui/icon';
-import { 
-  Menu, 
-  X, 
-  Search, 
-  Bell, 
-  Settings, 
-  User, 
+import {
+  Menu,
+  X,
+  Search,
+  Bell,
+  Settings,
+  User,
   Home,
   Truck,
   Users,
@@ -22,7 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Maximize2,
-  Minimize2
+  Minimize2,
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -61,7 +61,7 @@ export function EnhancedDashboardLayout({
   actions,
   breadcrumbs,
   fullWidth = false,
-  variant = 'default'
+  variant = 'default',
 }: EnhancedDashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -80,7 +80,7 @@ export function EnhancedDashboardLayout({
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => { window.removeEventListener('resize', handleResize); };
   }, []);
 
   const sidebarWidth = sidebarCollapsed ? 'w-16' : 'w-64';
@@ -90,40 +90,40 @@ export function EnhancedDashboardLayout({
     <div className={cn(
       'min-h-screen bg-card',
       variant === 'tactical' && 'bg-slate-950 text-green-400',
-      fullScreenMode && 'overflow-hidden'
+      fullScreenMode && 'overflow-hidden',
     )}>
       {/* Sidebar */}
       <aside className={cn(
         'fixed top-0 left-0 z-40 h-screen transition-all duration-300 ease-in-out',
         sidebarWidth,
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
-        variant === 'tactical' 
-          ? 'bg-slate-900 border-r border-green-400/20' 
-          : 'bg-card border-r border'
+        variant === 'tactical'
+          ? 'bg-slate-900 border-r border-green-400/20'
+          : 'bg-card border-r border',
       )}>
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between px-4 border-b border">
           {sidebarCollapsed ? (
             <CompactLogo variant={variant === 'tactical' ? 'tactical' : 'default'} />
           ) : (
-            <Logo 
-              variant={variant === 'tactical' ? 'tactical' : 'default'} 
+            <Logo
+              variant={variant === 'tactical' ? 'tactical' : 'default'}
               size="default"
               animated
             />
           )}
-          
+
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            onClick={() => { setSidebarCollapsed(!sidebarCollapsed); }}
             className={cn(
               'opacity-0 group-hover:opacity-100 transition-opacity',
-              sidebarCollapsed && 'opacity-100'
+              sidebarCollapsed && 'opacity-100',
             )}
           >
-            <Icon 
-              icon={sidebarCollapsed ? ChevronRight : ChevronLeft} 
+            <Icon
+              icon={sidebarCollapsed ? ChevronRight : ChevronLeft}
               size="sm"
               variant={variant === 'tactical' ? 'tactical' : 'default'}
             />
@@ -136,7 +136,7 @@ export function EnhancedDashboardLayout({
             <a
               key={item.id}
               href={item.href}
-              onClick={() => setActiveNav(item.id)}
+              onClick={() => { setActiveNav(item.id); }}
               className={cn(
                 'group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200',
                 activeNav === item.id
@@ -146,23 +146,23 @@ export function EnhancedDashboardLayout({
                   : variant === 'tactical'
                     ? 'text-green-400/70 hover:bg-green-400/10 hover:text-green-300'
                     : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                'hover:scale-[1.02] active:scale-[0.98]'
+                'hover:scale-[1.02] active:scale-[0.98]',
               )}
             >
-              <Icon 
-                icon={item.icon} 
+              <Icon
+                icon={item.icon}
                 size="sm"
                 className={cn(
                   'flex-shrink-0',
-                  !sidebarCollapsed && 'mr-3'
+                  !sidebarCollapsed && 'mr-3',
                 )}
                 variant={
-                  activeNav === item.id 
+                  activeNav === item.id
                     ? variant === 'tactical' ? 'tactical' : 'primary'
                     : variant === 'tactical' ? 'tactical' : 'muted'
                 }
               />
-              
+
               {!sidebarCollapsed && (
                 <>
                   <span className="flex-1">{item.label}</span>
@@ -171,7 +171,7 @@ export function EnhancedDashboardLayout({
                       'ml-2 px-2 py-0.5 text-xs rounded-full',
                       variant === 'tactical'
                         ? 'bg-green-400/20 text-green-300'
-                        : 'bg-primary text-primary-foreground'
+                        : 'bg-primary text-primary-foreground',
                     )}>
                       {item.badge}
                     </span>
@@ -186,13 +186,13 @@ export function EnhancedDashboardLayout({
         <div className="p-4 border-t border">
           <div className={cn(
             'flex items-center space-x-3',
-            sidebarCollapsed && 'justify-center'
+            sidebarCollapsed && 'justify-center',
           )}>
             <div className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center',
-              variant === 'tactical' 
-                ? 'bg-green-400/20 text-green-300' 
-                : 'bg-primary text-primary-foreground'
+              variant === 'tactical'
+                ? 'bg-green-400/20 text-green-300'
+                : 'bg-primary text-primary-foreground',
             )}>
               <Icon icon={User} size="sm" />
             </div>
@@ -201,7 +201,7 @@ export function EnhancedDashboardLayout({
                 <p className="text-sm font-medium truncate">John Doe</p>
                 <p className={cn(
                   'text-xs truncate',
-                  variant === 'tactical' ? 'text-green-400/60' : 'text-muted-foreground'
+                  variant === 'tactical' ? 'text-green-400/60' : 'text-muted-foreground',
                 )}>
                   Project Manager
                 </p>
@@ -213,29 +213,29 @@ export function EnhancedDashboardLayout({
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
+          onClick={() => { setSidebarOpen(false); }}
         />
       )}
 
       {/* Main Content */}
       <div className={cn(
         'transition-all duration-300 ease-in-out min-h-screen',
-        mainMargin
+        mainMargin,
       )}>
         {/* Top Header */}
         <header className={cn(
           'sticky top-0 z-20 flex h-16 items-center gap-4 border-b px-4 lg:px-6',
-          variant === 'tactical' 
-            ? 'bg-slate-900/95 backdrop-blur border-green-400/20' 
-            : 'bg-card/95 backdrop-blur border'
+          variant === 'tactical'
+            ? 'bg-slate-900/95 backdrop-blur border-green-400/20'
+            : 'bg-card/95 backdrop-blur border',
         )}>
           <Button
             variant="ghost"
             size="icon"
             className="lg:hidden"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => { setSidebarOpen(!sidebarOpen); }}
           >
             <Icon icon={Menu} size="sm" />
           </Button>
@@ -247,11 +247,11 @@ export function EnhancedDashboardLayout({
                 <React.Fragment key={index}>
                   {index > 0 && <span className="text-muted-foreground">/</span>}
                   {crumb.href ? (
-                    <a 
+                    <a
                       href={crumb.href}
                       className={cn(
                         'hover:underline',
-                        variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground'
+                        variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground',
                       )}
                     >
                       {crumb.label}
@@ -282,7 +282,7 @@ export function EnhancedDashboardLayout({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setFullScreenMode(!fullScreenMode)}
+              onClick={() => { setFullScreenMode(!fullScreenMode); }}
             >
               <Icon icon={fullScreenMode ? Minimize2 : Maximize2} size="sm" />
             </Button>
@@ -293,17 +293,17 @@ export function EnhancedDashboardLayout({
         {(title || description || actions) && (
           <div className={cn(
             'border-b px-4 lg:px-6 py-6',
-            variant === 'tactical' ? 'border-green-400/20' : 'border'
+            variant === 'tactical' ? 'border-green-400/20' : 'border',
           )}>
             <div className={cn(
               'flex items-center justify-between',
-              !fullWidth && 'max-w-7xl mx-auto'
+              !fullWidth && 'max-w-7xl mx-auto',
             )}>
               <div className="space-y-1">
                 {title && (
                   <h1 className={cn(
                     'text-3xl font-bold tracking-tight',
-                    variant === 'tactical' && 'text-green-300 animate-glow'
+                    variant === 'tactical' && 'text-green-300 animate-glow',
                   )}>
                     {title}
                   </h1>
@@ -311,7 +311,7 @@ export function EnhancedDashboardLayout({
                 {description && (
                   <p className={cn(
                     'text-muted-foreground',
-                    variant === 'tactical' && 'text-green-400/60'
+                    variant === 'tactical' && 'text-green-400/60',
                   )}>
                     {description}
                   </p>
@@ -330,7 +330,7 @@ export function EnhancedDashboardLayout({
         <main className={cn(
           'flex-1 px-4 lg:px-6 py-6',
           !fullWidth && 'max-w-7xl mx-auto',
-          fullScreenMode && 'h-[calc(100vh-4rem)] overflow-auto'
+          fullScreenMode && 'h-[calc(100vh-4rem)] overflow-auto',
         )}>
           <div className="animate-fade-in-blur">
             {children}

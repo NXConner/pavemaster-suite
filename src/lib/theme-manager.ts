@@ -19,7 +19,7 @@ export interface ThemeConfig {
     cardForeground: string;
     border: string;
     input: string;
-    
+
     // Primary colors
     primary: string;
     primaryForeground: string;
@@ -27,7 +27,7 @@ export interface ThemeConfig {
     secondaryForeground: string;
     accent: string;
     accentForeground: string;
-    
+
     // Status colors
     destructive: string;
     destructiveForeground: string;
@@ -37,21 +37,21 @@ export interface ThemeConfig {
     warningForeground: string;
     info: string;
     infoForeground: string;
-    
+
     // Interactive elements
     ring: string;
     radius: string;
-    
+
     // Custom properties
     sidebar: string;
     sidebarForeground: string;
     header: string;
     headerForeground: string;
-    
+
     // Gradients
     gradientStart: string;
     gradientEnd: string;
-    
+
     // Special effects
     shadow: string;
     glow: string;
@@ -606,10 +606,10 @@ export class ThemeManager {
     if (typeof window !== 'undefined') {
       this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       this.prefersDark = this.mediaQuery.matches;
-      
+
       this.mediaQuery.addEventListener('change', (e) => {
         this.prefersDark = e.matches;
-        
+
         // Auto-switch if user has auto theme enabled
         const savedTheme = localStorage.getItem('theme-preference');
         if (savedTheme === 'auto') {
@@ -624,7 +624,7 @@ export class ThemeManager {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
       const themePreference = localStorage.getItem('theme-preference');
-      
+
       if (themePreference === 'auto') {
         this.setTheme(this.prefersDark ? 'dark' : 'default');
       } else if (savedTheme && this.isValidTheme(savedTheme)) {
@@ -653,19 +653,19 @@ export class ThemeManager {
   getAllThemes(): ThemeConfig[] {
     const allThemes = [
       ...Object.values(themes),
-      ...Array.from(this.customThemes.values())
+      ...Array.from(this.customThemes.values()),
     ];
-    
+
     return allThemes.sort((a, b) => {
       // Sort by category, then by name
       const categoryOrder = ['light', 'dark', 'tactical', 'brand', 'accessibility'];
       const aIndex = categoryOrder.indexOf(a.category);
       const bIndex = categoryOrder.indexOf(b.category);
-      
+
       if (aIndex !== bIndex) {
         return aIndex - bIndex;
       }
-      
+
       return a.name.localeCompare(b.name);
     });
   }
@@ -684,25 +684,25 @@ export class ThemeManager {
 
     this.currentTheme = themeId;
     const theme = this.getTheme(themeId);
-    
+
     // Apply theme to DOM
     this.applyTheme(theme);
-    
+
     // Save to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', themeId);
     }
-    
+
     // Notify observers
-    this.observers.forEach(observer => observer(theme));
+    this.observers.forEach(observer => { observer(theme); });
   }
 
   // Apply theme to DOM
   private applyTheme(theme: ThemeConfig): void {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined') { return; }
 
     const root = document.documentElement;
-    
+
     // Apply CSS custom properties
     Object.entries(theme.colors).forEach(([key, value]) => {
       root.style.setProperty(`--${this.kebabCase(key)}`, value);
@@ -725,7 +725,7 @@ export class ThemeManager {
     // Apply effects as data attributes
     root.setAttribute('data-theme', theme.id);
     root.setAttribute('data-theme-category', theme.category);
-    
+
     Object.entries(theme.effects).forEach(([key, value]) => {
       root.setAttribute(`data-${this.kebabCase(key)}`, value.toString());
     });
@@ -745,7 +745,7 @@ export class ThemeManager {
   // Add custom theme
   addCustomTheme(theme: ThemeConfig): void {
     this.customThemes.set(theme.id, theme);
-    
+
     // Save to localStorage
     if (typeof window !== 'undefined') {
       const customThemes = Array.from(this.customThemes.values());
@@ -757,12 +757,12 @@ export class ThemeManager {
   removeCustomTheme(themeId: string): void {
     if (this.customThemes.has(themeId)) {
       this.customThemes.delete(themeId);
-      
+
       // Switch to default if current theme is being removed
       if (this.currentTheme === themeId) {
         this.setTheme('default');
       }
-      
+
       // Update localStorage
       if (typeof window !== 'undefined') {
         const customThemes = Array.from(this.customThemes.values());
@@ -774,7 +774,7 @@ export class ThemeManager {
   // Create theme from brand config
   createBrandTheme(brandConfig: CustomBrandConfig): ThemeConfig {
     const baseTheme = themes.default;
-    
+
     return {
       ...baseTheme,
       id: `brand-${brandConfig.companyName.toLowerCase().replace(/\s+/g, '-')}`,
@@ -804,22 +804,22 @@ export class ThemeManager {
   private hexToHsl(hex: string): string {
     // Remove the hash if present
     hex = hex.replace('#', '');
-    
+
     // Parse RGB values
     const r = parseInt(hex.substr(0, 2), 16) / 255;
     const g = parseInt(hex.substr(2, 2), 16) / 255;
     const b = parseInt(hex.substr(4, 2), 16) / 255;
-    
+
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     let h = 0;
     let s = 0;
     const l = (max + min) / 2;
-    
+
     if (max !== min) {
       const d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      
+
       switch (max) {
         case r:
           h = (g - b) / d + (g < b ? 6 : 0);
@@ -833,14 +833,14 @@ export class ThemeManager {
       }
       h /= 6;
     }
-    
+
     return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
   }
 
   // Toggle between light and dark
   toggleDarkMode(): void {
     const currentCategory = this.getCurrentTheme().category;
-    
+
     if (currentCategory === 'dark') {
       this.setTheme('default');
     } else {
@@ -859,7 +859,7 @@ export class ThemeManager {
   // Subscribe to theme changes
   subscribe(observer: (theme: ThemeConfig) => void): () => void {
     this.observers.add(observer);
-    
+
     // Return unsubscribe function
     return () => {
       this.observers.delete(observer);
@@ -876,12 +876,12 @@ export class ThemeManager {
   importTheme(themeData: string): ThemeConfig {
     try {
       const theme = JSON.parse(themeData) as ThemeConfig;
-      
+
       // Validate theme structure
       if (!theme.id || !theme.name || !theme.colors) {
         throw new Error('Invalid theme structure');
       }
-      
+
       this.addCustomTheme(theme);
       return theme;
     } catch (error) {
@@ -894,7 +894,7 @@ export class ThemeManager {
     const css = Object.entries(theme.colors)
       .map(([key, value]) => `--${this.kebabCase(key)}: ${value};`)
       .join('\n');
-    
+
     return `:root {\n${css}\n}`;
   }
 }
@@ -914,11 +914,11 @@ export function useTheme() {
   return {
     theme: currentTheme,
     themes: themeManager.getAllThemes(),
-    setTheme: (themeId: string) => themeManager.setTheme(themeId),
-    toggleDarkMode: () => themeManager.toggleDarkMode(),
-    setAutoTheme: () => themeManager.setAutoTheme(),
-    addCustomTheme: (theme: ThemeConfig) => themeManager.addCustomTheme(theme),
-    removeCustomTheme: (themeId: string) => themeManager.removeCustomTheme(themeId),
+    setTheme: (themeId: string) => { themeManager.setTheme(themeId); },
+    toggleDarkMode: () => { themeManager.toggleDarkMode(); },
+    setAutoTheme: () => { themeManager.setAutoTheme(); },
+    addCustomTheme: (theme: ThemeConfig) => { themeManager.addCustomTheme(theme); },
+    removeCustomTheme: (themeId: string) => { themeManager.removeCustomTheme(themeId); },
     createBrandTheme: (brandConfig: CustomBrandConfig) => themeManager.createBrandTheme(brandConfig),
     exportTheme: (themeId: string) => themeManager.exportTheme(themeId),
     importTheme: (themeData: string) => themeManager.importTheme(themeData),

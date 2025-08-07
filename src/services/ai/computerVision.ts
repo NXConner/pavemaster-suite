@@ -93,11 +93,11 @@ export class ComputerVisionService {
   }
 
   private async loadModel(): Promise<void> {
-    if (this.isModelLoaded) return;
+    if (this.isModelLoaded) { return; }
 
     try {
       console.log('Loading computer vision model...');
-      
+
       // Try to load the actual TensorFlow.js model first
       try {
         const modelUrl = '/models/model.json';
@@ -111,7 +111,7 @@ export class ComputerVisionService {
         this.model = await this.createMockModel();
         console.log('Fallback model created successfully');
       }
-      
+
       this.isModelLoaded = true;
       console.log('Pavement defect detection model ready');
     } catch (error) {
@@ -154,7 +154,7 @@ export class ComputerVisionService {
    */
   async analyzePavementDefects(
     imageData: ImageData | string,
-    options: Partial<ImageAnalysisOptions> = {}
+    options: Partial<ImageAnalysisOptions> = {},
   ): Promise<DefectAnalysis> {
     await this.loadModel();
 
@@ -162,7 +162,7 @@ export class ComputerVisionService {
       const processedImage = await this.preprocessImage(imageData, options);
       const predictions = await this.runInference(processedImage);
       const defects = await this.extractDefects(predictions, processedImage);
-      
+
       return this.generateDefectAnalysis(defects, processedImage);
     } catch (error) {
       console.error('Error analyzing pavement defects:', error);
@@ -179,10 +179,10 @@ export class ComputerVisionService {
     try {
       const beforeProcessed = await this.preprocessImage(beforeImage);
       const afterProcessed = await this.preprocessImage(afterImage);
-      
+
       const beforeDefects = await this.runInference(beforeProcessed);
       const afterDefects = await this.runInference(afterProcessed);
-      
+
       return this.calculateQualityScore(beforeDefects, afterDefects);
     } catch (error) {
       console.error('Error calculating quality score:', error);
@@ -198,9 +198,9 @@ export class ComputerVisionService {
 
     try {
       const processedImages = await Promise.all(
-        droneImagery.map(img => this.preprocessImage(img))
+        droneImagery.map(img => this.preprocessImage(img)),
       );
-      
+
       const combinedAnalysis = await this.analyzeMultipleImages(processedImages);
       return this.generateSurfaceMetrics(combinedAnalysis);
     } catch (error) {
@@ -211,7 +211,7 @@ export class ComputerVisionService {
 
   private async preprocessImage(
     imageData: ImageData | string,
-    options: Partial<ImageAnalysisOptions> = {}
+    options: Partial<ImageAnalysisOptions> = {},
   ): Promise<tf.Tensor> {
     let tensor: tf.Tensor;
 
@@ -227,10 +227,10 @@ export class ComputerVisionService {
 
     // Resize to model input size
     tensor = tf.image.resizeBilinear(tensor, [224, 224]);
-    
+
     // Normalize pixel values
     tensor = tensor.div(255.0);
-    
+
     // Add batch dimension
     tensor = tensor.expandDims(0);
 
@@ -238,11 +238,11 @@ export class ComputerVisionService {
     if (options.enhanceContrast) {
       tensor = this.enhanceContrast(tensor);
     }
-    
+
     if (options.noiseReduction) {
       tensor = this.applyNoiseReduction(tensor);
     }
-    
+
     if (options.edgeDetection) {
       tensor = this.applyEdgeDetection(tensor);
     }
@@ -260,7 +260,7 @@ export class ComputerVisionService {
     const kernel = tf.tensor4d([
       [[[0.0625]], [[0.125]], [[0.0625]]],
       [[[0.125]], [[0.25]], [[0.125]]],
-      [[[0.0625]], [[0.125]], [[0.0625]]]
+      [[[0.0625]], [[0.125]], [[0.0625]]],
     ]);
     return tf.conv2d(tensor, kernel, 1, 'same');
   }
@@ -270,7 +270,7 @@ export class ComputerVisionService {
     const sobelX = tf.tensor4d([
       [[[-1]], [[0]], [[1]]],
       [[[-2]], [[0]], [[2]]],
-      [[[-1]], [[0]], [[1]]]
+      [[[-1]], [[0]], [[1]]],
     ]);
     return tf.conv2d(tensor, sobelX, 1, 'same');
   }
@@ -279,7 +279,7 @@ export class ComputerVisionService {
     if (!this.model) {
       throw new Error('Model not loaded');
     }
-    
+
     // Run model prediction
     const prediction = this.model.predict(inputTensor) as tf.Tensor;
     return prediction;
@@ -288,11 +288,11 @@ export class ComputerVisionService {
   private async extractDefects(predictions: tf.Tensor, image: tf.Tensor): Promise<PavementDefect[]> {
     const predData = await predictions.data();
     const defects: PavementDefect[] = [];
-    
+
     // Mock defect extraction - in real implementation, this would use
     // object detection algorithms to locate and classify defects
     const defectTypes = ['crack', 'pothole', 'rutting', 'raveling', 'bleeding', 'patching'] as const;
-    
+
     for (let i = 0; i < predData.length; i++) {
       if (predData[i] > 0.5) { // Confidence threshold
         const defectType = defectTypes[i % defectTypes.length];
@@ -314,14 +314,14 @@ export class ComputerVisionService {
         defects.push(mockDefect);
       }
     }
-    
+
     return defects;
   }
 
   private determineSeverity(confidence: number): 'low' | 'medium' | 'high' | 'critical' {
-    if (confidence > 0.9) return 'critical';
-    if (confidence > 0.8) return 'high';
-    if (confidence > 0.6) return 'medium';
+    if (confidence > 0.9) { return 'critical'; }
+    if (confidence > 0.8) { return 'high'; }
+    if (confidence > 0.6) { return 'medium'; }
     return 'low';
   }
 
@@ -351,10 +351,10 @@ export class ComputerVisionService {
   }
 
   private determineUrgency(type: string, severity: number): 'immediate' | 'within_week' | 'within_month' | 'monitor' {
-    if (type === 'pothole' && severity > 0.8) return 'immediate';
-    if (severity > 0.9) return 'immediate';
-    if (severity > 0.7) return 'within_week';
-    if (severity > 0.5) return 'within_month';
+    if (type === 'pothole' && severity > 0.8) { return 'immediate'; }
+    if (severity > 0.9) { return 'immediate'; }
+    if (severity > 0.7) { return 'within_week'; }
+    if (severity > 0.5) { return 'within_month'; }
     return 'monitor';
   }
 
@@ -362,12 +362,12 @@ export class ComputerVisionService {
     const totalArea = 224 * 224; // Image dimensions
     const damagedArea = defects.reduce((sum, defect) => sum + defect.area, 0);
     const damagePercentage = (damagedArea / totalArea) * 100;
-    
+
     const overallCondition = this.determineOverallCondition(damagePercentage, defects);
-    const confidenceScore = defects.length > 0 
-      ? defects.reduce((sum, d) => sum + d.confidence, 0) / defects.length 
+    const confidenceScore = defects.length > 0
+      ? defects.reduce((sum, d) => sum + d.confidence, 0) / defects.length
       : 0.95;
-    
+
     return {
       defects,
       overallCondition,
@@ -383,33 +383,33 @@ export class ComputerVisionService {
 
   private determineOverallCondition(damagePercentage: number, defects: PavementDefect[]): 'excellent' | 'good' | 'fair' | 'poor' | 'failed' {
     const criticalDefects = defects.filter(d => d.severity === 'critical').length;
-    
-    if (criticalDefects > 2 || damagePercentage > 25) return 'failed';
-    if (criticalDefects > 0 || damagePercentage > 15) return 'poor';
-    if (damagePercentage > 8) return 'fair';
-    if (damagePercentage > 3) return 'good';
+
+    if (criticalDefects > 2 || damagePercentage > 25) { return 'failed'; }
+    if (criticalDefects > 0 || damagePercentage > 15) { return 'poor'; }
+    if (damagePercentage > 8) { return 'fair'; }
+    if (damagePercentage > 3) { return 'good'; }
     return 'excellent';
   }
 
   private generateRecommendations(defects: PavementDefect[], damagePercentage: number): string[] {
     const recommendations: string[] = [];
-    
+
     if (damagePercentage > 20) {
       recommendations.push('Consider full section reconstruction');
     } else if (damagePercentage > 10) {
       recommendations.push('Schedule major rehabilitation within 6 months');
     }
-    
+
     const immediateDefects = defects.filter(d => d.urgency === 'immediate');
     if (immediateDefects.length > 0) {
       recommendations.push(`Address ${immediateDefects.length} critical defects immediately`);
     }
-    
+
     const crackDefects = defects.filter(d => d.type === 'crack');
     if (crackDefects.length > 3) {
       recommendations.push('Apply crack sealing treatment');
     }
-    
+
     return recommendations;
   }
 
@@ -419,7 +419,7 @@ export class ComputerVisionService {
     const beforeScore = Math.random() * 40 + 30; // 30-70
     const afterScore = Math.random() * 30 + 70; // 70-100
     const improvement = afterScore - beforeScore;
-    
+
     return {
       overallScore: afterScore,
       beforeScore,
@@ -438,20 +438,20 @@ export class ComputerVisionService {
   }
 
   private getCertificationLevel(score: number): 'A+' | 'A' | 'B+' | 'B' | 'C' | 'F' {
-    if (score >= 95) return 'A+';
-    if (score >= 90) return 'A';
-    if (score >= 85) return 'B+';
-    if (score >= 80) return 'B';
-    if (score >= 70) return 'C';
+    if (score >= 95) { return 'A+'; }
+    if (score >= 90) { return 'A'; }
+    if (score >= 85) { return 'B+'; }
+    if (score >= 80) { return 'B'; }
+    if (score >= 70) { return 'C'; }
     return 'F';
   }
 
   private async analyzeMultipleImages(images: tf.Tensor[]): Promise<any> {
     // Combine analysis from multiple images
     const analyses = await Promise.all(
-      images.map(img => this.runInference(img))
+      images.map(img => this.runInference(img)),
     );
-    
+
     return analyses.reduce((combined, analysis) => {
       // Combine analyses - implementation would merge detection results
       return combined;

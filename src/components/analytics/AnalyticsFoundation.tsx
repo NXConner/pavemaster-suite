@@ -209,17 +209,17 @@ class AnalyticsTracker {
     };
 
     this.events.push(analyticsEvent);
-    
+
     // Store in localStorage for persistence
     const stored = localStorage.getItem('analytics_events');
     const existingEvents = stored ? JSON.parse(stored) : [];
     existingEvents.push(analyticsEvent);
-    
+
     // Keep only last 1000 events
     if (existingEvents.length > 1000) {
       existingEvents.splice(0, existingEvents.length - 1000);
     }
-    
+
     localStorage.setItem('analytics_events', JSON.stringify(existingEvents));
 
     // Send to server (simulated)
@@ -253,7 +253,7 @@ const PerformanceMonitor: React.FC = () => {
 
   const collectPerformanceMetrics = useCallback(() => {
     const now = new Date();
-    
+
     // Web Vitals simulation (in real app, use web-vitals library)
     const metric: PerformanceMetrics = {
       timestamp: now,
@@ -293,14 +293,14 @@ const PerformanceMonitor: React.FC = () => {
   }, []);
 
   const getAverageMetric = (key: keyof PerformanceMetrics) => {
-    if (metrics.length === 0) return 0;
+    if (metrics.length === 0) { return 0; }
     const sum = metrics.reduce((acc, metric) => acc + (metric[key] as number), 0);
     return sum / metrics.length;
   };
 
   const getMetricStatus = (value: number, thresholds: { good: number; poor: number }) => {
-    if (value <= thresholds.good) return 'good';
-    if (value <= thresholds.poor) return 'needs-improvement';
+    if (value <= thresholds.good) { return 'good'; }
+    if (value <= thresholds.poor) { return 'needs-improvement'; }
     return 'poor';
   };
 
@@ -339,7 +339,7 @@ const PerformanceMonitor: React.FC = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <Label className="text-xs">FID</Label>
@@ -348,7 +348,7 @@ const PerformanceMonitor: React.FC = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <Label className="text-xs">CLS</Label>
@@ -357,7 +357,7 @@ const PerformanceMonitor: React.FC = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <Label className="text-xs">Memory</Label>
@@ -373,16 +373,16 @@ const PerformanceMonitor: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={metrics.slice(-20)}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="timestamp" 
+                  <XAxis
+                    dataKey="timestamp"
                     tickFormatter={(time) => new Date(time).toLocaleTimeString()}
                   />
                   <YAxis />
-                  <Tooltip 
+                  <Tooltip
                     labelFormatter={(time) => new Date(time).toLocaleString()}
                     formatter={(value: number, name: string) => [
                       name === 'memoryUsage' ? `${(value / 1024 / 1024).toFixed(1)}MB` : `${value.toFixed(0)}ms`,
-                      name
+                      name,
                     ]}
                   />
                   <Legend />
@@ -456,7 +456,7 @@ const ABTestingPlatform: React.FC = () => {
   });
 
   const createExperiment = () => {
-    if (!newExperiment.name.trim()) return;
+    if (!newExperiment.name.trim()) { return; }
 
     const experiment: ABTestExperiment = {
       id: `exp-${Date.now()}`,
@@ -490,10 +490,10 @@ const ABTestingPlatform: React.FC = () => {
   };
 
   const toggleExperimentStatus = (experimentId: string) => {
-    setExperiments(prev => prev.map(exp => 
-      exp.id === experimentId 
+    setExperiments(prev => prev.map(exp =>
+      exp.id === experimentId
         ? { ...exp, status: exp.status === 'running' ? 'paused' : 'running' as any }
-        : exp
+        : exp,
     ));
   };
 
@@ -542,7 +542,7 @@ const ABTestingPlatform: React.FC = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => toggleExperimentStatus(experiment.id)}
+                          onClick={() => { toggleExperimentStatus(experiment.id); }}
                         >
                           {experiment.status === 'running' ? 'Pause' : 'Start'}
                         </Button>
@@ -559,7 +559,7 @@ const ABTestingPlatform: React.FC = () => {
                             {variant.traffic}% traffic
                           </div>
                         </div>
-                        
+
                         <div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
                             <div className="text-muted-foreground">Participants</div>
@@ -603,7 +603,7 @@ const ABTestingPlatform: React.FC = () => {
                 <Input
                   id="exp-name"
                   value={newExperiment.name}
-                  onChange={(e) => setNewExperiment(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => { setNewExperiment(prev => ({ ...prev, name: e.target.value })); }}
                   placeholder="Button Color Test"
                 />
               </div>
@@ -613,7 +613,7 @@ const ABTestingPlatform: React.FC = () => {
                 <Input
                   id="exp-description"
                   value={newExperiment.description}
-                  onChange={(e) => setNewExperiment(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) => { setNewExperiment(prev => ({ ...prev, description: e.target.value })); }}
                   placeholder="Testing different button colors for conversion"
                 />
               </div>
@@ -696,8 +696,8 @@ const KPIDashboard: React.FC = () => {
 
   const getPerformanceColor = (kpi: KPIMetric) => {
     const percentage = getProgressPercentage(kpi);
-    if (percentage >= 100) return 'text-green-600';
-    if (percentage >= 80) return 'text-yellow-600';
+    if (percentage >= 100) { return 'text-green-600'; }
+    if (percentage >= 80) { return 'text-yellow-600'; }
     return 'text-red-600';
   };
 
@@ -718,13 +718,13 @@ const KPIDashboard: React.FC = () => {
                   <h3 className="text-sm font-medium">{kpi.name}</h3>
                   {getTrendIcon(kpi.trend)}
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-baseline gap-1">
                     <span className="text-2xl font-bold">{kpi.value.toLocaleString()}</span>
                     <span className="text-sm text-muted-foreground">{kpi.unit}</span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">
                       Target: {kpi.target.toLocaleString()}{kpi.unit}
@@ -733,12 +733,12 @@ const KPIDashboard: React.FC = () => {
                       {kpi.change >= 0 ? '+' : ''}{kpi.change.toFixed(1)}%
                     </span>
                   </div>
-                  
-                  <Progress 
-                    value={getProgressPercentage(kpi)} 
+
+                  <Progress
+                    value={getProgressPercentage(kpi)}
                     className="h-2"
                   />
-                  
+
                   <div className="text-xs text-muted-foreground">
                     This {kpi.period}
                   </div>
@@ -777,7 +777,7 @@ const AnalyticsFoundation: React.FC = () => {
       setEvents(tracker.getEvents());
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval); };
   }, [tracker]);
 
   return (

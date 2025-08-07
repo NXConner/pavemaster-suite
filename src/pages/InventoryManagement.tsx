@@ -30,7 +30,7 @@ export default function InventoryManagement() {
     name: '',
     sku: '',
     quantity: 0,
-    location: ''
+    location: '',
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function InventoryManagement() {
         .select('*')
         .order('name');
 
-      if (error) throw error;
+      if (error) { throw error; }
       setItems(data || []);
     } catch (error: any) {
       toast.error('Error fetching inventory: ' + error.message);
@@ -59,7 +59,7 @@ export default function InventoryManagement() {
         .from('inventory_items')
         .insert([newItem]);
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       toast.success('Item added successfully');
       setAddDialogOpen(false);
@@ -71,7 +71,7 @@ export default function InventoryManagement() {
   };
 
   const updateItem = async () => {
-    if (!selectedItem) return;
+    if (!selectedItem) { return; }
 
     try {
       const { error } = await supabase
@@ -81,11 +81,11 @@ export default function InventoryManagement() {
           sku: selectedItem.sku,
           quantity: selectedItem.quantity,
           location: selectedItem.location,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', selectedItem.id);
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       toast.success('Item updated successfully');
       setEditDialogOpen(false);
@@ -97,7 +97,7 @@ export default function InventoryManagement() {
   };
 
   const deleteItem = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+    if (!confirm('Are you sure you want to delete this item?')) { return; }
 
     try {
       const { error } = await supabase
@@ -105,7 +105,7 @@ export default function InventoryManagement() {
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) { throw error; }
 
       toast.success('Item deleted successfully');
       fetchItems();
@@ -119,22 +119,21 @@ export default function InventoryManagement() {
       return { status: 'out_of_stock', color: 'destructive', icon: AlertTriangle };
     } else if (quantity < 10) {
       return { status: 'low_stock', color: 'secondary', icon: AlertTriangle };
-    } else {
-      return { status: 'in_stock', color: 'default', icon: CheckCircle };
     }
+      return { status: 'in_stock', color: 'default', icon: CheckCircle };
   };
 
   const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.location?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    || item.sku?.toLowerCase().includes(searchTerm.toLowerCase())
+    || item.location?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const stats = {
     total: items.length,
     inStock: items.filter(item => (item.quantity || 0) > 10).length,
     lowStock: items.filter(item => (item.quantity || 0) > 0 && (item.quantity || 0) <= 10).length,
-    outOfStock: items.filter(item => (item.quantity || 0) === 0).length
+    outOfStock: items.filter(item => (item.quantity || 0) === 0).length,
   };
 
   if (loading) {
@@ -175,7 +174,7 @@ export default function InventoryManagement() {
                   <Input
                     id="name"
                     value={newItem.name}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => { setNewItem(prev => ({ ...prev, name: e.target.value })); }}
                     placeholder="e.g., Asphalt Mix, Safety Cones"
                   />
                 </div>
@@ -184,7 +183,7 @@ export default function InventoryManagement() {
                   <Input
                     id="sku"
                     value={newItem.sku}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, sku: e.target.value }))}
+                    onChange={(e) => { setNewItem(prev => ({ ...prev, sku: e.target.value })); }}
                     placeholder="Stock keeping unit"
                   />
                 </div>
@@ -194,7 +193,7 @@ export default function InventoryManagement() {
                     id="quantity"
                     type="number"
                     value={newItem.quantity}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, quantity: parseInt(e.target.value) || 0 }))}
+                    onChange={(e) => { setNewItem(prev => ({ ...prev, quantity: parseInt(e.target.value) || 0 })); }}
                     placeholder="0"
                   />
                 </div>
@@ -203,13 +202,13 @@ export default function InventoryManagement() {
                   <Input
                     id="location"
                     value={newItem.location}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={(e) => { setNewItem(prev => ({ ...prev, location: e.target.value })); }}
                     placeholder="e.g., Warehouse A, Yard 1"
                   />
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
+                <Button variant="outline" onClick={() => { setAddDialogOpen(false); }}>
                   Cancel
                 </Button>
                 <Button onClick={addItem}>
@@ -277,7 +276,7 @@ export default function InventoryManagement() {
           <Input
             placeholder="Search inventory..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); }}
             className="pl-10"
           />
         </div>
@@ -287,7 +286,7 @@ export default function InventoryManagement() {
           {filteredItems.map((item) => {
             const stockStatus = getStockStatus(item.quantity);
             const StatusIcon = stockStatus.icon;
-            
+
             return (
               <Card key={item.id}>
                 <CardContent className="p-6">
@@ -351,7 +350,7 @@ export default function InventoryManagement() {
                   <Input
                     id="edit_name"
                     value={selectedItem.name}
-                    onChange={(e) => setSelectedItem(prev => prev ? { ...prev, name: e.target.value } : null)}
+                    onChange={(e) => { setSelectedItem(prev => prev ? { ...prev, name: e.target.value } : null); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -359,7 +358,7 @@ export default function InventoryManagement() {
                   <Input
                     id="edit_sku"
                     value={selectedItem.sku || ''}
-                    onChange={(e) => setSelectedItem(prev => prev ? { ...prev, sku: e.target.value } : null)}
+                    onChange={(e) => { setSelectedItem(prev => prev ? { ...prev, sku: e.target.value } : null); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -368,7 +367,7 @@ export default function InventoryManagement() {
                     id="edit_quantity"
                     type="number"
                     value={selectedItem.quantity || 0}
-                    onChange={(e) => setSelectedItem(prev => prev ? { ...prev, quantity: parseInt(e.target.value) || 0 } : null)}
+                    onChange={(e) => { setSelectedItem(prev => prev ? { ...prev, quantity: parseInt(e.target.value) || 0 } : null); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -376,13 +375,13 @@ export default function InventoryManagement() {
                   <Input
                     id="edit_location"
                     value={selectedItem.location || ''}
-                    onChange={(e) => setSelectedItem(prev => prev ? { ...prev, location: e.target.value } : null)}
+                    onChange={(e) => { setSelectedItem(prev => prev ? { ...prev, location: e.target.value } : null); }}
                   />
                 </div>
               </div>
             )}
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+              <Button variant="outline" onClick={() => { setEditDialogOpen(false); }}>
                 Cancel
               </Button>
               <Button onClick={updateItem}>
@@ -398,7 +397,7 @@ export default function InventoryManagement() {
               <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No items found</h3>
               <p className="text-muted-foreground">
-                {searchTerm 
+                {searchTerm
                   ? 'Try adjusting your search criteria'
                   : 'Add your first inventory item to get started'
                 }

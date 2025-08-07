@@ -1,138 +1,138 @@
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Eye, 
-  Thermometer, 
-  CloudRain, 
-  Wind, 
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Eye,
+  Thermometer,
+  CloudRain,
+  Wind,
   Clock,
   Camera,
   Gauge,
   MapPin,
   Zap,
   Activity,
-  TrendingUp
-} from "lucide-react"
+  TrendingUp,
+} from 'lucide-react';
 
 export const AsphaltGuardian = () => {
-  const [activeMonitoring, setActiveMonitoring] = useState(true)
+  const [activeMonitoring, setActiveMonitoring] = useState(true);
 
   const qualityMetrics = [
     {
-      name: "Surface Temperature",
+      name: 'Surface Temperature',
       value: 68,
-      unit: "°F",
-      status: "optimal",
-      range: "50-85°F",
-      icon: Thermometer
+      unit: '°F',
+      status: 'optimal',
+      range: '50-85°F',
+      icon: Thermometer,
     },
     {
-      name: "Humidity Level",
+      name: 'Humidity Level',
       value: 45,
-      unit: "%",
-      status: "good",
-      range: "30-70%",
-      icon: CloudRain
+      unit: '%',
+      status: 'good',
+      range: '30-70%',
+      icon: CloudRain,
     },
     {
-      name: "Wind Speed",
+      name: 'Wind Speed',
       value: 8,
-      unit: "mph",
-      status: "acceptable",
-      range: "0-15 mph",
-      icon: Wind
+      unit: 'mph',
+      status: 'acceptable',
+      range: '0-15 mph',
+      icon: Wind,
     },
     {
-      name: "Compaction Level",
+      name: 'Compaction Level',
       value: 96,
-      unit: "%",
-      status: "optimal",
-      range: "95-100%",
-      icon: Gauge
-    }
-  ]
+      unit: '%',
+      status: 'optimal',
+      range: '95-100%',
+      icon: Gauge,
+    },
+  ];
 
   const complianceChecks = [
-    { name: "DOT Standards", status: "compliant", lastCheck: "2 hours ago" },
-    { name: "Environmental Regs", status: "compliant", lastCheck: "4 hours ago" },
-    { name: "Safety Protocols", status: "warning", lastCheck: "6 hours ago" },
-    { name: "Quality Specs", status: "compliant", lastCheck: "1 hour ago" }
-  ]
+    { name: 'DOT Standards', status: 'compliant', lastCheck: '2 hours ago' },
+    { name: 'Environmental Regs', status: 'compliant', lastCheck: '4 hours ago' },
+    { name: 'Safety Protocols', status: 'warning', lastCheck: '6 hours ago' },
+    { name: 'Quality Specs', status: 'compliant', lastCheck: '1 hour ago' },
+  ];
 
   const inspectionAlerts = [
     {
       id: 1,
-      type: "warning",
-      title: "Temperature Deviation",
-      description: "Surface temperature approaching upper limit in Section B",
-      time: "5 minutes ago",
-      priority: "medium"
+      type: 'warning',
+      title: 'Temperature Deviation',
+      description: 'Surface temperature approaching upper limit in Section B',
+      time: '5 minutes ago',
+      priority: 'medium',
     },
     {
       id: 2,
-      type: "info",
-      title: "Compaction Complete",
-      description: "Section A compaction meets specifications",
-      time: "15 minutes ago",
-      priority: "low"
+      type: 'info',
+      title: 'Compaction Complete',
+      description: 'Section A compaction meets specifications',
+      time: '15 minutes ago',
+      priority: 'low',
     },
     {
       id: 3,
-      type: "alert",
-      title: "Material Quality Check",
-      description: "Requires immediate inspection in Section C",
-      time: "25 minutes ago",
-      priority: "high"
-    }
-  ]
+      type: 'alert',
+      title: 'Material Quality Check',
+      description: 'Requires immediate inspection in Section C',
+      time: '25 minutes ago',
+      priority: 'high',
+    },
+  ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "optimal": return "text-green-600"
-      case "good": return "text-blue-600"
-      case "acceptable": return "text-yellow-600"
-      case "poor": return "text-red-600"
-      case "compliant": return "text-green-600"
-      case "warning": return "text-yellow-600"
-      case "non-compliant": return "text-red-600"
-      default: return "text-gray-600"
+      case 'optimal': return 'text-green-600';
+      case 'good': return 'text-blue-600';
+      case 'acceptable': return 'text-yellow-600';
+      case 'poor': return 'text-red-600';
+      case 'compliant': return 'text-green-600';
+      case 'warning': return 'text-yellow-600';
+      case 'non-compliant': return 'text-red-600';
+      default: return 'text-gray-600';
     }
-  }
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "optimal":
-      case "compliant":
-        return <Badge className="bg-green-100 text-green-800">{status}</Badge>
-      case "good":
-        return <Badge className="bg-blue-100 text-blue-800">{status}</Badge>
-      case "acceptable":
-      case "warning":
-        return <Badge className="bg-yellow-100 text-yellow-800">{status}</Badge>
-      case "poor":
-      case "non-compliant":
-        return <Badge className="bg-red-100 text-red-800">{status}</Badge>
+      case 'optimal':
+      case 'compliant':
+        return <Badge className="bg-green-100 text-green-800">{status}</Badge>;
+      case 'good':
+        return <Badge className="bg-blue-100 text-blue-800">{status}</Badge>;
+      case 'acceptable':
+      case 'warning':
+        return <Badge className="bg-yellow-100 text-yellow-800">{status}</Badge>;
+      case 'poor':
+      case 'non-compliant':
+        return <Badge className="bg-red-100 text-red-800">{status}</Badge>;
       default:
-        return <Badge className="bg-gray-100 text-gray-800">{status}</Badge>
+        return <Badge className="bg-gray-100 text-gray-800">{status}</Badge>;
     }
-  }
+  };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case "high": return <AlertTriangle className="h-4 w-4 text-red-500" />
-      case "medium": return <Clock className="h-4 w-4 text-yellow-500" />
-      case "low": return <CheckCircle className="h-4 w-4 text-green-500" />
-      default: return <Eye className="h-4 w-4 text-gray-500" />
+      case 'high': return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'medium': return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'low': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      default: return <Eye className="h-4 w-4 text-gray-500" />;
     }
-  }
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -142,18 +142,18 @@ export const AsphaltGuardian = () => {
           <p className="text-muted-foreground">Real-time quality monitoring and compliance tracking</p>
         </div>
         <div className="flex items-center gap-4">
-          <Badge 
-            variant={activeMonitoring ? "default" : "secondary"}
+          <Badge
+            variant={activeMonitoring ? 'default' : 'secondary'}
             className="gap-2"
           >
             <div className={`w-2 h-2 rounded-full ${activeMonitoring ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
-            {activeMonitoring ? "Active Monitoring" : "Monitoring Paused"}
+            {activeMonitoring ? 'Active Monitoring' : 'Monitoring Paused'}
           </Badge>
-          <Button 
-            onClick={() => setActiveMonitoring(!activeMonitoring)}
-            variant={activeMonitoring ? "outline" : "default"}
+          <Button
+            onClick={() => { setActiveMonitoring(!activeMonitoring); }}
+            variant={activeMonitoring ? 'outline' : 'default'}
           >
-            {activeMonitoring ? "Pause" : "Start"} Monitoring
+            {activeMonitoring ? 'Pause' : 'Start'} Monitoring
           </Button>
         </div>
       </div>
@@ -182,10 +182,10 @@ export const AsphaltGuardian = () => {
                     {getStatusBadge(metric.status)}
                     <span className="text-xs text-muted-foreground">{metric.range}</span>
                   </div>
-                  <Progress 
-                    value={metric.value} 
+                  <Progress
+                    value={metric.value}
                     className="mt-3"
-                    max={metric.name === "Compaction Level" ? 100 : metric.name === "Surface Temperature" ? 120 : 100}
+                    max={metric.name === 'Compaction Level' ? 100 : metric.name === 'Surface Temperature' ? 120 : 100}
                   />
                 </CardContent>
               </Card>
@@ -307,7 +307,7 @@ export const AsphaltGuardian = () => {
                   <div className="text-sm text-muted-foreground">Failed Inspections</div>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 {inspectionAlerts.map((alert) => (
                   <div key={alert.id} className="flex items-start gap-3 p-4 rounded-lg border">
@@ -406,21 +406,21 @@ export const AsphaltGuardian = () => {
                 <div className="p-4 rounded-lg bg-green-50 border border-green-200">
                   <h4 className="font-medium text-green-800">Optimization Opportunity</h4>
                   <p className="text-sm text-green-700">
-                    Temperature control in Section B has improved 15% this week. Consider applying 
+                    Temperature control in Section B has improved 15% this week. Consider applying
                     the same techniques to other sections.
                   </p>
                 </div>
                 <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
                   <h4 className="font-medium text-blue-800">Efficiency Gain</h4>
                   <p className="text-sm text-blue-700">
-                    Implementing predictive maintenance reduced equipment downtime by 22%. 
+                    Implementing predictive maintenance reduced equipment downtime by 22%.
                     Schedule next maintenance cycle proactively.
                   </p>
                 </div>
                 <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
                   <h4 className="font-medium text-yellow-800">Attention Required</h4>
                   <p className="text-sm text-yellow-700">
-                    Weather conditions may affect operations tomorrow. Review contingency plans 
+                    Weather conditions may affect operations tomorrow. Review contingency plans
                     and material storage protocols.
                   </p>
                 </div>
@@ -430,5 +430,5 @@ export const AsphaltGuardian = () => {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};

@@ -16,31 +16,27 @@ export function useMobileDetection(): MobileDetection {
     isDesktop: true,
     isTouchDevice: false,
     orientation: 'landscape',
-    screenSize: 'lg'
+    screenSize: 'lg',
   });
 
   useEffect(() => {
     const updateDetection = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
+
       // Screen size detection based on Tailwind breakpoints
       let screenSize: MobileDetection['screenSize'] = 'sm';
-      if (width >= 1536) screenSize = '2xl';
-      else if (width >= 1280) screenSize = 'xl';
-      else if (width >= 1024) screenSize = 'lg';
-      else if (width >= 768) screenSize = 'md';
-      else screenSize = 'sm';
+      if (width >= 1536) { screenSize = '2xl'; } else if (width >= 1280) { screenSize = 'xl'; } else if (width >= 1024) { screenSize = 'lg'; } else if (width >= 768) { screenSize = 'md'; } else { screenSize = 'sm'; }
 
       // Device type detection
       const isMobile = width < 768;
       const isTablet = width >= 768 && width < 1024;
       const isDesktop = width >= 1024;
-      
+
       // Touch device detection
-      const isTouchDevice = 'ontouchstart' in window || 
-                           navigator.maxTouchPoints > 0 || 
-                           (navigator as any).msMaxTouchPoints > 0;
+      const isTouchDevice = 'ontouchstart' in window
+                           || navigator.maxTouchPoints > 0
+                           || (navigator as any).msMaxTouchPoints > 0;
 
       // Orientation detection
       const orientation = height > width ? 'portrait' : 'landscape';
@@ -51,7 +47,7 @@ export function useMobileDetection(): MobileDetection {
         isDesktop,
         isTouchDevice,
         orientation,
-        screenSize
+        screenSize,
       });
     };
 

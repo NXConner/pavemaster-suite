@@ -40,7 +40,7 @@ interface AccessibilitySettings {
 
 const AccessibilityThemeControls: React.FC = () => {
   const { currentTheme, setTheme, adaptiveContrast, setAdaptiveContrast } = useDynamicTheme();
-  
+
   const [settings, setSettings] = useState<AccessibilitySettings>({
     highContrast: false,
     reducedMotion: false,
@@ -95,7 +95,7 @@ const AccessibilityThemeControls: React.FC = () => {
 
   const applyAccessibilitySettings = (accessibilitySettings: AccessibilitySettings) => {
     const root = document.documentElement;
-    
+
     // Apply high contrast
     if (accessibilitySettings.highContrast) {
       setTheme(currentTheme.category === 'dark' ? 'highContrastDark' : 'highContrastLight');
@@ -235,7 +235,7 @@ const AccessibilityThemeControls: React.FC = () => {
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   currentTheme.id === theme.id ? 'ring-2 ring-primary' : ''
                 }`}
-                onClick={() => setTheme(theme.id)}
+                onClick={() => { setTheme(theme.id); }}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
@@ -268,7 +268,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.highContrast}
-              onCheckedChange={(checked) => handleSettingChange('highContrast', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('highContrast', checked); }}
             />
           </div>
 
@@ -289,7 +289,7 @@ const AccessibilityThemeControls: React.FC = () => {
             <Label>Font Size: {settings.fontSize}px</Label>
             <Slider
               value={[settings.fontSize]}
-              onValueChange={([value]) => handleSettingChange('fontSize', value)}
+              onValueChange={([value]) => { handleSettingChange('fontSize', value); }}
               min={12}
               max={24}
               step={1}
@@ -301,7 +301,7 @@ const AccessibilityThemeControls: React.FC = () => {
             <Label>Line Height: {settings.lineHeight}</Label>
             <Slider
               value={[settings.lineHeight]}
-              onValueChange={([value]) => handleSettingChange('lineHeight', value)}
+              onValueChange={([value]) => { handleSettingChange('lineHeight', value); }}
               min={1}
               max={2.5}
               step={0.1}
@@ -313,7 +313,7 @@ const AccessibilityThemeControls: React.FC = () => {
             <Label>Text Spacing: {settings.textSpacing}rem</Label>
             <Slider
               value={[settings.textSpacing]}
-              onValueChange={([value]) => handleSettingChange('textSpacing', value)}
+              onValueChange={([value]) => { handleSettingChange('textSpacing', value); }}
               min={0.5}
               max={2}
               step={0.1}
@@ -338,7 +338,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.reducedMotion}
-              onCheckedChange={(checked) => handleSettingChange('reducedMotion', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('reducedMotion', checked); }}
             />
           </div>
         </CardContent>
@@ -359,7 +359,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.colorBlindSupport}
-              onCheckedChange={(checked) => handleSettingChange('colorBlindSupport', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('colorBlindSupport', checked); }}
             />
           </div>
 
@@ -401,7 +401,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.dyslexiaSupport}
-              onCheckedChange={(checked) => handleSettingChange('dyslexiaSupport', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('dyslexiaSupport', checked); }}
             />
           </div>
 
@@ -414,7 +414,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.screenReaderOptimized}
-              onCheckedChange={(checked) => handleSettingChange('screenReaderOptimized', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('screenReaderOptimized', checked); }}
             />
           </div>
         </CardContent>
@@ -435,7 +435,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.focusIndicators}
-              onCheckedChange={(checked) => handleSettingChange('focusIndicators', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('focusIndicators', checked); }}
             />
           </div>
 
@@ -448,7 +448,7 @@ const AccessibilityThemeControls: React.FC = () => {
             </div>
             <Switch
               checked={settings.keyboardNavigation}
-              onCheckedChange={(checked) => handleSettingChange('keyboardNavigation', checked)}
+              onCheckedChange={(checked) => { handleSettingChange('keyboardNavigation', checked); }}
             />
           </div>
         </CardContent>

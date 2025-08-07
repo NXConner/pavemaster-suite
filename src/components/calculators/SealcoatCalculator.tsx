@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Calculator, Save, Download, Info, TrendingUp } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Calculator, Save, Download, Info, TrendingUp } from 'lucide-react';
 
 export const SealcoatCalculator = () => {
   const [measurements, setMeasurements] = useState({
@@ -17,8 +17,8 @@ export const SealcoatCalculator = () => {
     thickness: '0.25', // inches
     coats: '2',
     surfaceType: 'asphalt',
-    condition: 'good'
-  })
+    condition: 'good',
+  });
 
   const [results, setResults] = useState({
     area: 0,
@@ -28,16 +28,16 @@ export const SealcoatCalculator = () => {
     materials: {
       sealcoat: 0,
       sand: 0,
-      primer: 0
-    }
-  })
+      primer: 0,
+    },
+  });
 
   const [materialCosts, setMaterialCosts] = useState({
     sealcoatPrice: 35, // per gallon
     sandPrice: 25, // per 50lb bag
     primerPrice: 45, // per gallon
-    laborRate: 85 // per hour
-  })
+    laborRate: 85, // per hour
+  });
 
   // Sealcoat coverage rates (sq ft per gallon)
   const coverageRates = {
@@ -45,35 +45,35 @@ export const SealcoatCalculator = () => {
       excellent: 80,
       good: 70,
       fair: 60,
-      poor: 50
+      poor: 50,
     },
     concrete: {
       excellent: 85,
       good: 75,
       fair: 65,
-      poor: 55
-    }
-  }
+      poor: 55,
+    },
+  };
 
   const calculateResults = () => {
-    const length = parseFloat(measurements.length) || 0
-    const width = parseFloat(measurements.width) || 0
-    const area = length * width
-    
-    const coverage = coverageRates[measurements.surfaceType as keyof typeof coverageRates]?.[measurements.condition as keyof typeof coverageRates.asphalt] || 70
-    const coats = parseInt(measurements.coats) || 1
-    
-    const gallonsNeeded = (area * coats) / coverage
-    const sandBags = Math.ceil(gallonsNeeded * 0.5) // Approximately 0.5 bags per gallon
-    const primerGallons = measurements.condition === 'poor' ? gallonsNeeded * 0.25 : 0
-    
-    const materialCost = (gallonsNeeded * materialCosts.sealcoatPrice) + 
-                        (sandBags * materialCosts.sandPrice) + 
-                        (primerGallons * materialCosts.primerPrice)
-    
-    const laborHours = area / 500 // Approximate 500 sq ft per hour
-    const laborCost = laborHours * materialCosts.laborRate
-    
+    const length = parseFloat(measurements.length) || 0;
+    const width = parseFloat(measurements.width) || 0;
+    const area = length * width;
+
+    const coverage = coverageRates[measurements.surfaceType as keyof typeof coverageRates]?.[measurements.condition as keyof typeof coverageRates.asphalt] || 70;
+    const coats = parseInt(measurements.coats) || 1;
+
+    const gallonsNeeded = (area * coats) / coverage;
+    const sandBags = Math.ceil(gallonsNeeded * 0.5); // Approximately 0.5 bags per gallon
+    const primerGallons = measurements.condition === 'poor' ? gallonsNeeded * 0.25 : 0;
+
+    const materialCost = (gallonsNeeded * materialCosts.sealcoatPrice)
+                        + (sandBags * materialCosts.sandPrice)
+                        + (primerGallons * materialCosts.primerPrice);
+
+    const laborHours = area / 500; // Approximate 500 sq ft per hour
+    const laborCost = laborHours * materialCosts.laborRate;
+
     setResults({
       area,
       gallonsNeeded,
@@ -82,43 +82,43 @@ export const SealcoatCalculator = () => {
       materials: {
         sealcoat: gallonsNeeded,
         sand: sandBags,
-        primer: primerGallons
-      }
-    })
-  }
+        primer: primerGallons,
+      },
+    });
+  };
 
   useEffect(() => {
-    calculateResults()
-  }, [measurements, materialCosts])
+    calculateResults();
+  }, [measurements, materialCosts]);
 
   const handleInputChange = (field: string, value: string) => {
     setMeasurements(prev => ({
       ...prev,
-      [field]: value
-    }))
-  }
+      [field]: value,
+    }));
+  };
 
   const handleCostChange = (field: string, value: string) => {
     setMaterialCosts(prev => ({
       ...prev,
-      [field]: parseFloat(value) || 0
-    }))
-  }
+      [field]: parseFloat(value) || 0,
+    }));
+  };
 
   const saveCalculation = () => {
     const calculation = {
       measurements,
       results,
       timestamp: new Date().toISOString(),
-      type: 'sealcoat'
-    }
-    
-    const saved = JSON.parse(localStorage.getItem('sealcoat-calculations') || '[]')
-    saved.push(calculation)
-    localStorage.setItem('sealcoat-calculations', JSON.stringify(saved))
-    
-    alert('Calculation saved successfully!')
-  }
+      type: 'sealcoat',
+    };
+
+    const saved = JSON.parse(localStorage.getItem('sealcoat-calculations') || '[]');
+    saved.push(calculation);
+    localStorage.setItem('sealcoat-calculations', JSON.stringify(saved));
+
+    alert('Calculation saved successfully!');
+  };
 
   const exportResults = () => {
     const content = `
@@ -139,16 +139,16 @@ Material Requirements:
 
 Cost Estimate: $${results.costEstimate.toFixed(2)}
 Coverage Rate: ${results.coverage} sq ft/gallon
-    `.trim()
+    `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `sealcoat-calculation-${Date.now()}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sealcoat-calculation-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -193,7 +193,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     placeholder="100"
                     value={measurements.length}
-                    onChange={(e) => handleInputChange('length', e.target.value)}
+                    onChange={(e) => { handleInputChange('length', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -203,7 +203,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     placeholder="50"
                     value={measurements.width}
-                    onChange={(e) => handleInputChange('width', e.target.value)}
+                    onChange={(e) => { handleInputChange('width', e.target.value); }}
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="surfaceType">Surface Type</Label>
-                  <Select value={measurements.surfaceType} onValueChange={(value) => handleInputChange('surfaceType', value)}>
+                  <Select value={measurements.surfaceType} onValueChange={(value) => { handleInputChange('surfaceType', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -223,7 +223,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="condition">Surface Condition</Label>
-                  <Select value={measurements.condition} onValueChange={(value) => handleInputChange('condition', value)}>
+                  <Select value={measurements.condition} onValueChange={(value) => { handleInputChange('condition', value); }}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -239,7 +239,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
 
               <div className="space-y-2">
                 <Label htmlFor="coats">Number of Coats</Label>
-                <Select value={measurements.coats} onValueChange={(value) => handleInputChange('coats', value)}>
+                <Select value={measurements.coats} onValueChange={(value) => { handleInputChange('coats', value); }}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -269,7 +269,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.sealcoatPrice}
-                    onChange={(e) => handleCostChange('sealcoatPrice', e.target.value)}
+                    onChange={(e) => { handleCostChange('sealcoatPrice', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -279,7 +279,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.sandPrice}
-                    onChange={(e) => handleCostChange('sandPrice', e.target.value)}
+                    onChange={(e) => { handleCostChange('sandPrice', e.target.value); }}
                   />
                 </div>
               </div>
@@ -291,7 +291,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.primerPrice}
-                    onChange={(e) => handleCostChange('primerPrice', e.target.value)}
+                    onChange={(e) => { handleCostChange('primerPrice', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -301,7 +301,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.laborRate}
-                    onChange={(e) => handleCostChange('laborRate', e.target.value)}
+                    onChange={(e) => { handleCostChange('laborRate', e.target.value); }}
                   />
                 </div>
               </div>
@@ -375,7 +375,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
               <Alert>
                 <Info className="h-4 w-4" />
                 <AlertDescription className="text-xs">
-                  Coverage rates vary based on surface condition and porosity. 
+                  Coverage rates vary based on surface condition and porosity.
                   Poor surfaces may require primer application.
                 </AlertDescription>
               </Alert>
@@ -386,7 +386,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
             <Alert>
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                Poor surface condition detected. Primer application recommended 
+                Poor surface condition detected. Primer application recommended
                 before sealcoat application.
               </AlertDescription>
             </Alert>
@@ -496,5 +496,5 @@ Coverage Rate: ${results.coverage} sq ft/gallon
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};

@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.12 (cd3cf9e)"
+    PostgrestVersion: '12.2.12 (cd3cf9e)'
   }
   public: {
     Tables: {
@@ -38,11 +38,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "achievements_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'achievements_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -70,11 +70,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "analytics_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'analytics_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -147,18 +147,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "app_usage_metrics_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'app_usage_metrics_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "mobile_devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'mobile_devices'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "app_usage_metrics_session_id_fkey"
-            columns: ["session_id"]
+            foreignKeyName: 'app_usage_metrics_session_id_fkey'
+            columns: ['session_id']
             isOneToOne: false
-            referencedRelation: "mobile_sessions"
-            referencedColumns: ["id"]
+            referencedRelation: 'mobile_sessions'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -261,11 +261,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "badges_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'badges_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -344,11 +344,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "budget_allocations_category_id_fkey"
-            columns: ["category_id"]
+            foreignKeyName: 'budget_allocations_category_id_fkey'
+            columns: ['category_id']
             isOneToOne: false
-            referencedRelation: "expense_categories"
-            referencedColumns: ["id"]
+            referencedRelation: 'expense_categories'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -460,11 +460,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "compliance_notifications_rule_id_fkey"
-            columns: ["rule_id"]
+            foreignKeyName: 'compliance_notifications_rule_id_fkey'
+            columns: ['rule_id']
             isOneToOne: false
-            referencedRelation: "compliance_rules"
-            referencedColumns: ["id"]
+            referencedRelation: 'compliance_rules'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -567,11 +567,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "contracts_signed_by_fkey"
-            columns: ["signed_by"]
+            foreignKeyName: 'contracts_signed_by_fkey'
+            columns: ['signed_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -623,11 +623,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "cost_tracking_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'cost_tracking_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -760,11 +760,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "devices_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'devices_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_vehicles"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_vehicles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -807,18 +807,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "disciplinary_actions_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'disciplinary_actions_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "disciplinary_actions_violation_id_fkey"
-            columns: ["violation_id"]
+            foreignKeyName: 'disciplinary_actions_violation_id_fkey'
+            columns: ['violation_id']
             isOneToOne: false
-            referencedRelation: "employee_violations"
-            referencedColumns: ["id"]
+            referencedRelation: 'employee_violations'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -855,25 +855,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "document_hashes_blockchain_tx_id_fkey"
-            columns: ["blockchain_tx_id"]
+            foreignKeyName: 'document_hashes_blockchain_tx_id_fkey'
+            columns: ['blockchain_tx_id']
             isOneToOne: false
-            referencedRelation: "blockchain_transactions"
-            referencedColumns: ["id"]
+            referencedRelation: 'blockchain_transactions'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "document_hashes_document_id_fkey"
-            columns: ["document_id"]
+            foreignKeyName: 'document_hashes_document_id_fkey'
+            columns: ['document_id']
             isOneToOne: false
-            referencedRelation: "documents"
-            referencedColumns: ["id"]
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "document_hashes_version_id_fkey"
-            columns: ["version_id"]
+            foreignKeyName: 'document_hashes_version_id_fkey'
+            columns: ['version_id']
             isOneToOne: false
-            referencedRelation: "document_versions"
-            referencedColumns: ["id"]
+            referencedRelation: 'document_versions'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -904,11 +904,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "document_permissions_document_id_fkey"
-            columns: ["document_id"]
+            foreignKeyName: 'document_permissions_document_id_fkey'
+            columns: ['document_id']
             isOneToOne: false
-            referencedRelation: "documents"
-            referencedColumns: ["id"]
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -945,11 +945,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "document_versions_document_id_fkey"
-            columns: ["document_id"]
+            foreignKeyName: 'document_versions_document_id_fkey'
+            columns: ['document_id']
             isOneToOne: false
-            referencedRelation: "documents"
-            referencedColumns: ["id"]
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1088,11 +1088,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_certifications_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_certifications_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1126,11 +1126,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_compliance_scores_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_compliance_scores_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1185,11 +1185,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_contacts_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_contacts_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1232,11 +1232,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_costs_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_costs_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1276,11 +1276,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_documents_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_documents_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1350,11 +1350,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_performance_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'employee_performance_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1424,11 +1424,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_violations_rule_id_fkey"
-            columns: ["rule_id"]
+            foreignKeyName: 'employee_violations_rule_id_fkey'
+            columns: ['rule_id']
             isOneToOne: false
-            referencedRelation: "compliance_rules"
-            referencedColumns: ["id"]
+            referencedRelation: 'compliance_rules'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1510,11 +1510,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employees_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'employees_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1602,11 +1602,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "estimates_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: 'estimates_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1634,11 +1634,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "expense_categories_parent_category_id_fkey"
-            columns: ["parent_category_id"]
+            foreignKeyName: 'expense_categories_parent_category_id_fkey'
+            columns: ['parent_category_id']
             isOneToOne: false
-            referencedRelation: "expense_categories"
-            referencedColumns: ["id"]
+            referencedRelation: 'expense_categories'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1666,11 +1666,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "feedback_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'feedback_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1827,11 +1827,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "forum_posts_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'forum_posts_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1925,11 +1925,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "gps_locations_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'gps_locations_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'devices'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1957,11 +1957,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "inspection_checklists_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: 'inspection_checklists_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1992,18 +1992,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "inspection_results_checklist_id_fkey"
-            columns: ["checklist_id"]
+            foreignKeyName: 'inspection_results_checklist_id_fkey'
+            columns: ['checklist_id']
             isOneToOne: false
-            referencedRelation: "inspection_checklists"
-            referencedColumns: ["id"]
+            referencedRelation: 'inspection_checklists'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "inspection_results_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'inspection_results_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2085,11 +2085,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "jobs_customer_id_fkey"
-            columns: ["customer_id"]
+            foreignKeyName: 'jobs_customer_id_fkey'
+            columns: ['customer_id']
             isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
+            referencedRelation: 'customers'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2111,11 +2111,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "leaderboard_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'leaderboard_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2173,11 +2173,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "maintenance_logs_performed_by_fkey"
-            columns: ["performed_by"]
+            foreignKeyName: 'maintenance_logs_performed_by_fkey'
+            columns: ['performed_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2226,11 +2226,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "maintenance_records_asset_id_fkey"
-            columns: ["asset_id"]
+            foreignKeyName: 'maintenance_records_asset_id_fkey'
+            columns: ['asset_id']
             isOneToOne: false
-            referencedRelation: "fleet_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_assets'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2270,11 +2270,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "mobile_app_errors_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'mobile_app_errors_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "mobile_devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'mobile_devices'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2365,11 +2365,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "mobile_notifications_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'mobile_notifications_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "mobile_devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'mobile_devices'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2412,11 +2412,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "mobile_sessions_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'mobile_sessions_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "mobile_devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'mobile_devices'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2486,11 +2486,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "payments_proposal_id_fkey"
-            columns: ["proposal_id"]
+            foreignKeyName: 'payments_proposal_id_fkey'
+            columns: ['proposal_id']
             isOneToOne: false
-            referencedRelation: "proposals"
-            referencedColumns: ["id"]
+            referencedRelation: 'proposals'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2524,11 +2524,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "payroll_records_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'payroll_records_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2589,18 +2589,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "performance_reviews_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'performance_reviews_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "performance_reviews_reviewer_id_fkey"
-            columns: ["reviewer_id"]
+            foreignKeyName: 'performance_reviews_reviewer_id_fkey'
+            columns: ['reviewer_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2697,18 +2697,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "project_documents_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'project_documents_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "project_documents_uploaded_by_fkey"
-            columns: ["uploaded_by"]
+            foreignKeyName: 'project_documents_uploaded_by_fkey'
+            columns: ['uploaded_by']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2745,11 +2745,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "project_milestones_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'project_milestones_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2807,18 +2807,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "project_tasks_assigned_to_fkey"
-            columns: ["assigned_to"]
+            foreignKeyName: 'project_tasks_assigned_to_fkey'
+            columns: ['assigned_to']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "project_tasks_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'project_tasks_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2836,10 +2836,10 @@ export type Database = {
           estimated_cost: number | null
           id: string
           name: string
-          project_type: Database["public"]["Enums"]["project_type"] | null
+          project_type: Database['public']['Enums']['project_type'] | null
           site_address: string | null
           start_date: string | null
-          status: Database["public"]["Enums"]["project_status"] | null
+          status: Database['public']['Enums']['project_status'] | null
           updated_at: string | null
         }
         Insert: {
@@ -2855,10 +2855,10 @@ export type Database = {
           estimated_cost?: number | null
           id?: string
           name: string
-          project_type?: Database["public"]["Enums"]["project_type"] | null
+          project_type?: Database['public']['Enums']['project_type'] | null
           site_address?: string | null
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"] | null
+          status?: Database['public']['Enums']['project_status'] | null
           updated_at?: string | null
         }
         Update: {
@@ -2874,26 +2874,26 @@ export type Database = {
           estimated_cost?: number | null
           id?: string
           name?: string
-          project_type?: Database["public"]["Enums"]["project_type"] | null
+          project_type?: Database['public']['Enums']['project_type'] | null
           site_address?: string | null
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"] | null
+          status?: Database['public']['Enums']['project_status'] | null
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "projects_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: 'projects_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "projects_customer_id_fkey"
-            columns: ["customer_id"]
+            foreignKeyName: 'projects_customer_id_fkey'
+            columns: ['customer_id']
             isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
+            referencedRelation: 'customers'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2930,18 +2930,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "proposals_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: 'proposals_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "proposals_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'proposals_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2996,11 +2996,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "receipts_uploaded_by_fkey"
-            columns: ["uploaded_by"]
+            foreignKeyName: 'receipts_uploaded_by_fkey'
+            columns: ['uploaded_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3052,11 +3052,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "rewards_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'rewards_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3129,11 +3129,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "routes_assigned_vehicle_id_fkey"
-            columns: ["assigned_vehicle_id"]
+            foreignKeyName: 'routes_assigned_vehicle_id_fkey'
+            columns: ['assigned_vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_vehicles"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_vehicles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3161,18 +3161,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "samples_collected_by_fkey"
-            columns: ["collected_by"]
+            foreignKeyName: 'samples_collected_by_fkey'
+            columns: ['collected_by']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "samples_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'samples_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3206,11 +3206,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "scheduling_entries_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: 'scheduling_entries_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3292,11 +3292,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "security_alerts_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'security_alerts_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "security_events"
-            referencedColumns: ["id"]
+            referencedRelation: 'security_events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3570,18 +3570,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tests_sample_id_fkey"
-            columns: ["sample_id"]
+            foreignKeyName: 'tests_sample_id_fkey'
+            columns: ['sample_id']
             isOneToOne: false
-            referencedRelation: "samples"
-            referencedColumns: ["id"]
+            referencedRelation: 'samples'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "tests_tested_by_fkey"
-            columns: ["tested_by"]
+            foreignKeyName: 'tests_tested_by_fkey'
+            columns: ['tested_by']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3663,18 +3663,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "time_records_employee_id_fkey"
-            columns: ["employee_id"]
+            foreignKeyName: 'time_records_employee_id_fkey'
+            columns: ['employee_id']
             isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
+            referencedRelation: 'employees'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "time_records_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: 'time_records_project_id_fkey'
+            columns: ['project_id']
             isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3720,32 +3720,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tracking_events_device_id_fkey"
-            columns: ["device_id"]
+            foreignKeyName: 'tracking_events_device_id_fkey'
+            columns: ['device_id']
             isOneToOne: false
-            referencedRelation: "devices"
-            referencedColumns: ["id"]
+            referencedRelation: 'devices'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "tracking_events_geofence_id_fkey"
-            columns: ["geofence_id"]
+            foreignKeyName: 'tracking_events_geofence_id_fkey'
+            columns: ['geofence_id']
             isOneToOne: false
-            referencedRelation: "geofences"
-            referencedColumns: ["id"]
+            referencedRelation: 'geofences'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "tracking_events_location_id_fkey"
-            columns: ["location_id"]
+            foreignKeyName: 'tracking_events_location_id_fkey'
+            columns: ['location_id']
             isOneToOne: false
-            referencedRelation: "gps_locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'gps_locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "tracking_events_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'tracking_events_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_vehicles"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_vehicles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3782,18 +3782,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "user_preferences_theme_id_fkey"
-            columns: ["theme_id"]
+            foreignKeyName: 'user_preferences_theme_id_fkey'
+            columns: ['theme_id']
             isOneToOne: false
-            referencedRelation: "themes"
-            referencedColumns: ["id"]
+            referencedRelation: 'themes'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "user_preferences_wallpaper_id_fkey"
-            columns: ["wallpaper_id"]
+            foreignKeyName: 'user_preferences_wallpaper_id_fkey'
+            columns: ['wallpaper_id']
             isOneToOne: false
-            referencedRelation: "wallpapers"
-            referencedColumns: ["id"]
+            referencedRelation: 'wallpapers'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3837,19 +3837,19 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          role: Database["public"]["Enums"]["app_role"]
+          role: Database['public']['Enums']['app_role']
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          role: Database["public"]["Enums"]["app_role"]
+          role: Database['public']['Enums']['app_role']
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          role?: Database['public']['Enums']['app_role']
           user_id?: string
         }
         Relationships: []
@@ -3860,7 +3860,7 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
-          role: Database["public"]["Enums"]["user_role"] | null
+          role: Database['public']['Enums']['user_role'] | null
           updated_at: string | null
         }
         Insert: {
@@ -3868,7 +3868,7 @@ export type Database = {
           email: string
           full_name?: string | null
           id?: string
-          role?: Database["public"]["Enums"]["user_role"] | null
+          role?: Database['public']['Enums']['user_role'] | null
           updated_at?: string | null
         }
         Update: {
@@ -3876,7 +3876,7 @@ export type Database = {
           email?: string
           full_name?: string | null
           id?: string
-          role?: Database["public"]["Enums"]["user_role"] | null
+          role?: Database['public']['Enums']['user_role'] | null
           updated_at?: string | null
         }
         Relationships: []
@@ -3974,11 +3974,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "vehicle_details_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'vehicle_details_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_assets'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4057,11 +4057,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "vehicle_inspections_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'vehicle_inspections_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_assets'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4122,11 +4122,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "vehicle_maintenance_records_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'vehicle_maintenance_records_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "fleet_vehicles"
-            referencedColumns: ["id"]
+            referencedRelation: 'fleet_vehicles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4237,7 +4237,7 @@ export type Database = {
       }
       weather_data: {
         Row: {
-          condition: Database["public"]["Enums"]["weather_condition"] | null
+          condition: Database['public']['Enums']['weather_condition'] | null
           humidity: number | null
           id: string
           location_id: string | null
@@ -4246,7 +4246,7 @@ export type Database = {
           wind_speed: number | null
         }
         Insert: {
-          condition?: Database["public"]["Enums"]["weather_condition"] | null
+          condition?: Database['public']['Enums']['weather_condition'] | null
           humidity?: number | null
           id?: string
           location_id?: string | null
@@ -4255,7 +4255,7 @@ export type Database = {
           wind_speed?: number | null
         }
         Update: {
-          condition?: Database["public"]["Enums"]["weather_condition"] | null
+          condition?: Database['public']['Enums']['weather_condition'] | null
           humidity?: number | null
           id?: string
           location_id?: string | null
@@ -4265,11 +4265,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "weather_data_location_id_fkey"
-            columns: ["location_id"]
+            foreignKeyName: 'weather_data_location_id_fkey'
+            columns: ['location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4407,7 +4407,7 @@ export type Database = {
         Returns: boolean
       }
       _st_bestsrid: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       _st_contains: {
@@ -4472,7 +4472,7 @@ export type Database = {
         Returns: boolean
       }
       _st_pointoutside: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       _st_sortablehash: {
@@ -4497,7 +4497,7 @@ export type Database = {
         Returns: boolean
       }
       addauth: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: boolean
       }
       addgeometrycolumn: {
@@ -4532,51 +4532,51 @@ export type Database = {
         Returns: string
       }
       binary_quantize: {
-        Args: { "": string } | { "": unknown }
+        Args: { '': string } | { '': unknown }
         Returns: unknown
       }
       box: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: unknown
       }
       box2d: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: unknown
       }
       box2d_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box2d_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box2df_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box2df_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box3d: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: unknown
       }
       box3d_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box3d_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       box3dtobox: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       bytea: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: string
       }
       calculate_compliance_score: {
@@ -4638,51 +4638,51 @@ export type Database = {
         Returns: undefined
       }
       geography: {
-        Args: { "": string } | { "": unknown }
+        Args: { '': string } | { '': unknown }
         Returns: unknown
       }
       geography_analyze: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       geography_gist_compress: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geography_gist_decompress: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geography_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geography_send: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       geography_spgist_compress_nd: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geography_typmod_in: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: number
       }
       geography_typmod_out: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: unknown
       }
       geometry: {
         Args:
-          | { "": string }
-          | { "": string }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
-          | { "": unknown }
+          | { '': string }
+          | { '': string }
+          | { '': unknown }
+          | { '': unknown }
+          | { '': unknown }
+          | { '': unknown }
+          | { '': unknown }
+          | { '': unknown }
         Returns: unknown
       }
       geometry_above: {
@@ -4690,7 +4690,7 @@ export type Database = {
         Returns: boolean
       }
       geometry_analyze: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       geometry_below: {
@@ -4730,23 +4730,23 @@ export type Database = {
         Returns: boolean
       }
       geometry_gist_compress_2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_gist_compress_nd: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_gist_decompress_2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_gist_decompress_nd: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_gist_sortsupport_2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: undefined
       }
       geometry_gt: {
@@ -4754,11 +4754,11 @@ export type Database = {
         Returns: boolean
       }
       geometry_hash: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       geometry_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_le: {
@@ -4774,7 +4774,7 @@ export type Database = {
         Returns: boolean
       }
       geometry_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_overabove: {
@@ -4802,7 +4802,7 @@ export type Database = {
         Returns: boolean
       }
       geometry_recv: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_right: {
@@ -4818,31 +4818,31 @@ export type Database = {
         Returns: boolean
       }
       geometry_send: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       geometry_sortsupport: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: undefined
       }
       geometry_spgist_compress_2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_spgist_compress_3d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_spgist_compress_nd: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       geometry_typmod_in: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: number
       }
       geometry_typmod_out: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: unknown
       }
       geometry_within: {
@@ -4850,15 +4850,15 @@ export type Database = {
         Returns: boolean
       }
       geometrytype: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: string
       }
       geomfromewkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       geomfromewkt: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       get_current_user_role: {
@@ -4866,7 +4866,7 @@ export type Database = {
         Returns: string
       }
       get_proj4_from_srid: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: string
       }
       get_security_status: {
@@ -4882,50 +4882,50 @@ export type Database = {
         Returns: unknown
       }
       gidx_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       gidx_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       halfvec_avg: {
-        Args: { "": number[] }
+        Args: { '': number[] }
         Returns: unknown
       }
       halfvec_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       halfvec_send: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       halfvec_typmod_in: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: number
       }
       has_role: {
         Args: {
           _user_id: string
-          _role: Database["public"]["Enums"]["app_role"]
+          _role: Database['public']['Enums']['app_role']
         }
         Returns: boolean
       }
       hnsw_bit_support: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       hnsw_halfvec_support: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       hnsw_sparsevec_support: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       hnswhandler: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       is_admin_user: {
@@ -4937,31 +4937,31 @@ export type Database = {
         Returns: boolean
       }
       ivfflat_bit_support: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       ivfflat_halfvec_support: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       ivfflathandler: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       json: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: Json
       }
       jsonb: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: Json
       }
       l2_norm: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: number
       }
       l2_normalize: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { '': string } | { '': unknown } | { '': unknown }
         Returns: unknown
       }
       log_security_event: {
@@ -4978,59 +4978,59 @@ export type Database = {
         Returns: boolean
       }
       path: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       pgis_asflatgeobuf_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       pgis_asgeobuf_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       pgis_asmvt_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       pgis_asmvt_serialfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       pgis_geometry_clusterintersecting_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown[]
       }
       pgis_geometry_clusterwithin_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown[]
       }
       pgis_geometry_collect_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       pgis_geometry_makeline_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       pgis_geometry_polygonize_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       pgis_geometry_union_parallel_finalfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       pgis_geometry_union_parallel_serialfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       point: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       polygon: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       populate_geometry_columns: {
@@ -5040,7 +5040,7 @@ export type Database = {
         Returns: number
       }
       postgis_addbbox: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_constraint_dims: {
@@ -5056,7 +5056,7 @@ export type Database = {
         Returns: string
       }
       postgis_dropbbox: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_extensions_upgrade: {
@@ -5068,7 +5068,7 @@ export type Database = {
         Returns: string
       }
       postgis_geos_noop: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_geos_version: {
@@ -5076,15 +5076,15 @@ export type Database = {
         Returns: string
       }
       postgis_getbbox: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_hasbbox: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       postgis_index_supportfn: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_lib_build_date: {
@@ -5116,7 +5116,7 @@ export type Database = {
         Returns: string
       }
       postgis_noop: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       postgis_proj_version: {
@@ -5148,15 +5148,15 @@ export type Database = {
         Returns: string
       }
       postgis_typmod_dims: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: number
       }
       postgis_typmod_srid: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: number
       }
       postgis_typmod_type: {
-        Args: { "": number }
+        Args: { '': number }
         Returns: string
       }
       postgis_version: {
@@ -5168,23 +5168,23 @@ export type Database = {
         Returns: string
       }
       sparsevec_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       sparsevec_send: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       sparsevec_typmod_in: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: number
       }
       spheroid_in: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       spheroid_out: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_3dclosestpoint: {
@@ -5200,7 +5200,7 @@ export type Database = {
         Returns: boolean
       }
       st_3dlength: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_3dlongestline: {
@@ -5216,7 +5216,7 @@ export type Database = {
         Returns: number
       }
       st_3dperimeter: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_3dshortestline: {
@@ -5235,17 +5235,17 @@ export type Database = {
       }
       st_area: {
         Args:
-          | { "": string }
-          | { "": unknown }
+          | { '': string }
+          | { '': unknown }
           | { geog: unknown; use_spheroid?: boolean }
         Returns: number
       }
       st_area2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_asbinary: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: string
       }
       st_asencodedpolyline: {
@@ -5253,16 +5253,16 @@ export type Database = {
         Returns: string
       }
       st_asewkb: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       st_asewkt: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { '': string } | { '': unknown } | { '': unknown }
         Returns: string
       }
       st_asgeojson: {
         Args:
-          | { "": string }
+          | { '': string }
           | { geog: unknown; maxdecimaldigits?: number; options?: number }
           | { geom: unknown; maxdecimaldigits?: number; options?: number }
           | {
@@ -5275,7 +5275,7 @@ export type Database = {
       }
       st_asgml: {
         Args:
-          | { "": string }
+          | { '': string }
           | {
               geog: unknown
               maxdecimaldigits?: number
@@ -5303,12 +5303,12 @@ export type Database = {
         Returns: string
       }
       st_ashexewkb: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       st_askml: {
         Args:
-          | { "": string }
+          | { '': string }
           | { geog: unknown; maxdecimaldigits?: number; nprefix?: string }
           | { geom: unknown; maxdecimaldigits?: number; nprefix?: string }
         Returns: string
@@ -5333,13 +5333,13 @@ export type Database = {
       }
       st_assvg: {
         Args:
-          | { "": string }
+          | { '': string }
           | { geog: unknown; rel?: number; maxdecimaldigits?: number }
           | { geom: unknown; rel?: number; maxdecimaldigits?: number }
         Returns: string
       }
       st_astext: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
+        Args: { '': string } | { '': unknown } | { '': unknown }
         Returns: string
       }
       st_astwkb: {
@@ -5374,7 +5374,7 @@ export type Database = {
         Returns: number
       }
       st_boundary: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_boundingdiagonal: {
@@ -5388,15 +5388,15 @@ export type Database = {
         Returns: unknown
       }
       st_buildarea: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_centroid: {
-        Args: { "": string } | { "": unknown }
+        Args: { '': string } | { '': unknown }
         Returns: unknown
       }
       st_cleangeometry: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_clipbybox2d: {
@@ -5408,19 +5408,19 @@ export type Database = {
         Returns: unknown
       }
       st_clusterintersecting: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: unknown[]
       }
       st_collect: {
-        Args: { "": unknown[] } | { geom1: unknown; geom2: unknown }
+        Args: { '': unknown[] } | { geom1: unknown; geom2: unknown }
         Returns: unknown
       }
       st_collectionextract: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_collectionhomogenize: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_concavehull: {
@@ -5440,7 +5440,7 @@ export type Database = {
         Returns: boolean
       }
       st_convexhull: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_coorddim: {
@@ -5476,7 +5476,7 @@ export type Database = {
         Returns: unknown
       }
       st_dimension: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_disjoint: {
@@ -5500,20 +5500,20 @@ export type Database = {
         Returns: number
       }
       st_dump: {
-        Args: { "": unknown }
-        Returns: Database["public"]["CompositeTypes"]["geometry_dump"][]
+        Args: { '': unknown }
+        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
       }
       st_dumppoints: {
-        Args: { "": unknown }
-        Returns: Database["public"]["CompositeTypes"]["geometry_dump"][]
+        Args: { '': unknown }
+        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
       }
       st_dumprings: {
-        Args: { "": unknown }
-        Returns: Database["public"]["CompositeTypes"]["geometry_dump"][]
+        Args: { '': unknown }
+        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
       }
       st_dumpsegments: {
-        Args: { "": unknown }
-        Returns: Database["public"]["CompositeTypes"]["geometry_dump"][]
+        Args: { '': unknown }
+        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
       }
       st_dwithin: {
         Args: {
@@ -5525,11 +5525,11 @@ export type Database = {
         Returns: boolean
       }
       st_endpoint: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_envelope: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_equals: {
@@ -5544,15 +5544,15 @@ export type Database = {
         Returns: unknown
       }
       st_exteriorring: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_flipcoordinates: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_force2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_force3d: {
@@ -5572,27 +5572,27 @@ export type Database = {
         Returns: unknown
       }
       st_forcecollection: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_forcecurve: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_forcepolygonccw: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_forcepolygoncw: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_forcerhr: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_forcesfs: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_generatepoints: {
@@ -5602,15 +5602,15 @@ export type Database = {
         Returns: unknown
       }
       st_geogfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geogfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geographyfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geohash: {
@@ -5620,11 +5620,11 @@ export type Database = {
         Returns: string
       }
       st_geomcollfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomcollfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geometricmedian: {
@@ -5637,31 +5637,31 @@ export type Database = {
         Returns: unknown
       }
       st_geometryfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geometrytype: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       st_geomfromewkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfromewkt: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfromgeojson: {
-        Args: { "": Json } | { "": Json } | { "": string }
+        Args: { '': Json } | { '': Json } | { '': string }
         Returns: unknown
       }
       st_geomfromgml: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfromkml: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfrommarc21: {
@@ -5669,19 +5669,19 @@ export type Database = {
         Returns: unknown
       }
       st_geomfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfromtwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_geomfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_gmltosql: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_hasarc: {
@@ -5715,58 +5715,58 @@ export type Database = {
         Returns: boolean
       }
       st_isclosed: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_iscollection: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_isempty: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_ispolygonccw: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_ispolygoncw: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_isring: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_issimple: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_isvalid: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_isvaliddetail: {
         Args: { geom: unknown; flags?: number }
-        Returns: Database["public"]["CompositeTypes"]["valid_detail"]
+        Returns: Database['public']['CompositeTypes']['valid_detail']
       }
       st_isvalidreason: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       st_isvalidtrajectory: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: boolean
       }
       st_length: {
         Args:
-          | { "": string }
-          | { "": unknown }
+          | { '': string }
+          | { '': unknown }
           | { geog: unknown; use_spheroid?: boolean }
         Returns: number
       }
       st_length2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_letters: {
@@ -5782,15 +5782,15 @@ export type Database = {
         Returns: unknown
       }
       st_linefrommultipoint: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_linefromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_linefromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_linelocatepoint: {
@@ -5798,11 +5798,11 @@ export type Database = {
         Returns: number
       }
       st_linemerge: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_linestringfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_linetocurve: {
@@ -5831,7 +5831,7 @@ export type Database = {
         Returns: unknown
       }
       st_m: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_makebox2d: {
@@ -5839,15 +5839,15 @@ export type Database = {
         Returns: unknown
       }
       st_makeline: {
-        Args: { "": unknown[] } | { geom1: unknown; geom2: unknown }
+        Args: { '': unknown[] } | { geom1: unknown; geom2: unknown }
         Returns: unknown
       }
       st_makepolygon: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_makevalid: {
-        Args: { "": unknown } | { geom: unknown; params: string }
+        Args: { '': unknown } | { geom: unknown; params: string }
         Returns: unknown
       }
       st_maxdistance: {
@@ -5855,11 +5855,11 @@ export type Database = {
         Returns: number
       }
       st_maximuminscribedcircle: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: Record<string, unknown>
       }
       st_memsize: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_minimumboundingcircle: {
@@ -5867,71 +5867,71 @@ export type Database = {
         Returns: unknown
       }
       st_minimumboundingradius: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: Record<string, unknown>
       }
       st_minimumclearance: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_minimumclearanceline: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_mlinefromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_mlinefromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_mpointfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_mpointfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_mpolyfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_mpolyfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multi: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_multilinefromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multilinestringfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multipointfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multipointfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multipolyfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_multipolygonfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_ndims: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_node: {
@@ -5943,31 +5943,31 @@ export type Database = {
         Returns: unknown
       }
       st_npoints: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_nrings: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_numgeometries: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_numinteriorring: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_numinteriorrings: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_numpatches: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_numpoints: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_offsetcurve: {
@@ -5979,7 +5979,7 @@ export type Database = {
         Returns: boolean
       }
       st_orientedenvelope: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_overlaps: {
@@ -5987,19 +5987,19 @@ export type Database = {
         Returns: boolean
       }
       st_perimeter: {
-        Args: { "": unknown } | { geog: unknown; use_spheroid?: boolean }
+        Args: { '': unknown } | { geog: unknown; use_spheroid?: boolean }
         Returns: number
       }
       st_perimeter2d: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_pointfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_pointfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_pointm: {
@@ -6012,11 +6012,11 @@ export type Database = {
         Returns: unknown
       }
       st_pointonsurface: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_points: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_pointz: {
@@ -6039,23 +6039,23 @@ export type Database = {
         Returns: unknown
       }
       st_polyfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_polyfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_polygonfromtext: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_polygonfromwkb: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_polygonize: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: unknown
       }
       st_project: {
@@ -6085,7 +6085,7 @@ export type Database = {
         Returns: unknown
       }
       st_reverse: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_segmentize: {
@@ -6101,7 +6101,7 @@ export type Database = {
         Returns: unknown
       }
       st_shiftlongitude: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_shortestline: {
@@ -6129,7 +6129,7 @@ export type Database = {
         Returns: number
       }
       st_startpoint: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: unknown
       }
       st_subdivide: {
@@ -6137,7 +6137,7 @@ export type Database = {
         Returns: unknown[]
       }
       st_summary: {
-        Args: { "": unknown } | { "": unknown }
+        Args: { '': unknown } | { '': unknown }
         Returns: string
       }
       st_swapordinates: {
@@ -6179,7 +6179,7 @@ export type Database = {
       }
       st_union: {
         Args:
-          | { "": unknown[] }
+          | { '': unknown[] }
           | { geom1: unknown; geom2: unknown }
           | { geom1: unknown; geom2: unknown; gridsize: number }
         Returns: unknown
@@ -6201,7 +6201,7 @@ export type Database = {
         Returns: unknown
       }
       st_wkttosql: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       st_wrapx: {
@@ -6209,51 +6209,51 @@ export type Database = {
         Returns: unknown
       }
       st_x: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_xmax: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_xmin: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_y: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_ymax: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_ymin: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_z: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_zmax: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_zmflag: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       st_zmin: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: number
       }
       text: {
-        Args: { "": unknown }
+        Args: { '': unknown }
         Returns: string
       }
       unlockrows: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: number
       }
       update_employee_score: {
@@ -6271,64 +6271,64 @@ export type Database = {
         Returns: string
       }
       vector_avg: {
-        Args: { "": number[] }
+        Args: { '': number[] }
         Returns: string
       }
       vector_dims: {
-        Args: { "": string } | { "": unknown }
+        Args: { '': string } | { '': unknown }
         Returns: number
       }
       vector_norm: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: number
       }
       vector_out: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: unknown
       }
       vector_send: {
-        Args: { "": string }
+        Args: { '': string }
         Returns: string
       }
       vector_typmod_in: {
-        Args: { "": unknown[] }
+        Args: { '': unknown[] }
         Returns: number
       }
     }
     Enums: {
       app_role:
-        | "Super Administrator"
-        | "Administrator"
-        | "Estimator"
-        | "Field Crew Lead"
-        | "Field Technician"
-        | "Client"
+        | 'Super Administrator'
+        | 'Administrator'
+        | 'Estimator'
+        | 'Field Crew Lead'
+        | 'Field Technician'
+        | 'Client'
       equipment_status:
-        | "available"
-        | "in_use"
-        | "maintenance"
-        | "out_of_service"
+        | 'available'
+        | 'in_use'
+        | 'maintenance'
+        | 'out_of_service'
       equipment_type:
-        | "paver"
-        | "roller"
-        | "truck"
-        | "trailer"
-        | "compactor"
-        | "seal_coating_tank"
-        | "line_striper"
-        | "crack_sealer"
-        | "tools"
-      project_status: "pending" | "in_progress" | "completed" | "cancelled"
+        | 'paver'
+        | 'roller'
+        | 'truck'
+        | 'trailer'
+        | 'compactor'
+        | 'seal_coating_tank'
+        | 'line_striper'
+        | 'crack_sealer'
+        | 'tools'
+      project_status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
       project_type:
-        | "asphalt_paving"
-        | "sealcoating"
-        | "line_striping"
-        | "crack_sealing"
-        | "pothole_repair"
-        | "overlay"
-        | "maintenance"
-      user_role: "admin" | "manager" | "user" | "super_admin"
-      weather_condition: "sunny" | "cloudy" | "rainy" | "snowy" | "windy"
+        | 'asphalt_paving'
+        | 'sealcoating'
+        | 'line_striping'
+        | 'crack_sealing'
+        | 'pothole_repair'
+        | 'overlay'
+        | 'maintenance'
+      user_role: 'admin' | 'manager' | 'user' | 'super_admin'
+      weather_condition: 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'windy'
     }
     CompositeTypes: {
       geometry_dump: {
@@ -6344,33 +6344,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -6379,23 +6379,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -6404,23 +6404,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -6429,78 +6429,78 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
+    | keyof DefaultSchema['Enums']
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
+    | keyof DefaultSchema['CompositeTypes']
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   public: {
     Enums: {
       app_role: [
-        "Super Administrator",
-        "Administrator",
-        "Estimator",
-        "Field Crew Lead",
-        "Field Technician",
-        "Client",
+        'Super Administrator',
+        'Administrator',
+        'Estimator',
+        'Field Crew Lead',
+        'Field Technician',
+        'Client',
       ],
       equipment_status: [
-        "available",
-        "in_use",
-        "maintenance",
-        "out_of_service",
+        'available',
+        'in_use',
+        'maintenance',
+        'out_of_service',
       ],
       equipment_type: [
-        "paver",
-        "roller",
-        "truck",
-        "trailer",
-        "compactor",
-        "seal_coating_tank",
-        "line_striper",
-        "crack_sealer",
-        "tools",
+        'paver',
+        'roller',
+        'truck',
+        'trailer',
+        'compactor',
+        'seal_coating_tank',
+        'line_striper',
+        'crack_sealer',
+        'tools',
       ],
-      project_status: ["pending", "in_progress", "completed", "cancelled"],
+      project_status: ['pending', 'in_progress', 'completed', 'cancelled'],
       project_type: [
-        "asphalt_paving",
-        "sealcoating",
-        "line_striping",
-        "crack_sealing",
-        "pothole_repair",
-        "overlay",
-        "maintenance",
+        'asphalt_paving',
+        'sealcoating',
+        'line_striping',
+        'crack_sealing',
+        'pothole_repair',
+        'overlay',
+        'maintenance',
       ],
-      user_role: ["admin", "manager", "user", "super_admin"],
-      weather_condition: ["sunny", "cloudy", "rainy", "snowy", "windy"],
+      user_role: ['admin', 'manager', 'user', 'super_admin'],
+      weather_condition: ['sunny', 'cloudy', 'rainy', 'snowy', 'windy'],
     },
   },
-} as const
+} as const;

@@ -2,41 +2,41 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { 
-  Sparkles, 
-  Zap, 
-  Layers, 
-  Globe, 
+import {
+  Sparkles,
+  Zap,
+  Layers,
+  Globe,
   Brain,
-  ArrowRight 
+  ArrowRight,
 } from 'lucide-react';
 
 export const ExperienceRevolution: React.FC = () => {
   const features = [
     {
       icon: Brain,
-      title: "AI-Powered Insights",
-      description: "Revolutionary machine learning algorithms that predict maintenance needs and optimize operations.",
-      status: "Active"
+      title: 'AI-Powered Insights',
+      description: 'Revolutionary machine learning algorithms that predict maintenance needs and optimize operations.',
+      status: 'Active',
     },
     {
       icon: Globe,
-      title: "Global Connectivity",
-      description: "Seamless integration across all platforms and devices worldwide.",
-      status: "Live"
+      title: 'Global Connectivity',
+      description: 'Seamless integration across all platforms and devices worldwide.',
+      status: 'Live',
     },
     {
       icon: Layers,
-      title: "Modular Architecture",
-      description: "Flexible, scalable system that grows with your business needs.",
-      status: "Deployed"
+      title: 'Modular Architecture',
+      description: 'Flexible, scalable system that grows with your business needs.',
+      status: 'Deployed',
     },
     {
       icon: Zap,
-      title: "Real-time Processing",
-      description: "Instant data processing and notifications for immediate action.",
-      status: "Active"
-    }
+      title: 'Real-time Processing',
+      description: 'Instant data processing and notifications for immediate action.',
+      status: 'Active',
+    },
   ];
 
   return (

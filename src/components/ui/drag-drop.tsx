@@ -3,18 +3,18 @@ import { cn } from '../../lib/utils';
 import { Card } from './card';
 import { Button } from './button';
 import { Icon } from './icon';
-import { 
-  Upload, 
-  X, 
-  File, 
-  Image, 
-  FileText, 
-  Video, 
+import {
+  Upload,
+  X,
+  File,
+  Image,
+  FileText,
+  Video,
   Music,
   Archive,
   CheckCircle2,
   AlertCircle,
-  RotateCcw
+  RotateCcw,
 } from 'lucide-react';
 
 // File Upload with Drag & Drop
@@ -37,7 +37,7 @@ export function FileUpload({
   maxFiles = 5,
   variant = 'default',
   className,
-  disabled = false
+  disabled = false,
 }: FileUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -46,16 +46,16 @@ export function FileUpload({
 
   const getFileIcon = (file: File) => {
     const type = file.type;
-    if (type.startsWith('image/')) return Image;
-    if (type.startsWith('video/')) return Video;
-    if (type.startsWith('audio/')) return Music;
-    if (type.includes('pdf') || type.includes('document')) return FileText;
-    if (type.includes('zip') || type.includes('rar')) return Archive;
+    if (type.startsWith('image/')) { return Image; }
+    if (type.startsWith('video/')) { return Video; }
+    if (type.startsWith('audio/')) { return Music; }
+    if (type.includes('pdf') || type.includes('document')) { return FileText; }
+    if (type.includes('zip') || type.includes('rar')) { return Archive; }
     return File;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) { return '0 Bytes'; }
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -78,7 +78,7 @@ export function FileUpload({
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    if (!disabled) setIsDragOver(true);
+    if (!disabled) { setIsDragOver(true); }
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
@@ -89,8 +89,8 @@ export function FileUpload({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
-    if (disabled) return;
+
+    if (disabled) { return; }
 
     const droppedFiles = Array.from(e.dataTransfer.files);
     processFiles(droppedFiles);
@@ -137,12 +137,12 @@ export function FileUpload({
         className={cn(
           'relative border-2 border-dashed transition-all duration-300 cursor-pointer',
           isDragOver && !disabled && (
-            variant === 'tactical' 
-              ? 'border-green-400 bg-green-400/5 animate-tactical-scan' 
+            variant === 'tactical'
+              ? 'border-green-400 bg-green-400/5 animate-tactical-scan'
               : 'border-primary bg-primary/5'
           ),
           disabled && 'opacity-50 cursor-not-allowed',
-          error && 'border-destructive bg-destructive/5'
+          error && 'border-destructive bg-destructive/5',
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -152,34 +152,34 @@ export function FileUpload({
         <div className="p-8 text-center space-y-4">
           <div className={cn(
             'mx-auto w-12 h-12 rounded-full flex items-center justify-center',
-            variant === 'tactical' 
-              ? 'bg-green-400/20 text-green-400' 
-              : 'bg-primary/20 text-primary'
+            variant === 'tactical'
+              ? 'bg-green-400/20 text-green-400'
+              : 'bg-primary/20 text-primary',
           )}>
-            <Icon 
-              icon={Upload} 
+            <Icon
+              icon={Upload}
               size="lg"
               animation={isDragOver ? 'bounce' : 'none'}
               variant={variant === 'tactical' ? 'tactical' : 'primary'}
             />
           </div>
-          
+
           <div>
             <h3 className={cn(
               'text-lg font-semibold',
-              variant === 'tactical' && 'text-green-300'
+              variant === 'tactical' && 'text-green-300',
             )}>
               {isDragOver ? 'Drop files here' : 'Upload files'}
             </h3>
             <p className={cn(
               'text-sm mt-1',
-              variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground'
+              variant === 'tactical' ? 'text-green-400/70' : 'text-muted-foreground',
             )}>
               Drag and drop files here, or click to browse
             </p>
             <p className={cn(
               'text-xs mt-2',
-              variant === 'tactical' ? 'text-green-400/50' : 'text-muted-foreground'
+              variant === 'tactical' ? 'text-green-400/50' : 'text-muted-foreground',
             )}>
               Max {maxFiles} files, {maxSize}MB each
             </p>
@@ -210,7 +210,7 @@ export function FileUpload({
             <div className="flex items-center justify-between mb-4">
               <h4 className={cn(
                 'font-medium',
-                variant === 'tactical' && 'text-green-300'
+                variant === 'tactical' && 'text-green-300',
               )}>
                 Selected Files ({files.length})
               </h4>
@@ -223,7 +223,7 @@ export function FileUpload({
                 Clear All
               </Button>
             </div>
-            
+
             <div className="space-y-2">
               {files.map((file, index) => {
                 const FileIcon = getFileIcon(file);
@@ -232,33 +232,33 @@ export function FileUpload({
                     key={index}
                     className={cn(
                       'flex items-center justify-between p-3 rounded-lg border animate-slide-up',
-                      variant === 'tactical' 
-                        ? 'border-green-400/20 bg-green-400/5' 
-                        : 'border bg-muted/50'
+                      variant === 'tactical'
+                        ? 'border-green-400/20 bg-green-400/5'
+                        : 'border bg-muted/50',
                     )}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon 
-                        icon={FileIcon} 
+                      <Icon
+                        icon={FileIcon}
                         size="sm"
                         variant={variant === 'tactical' ? 'tactical' : 'muted'}
                       />
                       <div>
                         <p className={cn(
                           'text-sm font-medium',
-                          variant === 'tactical' && 'text-green-300'
+                          variant === 'tactical' && 'text-green-300',
                         )}>
                           {file.name}
                         </p>
                         <p className={cn(
                           'text-xs',
-                          variant === 'tactical' ? 'text-green-400/60' : 'text-muted-foreground'
+                          variant === 'tactical' ? 'text-green-400/60' : 'text-muted-foreground',
                         )}>
                           {formatFileSize(file.size)}
                         </p>
                       </div>
                     </div>
-                    
+
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -301,7 +301,7 @@ export function SortableList({
   onReorder,
   variant = 'default',
   className,
-  itemClassName
+  itemClassName,
 }: SortableListProps) {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
@@ -323,13 +323,13 @@ export function SortableList({
 
   const handleDrop = (e: React.DragEvent, dropItemId: string) => {
     e.preventDefault();
-    
-    if (!draggedItem || draggedItem === dropItemId) return;
+
+    if (!draggedItem || draggedItem === dropItemId) { return; }
 
     const draggedIndex = items.findIndex(item => item.id === draggedItem);
     const dropIndex = items.findIndex(item => item.id === dropItemId);
 
-    if (draggedIndex === -1 || dropIndex === -1) return;
+    if (draggedIndex === -1 || dropIndex === -1) { return; }
 
     const newItems = [...items];
     const [removed] = newItems.splice(draggedIndex, 1);
@@ -346,19 +346,19 @@ export function SortableList({
         <div
           key={item.id}
           draggable={!item.disabled}
-          onDragStart={(e) => handleDragStart(e, item.id)}
-          onDragOver={(e) => handleDragOver(e, item.id)}
+          onDragStart={(e) => { handleDragStart(e, item.id); }}
+          onDragOver={(e) => { handleDragOver(e, item.id); }}
           onDragEnd={handleDragEnd}
-          onDrop={(e) => handleDrop(e, item.id)}
+          onDrop={(e) => { handleDrop(e, item.id); }}
           className={cn(
             'p-4 rounded-lg border transition-all duration-200 cursor-move',
             draggedItem === item.id && 'opacity-50 scale-95',
             dragOverItem === item.id && 'scale-105',
-            variant === 'tactical' 
-              ? 'border-green-400/20 bg-green-400/5 hover:bg-green-400/10' 
+            variant === 'tactical'
+              ? 'border-green-400/20 bg-green-400/5 hover:bg-green-400/10'
               : 'border bg-card hover:bg-muted/50',
             item.disabled && 'opacity-50 cursor-not-allowed',
-            itemClassName
+            itemClassName,
           )}
         >
           {item.content}
@@ -393,7 +393,7 @@ export function KanbanBoard({
   columns,
   onMove,
   variant = 'default',
-  className
+  className,
 }: KanbanBoardProps) {
   const [draggedItem, setDraggedItem] = useState<{ itemId: string; columnId: string } | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
@@ -410,7 +410,7 @@ export function KanbanBoard({
 
   const handleDrop = (e: React.DragEvent, toColumnId: string) => {
     e.preventDefault();
-    
+
     if (!draggedItem || draggedItem.columnId === toColumnId) {
       setDraggedItem(null);
       setDragOverColumn(null);
@@ -436,63 +436,63 @@ export function KanbanBoard({
           key={column.id}
           className={cn(
             'flex-shrink-0 w-80',
-            variant === 'tactical' && 'text-green-400'
+            variant === 'tactical' && 'text-green-400',
           )}
-          onDragOver={(e) => handleDragOver(e, column.id)}
-          onDrop={(e) => handleDrop(e, column.id)}
+          onDragOver={(e) => { handleDragOver(e, column.id); }}
+          onDrop={(e) => { handleDrop(e, column.id); }}
         >
           <Card variant={variant === 'tactical' ? 'tactical' : 'default'}>
             <div className="p-4 border-b border">
               <div className="flex items-center justify-between">
                 <h3 className={cn(
                   'font-semibold',
-                  variant === 'tactical' && 'text-green-300'
+                  variant === 'tactical' && 'text-green-300',
                 )}>
                   {column.title}
                 </h3>
                 <span className={cn(
                   'text-sm px-2 py-1 rounded-full',
-                  variant === 'tactical' 
-                    ? 'bg-green-400/20 text-green-300' 
-                    : 'bg-muted text-muted-foreground'
+                  variant === 'tactical'
+                    ? 'bg-green-400/20 text-green-300'
+                    : 'bg-muted text-muted-foreground',
                 )}>
                   {column.items.length}
                   {column.maxItems && `/${column.maxItems}`}
                 </span>
               </div>
             </div>
-            
+
             <div className={cn(
               'p-4 min-h-[400px] space-y-3',
               dragOverColumn === column.id && (
-                variant === 'tactical' 
-                  ? 'bg-green-400/5' 
+                variant === 'tactical'
+                  ? 'bg-green-400/5'
                   : 'bg-primary/5'
-              )
+              ),
             )}>
               {column.items.map((item) => (
                 <div
                   key={item.id}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, item.id, column.id)}
+                  onDragStart={(e) => { handleDragStart(e, item.id, column.id); }}
                   className={cn(
                     'p-3 rounded-lg border cursor-move transition-all duration-200 hover:shadow-md',
                     draggedItem?.itemId === item.id && 'opacity-50 scale-95',
-                    variant === 'tactical' 
-                      ? 'border-green-400/20 bg-slate-800 hover:bg-slate-700' 
-                      : 'border bg-card hover:bg-muted/50'
+                    variant === 'tactical'
+                      ? 'border-green-400/20 bg-slate-800 hover:bg-slate-700'
+                      : 'border bg-card hover:bg-muted/50',
                   )}
                 >
                   {item.content}
                 </div>
               ))}
-              
+
               {column.items.length === 0 && (
                 <div className={cn(
                   'flex items-center justify-center h-32 border-2 border-dashed rounded-lg',
-                  variant === 'tactical' 
-                    ? 'border-green-400/20 text-green-400/60' 
-                    : 'border text-muted-foreground'
+                  variant === 'tactical'
+                    ? 'border-green-400/20 text-green-400/60'
+                    : 'border text-muted-foreground',
                 )}>
                   Drop items here
                 </div>

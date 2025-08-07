@@ -64,25 +64,25 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    loading, 
-    leftIcon, 
-    rightIcon, 
-    children, 
-    disabled, 
+  ({
+    className,
+    variant,
+    size,
+    loading,
+    leftIcon,
+    rightIcon,
+    children,
+    disabled,
     ripple = true,
     animation,
     onClick,
-    ...props 
+    ...props
   }, ref) => {
     const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     const createRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (!ripple || !buttonRef.current) return;
+      if (!ripple || !buttonRef.current) { return; }
 
       const button = buttonRef.current;
       const rect = button.getBoundingClientRect();
@@ -116,20 +116,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {loading && (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         )}
-        
+
         {/* Left Icon */}
         {!loading && leftIcon && (
           <span className="mr-2 transition-transform group-hover:scale-110">{leftIcon}</span>
         )}
-        
+
         {/* Content */}
         <span className="relative z-10">{children}</span>
-        
+
         {/* Right Icon */}
         {!loading && rightIcon && (
           <span className="ml-2 transition-transform group-hover:scale-110">{rightIcon}</span>
         )}
-        
+
         {/* Ripple Effects */}
         {ripple && ripples.map(({ id, x, y }) => (
           <span
@@ -145,7 +145,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             }}
           />
         ))}
-        
+
         {/* Enhanced Shine Effect */}
         <span className="absolute inset-0 overflow-hidden rounded-md">
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] transition-transform duration-700 group-hover:translate-x-[100%] skew-x-12" />

@@ -1,90 +1,90 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { 
-  Shield, 
-  FileText, 
-  AlertTriangle, 
-  CheckCircle, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  Shield,
+  FileText,
+  AlertTriangle,
+  CheckCircle,
   Book,
   Scale,
   Leaf,
-  HardHat
-} from "lucide-react"
+  HardHat,
+} from 'lucide-react';
 
 export const RegulationsGuide = () => {
   const federalRegulations = [
     {
-      title: "FHWA Standards",
-      category: "Federal Highway Administration",
-      description: "Guidelines for highway construction and maintenance including material specifications and quality standards.",
-      compliance: "Required",
-      lastUpdated: "2024"
+      title: 'FHWA Standards',
+      category: 'Federal Highway Administration',
+      description: 'Guidelines for highway construction and maintenance including material specifications and quality standards.',
+      compliance: 'Required',
+      lastUpdated: '2024',
     },
     {
-      title: "EPA Environmental Standards",
-      category: "Environmental Protection Agency",
-      description: "Environmental regulations for construction activities, waste management, and air quality.",
-      compliance: "Required",
-      lastUpdated: "2023"
+      title: 'EPA Environmental Standards',
+      category: 'Environmental Protection Agency',
+      description: 'Environmental regulations for construction activities, waste management, and air quality.',
+      compliance: 'Required',
+      lastUpdated: '2023',
     },
     {
-      title: "OSHA Safety Requirements",
-      category: "Occupational Safety and Health",
-      description: "Workplace safety standards for construction and road work operations.",
-      compliance: "Required",
-      lastUpdated: "2024"
-    }
-  ]
+      title: 'OSHA Safety Requirements',
+      category: 'Occupational Safety and Health',
+      description: 'Workplace safety standards for construction and road work operations.',
+      compliance: 'Required',
+      lastUpdated: '2024',
+    },
+  ];
 
   const stateRegulations = [
     {
-      title: "DOT Material Specifications",
-      state: "California",
-      description: "State-specific material standards for asphalt mixes, aggregates, and additives.",
-      status: "Active"
+      title: 'DOT Material Specifications',
+      state: 'California',
+      description: 'State-specific material standards for asphalt mixes, aggregates, and additives.',
+      status: 'Active',
     },
     {
-      title: "Contractor Licensing",
-      state: "California",
-      description: "Requirements for contractor certification and bonding for public works projects.",
-      status: "Active"
+      title: 'Contractor Licensing',
+      state: 'California',
+      description: 'Requirements for contractor certification and bonding for public works projects.',
+      status: 'Active',
     },
     {
-      title: "Traffic Control Standards",
-      state: "California",
-      description: "Work zone safety and traffic management requirements during construction.",
-      status: "Active"
-    }
-  ]
+      title: 'Traffic Control Standards',
+      state: 'California',
+      description: 'Work zone safety and traffic management requirements during construction.',
+      status: 'Active',
+    },
+  ];
 
   const technicalStandards = [
     {
-      organization: "AASHTO",
-      standard: "M 323",
-      title: "Superpave Volumetric Mix Design",
-      description: "Standard method for asphalt mix design using Superpave criteria."
+      organization: 'AASHTO',
+      standard: 'M 323',
+      title: 'Superpave Volumetric Mix Design',
+      description: 'Standard method for asphalt mix design using Superpave criteria.',
     },
     {
-      organization: "ASTM",
-      standard: "D6926",
-      title: "Standard Practice for Preparation of Bituminous Specimens",
-      description: "Laboratory compaction procedures for asphalt specimens."
+      organization: 'ASTM',
+      standard: 'D6926',
+      title: 'Standard Practice for Preparation of Bituminous Specimens',
+      description: 'Laboratory compaction procedures for asphalt specimens.',
     },
     {
-      organization: "ASTM",
-      standard: "D6927",
-      title: "Marshall Stability and Flow Test",
-      description: "Test method for determining stability and flow of asphalt mixtures."
+      organization: 'ASTM',
+      standard: 'D6927',
+      title: 'Marshall Stability and Flow Test',
+      description: 'Test method for determining stability and flow of asphalt mixtures.',
     },
     {
-      organization: "AASHTO",
-      standard: "T 283",
-      title: "Moisture Susceptibility Test",
-      description: "Test for resistance of compacted asphalt mixtures to moisture damage."
-    }
-  ]
+      organization: 'AASHTO',
+      standard: 'T 283',
+      title: 'Moisture Susceptibility Test',
+      description: 'Test for resistance of compacted asphalt mixtures to moisture damage.',
+    },
+  ];
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -159,7 +159,7 @@ export const RegulationsGuide = () => {
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Federal regulations are mandatory for all projects involving federal funding or interstate commerce. 
+              Federal regulations are mandatory for all projects involving federal funding or interstate commerce.
               Non-compliance can result in project delays, fines, and loss of federal funding eligibility.
             </AlertDescription>
           </Alert>
@@ -379,7 +379,7 @@ export const RegulationsGuide = () => {
               <Alert>
                 <Leaf className="h-4 w-4" />
                 <AlertDescription>
-                  Environmental compliance is increasingly important. Many projects now require 
+                  Environmental compliance is increasingly important. Many projects now require
                   sustainability reporting and may prefer contractors with green certifications.
                 </AlertDescription>
               </Alert>
@@ -421,5 +421,5 @@ export const RegulationsGuide = () => {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};
