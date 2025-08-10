@@ -20,7 +20,7 @@ export const sanitizeNumber = (input: any): number | null => {
 
 // Enhanced validation schemas
 export const phoneSchema = z.string()
-  .regex(/^\+?[\d\s\-\(\)]{10,15}$/, 'Invalid phone number format');
+  .regex(/^\+?[\d\s\-()]{10,15}$/, 'Invalid phone number format');
 
 export const currencySchema = z.number()
   .min(0, 'Amount must be positive')

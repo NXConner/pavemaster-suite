@@ -232,15 +232,17 @@ class NLPEngine {
     const parameters: Record<string, any> = {};
 
     switch (intentName) {
-      case 'create_project':
-        const nameMatch = message.match(/project\s+(?:called\s+|named\s+)?['""]?([^'""]+)['""]?/i);
+      case 'create_project': {
+        const nameMatch = message.match(/project\s+(?:called\s+|named\s+)?['"]?([^'"]+)['"]?/i);
         if (nameMatch) { parameters.name = nameMatch[1].trim(); }
         break;
+      }
 
-      case 'schedule_task':
-        const taskMatch = message.match(/task\s+['""]?([^'""]+)['""]?/i);
+      case 'schedule_task': {
+        const taskMatch = message.match(/task\s+['"]?([^'"]+)['"]?/i);
         if (taskMatch) { parameters.task = taskMatch[1].trim(); }
         break;
+      }
     }
 
     return parameters;
