@@ -104,12 +104,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       onClick?.(event);
     };
 
+    const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (e) => {
+      if (disabled || loading) { return; }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        // Synthesize a click
+        onClick?.(e as unknown as React.MouseEvent<HTMLButtonElement>);
+      }
+    };
+
     return (
       <button
         ref={ref || buttonRef}
         className={cn(buttonVariants({ variant, size, loading, animation, className }))}
         disabled={disabled || loading}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         {...props}
       >
         {/* Loading State */}
