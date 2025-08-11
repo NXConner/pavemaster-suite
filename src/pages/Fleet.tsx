@@ -18,6 +18,9 @@ import {
   FileText,
   Plus,
 } from 'lucide-react';
+import { MaintenanceChecklist } from '../components/vehicle/MaintenanceChecklist';
+import { InspectionChecklist } from '../components/vehicle/InspectionChecklist';
+import { supabase } from '../integrations/supabase/client';
 
 interface Vehicle {
   id: string;
@@ -368,6 +371,31 @@ export default function Fleet() {
                 </div>
               </CardContent>
             </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>New Maintenance Checklist</CardTitle>
+                <CardDescription>Record maintenance with notes and document uploads</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <MaintenanceChecklist
+                  onUploadFiles={async (files, category) => {
+                    try {
+                      for (const file of files) {
+                        const path = `fleet/${category}/${Date.now()}-${file.name}`;
+                        await supabase.storage.from('vehicle-docs').upload(path, file, {
+                          cacheControl: '3600',
+                          upsert: true,
+                          contentType: file.type,
+                        });
+                      }
+                    } catch (error) {
+                      console.error('Upload failed (ensure storage bucket vehicle-docs exists):', error);
+                    }
+                  }}
+                />
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="inspections" className="space-y-6">
@@ -389,6 +417,31 @@ export default function Fleet() {
                     <Badge variant="outline" className="border-green-600 text-green-600">Passed</Badge>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>New Inspection Checklist</CardTitle>
+                <CardDescription>Complete inspection and upload photos/PDFs</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <InspectionChecklist
+                  onUploadFiles={async (files, category) => {
+                    try {
+                      for (const file of files) {
+                        const path = `fleet/${category}/${Date.now()}-${file.name}`;
+                        await supabase.storage.from('vehicle-docs').upload(path, file, {
+                          cacheControl: '3600',
+                          upsert: true,
+                          contentType: file.type,
+                        });
+                      }
+                    } catch (error) {
+                      console.error('Upload failed (ensure storage bucket vehicle-docs exists):', error);
+                    }
+                  }}
+                />
               </CardContent>
             </Card>
           </TabsContent>

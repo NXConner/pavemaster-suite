@@ -19,6 +19,9 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { sanitizeString, validateInput, vehicleDetailsSchema, rateLimiter, logSecurityEvent } from '../../lib/security';
+import { InspectionChecklist } from './InspectionChecklist';
+import { MaintenanceChecklist } from './MaintenanceChecklist';
+import { supabase } from '../../integrations/supabase/client';
 
 interface VehicleDetailsProps {
   vehicleId: string;
@@ -599,6 +602,32 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
               </Button>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Maintenance Checklist</CardTitle>
+              <CardDescription>Checklist with notes and document uploads</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <MaintenanceChecklist
+                vehicleId={vehicleId}
+                onUploadFiles={async (files, category) => {
+                  try {
+                    for (const file of files) {
+                      const path = `${vehicleId}/${category}/${Date.now()}-${file.name}`;
+                      await supabase.storage.from('vehicle-docs').upload(path, file, {
+                        cacheControl: '3600',
+                        upsert: true,
+                        contentType: file.type,
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Upload failed (ensure storage bucket vehicle-docs exists):', error);
+                  }
+                }}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Inspection Tab */}
@@ -771,6 +800,32 @@ export function VehicleDetailsForm({ vehicleId, onSave }: VehicleDetailsProps) {
                   </>
                 )}
               </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Inspection Checklist</CardTitle>
+              <CardDescription>Structured checklist with notes and uploads</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <InspectionChecklist
+                vehicleId={vehicleId}
+                onUploadFiles={async (files, category) => {
+                  try {
+                    for (const file of files) {
+                      const path = `${vehicleId}/${category}/${Date.now()}-${file.name}`;
+                      await supabase.storage.from('vehicle-docs').upload(path, file, {
+                        cacheControl: '3600',
+                        upsert: true,
+                        contentType: file.type,
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Upload failed (ensure storage bucket vehicle-docs exists):', error);
+                  }
+                }}
+              />
             </CardContent>
           </Card>
         </TabsContent>
