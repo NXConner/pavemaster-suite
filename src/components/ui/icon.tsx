@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { LucideIcon, LucideProps } from 'lucide-react';
+import { LucideIcon, LucideProps, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 const iconVariants = cva(
   'inline-flex items-center justify-center transition-all duration-200',
@@ -81,7 +81,6 @@ Icon.displayName = 'Icon';
 
 // Predefined icon components for common use cases
 export const LoadingIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
-  const Loader2 = require('lucide-react').Loader2;
   return (
     <Icon
       icon={Loader2}
@@ -93,7 +92,6 @@ export const LoadingIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) =>
 };
 
 export const SuccessIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
-  const CheckCircle2 = require('lucide-react').CheckCircle2;
   return (
     <Icon
       icon={CheckCircle2}
@@ -105,7 +103,6 @@ export const SuccessIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) =>
 };
 
 export const ErrorIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
-  const AlertCircle = require('lucide-react').AlertCircle;
   return (
     <Icon
       icon={AlertCircle}
@@ -117,7 +114,6 @@ export const ErrorIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
 };
 
 export const WarningIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
-  const AlertTriangle = require('lucide-react').AlertTriangle;
   return (
     <Icon
       icon={AlertTriangle}
@@ -129,7 +125,6 @@ export const WarningIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) =>
 };
 
 export const InfoIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
-  const Info = require('lucide-react').Info;
   return (
     <Icon
       icon={Info}

@@ -96,7 +96,7 @@ export function FormProvider({
       if (rules.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         return 'Invalid email address';
       }
-      if (rules.phone && !/^\+?[\d\s\-\(\)]+$/.test(value)) {
+      if (rules.phone && !/^\+?[\d\s\-()]+$/.test(value)) {
         return 'Invalid phone number';
       }
       if (rules.url && !/^https?:\/\/.+/.test(value)) {

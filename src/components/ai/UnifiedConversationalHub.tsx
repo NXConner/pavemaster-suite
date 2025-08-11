@@ -4,10 +4,8 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { ConversationalInterface } from './ConversationalInterface';
-import { ConversationMemory, ConversationMemoryEngine } from './ConversationMemory';
-import { AdvancedVoiceInterface, AdvancedVoiceEngine } from './AdvancedVoiceInterface';
-import type { VoiceCommand } from './AdvancedVoiceInterface';
-import type { ConversationMemoryType, EntityMemory } from './ConversationMemory';
+import { ConversationMemory, ConversationMemoryEngine, type ConversationMemoryType, type EntityMemory } from './ConversationMemory';
+import { AdvancedVoiceInterface, type VoiceCommand } from './AdvancedVoiceInterface';
 import {
   Brain,
   MessageSquare,

@@ -635,7 +635,7 @@ export class ThemeManager {
 
   // Check if theme is valid
   private isValidTheme(themeId: string): boolean {
-    return themes.hasOwnProperty(themeId) || this.customThemes.has(themeId);
+    return Object.prototype.hasOwnProperty.call(themes, themeId) || this.customThemes.has(themeId);
   }
 
   // Get theme configuration

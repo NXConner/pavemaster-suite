@@ -126,13 +126,14 @@ export default function Materials() {
         laborRate = 0.35; // per sq ft
         equipmentRate = 0.15; // per sq ft
         break;
-      case 'stripe_paint':
+      case 'stripe_paint': {
         // Assuming 4" stripes, calculate linear feet needed
         const linearFeet = areaNum * 0.1; // rough estimate for parking lot striping
         materialNeeded = linearFeet / selectedMat.coverage;
         laborRate = 0.25; // per linear foot
         equipmentRate = 0.10; // per linear foot
         break;
+      }
       default:
         materialNeeded = areaNum / selectedMat.coverage;
         laborRate = 0.50;

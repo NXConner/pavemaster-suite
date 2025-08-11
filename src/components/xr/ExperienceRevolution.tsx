@@ -1016,10 +1016,12 @@ export const ExperienceRevolution: React.FC = () => {
                           {selectedScene.status === 'ready' && (
                             <Button
                               onClick={() => {
- isRendering
-                                  ? handleStopRendering(selectedScene.id)
-                                  : handleStartRendering(selectedScene.id);
-}
+                                if (isRendering) {
+                                  handleStopRendering(selectedScene.id);
+                                } else {
+                                  handleStartRendering(selectedScene.id);
+                                }
+                              }
                               }
                               variant="outline"
                               className="flex-1"

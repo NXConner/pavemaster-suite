@@ -112,18 +112,14 @@ export default function Profile() {
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user?.id) { return; }
 
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id);
 
-      if (error) { throw error; }
+    if (error) { throw error; }
 
-      setProfile(prev => prev ? { ...prev, ...updates } : null);
-    } catch (error: any) {
-      throw error;
-    }
+    setProfile(prev => prev ? { ...prev, ...updates } : null);
   };
 
   const handleSave = async () => {

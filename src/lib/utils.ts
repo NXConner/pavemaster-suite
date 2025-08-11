@@ -337,33 +337,40 @@ export function getDateRange(type: 'today' | 'yesterday' | 'thisWeek' | 'lastWee
   switch (type) {
     case 'today':
       return { start: today, end: endOfDay(now) };
-    case 'yesterday':
+    case 'yesterday': {
       const yesterday = subDays(today, 1);
       return { start: yesterday, end: endOfDay(yesterday) };
-    case 'thisWeek':
+    }
+    case 'thisWeek': {
       const startOfWeek = new Date(today);
       startOfWeek.setDate(today.getDate() - today.getDay());
       return { start: startOfWeek, end: endOfDay(addDays(startOfWeek, 6)) };
-    case 'lastWeek':
+    }
+    case 'lastWeek': {
       const lastWeekStart = new Date(today);
       lastWeekStart.setDate(today.getDate() - today.getDay() - 7);
       return { start: lastWeekStart, end: endOfDay(addDays(lastWeekStart, 6)) };
-    case 'thisMonth':
+    }
+    case 'thisMonth': {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
       return { start: startOfMonth, end: endOfDay(endOfMonth) };
-    case 'lastMonth':
+    }
+    case 'lastMonth': {
       const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
       const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
       return { start: lastMonthStart, end: endOfDay(lastMonthEnd) };
-    case 'thisYear':
+    }
+    case 'thisYear': {
       const startOfYear = new Date(now.getFullYear(), 0, 1);
       const endOfYear = new Date(now.getFullYear(), 11, 31);
       return { start: startOfYear, end: endOfDay(endOfYear) };
-    case 'lastYear':
+    }
+    case 'lastYear': {
       const lastYearStart = new Date(now.getFullYear() - 1, 0, 1);
       const lastYearEnd = new Date(now.getFullYear() - 1, 11, 31);
       return { start: lastYearStart, end: endOfDay(lastYearEnd) };
+    }
     default:
       return { start: today, end: endOfDay(now) };
   }
@@ -380,11 +387,11 @@ const validationPatterns = {
     message: 'Please enter a valid email address',
   },
   phone: {
-    regex: /^[\+]?[1-9][\d]{0,15}$/,
+    regex: /^[+]?[1-9][\d]{0,15}$/,
     message: 'Please enter a valid phone number',
   },
   url: {
-    regex: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+    regex: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)$/,
     message: 'Please enter a valid URL',
   },
   ipAddress: {
@@ -792,46 +799,33 @@ export const storage = {
 // ============================================================================
 
 // Simple event emitter
-export class EventEmitter<T extends Record<string, any>> {
-  private events: Map<keyof T, Function[]> = new Map();
+export class EventEmitter<T extends Record<string, unknown>> {
+  private events: { [K in keyof T]?: Array<(data: T[K]) => void> } = {};
 
   on<K extends keyof T>(event: K, listener: (data: T[K]) => void): () => void {
-    if (!this.events.has(event)) {
-      this.events.set(event, []);
-    }
-
-    const listeners = this.events.get(event)!;
+    const listeners = this.events[event] ?? (this.events[event] = []);
     listeners.push(listener);
-
-    // Return unsubscribe function
     return () => {
-      const index = listeners.indexOf(listener);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
+      const arr = this.events[event];
+      if (!arr) { return; }
+      const index = arr.indexOf(listener);
+      if (index > -1) { arr.splice(index, 1); }
     };
   }
 
   emit<K extends keyof T>(event: K, data: T[K]): void {
-    const listeners = this.events.get(event);
-    if (listeners) {
-      listeners.forEach(listener => listener(data));
-    }
+    this.events[event]?.forEach(listener => listener(data));
   }
 
-  off<K extends keyof T>(event: K, listener?: Function): void {
+  off<K extends keyof T>(event: K, listener?: (data: T[K]) => void): void {
     if (!listener) {
-      this.events.delete(event);
+      delete this.events[event];
       return;
     }
-
-    const listeners = this.events.get(event);
-    if (listeners) {
-      const index = listeners.indexOf(listener);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    }
+    const arr = this.events[event];
+    if (!arr) { return; }
+    const index = arr.indexOf(listener);
+    if (index > -1) { arr.splice(index, 1); }
   }
 }
 
@@ -1060,7 +1054,7 @@ export function createFocusTrap(element: HTMLElement): () => void {
 // ============================================================================
 // Performance Optimization Utilities (continued)
 // ============================================================================
- 
+
 // RAF-based animation helper
 export function animateWithRAF(callback: (progress: number) => void, duration: number) {
   const startTime = performance.now();
@@ -1160,7 +1154,6 @@ export function prefersDarkTheme(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-
 // Announce to screen readers
 export function announce(message: string, priority: 'polite' | 'assertive' = 'polite') {
   const announcer = document.createElement('div');
@@ -1208,7 +1201,6 @@ export function checkContrast(foreground: string, background: string): number {
 // ============================================================================
 // Device and Environment Detection (continued)
 // ============================================================================
-
 
 // Get device orientation
 export function getOrientation(): 'portrait' | 'landscape' {

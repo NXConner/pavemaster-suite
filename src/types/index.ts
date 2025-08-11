@@ -1571,16 +1571,22 @@ export type PartialFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K
 export type OptionalFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 // Type guards and predicates
-export const isUser = (obj: any): obj is User => {
-  return obj && typeof obj.id === 'string' && typeof obj.email === 'string';
+export const isUser = (obj: unknown): obj is User => {
+  if (!obj || typeof obj !== 'object') { return false; }
+  const o = obj as Record<string, unknown>;
+  return typeof o.id === 'string' && typeof o.email === 'string';
 };
 
-export const isProject = (obj: any): obj is Project => {
-  return obj && typeof obj.id === 'string' && typeof obj.name === 'string';
+export const isProject = (obj: unknown): obj is Project => {
+  if (!obj || typeof obj !== 'object') { return false; }
+  const o = obj as Record<string, unknown>;
+  return typeof o.id === 'string' && typeof o.name === 'string';
 };
 
-export const isEquipment = (obj: any): obj is Equipment => {
-  return obj && typeof obj.id === 'string' && typeof obj.name === 'string';
+export const isEquipment = (obj: unknown): obj is Equipment => {
+  if (!obj || typeof obj !== 'object') { return false; }
+  const o = obj as Record<string, unknown>;
+  return typeof o.id === 'string' && typeof o.name === 'string';
 };
 
 // Type utilities for form handling
