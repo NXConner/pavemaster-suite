@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import { z } from 'zod';
+import { supabase } from '@/integrations/supabase/client';
 
 // Enhanced input sanitization
 export const sanitizeHtml = (input: string): string => {
@@ -142,12 +143,18 @@ export const logSecurityEvent = async (event: SecurityEvent) => {
       console.warn('[SECURITY EVENT]', event);
     }
 
-    // In production, send to monitoring service
-    // await fetch('/api/security/log', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(event)
-    // });
+    // Send to server (Edge Function) for centralized logging
+    await supabase.functions.invoke('security-log', {
+      body: {
+        type: event.type,
+        severity: event.severity,
+        action: event.action,
+        userId: event.userId,
+        ip: event.ip,
+        userAgent: event.userAgent,
+        metadata: event.metadata ?? {},
+      },
+    });
   } catch (error) {
     console.error('Failed to log security event:', error);
   }
@@ -207,13 +214,15 @@ export const getUserAgent = (): string => {
 // Content Security Policy helper
 export const getCSPHeader = (): string => {
   return [
-    'default-src \'self\'',
-    'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'',
-    'style-src \'self\' \'unsafe-inline\'',
-    'img-src \'self\' data: https:',
-    'connect-src \'self\' https:',
-    'font-src \'self\'',
-    'frame-ancestors \'none\'',
-    'base-uri \'self\'',
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https:",
+    "font-src 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    'upgrade-insecure-requests',
   ].join('; ');
 };

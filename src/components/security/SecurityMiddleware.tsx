@@ -104,14 +104,16 @@ export function SecurityMiddleware({ children }: SecurityMiddlewareProps) {
     const meta = document.createElement('meta');
     meta.httpEquiv = 'Content-Security-Policy';
     meta.content = [
-      'default-src \'self\'',
-      'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'',
-      'style-src \'self\' \'unsafe-inline\'',
-      'img-src \'self\' data: https:',
-      'connect-src \'self\' https:',
-      'font-src \'self\'',
-      'frame-ancestors \'none\'',
-      'base-uri \'self\'',
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https:",
+      "connect-src 'self' https:",
+      "font-src 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      'upgrade-insecure-requests',
     ].join('; ');
     document.head.appendChild(meta);
 

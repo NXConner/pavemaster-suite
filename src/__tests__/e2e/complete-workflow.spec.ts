@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 // Helper function to login
 async function loginUser(page: Page, email = 'test@example.com', password = 'password') {
@@ -278,8 +278,11 @@ test.describe('Complete PaveMaster Suite Workflows', () => {
 
     // Test offline capability
     await page.evaluate(() => {
-      // Simulate going offline
-      window.navigator.onLine = false;
+      // Simulate going offline (mock navigator.onLine)
+      Object.defineProperty(window.navigator, 'onLine', {
+        configurable: true,
+        get: () => false,
+      });
     });
 
     await page.fill('[data-testid="offline-note"]', 'Working offline - will sync when connected');
@@ -382,7 +385,7 @@ test.describe('Complete PaveMaster Suite Workflows', () => {
 
     // Test pagination and filtering
     await page.click('[data-testid="projects-list-link"]');
-    await expect(page.locator('[data-testid="project-item"]')).toHaveCount.toBeGreaterThan(5);
+    await expect(await page.locator('[data-testid="project-item"]').count()).toBeGreaterThan(5);
 
     // Test filtering
     await page.fill('[data-testid="project-filter"]', 'Load Test');

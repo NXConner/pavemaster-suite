@@ -92,8 +92,8 @@ describe('WeatherService Integration Tests', () => {
 
       expect(result).toBeDefined();
       expect(result.daily).toHaveLength(5);
-      expect(result.workableDays).toBeDefined();
-      expect(result.recommendations).toBeDefined();
+      expect((result as any).workableDays).toBeDefined();
+      expect((result as any).recommendations).toBeDefined();
     });
 
     it('should identify optimal working days', async () => {
@@ -115,9 +115,9 @@ describe('WeatherService Integration Tests', () => {
 
       const result = await weatherService.getWeatherForecast(40.7128, -74.0060, 7);
 
-      expect(result.workableDays).toBeGreaterThan(0);
-      expect(result.workableDays).toBeLessThanOrEqual(7);
-      expect(result.recommendations).toContain('Optimal working conditions');
+      expect((result as any).workableDays).toBeGreaterThan(0);
+      expect((result as any).workableDays).toBeLessThanOrEqual(7);
+      expect((result as any).recommendations).toContain('Optimal working conditions');
     });
   });
 
@@ -260,9 +260,9 @@ describe('WeatherService Integration Tests', () => {
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
 
-      expect(result.materialRecommendations.asphalt).toBeDefined();
-      expect(result.materialRecommendations.sealcoating).toBeDefined();
-      expect(result.materialRecommendations.striping).toBeDefined();
+      expect((result as any).materialRecommendations?.asphalt).toBeDefined();
+      expect((result as any).materialRecommendations?.sealcoating).toBeDefined();
+      expect((result as any).materialRecommendations?.striping).toBeDefined();
     });
 
     it('should warn about temperature extremes for different materials', async () => {
@@ -281,8 +281,8 @@ describe('WeatherService Integration Tests', () => {
 
       const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
 
-      expect(result.materialRecommendations.asphalt.suitable).toBe(false);
-      expect(result.materialRecommendations.sealcoating.suitable).toBe(false);
+      expect((result as any).materialRecommendations?.asphalt?.suitable).toBe(false);
+      expect((result as any).materialRecommendations?.sealcoating?.suitable).toBe(false);
     });
   });
 });
