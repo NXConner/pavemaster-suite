@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Alert, AlertDescription } from '../ui/alert';
 import { Calculator, Save, Download, Info, TrendingUp, Plus, Minus } from 'lucide-react';
 
 interface StripingLine {
@@ -231,7 +231,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="projectName"
                     placeholder="Highway 101 Striping"
                     value={projectDetails.projectName}
-                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, projectName: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectDetails(prev => ({ ...prev, projectName: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -240,7 +240,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="location"
                     placeholder="San Francisco, CA"
                     value={projectDetails.location}
-                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, location: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectDetails(prev => ({ ...prev, location: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -251,7 +251,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="temperature"
                     type="number"
                     value={projectDetails.temperature}
-                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, temperature: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectDetails(prev => ({ ...prev, temperature: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -260,7 +260,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     id="humidity"
                     type="number"
                     value={projectDetails.humidity}
-                    onChange={(e) => { setProjectDetails(prev => ({ ...prev, humidity: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectDetails(prev => ({ ...prev, humidity: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -337,7 +337,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                       <Input
                         type="number"
                         value={line.length}
-                        onChange={(e) => { updateLine(line.id, 'length', parseInt(e.target.value) || 0); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { updateLine(line.id, 'length', parseInt(e.target.value) || 0); }}
                       />
                     </div>
 
@@ -382,7 +382,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.whitePaint}
-                    onChange={(e) => { handleCostChange('whitePaint', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('whitePaint', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -392,7 +392,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.yellowPaint}
-                    onChange={(e) => { handleCostChange('yellowPaint', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('yellowPaint', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -402,7 +402,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.glassBeads}
-                    onChange={(e) => { handleCostChange('glassBeads', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('glassBeads', e.target.value); }}
                   />
                 </div>
               </div>
@@ -414,7 +414,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.primer}
-                    onChange={(e) => { handleCostChange('primer', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('primer', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -424,7 +424,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                     type="number"
                     step="0.01"
                     value={materialCosts.laborRate}
-                    onChange={(e) => { handleCostChange('laborRate', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('laborRate', e.target.value); }}
                   />
                 </div>
               </div>

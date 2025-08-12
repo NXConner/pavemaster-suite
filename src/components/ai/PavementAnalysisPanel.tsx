@@ -1,12 +1,12 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Camera, Upload, Zap, AlertTriangle, CheckCircle, Clock, Info, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/hooks/use-toast';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Progress } from '../ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { toast } from '../../hooks/use-toast';
 
 interface PredictionResult {
   predicted_class: string;
@@ -124,9 +124,9 @@ const PavementAnalysisPanel: React.FC = () => {
 
     try {
       const formData = new FormData();
-      Array.from(files).forEach((file, index) => {
-        formData.append('images', file);
-      });
+        Array.from(files).forEach((file) => {
+          formData.append('images', file);
+        });
 
       const response = await fetch('/api/ai/predict_batch', {
         method: 'POST',

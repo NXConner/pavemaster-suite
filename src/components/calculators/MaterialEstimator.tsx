@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Alert, AlertDescription } from '../ui/alert';
 import { Calculator, Save, Download, Info, TrendingUp, Truck, Package } from 'lucide-react';
 
 interface ProjectZone {
@@ -270,7 +270,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="projectName"
                     placeholder="Highway 101 Paving"
                     value={projectInfo.projectName}
-                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, projectName: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectInfo(prev => ({ ...prev, projectName: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -279,7 +279,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="location"
                     placeholder="San Francisco, CA"
                     value={projectInfo.location}
-                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, location: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectInfo(prev => ({ ...prev, location: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -290,7 +290,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="startDate"
                     type="date"
                     value={projectInfo.startDate}
-                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, startDate: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectInfo(prev => ({ ...prev, startDate: e.target.value })); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -299,7 +299,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     id="contractor"
                     placeholder="ABC Paving Company"
                     value={projectInfo.contractor}
-                    onChange={(e) => { setProjectInfo(prev => ({ ...prev, contractor: e.target.value })); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setProjectInfo(prev => ({ ...prev, contractor: e.target.value })); }}
                   />
                 </div>
               </div>
@@ -348,7 +348,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Input
                         type="number"
                         value={zone.length}
-                        onChange={(e) => { updateZone(zone.id, 'length', parseInt(e.target.value) || 0); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { updateZone(zone.id, 'length', parseInt(e.target.value) || 0); }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -356,14 +356,14 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Input
                         type="number"
                         value={zone.width}
-                        onChange={(e) => { updateZone(zone.id, 'width', parseInt(e.target.value) || 0); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { updateZone(zone.id, 'width', parseInt(e.target.value) || 0); }}
                       />
                     </div>
                     <div className="space-y-2">
                       <Label>Thickness (inches)</Label>
                       <Select
                         value={zone.thickness.toString()}
-                        onValueChange={(value) => { updateZone(zone.id, 'thickness', parseInt(value)); }}
+                        onValueChange={(value: string) => { updateZone(zone.id, 'thickness', parseInt(value)); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -439,7 +439,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.standardMix}
-                    onChange={(e) => { handleCostChange('standardMix', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('standardMix', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -449,7 +449,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.premiumMix}
-                    onChange={(e) => { handleCostChange('premiumMix', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('premiumMix', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -459,7 +459,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.recycledMix}
-                    onChange={(e) => { handleCostChange('recycledMix', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('recycledMix', e.target.value); }}
                   />
                 </div>
               </div>
@@ -471,7 +471,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.aggregate}
-                    onChange={(e) => { handleCostChange('aggregate', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('aggregate', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -481,7 +481,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.bindingAgent}
-                    onChange={(e) => { handleCostChange('bindingAgent', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('bindingAgent', e.target.value); }}
                   />
                 </div>
               </div>
@@ -493,7 +493,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.fuelSurcharge}
-                    onChange={(e) => { handleCostChange('fuelSurcharge', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('fuelSurcharge', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -503,7 +503,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                     type="number"
                     step="0.01"
                     value={materialCosts.deliveryRate}
-                    onChange={(e) => { handleCostChange('deliveryRate', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('deliveryRate', e.target.value); }}
                   />
                 </div>
               </div>

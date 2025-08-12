@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calculator, Save, Download, Info, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Alert, AlertDescription } from '../ui/alert';
+import { Calculator, Save, Download, Info, TrendingUp, AlertTriangle } from 'lucide-react';
 
 export const SealcoatCalculator = () => {
   const [measurements, setMeasurements] = useState({
@@ -193,7 +193,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     placeholder="100"
                     value={measurements.length}
-                    onChange={(e) => { handleInputChange('length', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleInputChange('length', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -203,7 +203,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     placeholder="50"
                     value={measurements.width}
-                    onChange={(e) => { handleInputChange('width', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleInputChange('width', e.target.value); }}
                   />
                 </div>
               </div>
@@ -269,7 +269,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.sealcoatPrice}
-                    onChange={(e) => { handleCostChange('sealcoatPrice', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('sealcoatPrice', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -279,7 +279,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.sandPrice}
-                    onChange={(e) => { handleCostChange('sandPrice', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('sandPrice', e.target.value); }}
                   />
                 </div>
               </div>
@@ -291,7 +291,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.primerPrice}
-                    onChange={(e) => { handleCostChange('primerPrice', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('primerPrice', e.target.value); }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -301,7 +301,7 @@ Coverage Rate: ${results.coverage} sq ft/gallon
                     type="number"
                     step="0.01"
                     value={materialCosts.laborRate}
-                    onChange={(e) => { handleCostChange('laborRate', e.target.value); }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleCostChange('laborRate', e.target.value); }}
                   />
                 </div>
               </div>
