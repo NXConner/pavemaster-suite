@@ -163,7 +163,11 @@ describe('WeatherService Integration Tests', () => {
         { temp: 65, humidity: 80, wind: 15, rain: true, expectedScore: 30 },
       ];
 
-      for (const testCase of testCases) {
+      // Enable test-only cache bypass for this scenario batch
+      (globalThis as any).__WEATHER_BYPASS_CACHE__ = true;
+
+      for (let i = 0; i < testCases.length; i++) {
+        const testCase = testCases[i];
         const mockResponse = {
           weather: [{ main: testCase.rain ? 'Rain' : 'Clear', description: 'test' }],
           main: { temp: testCase.temp, humidity: testCase.humidity, pressure: 1013 },
@@ -171,6 +175,9 @@ describe('WeatherService Integration Tests', () => {
           visibility: 10000,
           dt: Date.now() / 1000,
         };
+
+        // Tag each iteration with a scenario id to ensure unique cache key if needed
+        ;(globalThis as any).__WEATHER_SCENARIO_ID__ = `case_${i}`;
 
         (fetch as any).mockResolvedValue({
           ok: true,
@@ -181,6 +188,10 @@ describe('WeatherService Integration Tests', () => {
 
         expect(result.workability.score).toBeCloseTo(testCase.expectedScore, -1);
       }
+
+      // Cleanup
+      delete (globalThis as any).__WEATHER_BYPASS_CACHE__;
+      delete (globalThis as any).__WEATHER_SCENARIO_ID__;
     });
   });
 
@@ -205,6 +216,8 @@ describe('WeatherService Integration Tests', () => {
 
       // Second call should use cache
       await weatherService.getCurrentConditions(40.7128, -74.0060);
+      // Bypass might be toggled elsewhere; ensure no bypass for this test
+      expect((globalThis as any).__WEATHER_BYPASS_CACHE__).toBeUndefined();
       expect(fetch).toHaveBeenCalledTimes(1);
     });
   });

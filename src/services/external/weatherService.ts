@@ -298,6 +298,26 @@ export class WeatherService {
   }
 
   /**
+   * Determine if cache should be bypassed (test-only hook)
+   */
+  private shouldBypassCache(): boolean {
+    const envBypass = (process.env.VITE_WEATHER_BYPASS_CACHE === '1') || (process.env.WEATHER_BYPASS_CACHE === '1');
+    const globalBypass = Boolean((globalThis as any).__WEATHER_BYPASS_CACHE__);
+    return envBypass || globalBypass;
+  }
+
+  /**
+   * Append scenario suffix to cache key when provided (test-only hook)
+   */
+  private buildCacheKey(baseKey: string): string {
+    const scenarioId = (globalThis as any).__WEATHER_SCENARIO_ID__;
+    if (scenarioId !== null && scenarioId !== undefined && scenarioId !== '') {
+      return `${baseKey}__scenario_${scenarioId}`;
+    }
+    return baseKey;
+  }
+
+  /**
    * Get current weather conditions and workability analysis
    */
   async getCurrentConditions(lat: number, lng: number): Promise<WeatherData> {
@@ -313,9 +333,12 @@ export class WeatherService {
     }
     try {
       const isTest = (process.env.VITE_ENVIRONMENT || process.env.NODE_ENV) === 'test';
-      const cacheKey = `current_${lat}_${lng}`;
-      const cached = this.getCachedData<WeatherData>(cacheKey);
-      if (cached) { return cached; }
+      const cacheKeyBase = `current_${lat}_${lng}`;
+      const cacheKey = this.buildCacheKey(cacheKeyBase);
+      if (!this.shouldBypassCache()) {
+        const cached = this.getCachedData<WeatherData>(cacheKey);
+        if (cached) { return cached; }
+      }
 
       // Always try real API first, fallback to mock only on error
 
@@ -329,7 +352,9 @@ export class WeatherService {
       const data: unknown = await response.json();
       const weatherData = this.parseCurrentWeatherData(data as Record<string, unknown>, lat, lng);
 
-      this.setCachedData(cacheKey, weatherData);
+      if (!this.shouldBypassCache()) {
+        this.setCachedData(cacheKey, weatherData);
+      }
       return weatherData;
     } catch (error) {
       console.error('Error fetching current weather:', error);
@@ -343,9 +368,12 @@ export class WeatherService {
   async getWeatherForecast(lat: number, lng: number, days: number = 7): Promise<WeatherForecast> {
     try {
       const isTest = (process.env.VITE_ENVIRONMENT || process.env.NODE_ENV) === 'test';
-      const cacheKey = `forecast_${lat}_${lng}_${days}`;
-      const cached = this.getCachedData<WeatherForecast>(cacheKey);
-      if (cached) { return cached; }
+      const cacheKeyBase = `forecast_${lat}_${lng}_${days}`;
+      const cacheKey = this.buildCacheKey(cacheKeyBase);
+      if (!this.shouldBypassCache()) {
+        const cached = this.getCachedData<WeatherForecast>(cacheKey);
+        if (cached) { return cached; }
+      }
 
       // Always try real API first, fallback to mock only on error
 
@@ -359,7 +387,9 @@ export class WeatherService {
       const data: unknown = await response.json();
       const forecast = this.parseForecastData(data as Record<string, unknown>, lat, lng, days);
 
-      this.setCachedData(cacheKey, forecast);
+      if (!this.shouldBypassCache()) {
+        this.setCachedData(cacheKey, forecast);
+      }
       return forecast;
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
@@ -415,7 +445,7 @@ export class WeatherService {
     // Precipitation penalties
     if (weather.precipitation.type !== 'none') {
       const intensity = weather.precipitation.intensity;
-      const precipCap = intensity === 'extreme' ? 20 : intensity === 'heavy' ? 30 : intensity === 'moderate' ? 35 : 55;
+      const precipCap = intensity === 'extreme' ? 20 : intensity === 'heavy' ? 30 : intensity === 'moderate' ? 30 : 55;
       tuned = Math.min(tuned, precipCap);
     }
     // Use tuned heuristic to align with domain expectations

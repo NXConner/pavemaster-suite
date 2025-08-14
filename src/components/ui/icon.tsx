@@ -1,7 +1,8 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { LucideIcon, LucideProps, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Info } from 'lucide-react';
+import type { Icon as LucideIcon } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 const iconVariants = cva(
   'inline-flex items-center justify-center transition-all duration-200',
@@ -50,14 +51,14 @@ const iconVariants = cva(
   },
 );
 
-export interface IconProps extends Omit<LucideProps, 'size'>, VariantProps<typeof iconVariants> {
+export interface IconProps extends VariantProps<typeof iconVariants> {
   icon: LucideIcon;
   onClick?: () => void;
   'aria-label'?: string;
 }
 
 const Icon = React.forwardRef<SVGSVGElement, IconProps>(
-  ({ icon: IconComponent, className, variant, size, animation, interactive, onClick, ...props }, ref) => {
+  ({ icon: IconComponent, className, variant, size, animation, interactive, onClick }, ref) => {
     return (
       <IconComponent
         ref={ref}
@@ -65,13 +66,12 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
         onClick={onClick}
         role={onClick ? 'button' : undefined}
         tabIndex={onClick ? 0 : undefined}
-        onKeyDown={onClick ? (e) => {
+        onKeyDown={onClick ? (e: React.KeyboardEvent<SVGSVGElement>) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClick();
           }
         } : undefined}
-        {...props}
       />
     );
   },
@@ -80,57 +80,52 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
 Icon.displayName = 'Icon';
 
 // Predefined icon components for common use cases
-export const LoadingIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
+export const LoadingIcon = ({ className }: Omit<IconProps, 'icon'>) => {
   return (
     <Icon
       icon={Loader2}
       animation="spin"
       className={className}
-      {...props}
     />
   );
 };
 
-export const SuccessIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
+export const SuccessIcon = ({ className }: Omit<IconProps, 'icon'>) => {
   return (
     <Icon
       icon={CheckCircle2}
       variant="success"
       className={className}
-      {...props}
     />
   );
 };
 
-export const ErrorIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
+export const ErrorIcon = ({ className }: Omit<IconProps, 'icon'>) => {
   return (
     <Icon
       icon={AlertCircle}
       variant="destructive"
       className={className}
-      {...props}
     />
   );
 };
 
-export const WarningIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
+export const WarningIcon = ({ className }: Omit<IconProps, 'icon'>) => {
   return (
     <Icon
       icon={AlertTriangle}
       variant="warning"
       className={className}
-      {...props}
     />
   );
 };
 
-export const InfoIcon = ({ className, ...props }: Omit<IconProps, 'icon'>) => {
+export const InfoIcon = ({ className }: Omit<IconProps, 'icon'>) => {
   return (
     <Icon
       icon={Info}
       variant="info"
       className={className}
-      {...props}
     />
   );
 };
