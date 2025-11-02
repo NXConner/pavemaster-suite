@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
@@ -10,29 +9,18 @@ import { ScrollArea } from '../ui/scroll-area';
 import {
   Globe,
   Link,
-  Zap,
   Activity,
   Users,
   MessageSquare,
-  Cloud,
-  Database,
   Code,
   Webhook,
-  Shield,
   CheckCircle,
-  AlertTriangle,
   Clock,
   BarChart3,
-  Settings,
   Play,
-  Pause,
-  Square,
   RefreshCw,
-  Monitor,
   Wifi,
-  WifiOff,
   Lock,
-  Key,
 } from 'lucide-react';
 
 // Connectivity Interfaces
@@ -147,7 +135,6 @@ class ConnectivityHubEngine {
   private realtimeConnections: Map<string, RealtimeConnection> = new Map();
   private collaborationSessions: Map<string, CollaborationSession> = new Map();
   private syncJobs: Map<string, DataSyncJob> = new Map();
-  private websockets: Map<string, WebSocket> = new Map();
 
   constructor() {
     this.initializeEngine();
@@ -411,7 +398,7 @@ class ConnectivityHubEngine {
     return {
       success,
       responseTime,
-      error: success ? undefined : 'Connection timeout',
+      ...(success ? {} : { error: 'Connection timeout' }),
     };
   }
 
@@ -480,7 +467,6 @@ class ConnectivityHubEngine {
     job.status = 'running';
     job.startedAt = new Date();
 
-    const totalTime = 5000 + Math.random() * 10000; // 5-15 seconds
     const interval = setInterval(() => {
       job.progress += 5 + Math.random() * 15;
       job.recordsProcessed = Math.floor((job.progress / 100) * job.recordsTotal);
@@ -1188,7 +1174,7 @@ export const ConnectivityHub: React.FC = () => {
                           <div>
                             <Label className="text-sm font-medium">Top Endpoints</Label>
                             <div className="space-y-2 mt-2">
-                              {apiAnalytics.topEndpoints.map((endpoint: any, index: number) => (
+                              {apiAnalytics.topEndpoints.map((endpoint: any) => (
                                 <div key={endpoint.id} className="flex items-center justify-between text-sm">
                                   <span>{endpoint.name}</span>
                                   <span>{endpoint.usage.totalRequests.toLocaleString()}</span>
@@ -1216,7 +1202,7 @@ export const ConnectivityHub: React.FC = () => {
                               {Object.entries(integrationAnalytics.byCategory).map(([category, count]) => (
                                 <div key={category} className="flex items-center justify-between text-sm">
                                   <span className="capitalize">{category.replace('_', ' ')}</span>
-                                  <span>{count}</span>
+                                  <span>{String(count)}</span>
                                 </div>
                               ))}
                             </div>

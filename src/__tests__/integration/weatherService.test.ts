@@ -168,6 +168,8 @@ describe('WeatherService Integration Tests', () => {
 
       for (let i = 0; i < testCases.length; i++) {
         const testCase = testCases[i];
+        if (!testCase) continue;
+        
         const mockResponse = {
           weather: [{ main: testCase.rain ? 'Rain' : 'Clear', description: 'test' }],
           main: { temp: testCase.temp, humidity: testCase.humidity, pressure: 1013 },
@@ -186,7 +188,9 @@ describe('WeatherService Integration Tests', () => {
 
         const result = await weatherService.getCurrentConditions(40.7128, -74.0060);
 
-        expect(result.workability.score).toBeCloseTo(testCase.expectedScore, -1);
+        if (testCase) {
+          expect(result.workability.score).toBeCloseTo(testCase.expectedScore, -1);
+        }
       }
 
       // Cleanup

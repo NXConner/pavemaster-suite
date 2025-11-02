@@ -16,8 +16,6 @@ import {
   Clock,
   Camera,
   Gauge,
-  MapPin,
-  Zap,
   Activity,
   TrendingUp,
 } from 'lucide-react';
@@ -93,19 +91,6 @@ export const AsphaltGuardian = () => {
       priority: 'high',
     },
   ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'optimal': return 'text-green-600';
-      case 'good': return 'text-blue-600';
-      case 'acceptable': return 'text-yellow-600';
-      case 'poor': return 'text-red-600';
-      case 'compliant': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'non-compliant': return 'text-red-600';
-      default: return 'text-gray-600';
-    }
-  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -185,7 +170,6 @@ export const AsphaltGuardian = () => {
                   <Progress
                     value={metric.value}
                     className="mt-3"
-                    max={metric.name === 'Compaction Level' ? 100 : metric.name === 'Surface Temperature' ? 120 : 100}
                   />
                 </CardContent>
               </Card>

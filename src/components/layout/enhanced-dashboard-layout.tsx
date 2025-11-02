@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+
 import { Logo, CompactLogo } from '../ui/logo';
 import { Icon } from '../ui/icon';
 import {
   Menu,
-  X,
   Search,
   Bell,
   Settings,
@@ -18,7 +17,6 @@ import {
   MapPin,
   BarChart3,
   Calendar,
-  Shield,
   ChevronLeft,
   ChevronRight,
   Maximize2,
@@ -28,7 +26,7 @@ import {
 interface NavigationItem {
   id: string;
   label: string;
-  icon: React.ComponentType;
+  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & React.RefAttributes<SVGSVGElement>>;
   href: string;
   badge?: number;
   children?: NavigationItem[];
@@ -152,10 +150,6 @@ export function EnhancedDashboardLayout({
               <Icon
                 icon={item.icon}
                 size="sm"
-                className={cn(
-                  'flex-shrink-0',
-                  !sidebarCollapsed && 'mr-3',
-                )}
                 variant={
                   activeNav === item.id
                     ? variant === 'tactical' ? 'tactical' : 'primary'

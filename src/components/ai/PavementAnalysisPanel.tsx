@@ -3,7 +3,7 @@ import { Camera, Upload, Zap, AlertTriangle, CheckCircle, Clock, Info, TrendingU
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Alert, AlertDescription } from '../ui/alert';
 import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { toast } from '../../hooks/use-toast';
@@ -386,9 +386,8 @@ const PavementAnalysisPanel: React.FC = () => {
             {(result.maintenance_urgency === 'high' || result.maintenance_urgency === 'critical') && (
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Maintenance Required</AlertTitle>
                 <AlertDescription>
-                  This pavement section requires {result.maintenance_urgency} priority attention.
+                  <strong>Maintenance Required:</strong> This pavement section requires {result.maintenance_urgency} priority attention.
                   Please review the recommendations below.
                 </AlertDescription>
               </Alert>
@@ -566,7 +565,7 @@ const PavementAnalysisPanel: React.FC = () => {
                       <span className="font-medium capitalize">
                         {item.result.predicted_class}
                       </span>
-                      <Badge className={getUrgencyColor(item.result.maintenance_urgency)} size="sm">
+                      <Badge className={getUrgencyColor(item.result.maintenance_urgency)}>
                         {item.result.maintenance_urgency}
                       </Badge>
                     </div>

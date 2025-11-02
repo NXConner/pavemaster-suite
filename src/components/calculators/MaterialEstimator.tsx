@@ -384,7 +384,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Label>Surface Type</Label>
                       <Select
                         value={zone.surfaceType}
-                        onValueChange={(value: 'new' | 'overlay' | 'patch') => { updateZone(zone.id, 'surfaceType', value); }}
+                        onValueChange={(value) => { updateZone(zone.id, 'surfaceType', value as 'new' | 'overlay' | 'patch'); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -400,7 +400,7 @@ Cost per sq ft: $${(results.totalCost / results.totalArea).toFixed(2)}
                       <Label>Mix Type</Label>
                       <Select
                         value={zone.mixType}
-                        onValueChange={(value: 'standard' | 'premium' | 'recycled') => { updateZone(zone.id, 'mixType', value); }}
+                        onValueChange={(value) => { updateZone(zone.id, 'mixType', value as 'standard' | 'premium' | 'recycled'); }}
                       >
                         <SelectTrigger>
                           <SelectValue />

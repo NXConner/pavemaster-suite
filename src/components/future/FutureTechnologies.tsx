@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
@@ -13,29 +12,17 @@ import {
   Shield,
   Bot,
   Zap,
-  Satellite,
   Brain,
   Atom,
   Activity,
   CheckCircle,
-  AlertTriangle,
-  Clock,
-  BarChart3,
-  Settings,
   Play,
-  Pause,
-  Square,
-  RefreshCw,
   Monitor,
   Network,
   Radar,
   Car,
   Drone,
   Factory,
-  Lock,
-  Key,
-  Database,
-  Cloud,
   Smartphone,
 } from 'lucide-react';
 

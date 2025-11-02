@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
@@ -10,21 +9,17 @@ import {
   MapPin,
   Wifi,
   WifiOff,
-  Download,
-  Upload,
   Image as ImageIcon,
   Video,
-  Mic,
   Navigation,
   Compass,
   Clock,
   Database,
-  Sync,
+  RefreshCw,
   CheckCircle,
   AlertCircle,
   XCircle,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 // Camera integration
 interface CameraCapture {
@@ -306,9 +301,9 @@ const GPSIntegration: React.FC<{
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         accuracy: position.coords.accuracy,
-        altitude: position.coords.altitude || undefined,
-        heading: position.coords.heading || undefined,
-        speed: position.coords.speed || undefined,
+        altitude: position.coords.altitude ?? 0,
+        heading: position.coords.heading ?? 0,
+        speed: position.coords.speed ?? 0,
         timestamp: new Date(),
       };
 
@@ -334,9 +329,9 @@ const GPSIntegration: React.FC<{
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           accuracy: position.coords.accuracy,
-          altitude: position.coords.altitude || undefined,
-          heading: position.coords.heading || undefined,
-          speed: position.coords.speed || undefined,
+          altitude: position.coords.altitude ?? 0,
+          heading: position.coords.heading ?? 0,
+          speed: position.coords.speed ?? 0,
           timestamp: new Date(),
         };
 
@@ -556,6 +551,8 @@ const OfflineSynchronization: React.FC = () => {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500));
 
+        if (!item) continue;
+
         // Mark as synced
         setSyncQueue(prev => prev.map(queueItem =>
           queueItem.id === item.id ? { ...queueItem, synced: true } : queueItem,
@@ -563,7 +560,9 @@ const OfflineSynchronization: React.FC = () => {
 
         setSyncProgress(((i + 1) / unsyncedItems.length) * 100);
       } catch (error) {
-        console.error('Sync failed for item:', item.id, error);
+        if (item) {
+          console.error('Sync failed for item:', item.id, error);
+        }
         break;
       }
     }
@@ -631,7 +630,7 @@ const OfflineSynchronization: React.FC = () => {
         {isSyncing && (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Sync className="h-4 w-4 animate-spin" />
+              <RefreshCw className="h-4 w-4 animate-spin" />
               <span className="text-sm">Syncing...</span>
             </div>
             <Progress value={syncProgress} className="w-full" />
@@ -640,7 +639,7 @@ const OfflineSynchronization: React.FC = () => {
 
         <div className="flex gap-2">
           <Button onClick={syncData} disabled={!isOnline || isSyncing || syncQueue.length === 0} className="flex-1">
-            <Sync className="h-4 w-4 mr-2" />
+            <RefreshCw className="h-4 w-4 mr-2" />
             Sync Now
           </Button>
 

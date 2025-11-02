@@ -301,7 +301,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                       <Label>Type</Label>
                       <Select
                         value={line.type}
-                        onValueChange={(value: 'solid' | 'dashed' | 'double') => { updateLine(line.id, 'type', value); }}
+                        onValueChange={(value) => { updateLine(line.id, 'type', value as 'solid' | 'dashed' | 'double'); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -345,7 +345,7 @@ Total Length: ${results.totalLength.toLocaleString()} linear feet
                       <Label>Color</Label>
                       <Select
                         value={line.color}
-                        onValueChange={(value: 'white' | 'yellow') => { updateLine(line.id, 'color', value); }}
+                        onValueChange={(value) => { updateLine(line.id, 'color', value as 'white' | 'yellow'); }}
                       >
                         <SelectTrigger>
                           <SelectValue />
