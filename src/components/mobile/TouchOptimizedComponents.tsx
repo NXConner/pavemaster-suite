@@ -1,29 +1,18 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
 import { Slider } from '../ui/slider';
 import {
-  PanInfo,
-  motion,
-  useAnimation,
-  useDragControls,
-  useMotionValue,
-  useTransform,
-} from 'framer-motion';
-import {
   Smartphone,
-  Touch,
-  Vibrate,
+  Hand,
   Navigation,
   Camera,
   MapPin,
   Wifi,
   WifiOff,
   Battery,
-  Signal,
 } from 'lucide-react';
 
 interface TouchGesture {
@@ -88,10 +77,10 @@ const TouchButton: React.FC<{
   };
 
   return (
-    <motion.button
+    <button
       className={`
         relative rounded-lg font-medium transition-all duration-200 
-        select-none touch-manipulation active:scale-95
+        select-none touch-manipulation hover:scale-105 active:scale-95
         ${sizeClasses[size]} ${variantClasses[variant]}
         ${isPressed ? 'shadow-inner' : 'shadow-lg'}
       `}
@@ -100,11 +89,9 @@ const TouchButton: React.FC<{
       onMouseDown={() => { setIsPressed(true); }}
       onMouseUp={() => { setIsPressed(false); }}
       onMouseLeave={() => { setIsPressed(false); }}
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.02 }}
     >
       {children}
-    </motion.button>
+    </button>
   );
 };
 
@@ -116,49 +103,64 @@ const SwipeableCard: React.FC<{
   onSwipeUp?: () => void;
   onSwipeDown?: () => void;
 }> = ({ children, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [5, -5]);
-  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
-  const opacity = useTransform(x, [-150, 0, 150], [0.5, 1, 0.5]);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const startPos = useRef({ x: 0, y: 0 });
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      setIsDragging(true);
+      startPos.current = { x: touch.clientX, y: touch.clientY };
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    if (touch) {
+      const deltaX = touch.clientX - startPos.current.x;
+      const deltaY = touch.clientY - startPos.current.y;
+      setPosition({ x: deltaX, y: deltaY });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
     const threshold = 100;
-    const velocity = 500;
 
-    if (Math.abs(info.offset.x) > threshold || Math.abs(info.velocity.x) > velocity) {
-      if (info.offset.x > 0) {
+    if (Math.abs(position.x) > threshold) {
+      if (position.x > 0) {
         onSwipeRight?.();
       } else {
         onSwipeLeft?.();
       }
-    } else if (Math.abs(info.offset.y) > threshold || Math.abs(info.velocity.y) > velocity) {
-      if (info.offset.y > 0) {
+    } else if (Math.abs(position.y) > threshold) {
+      if (position.y > 0) {
         onSwipeDown?.();
       } else {
         onSwipeUp?.();
       }
     }
 
-    // Reset position
-    x.set(0);
-    y.set(0);
+    setPosition({ x: 0, y: 0 });
   };
 
   return (
-    <motion.div
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={0.2}
-      onDragEnd={handleDragEnd}
-      style={{ x, y, rotateX, rotateY, opacity }}
-      className="cursor-grab active:cursor-grabbing"
-      whileDrag={{ scale: 1.05 }}
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: isDragging ? 'none' : 'transform 0.3s ease',
+      }}
+      className="cursor-grab active:cursor-grabbing touch-none"
     >
       <Card className="select-none">
         {children}
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
@@ -183,17 +185,18 @@ const MobileDataTable: React.FC<{
   return (
     <div className="space-y-2">
       {data.map((row, index) => (
-        <motion.div
+        <div
           key={index}
           className={`
-            p-4 rounded-lg border cursor-pointer min-h-[56px]
+            p-4 rounded-lg border cursor-pointer min-h-[56px] transition-all active:scale-98
             ${selectedRow === index ? 'bg-primary/10 border-primary' : 'bg-card'}
           `}
           onTouchEnd={() => { handleRowPress(index, row); }}
-          whileTap={{ scale: 0.98 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.05 }}
+          style={{
+            opacity: 0,
+            transform: 'translateY(20px)',
+            animation: `fadeInUp 0.3s ease forwards ${index * 0.05}s`,
+          }}
         >
           <div className="space-y-2">
             {columns.map((column) => (
@@ -207,8 +210,16 @@ const MobileDataTable: React.FC<{
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       ))}
+      <style>{`
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
@@ -221,6 +232,7 @@ const useGestureRecognition = () => {
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     const touch = event.touches[0];
+    if (!touch) return;
     touchStartRef.current = {
       x: touch.clientX,
       y: touch.clientY,
@@ -252,6 +264,7 @@ const useGestureRecognition = () => {
     }
 
     const touch = event.changedTouches[0];
+    if (!touch) return;
     const deltaX = touch.clientX - touchStartRef.current.x;
     const deltaY = touch.clientY - touchStartRef.current.y;
     const deltaTime = Date.now() - touchStartRef.current.time;
@@ -306,11 +319,9 @@ const MobileNavigation: React.FC<{
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <motion.div
-      className="fixed bottom-0 left-0 right-0 bg-card border-t z-50"
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', damping: 20 }}
+    <div
+      className="fixed bottom-0 left-0 right-0 bg-card border-t z-50 animate-in slide-in-from-bottom"
+      style={{ animation: 'slideUp 0.3s ease' }}
     >
       {/* Main navigation bar */}
       <div className="flex items-center justify-around px-4 py-2 min-h-[60px]">
@@ -346,11 +357,12 @@ const MobileNavigation: React.FC<{
 
       {/* Expanded menu */}
       {isExpanded && items.length > 4 && (
-        <motion.div
-          className="bg-card border-t p-4"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
+        <div
+          className="bg-card border-t p-4 transition-all"
+          style={{
+            maxHeight: isExpanded ? '400px' : '0',
+            opacity: isExpanded ? 1 : 0,
+          }}
         >
           <div className="grid grid-cols-3 gap-3">
             {items.slice(4).map((item) => (
@@ -371,9 +383,19 @@ const MobileNavigation: React.FC<{
               </TouchButton>
             ))}
           </div>
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+      <style>{`
+        @keyframes slideUp {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
   );
 };
 
@@ -404,13 +426,14 @@ const TouchOptimizedForm: React.FC<{
 
   return (
     <div className="space-y-6 p-4">
-      {fields.map((field) => (
-        <motion.div
+      {fields.map((field, idx) => (
+        <div
           key={field.id}
           className="space-y-2"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: fields.indexOf(field) * 0.1 }}
+          style={{
+            opacity: 0,
+            animation: `fadeIn 0.3s ease forwards ${idx * 0.1}s`,
+          }}
         >
           <Label htmlFor={field.id} className="text-base font-medium">
             {field.label}
@@ -422,7 +445,7 @@ const TouchOptimizedForm: React.FC<{
               id={field.id}
               type={field.type}
               value={formData[field.id] || ''}
-              onChange={(e) => { setFormData(prev => ({ ...prev, [field.id]: e.target.value })); }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setFormData(prev => ({ ...prev, [field.id]: e.target.value })); }}
               className="h-12 text-base" // Larger touch target
               placeholder={field.label}
             />
@@ -456,9 +479,6 @@ const TouchOptimizedForm: React.FC<{
               <Slider
                 value={[formData[field.id] || field.min || 0]}
                 onValueChange={([value]) => { setFormData(prev => ({ ...prev, [field.id]: value })); }}
-                min={field.min}
-                max={field.max}
-                step={field.step}
                 className="w-full"
               />
               <div className="text-sm text-muted-foreground text-center">
@@ -466,8 +486,15 @@ const TouchOptimizedForm: React.FC<{
               </div>
             </div>
           ) : null}
-        </motion.div>
+        </div>
       ))}
+      <style>{`
+        @keyframes fadeIn {
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
 
       <TouchButton
         onClick={handleSubmit}
@@ -594,7 +621,7 @@ const TouchOptimizedDemo: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Touch className="h-5 w-5" />
+                <Hand className="h-5 w-5" />
                 Touch-Optimized Components
               </CardTitle>
             </CardHeader>
