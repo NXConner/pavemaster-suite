@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { cn } from '../../lib/utils';
 import { Button } from './button';
 import { Input } from './input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 import { Card } from './card';
 import { Icon } from './icon';
 import { LoadingCard } from './loading';
@@ -12,7 +11,6 @@ import {
   Search,
   Filter,
   Download,
-  MoreHorizontal,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -242,7 +240,7 @@ export function DataTable<T extends Record<string, any>>({
 }
                     }
                     size="sm"
-                    variant={variant === 'tactical' ? 'tactical' : 'default'}
+                    variant={variant === 'tactical' ? 'tactical' : 'default' as any}
                   />
                 </div>
               ))}
@@ -424,7 +422,7 @@ export function DataTable<T extends Record<string, any>>({
                               }}
                               className={action.variant === 'destructive' ? 'text-destructive hover:text-destructive' : ''}
                             >
-                              {action.icon && <Icon icon={action.icon} size="xs" />}
+                              {action.icon && <Icon icon={action.icon as any} size="xs" />}
                             </Button>
                           ))}
                         </div>

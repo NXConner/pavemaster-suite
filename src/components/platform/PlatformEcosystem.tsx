@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -16,24 +16,15 @@ import {
   Star,
   Users,
   Search,
-  Filter,
-  Settings,
-  Wrench,
   Terminal,
   FileText,
   Zap,
   Shield,
   CheckCircle,
-  AlertTriangle,
-  Clock,
   Activity,
   BarChart3,
   Layers,
-  Globe,
   Upload,
-  Play,
-  Building2,
-  Briefcase,
 } from 'lucide-react';
 
 // Platform Ecosystem Interfaces
@@ -654,8 +645,8 @@ class MLAnalyzer:
       if (filters.pricing) {
         results = results.filter(ext => ext.pricing.type === filters.pricing);
       }
-      if (filters.rating) {
-        results = results.filter(ext => ext.stats.rating >= filters.rating);
+      if (filters.rating !== undefined) {
+        results = results.filter(ext => ext.stats.rating >= filters.rating!);
       }
       if (filters.tags && filters.tags.length > 0) {
         results = results.filter(ext =>
@@ -796,7 +787,7 @@ class MLAnalyzer:
 
   private generateMonthlyData(extensions: Extension[]): number[] {
     // Simulate monthly download data for the last 12 months
-    return Array.from({ length: 12 }, (_, i) => {
+    return Array.from({ length: 12 }, () => {
       const baseDownloads = extensions.reduce((sum, ext) => sum + ext.stats.downloads, 0);
       return Math.floor(baseDownloads * (0.1 + Math.random() * 0.3) / 12);
     });
@@ -875,7 +866,7 @@ export const PlatformEcosystem: React.FC = () => {
       case 'ui': return Layers;
       case 'workflow': return Activity;
       case 'reporting': return FileText;
-      case 'ai': return Brain;
+      case 'ai': return Zap;
       case 'security': return Shield;
       default: return Package;
     }

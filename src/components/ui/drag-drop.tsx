@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { cn } from '../../lib/utils';
 import { Card } from './card';
 import { Button } from './button';
@@ -12,7 +12,6 @@ import {
   Video,
   Music,
   Archive,
-  CheckCircle2,
   AlertCircle,
   RotateCcw,
 } from 'lucide-react';
@@ -331,11 +330,16 @@ export function SortableList({
 
     if (draggedIndex === -1 || dropIndex === -1) { return; }
 
-    const newItems = [...items];
-    const [removed] = newItems.splice(draggedIndex, 1);
-    newItems.splice(dropIndex, 0, removed);
-
-    onReorder(newItems);
+    if (draggedIndex !== -1 && dropIndex !== -1) {
+      const newItems = [...items];
+      const removed = newItems[draggedIndex];
+      if (removed) {
+        newItems.splice(draggedIndex, 1);
+        newItems.splice(dropIndex, 0, removed);
+        onReorder(newItems);
+      }
+    }
+    
     setDraggedItem(null);
     setDragOverItem(null);
   };

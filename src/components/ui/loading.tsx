@@ -92,12 +92,12 @@ const ThemedLoading = ({ className, variant, size }: LoadingProps) => {
 
   return (
     <div className={cn('relative', className)}>
-      <IconComponent
-        className={cn(
+      {IconComponent && React.createElement(IconComponent, {
+        className: cn(
           loadingVariants({ variant, size }),
           'animate-bounce',
-        )}
-      />
+        ),
+      })}
       <div className={cn(
         'absolute inset-0 rounded-full border-2 border-t-transparent animate-spin',
         variant === 'tactical' ? 'border-green-400/30' : 'border-primary/30',
@@ -111,15 +111,21 @@ const Loading = React.forwardRef<HTMLDivElement, LoadingProps>(
     const loadingComponent = () => {
       switch (type) {
         case 'dots':
-          return <LoadingDots className={className} variant={variant} />;
+          return className ? <LoadingDots className={className} variant={variant} /> : <LoadingDots variant={variant} />;
         case 'pulse':
-          return <LoadingPulse className={className} variant={variant} size={size} />;
+          return className && size ? <LoadingPulse className={className} variant={variant} size={size} /> :
+            className ? <LoadingPulse className={className} variant={variant} /> :
+            size ? <LoadingPulse variant={variant} size={size} /> : <LoadingPulse variant={variant} />;
         case 'skeleton':
-          return <LoadingSkeleton className={className} variant={variant} />;
+          return className ? <LoadingSkeleton className={className} variant={variant} /> : <LoadingSkeleton variant={variant} />;
         case 'themed':
-          return <ThemedLoading className={className} variant={variant} size={size} />;
+          return className && size ? <ThemedLoading className={className} variant={variant} size={size} /> :
+            className ? <ThemedLoading className={className} variant={variant} /> :
+            size ? <ThemedLoading variant={variant} size={size} /> : <ThemedLoading variant={variant} />;
         default:
-          return <LoadingSpinner className={className} variant={variant} size={size} />;
+          return className && size ? <LoadingSpinner className={className} variant={variant} size={size} /> :
+            className ? <LoadingSpinner className={className} variant={variant} /> :
+            size ? <LoadingSpinner variant={variant} size={size} /> : <LoadingSpinner variant={variant} />;
       }
     };
 

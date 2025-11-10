@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { Icon as LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Loader2, CheckCircle2, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 const iconVariants = cva(
@@ -55,6 +55,7 @@ export interface IconProps extends VariantProps<typeof iconVariants> {
   icon: LucideIcon;
   onClick?: () => void;
   'aria-label'?: string;
+  className?: string;
 }
 
 const Icon = React.forwardRef<SVGSVGElement, IconProps>(
@@ -79,55 +80,39 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
 
 Icon.displayName = 'Icon';
 
-// Predefined icon components for common use cases
-export const LoadingIcon = ({ className }: Omit<IconProps, 'icon'>) => {
-  return (
-    <Icon
-      icon={Loader2}
-      animation="spin"
-      className={className}
-    />
-  );
+export const LoadingIcon = ({ className }: { className?: string }) => {
+  if (className === undefined) {
+    return <Icon icon={Loader2} animation="spin" />;
+  }
+  return <Icon icon={Loader2} animation="spin" className={className} />;
 };
 
-export const SuccessIcon = ({ className }: Omit<IconProps, 'icon'>) => {
-  return (
-    <Icon
-      icon={CheckCircle2}
-      variant="success"
-      className={className}
-    />
-  );
+export const SuccessIcon = ({ className }: { className?: string }) => {
+  if (className === undefined) {
+    return <Icon icon={CheckCircle2} variant="success" />;
+  }
+  return <Icon icon={CheckCircle2} variant="success" className={className} />;
 };
 
-export const ErrorIcon = ({ className }: Omit<IconProps, 'icon'>) => {
-  return (
-    <Icon
-      icon={AlertCircle}
-      variant="destructive"
-      className={className}
-    />
-  );
+export const ErrorIcon = ({ className }: { className?: string }) => {
+  if (className === undefined) {
+    return <Icon icon={AlertCircle} variant="destructive" />;
+  }
+  return <Icon icon={AlertCircle} variant="destructive" className={className} />;
 };
 
-export const WarningIcon = ({ className }: Omit<IconProps, 'icon'>) => {
-  return (
-    <Icon
-      icon={AlertTriangle}
-      variant="warning"
-      className={className}
-    />
-  );
+export const WarningIcon = ({ className }: { className?: string }) => {
+  if (className === undefined) {
+    return <Icon icon={AlertTriangle} variant="warning" />;
+  }
+  return <Icon icon={AlertTriangle} variant="warning" className={className} />;
 };
 
-export const InfoIcon = ({ className }: Omit<IconProps, 'icon'>) => {
-  return (
-    <Icon
-      icon={Info}
-      variant="info"
-      className={className}
-    />
-  );
+export const InfoIcon = ({ className }: { className?: string }) => {
+  if (className === undefined) {
+    return <Icon icon={Info} variant="info" />;
+  }
+  return <Icon icon={Info} variant="info" className={className} />;
 };
 
 // Custom CSS for animations (to be added to global styles)

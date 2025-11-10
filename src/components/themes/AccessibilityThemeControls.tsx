@@ -6,17 +6,11 @@ import { Slider } from '../ui/slider';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Badge } from '../ui/badge';
-import { Separator } from '../ui/separator';
 import {
   Eye,
-  EyeOff,
-  Volume2,
   Contrast,
   Type,
-  Palette,
-  Zap,
   Moon,
-  Sun,
   Accessibility,
   Heart,
   Focus,
@@ -290,9 +284,6 @@ const AccessibilityThemeControls: React.FC = () => {
             <Slider
               value={[settings.fontSize]}
               onValueChange={([value]) => { handleSettingChange('fontSize', value); }}
-              min={12}
-              max={24}
-              step={1}
               className="w-full"
             />
           </div>
@@ -302,9 +293,6 @@ const AccessibilityThemeControls: React.FC = () => {
             <Slider
               value={[settings.lineHeight]}
               onValueChange={([value]) => { handleSettingChange('lineHeight', value); }}
-              min={1}
-              max={2.5}
-              step={0.1}
               className="w-full"
             />
           </div>
@@ -314,9 +302,6 @@ const AccessibilityThemeControls: React.FC = () => {
             <Slider
               value={[settings.textSpacing]}
               onValueChange={([value]) => { handleSettingChange('textSpacing', value); }}
-              min={0.5}
-              max={2}
-              step={0.1}
               className="w-full"
             />
           </div>

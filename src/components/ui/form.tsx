@@ -1,18 +1,14 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { cn } from '../../lib/utils';
 import { Button } from './button';
 import { Input } from './input';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from './card';
-import { Icon } from './icon';
 import { Progress } from './progress';
 import {
   CheckCircle2,
-  AlertCircle,
   ChevronLeft,
   ChevronRight,
   Save,
-  Eye,
-  EyeOff,
 } from 'lucide-react';
 
 // Form Context
@@ -193,7 +189,7 @@ export function FormProvider({
     setIsSubmitting(false);
   };
 
-  const handleSubmit = async () => {
+  const handleFormSubmit = async () => {
     if (!onSubmit) { return; }
 
     const isValid = validate();
@@ -317,7 +313,7 @@ export function FormField({
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder={placeholder}
-          error={hasError ? error : undefined}
+          error={hasError && error ? error : undefined}
           success={isTouched && !error}
           className={inputClassName}
         />
@@ -357,7 +353,7 @@ export function MultiStepForm({
   className,
 }: MultiStepFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const { validate, values, isSubmitting } = useForm();
+  const { validate, isSubmitting } = useForm();
 
   const validateCurrentStep = (): boolean => {
     const currentStepFields = steps[currentStep]?.fields || [];
